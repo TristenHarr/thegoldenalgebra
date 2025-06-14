@@ -1,0 +1,17 @@
+% In preamble.tex
+
+\usepackage{palatino}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{etoolbox}
+
+\newcommand{\NewLaw}[2]{\csdef{#1}{#2}}
+\newcommand{\GetLaw}[1]{\csuse{#1}}
+
+
+% --- Custom Math Commands ---
+\newcommand{\gold}{\phi}
+% --- Operator Symbols ---
+\newcommand{\LambdaG}{\Lambda_{G1}}
+\newcommand{\PiA}{\Pi_{A}}

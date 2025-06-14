@@ -1,0 +1,24 @@
+% In main.tex
+
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+\begin{document}
+
+\input{titlepage.tex}
+\maketitle
+\newpage
+
+% --- Part 1: The Compendium Summary ---
+% This command builds the summary page. No changes are needed inside compendium.tex
+\input{compendium/compendium.tex}
+
+
+% --- Part 2: The Full Law Chapter ---
+% Add this section to render the full page for the law after the summary.
+\newpage
+\input{compendium/law-of-rational-quantization.tex}
+
+
+\end{document}
