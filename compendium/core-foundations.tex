@@ -1,0 +1,48 @@
+% No \part* here, as parts are typically handled in the main document body.
+% We will use \section for the main heading of this proof chapter.
+
+\section{Proofs of the Core Identities}
+\label{sec:core_identities}
+
+This chapter provides the rigorous, foundational proofs for the "Core Identities" listed in the Compendium. These identities are the bedrock upon which the Golden Algebra is built, demonstrating the unique, quantized relationships between its fundamental constants.
+
+\subsection{Proof of the Bridge Formula: \(T - J = 2TJ\)}
+
+The Bridge Formula establishes a critical, non-obvious link between the additive and multiplicative properties of the core constants $T$ and $J$.
+
+\subsubsection*{1. State the Definitions}
+The proof begins with the fundamental definitions of the constants $T$ and $J$:
+$$ T = \frac{\sqrt{5}-1}{4} \quad \text{and} \quad J = \frac{3-\sqrt{5}}{4} $$
+
+\subsubsection*{2. Evaluate the Left-Hand Side (LHS)}
+We substitute the definitions into the left side of the equation, $T-J$:
+\begin{align*}
+LHS &= T - J \\
+&= \frac{\sqrt{5}-1}{4} - \frac{3-\sqrt{5}}{4} \\
+&= \frac{(\sqrt{5}-1) - (3-\sqrt{5})}{4} \\
+&= \frac{\sqrt{5}-1-3+\sqrt{5}}{4} \\
+&= \frac{2\sqrt{5}-4}{4} \\
+&= \frac{\sqrt{5}-2}{2}
+\end{align*}
+
+\subsubsection*{3. Evaluate the Right-Hand Side (RHS)}
+Next, we substitute the definitions into the right side of the equation, $2TJ$:
+\begin{align*}
+RHS &= 2TJ \\
+&= 2 \left( \frac{\sqrt{5}-1}{4} \right) \left( \frac{3-\sqrt{5}}{4} \right) \\
+&= \frac{(\sqrt{5}-1)(3-\sqrt{5})}{8}
+\end{align*}
+Expanding the numerator:
+\begin{align*}
+\text{Numerator} &= 3\sqrt{5} - (\sqrt{5})^2 - 3 + \sqrt{5} \\
+&= 4\sqrt{5} - 8
+\end{align*}
+Substituting the expanded numerator back into the expression for the RHS:
+\begin{align*}
+RHS &= \frac{4\sqrt{5} - 8}{8} \\
+&= \frac{4(\sqrt{5}-2)}{8} \\
+&= \frac{\sqrt{5}-2}{2}
+\end{align*}
+
+\subsubsection*{4. Conclusion of Proof}
+By direct evaluation, we have shown that both the Left-Hand Side (LHS) and the Right-Hand Side (RHS) of the equation simplify to the same expression. Because LHS = RHS, the identity $T - J = 2TJ$ is **proven**.
