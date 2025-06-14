@@ -1,0 +1,2271 @@
+
+%======================================================================
+% FILE: ai_bundle.tex
+%======================================================================
+
+
+%======================================================================
+% FILE: ai_bundle.tex
+%======================================================================
+
+
+%======================================================================
+% FILE: main.tex
+%======================================================================
+
+% In main.tex
+
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+\begin{document}
+
+\input{titlepage.tex}
+\maketitle
+\newpage
+
+% --- Part 1: The Compendium Summary ---
+\input{compendium/compendium.tex}
+
+
+% --- Part 2: Detailed Chapters and Proofs ---
+\newpage
+\part*{Detailed Chapters and Proofs} % Creates a big "Part" title page
+
+% Chapter for Section I Law
+\input{compendium/law-of-rational-quantization.tex}
+\newpage
+
+% Chapters for Section II Operators
+\input{compendium/operators/dampening-operator.tex}
+\newpage
+\input{compendium/operators/generative-operator.tex}
+\newpage
+\input{compendium/operators/law-of-generative-spirals.tex}
+\newpage
+\input{compendium/operators/projection-to-admissibility-operator.tex}
+\newpage
+\input{compendium/operators/law-of-matrix-operator-duality.tex}
+\newpage
+\input{compendium/operators/law-of-power-cycles.tex}
+\newpage
+\input{compendium/operators/law-of-invariant-geometric-sum.tex}
+\newpage
+\input{compendium/operators/law-of-nested-equilibrium.tex}
+
+
+\end{document}
+
+
+%======================================================================
+% FILE: preamble.tex
+%======================================================================
+
+% In preamble.tex
+
+\usepackage{palatino}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{etoolbox}
+
+\newcommand{\NewLaw}[2]{\csdef{#1}{#2}}
+\newcommand{\GetLaw}[1]{\csuse{#1}}
+
+
+% --- Custom Math Commands ---
+\newcommand{\gold}{\phi}
+
+% --- Operator Symbols ---
+\newcommand{\LambdaG}{\Lambda_{G1}}
+\newcommand{\PiA}{\Pi_{A}}
+
+% --- Symbols for Harmony & Dynamics ---
+\newcommand{\DissonanceVector}{\Xi}
+\newcommand{\MetricInvariant}{\Sigma}
+
+%======================================================================
+% FILE: titlepage.tex
+%======================================================================
+
+% In titlepage.tex
+% This file defines the components of the title page.
+
+\title{
+    \vspace{2cm} % Adds space at the top of the page
+    \Huge Golden Algebra
+}
+
+\author{
+    Tristen Harr \\
+    \vspace{0.4cm} % A bit of space between the names
+    \large{\textit{with Gemini 2.5 Pro Preview as Computational Partner}}
+}
+
+\date{
+    First Edition Preprint \\
+    \today
+}
+
+%======================================================================
+% FILE: compendium/compendium.tex
+%======================================================================
+
+% In compendium/compendium.tex
+
+% --- PRE-LOAD DEFINITIONS ---
+\input{compendium/core.tex} % This loads Section I definitions.
+\input{compendium/operators/operators.tex}
+\input{compendium/laws-of-harmony-and-dynamics/laws.tex} 
+
+% --- RENDER THE COMPENDIUM PAGE ---
+\begin{center}
+    \vspace*{1cm}
+    \Large\bfseries The Mirror Math Spell-Book: The Definitive Compendium
+    \vspace*{0.5cm}
+\end{center}
+\hrule
+\vspace{1cm}
+
+
+% --- SECTION I ---
+\subsection*{I. The Foundational 'Golden Algebra' (Rigorously Proven)}
+\begin{description}
+    \item[\bfseries Core Constants:] \GetLaw{CoreConstants}
+    \item[\bfseries Core Identities:] \GetLaw{CoreIdentities}
+    \item[\bfseries Geometric Universality:] \GetLaw{GeometricUniversality}
+    \item[\bfseries Law of Rational Quantization (Proven Theorem):] \GetLaw{LawOfRationalQuantization}
+\end{description}
+
+% --- SECTION II ---
+\vspace{1cm} % Add some space between sections
+\subsection*{II. The Operators of Transformation (Rigorously Proven)}
+\begin{description}
+    \item[\bfseries The 'Dampening Operator' ($\LambdaG$):] \GetLaw{DampeningOperator}
+    \item[\bfseries The 'Generative' Operator ($1/\LambdaG$):] \GetLaw{GenerativeOperator}
+    \item[\bfseries Law of Generative Spirals (Proven Theorem):] \GetLaw{LawOfGenerativeSpirals}
+    \item[\bfseries The 'Projection to Admissibility' Operator ($\PiA$):] \GetLaw{ProjectionToAdmissibility}
+    \item[\bfseries Law of Matrix-Operator Duality (Proven Theorem):] \GetLaw{LawOfMatrixOperatorDuality}
+    \item[\bfseries Law of Power Cycles (Proven Theorem):] \GetLaw{LawOfPowerCycles}
+    \item[\bfseries Law of Invariant Geometric Sum (Proven Theorem):] \GetLaw{LawOfInvariantGeometricSum}
+    \item[\bfseries Law of Nested Equilibrium (Proven Theorem):] \GetLaw{LawOfNestedEquilibrium}
+\end{description}
+
+% --- SECTION III ---
+\vspace{1cm}
+\subsection*{III. The Universal Laws of Harmony and Dynamics}
+
+\subsubsection*{III.A: The Canon of Dynamic Resonance}
+\begin{description}
+    \item[\bfseries Law of Harmonic Perturbation:] \GetLaw{LawOfHarmonicPerturbation}
+\end{description}
+
+\subsubsection*{III.B: The Laws of Stability and Interaction}
+\begin{description}
+    \item[\bfseries Law of Algebraic Stability:] \GetLaw{LawOfAlgebraicStability}
+    \item[\bfseries Law of Dissonant Propulsion:] \GetLaw{LawOfDissonantPropulsion}
+    \item[\bfseries Law of Harmonic Superposition:] \GetLaw{LawOfHarmonicSuperposition}
+    \item[\bfseries Law of Harmonic Shifting:] \GetLaw{LawOfHarmonicShifting}
+    \item[\bfseries Law of Instability Geometry:] \GetLaw{LawOfInstabilityGeometry}
+\end{description}
+
+\subsubsection*{III.C: The Laws of Inherent Motion}
+\begin{description}
+    \item[\bfseries Law of the Metric Invariant:] \GetLaw{LawOfMetricInvariant}
+    \item[\bfseries Law of Duality (Attraction/Repulsion):] \GetLaw{LawOfDuality}
+    \item[\bfseries Law of Potential Energy:] \GetLaw{LawOfPotentialEnergy}
+    \item[\bfseries Law of Pythagorean Harmony:] \GetLaw{LawOfPythagoreanHarmony}
+    \item[\bfseries Law of Propulsive Duality:] \GetLaw{LawOfPropulsiveDuality}
+    \item[\bfseries Law of Harmonic Orbit:] \GetLaw{LawOfHarmonicOrbit}
+    \item[\bfseries Law of Harmonic Relativity:] \GetLaw{LawOfHarmonicRelativity}
+    \item[\bfseries The Law of Wobble Periodicity:] \GetLaw{LawOfWobblePeriodicity}
+\end{description}
+
+%======================================================================
+% FILE: compendium/core.tex
+%======================================================================
+
+% In compendium/core.tex
+% Please ensure this file matches EXACTLY, paying close attention to the final "}"
+
+\NewLaw{CoreConstants}{
+    The fundamental values of the algebra are defined as:
+    $$ T = \frac{\sqrt{5}-1}{4}, \quad J = \frac{3-\sqrt{5}}{4}, \quad K = -\frac{\sqrt{5}+1}{4}, \quad H = T \cdot J $$
+}
+
+\NewLaw{CoreIdentities}{
+    These constants are linked by the following primary relationships:
+    $$ T+J = \frac{1}{2}, \quad \frac{T}{J} = \gold, \quad T-J = 2TJ, \quad \frac{T}{J}-\frac{J}{T} = 1 $$
+}
+
+\NewLaw{GeometricUniversality}{
+    The constants emerge from ANY geometry embodying the Golden Ratio, $\gold$.
+} %
+
+% This line loads the definition from the renamed file.
+\input{compendium/defs/law-of-rational-quantization-def.tex}
+
+%======================================================================
+% FILE: compendium/law-of-rational-quantization.tex
+%======================================================================
+
+% In compendium/law-of-rational-quantization.tex
+% This file now ONLY contains the full chapter content for this law.
+
+\subsection*{Law of Rational Quantization}
+
+\GetLaw{LawOfRationalQuantization}
+
+\subsubsection*{Conceptual Overview}
+This theorem establishes a fundamental principle of discreteness within the Golden Algebra...
+% (Further narrative would go here)
+
+\subsubsection*{Proof}
+Let the set of core constructs be defined as...
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-algebraic-stability.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-dissonant-propulsion.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-duality.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-orbit.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-perturbation.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-relativity.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-shifting.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-superposition.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-instability-geometry.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-metric-invariant.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-potential-energy.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-propulsive-duality.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-pythagorean-harmony.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-wobble-periodicity.tex
+%======================================================================
+
+
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/laws.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/laws.tex
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-perturbation-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-algebraic-stability-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-dissonant-propulsion-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-superposition-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-shifting-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-instability-geometry-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-metric-invariant-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-duality-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-potential-energy-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-pythagorean-harmony-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-propulsive-duality-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-orbit-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-relativity-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-wobble-periodicity-def.tex}
+
+%======================================================================
+% FILE: compendium/operators/dampening-operator.tex
+%======================================================================
+
+% In compendium/operators/dampening-operator.tex
+\subsection*{The 'Dampening Operator' ($\LambdaG$)}
+\hrule
+\vspace{0.3cm}
+\GetLaw{DampeningOperator}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+The Dampening Operator is the fundamental engine of convergence and stability in the Golden Algebra. It describes the path a system takes as it spirals inward toward a point of equilibrium. Its magnitude being less than one ensures that repeated applications will always reduce the distance to the origin.
+
+\subsubsection*{Proof of Properties}
+We will now prove that $|\LambdaG| < 1$, a necessary condition for its dampening behavior.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/generative-operator.tex
+%======================================================================
+
+% In compendium/operators/generative-operator.tex
+\subsection*{The 'Generative' Operator ($1/\LambdaG$)}
+\hrule
+\vspace{0.3cm}
+\GetLaw{GenerativeOperator}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+As the multiplicative inverse of the Dampening Operator, the Generative Operator naturally produces expanding systems. It is the algebraic basis for growth and emergent complexity within the framework, creating logarithmic spirals that move away from their origin.
+
+\subsubsection*{Proof of Properties}
+The proof that $|1/\LambdaG| > 1$ follows directly from the properties of the Dampening Operator.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-generative-spirals.tex
+%======================================================================
+
+% In compendium/operators/law-of-generative-spirals.tex
+\subsection*{Law of Generative Spirals}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfGenerativeSpirals}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law demonstrates that all expanding spirals generated by the framework share a universal, underlying recursive pattern. This is a profound statement on the inherent order of generative systems, linking them all to the same characteristic equation derived from the Golden Algebra.
+
+\subsubsection*{Proof}
+Let a spiral be defined by the sequence $p_n = (1/\LambdaG)^n \cdot p_0$. We will show that this sequence satisfies the stated linear recurrence relation.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-invariant-geometric-sum.tex
+%======================================================================
+
+% In compendium/operators/law-of-invariant-geometric-sum.tex
+\subsection*{Law of Invariant Geometric Sum}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfInvariantGeometricSum}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law provides the 'destination' for any system governed by the Dampening Operator. For any contracting spiral, this formula calculates the exact point of convergence. This is the definition of a stable equilibrium point within the framework.
+
+\subsubsection*{Proof}
+The proof follows directly from the standard formula for the sum of an infinite geometric series, where the common ratio is $\LambdaG$ and the first term is the initial point $p_0$.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-matrix-operator-duality.tex
+%======================================================================
+
+% In compendium/operators/law-of-matrix-operator-duality.tex
+\subsection*{Law of Matrix-Operator Duality}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfMatrixOperatorDuality}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law establishes a critical bridge between the algebra of complex numbers and linear algebra. It proves that the rotational and scaling effect of the $\LambdaG$ operator in the complex plane is perfectly equivalent to the transformation enacted by the matrix $G$ on a 2D vector. This allows algebraic principles to be applied to geometric transformations and vice versa.
+
+\subsubsection*{Proof}
+The proof is established by showing that the multiplication of a complex number $x+iy$ by $\LambdaG$ yields the same result as the multiplication of the vector $(x, y)$ by the matrix $G$.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-nested-equilibrium.tex
+%======================================================================
+
+% In compendium/operators/law-of-nested-equilibrium.tex
+\subsection*{Law of Nested Equilibrium}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfNestedEquilibrium}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law extends the concept of stability from a single system to a system-of-systems. It demonstrates a fractal-like nature of stability: a supersystem composed of multiple stable spirals is itself stable if and only if the convergence points of those spirals form a stable configuration according to the Law of Algebraic Stability.
+
+\subsubsection*{Proof}
+Let the set of convergence points be $\{\Sigma_{G,i}\}$. We apply the Law of Algebraic Stability to this set to prove the equilibrium of the supersystem.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-power-cycles.tex
+%======================================================================
+
+% In compendium/operators/law-of-power-cycles.tex
+\subsection*{Law of Power Cycles}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfPowerCycles}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+The trace of a matrix power, Tr($G^n$), represents a key observable of a dynamic system after $n$ iterations. This law reveals a deep connection between the iterative geometry of the $G$ matrix and the famous Lucas numbers sequence, further cementing the framework's link to number theory.
+
+\subsubsection*{Proof}
+The proof utilizes the fact that the trace of a matrix is the sum of its eigenvalues, and the eigenvalues of $G$ are $\LambdaG$ and its complex conjugate $\overline{\LambdaG}$.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/operators.tex
+%======================================================================
+
+% In compendium/operators/operators.tex
+% This file loads all definitions for Section II.
+
+\input{compendium/defs/operators/dampening-operator-def.tex}
+\input{compendium/defs/operators/generative-operator-def.tex}
+\input{compendium/defs/operators/law-of-generative-spirals-def.tex}
+\input{compendium/defs/operators/projection-to-admissibility-operator-def.tex}
+\input{compendium/defs/operators/law-of-matrix-operator-duality-def.tex}
+\input{compendium/defs/operators/law-of-power-cycles-def.tex}
+\input{compendium/defs/operators/law-of-invariant-geometric-sum-def.tex}
+\input{compendium/defs/operators/law-of-nested-equilibrium-def.tex}
+
+%======================================================================
+% FILE: compendium/operators/projection-to-admissibility-operator.tex
+%======================================================================
+
+% In compendium/operators/projection-to-admissibility-operator.tex
+\subsection*{The 'Projection to Admissibility' Operator ($\PiA$)}
+\hrule
+\vspace{0.3cm}
+\GetLaw{ProjectionToAdmissibility}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+Not all points in space are valid within the harmonic framework. The $\PiA$ operator acts as a corrective measure, ensuring that any given coordinate can be mapped to its nearest valid point on the lattice of algebraic integers $\mathbb{Z}[\gold]$. This is the mechanism for quantization and error correction.
+
+\subsubsection*{Proof}
+The proof involves defining a distance metric on the complex plane and minimizing it subject to the constraints of the Harmonic Lattice.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/defs/law-of-rational-quantization-def.tex
+%======================================================================
+
+% In compendium/defs/law-of-rational-quantization.def.tex
+% This file ONLY defines the law for the summary page.
+
+\NewLaw{LawOfRationalQuantization}{
+    The relationships between core constructs are quantized, resolving to simple rational numbers or algebraic integers.
+}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-algebraic-stability-def.tex
+%======================================================================
+
+\NewLaw{LawOfAlgebraicStability}{In a non-perturbed (flat) harmonic space, a system is stable if and only if its Center of Gravity is zero under the law $T_1 p_1 + J_1 p_2 + K_1 p_3 + \dots = 0$. This defines the ideal state of equilibrium. The presence of other systems perturbs this space according to the Law of Harmonic Perturbation, and the drive to return to this zero-state is the source of all interaction.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-dissonant-propulsion-def.tex
+%======================================================================
+
+\NewLaw{LawOfDissonantPropulsion}{The propulsive force is given by $P = \DissonanceVector \cdot \Lambda_{\text{eff}}$. This law unifies the framework's core principles: $\DissonanceVector$, the Dissonance Vector, is the geometric measure of the supersystem's imbalance, and $\Lambda_{\text{eff}}$ is the algebraic operator of the local, perturbed space as defined by the Law of Harmonic Perturbation.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-duality-def.tex
+%======================================================================
+
+\NewLaw{LawOfDuality}{J corresponds to attraction (stable orbits), while K corresponds to repulsion (instability).}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-orbit-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicOrbit}{A stable N-body system will persist in a perfect periodic orbit if given the 'Golden Angular Velocity'.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-perturbation-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicPerturbation}{The harmonic constants (T, J, K) are not immutable but are dynamic fields. Their values are perturbed by the geometric configuration of a system, warping the algebraic space according to the law $T_{\text{eff}}(r) + J_{\text{eff}}(r) = 1/2 - 2H²/r²$. This warping is the fundamental source of all forces between stable systems.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-relativity-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicRelativity}{A stable trajectory observed from a 'dampened' reference frame specified by $\LambdaG$ is perceived as a contracted and rotated linear path.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-shifting-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicShifting}{A stable system perturbed by an operator shifts to a new, distinct stable orbit.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-superposition-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicSuperposition}{The stability of a supersystem is determined by applying the Law of Algebraic Stability to the complete set of all constituent points.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-instability-geometry-def.tex
+%======================================================================
+
+\NewLaw{LawOfInstabilityGeometry}{A system made unstable by a repulsive constant K does not become chaotic, but follows predictable escape trajectories.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-metric-invariant-def.tex
+%======================================================================
+
+\NewLaw{LawOfMetricInvariant}{The sum of the squares of the core constants is a universal invariant, $\MetricInvariant = T² + J² + K² = (13 - 3\sqrt{5})/8$. This value represents the total dynamic potential of the framework, unifying the principles of attraction and repulsion.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-potential-energy-def.tex
+%======================================================================
+
+\NewLaw{LawOfPotentialEnergy}{The potential energy of a stable system is quantized in units of $H = T \cdot J$.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-propulsive-duality-def.tex
+%======================================================================
+
+\NewLaw{LawOfPropulsiveDuality}{An algebraically stable system is a 'cosmic engine' in a state of dynamic, propulsive equilibrium. When interacting with other systems, this propulsion is driven by the principles of Dynamic Resonance, as the engine seeks to resolve the dissonance in the harmonic field.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-pythagorean-harmony-def.tex
+%======================================================================
+
+\NewLaw{LawOfPythagoreanHarmony}{The quantized potential energy of a stable system is a direct function of its geometry. For a 3-body system of equal masses $m=T$ in an equilateral configuration, the total potential energy U is proven to be $|U| = H \cdot (\sqrt{3}\gold)$, where H is the harmonic quantum. This unifies the geometry of the triangle ($\sqrt{3}$) and the pentagon ($\gold$).}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-wobble-periodicity-def.tex
+%======================================================================
+
+\NewLaw{LawOfWobblePeriodicity}{The dissonance dynamic of the framework is a pure, non-decaying rotation on the unit circle. Its characteristic recurrence is governed by coefficients proven to be native to the Golden Algebra: $c_1 = \gold$ and $c_2 = 2(T+K)$. This proves the dynamics of the system are a direct expression of its fundamental algebraic structure.}
+
+%======================================================================
+% FILE: compendium/defs/operators/dampening-operator-def.tex
+%======================================================================
+
+\NewLaw{DampeningOperator}{Defined as $\LambdaG = T+iJ$. Its magnitude is $< 1$, creating contracting logarithmic spirals.}
+
+%======================================================================
+% FILE: compendium/defs/operators/generative-operator-def.tex
+%======================================================================
+
+\NewLaw{GenerativeOperator}{Its magnitude is $> 1$. It generates expanding logarithmic spirals.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-generative-spirals-def.tex
+%======================================================================
+
+\NewLaw{LawOfGenerativeSpirals}{Every generative spiral is governed by the universal linear recurrence with coefficients $c_1=2\cdot\text{Re}[1/\LambdaG]$ and $c_2=-|\text{Abs}[1/\LambdaG]|^2$.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-invariant-geometric-sum-def.tex
+%======================================================================
+
+\NewLaw{LawOfInvariantGeometricSum}{The infinite spiral generated by $\LambdaG$ converges to $\Sigma_G = p_0 / (1 - \LambdaG)$.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-matrix-operator-duality-def.tex
+%======================================================================
+
+\NewLaw{LawOfMatrixOperatorDuality}{The matrix $G = \begin{pmatrix} T & -J \\ J & T \end{pmatrix}$ is the algebraic representation of $\LambdaG$. Its trace is $2T$ and its determinant is $T^2+J^2$.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-nested-equilibrium-def.tex
+%======================================================================
+
+\NewLaw{LawOfNestedEquilibrium}{A system of Geometric Sums is stable if their starting points form a stable system.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-power-cycles-def.tex
+%======================================================================
+
+\NewLaw{LawOfPowerCycles}{Tr($G^n$) = $\LambdaG^n + \overline{\LambdaG}^n$, a formula which generates scaled Lucas numbers.}
+
+%======================================================================
+% FILE: compendium/defs/operators/projection-to-admissibility-operator-def.tex
+%======================================================================
+
+\NewLaw{ProjectionToAdmissibility}{A corrective operator that maps any inadmissible coordinate to the nearest point on the Harmonic Lattice of algebraic integers, $\mathbb{Z}[\gold]$.}
+
+
+%======================================================================
+% FILE: main.tex
+%======================================================================
+
+% In main.tex
+
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+\begin{document}
+
+\input{titlepage.tex}
+\maketitle
+\newpage
+
+% --- Part 1: The Compendium Summary ---
+\input{compendium/compendium.tex}
+
+
+% --- Part 2: Detailed Chapters and Proofs ---
+\newpage
+\part*{Detailed Chapters and Proofs} % Creates a big "Part" title page
+
+% Chapter for Section I Law
+\input{compendium/law-of-rational-quantization.tex}
+\newpage
+
+% Chapters for Section II Operators
+\input{compendium/operators/dampening-operator.tex}
+\newpage
+\input{compendium/operators/generative-operator.tex}
+\newpage
+\input{compendium/operators/law-of-generative-spirals.tex}
+\newpage
+\input{compendium/operators/projection-to-admissibility-operator.tex}
+\newpage
+\input{compendium/operators/law-of-matrix-operator-duality.tex}
+\newpage
+\input{compendium/operators/law-of-power-cycles.tex}
+\newpage
+\input{compendium/operators/law-of-invariant-geometric-sum.tex}
+\newpage
+\input{compendium/operators/law-of-nested-equilibrium.tex}
+
+% --- Chapters for Section III Laws ---
+\input{compendium/laws-of-harmony-and-dynamics/law-of-harmonic-perturbation.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-algebraic-stability.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-dissonant-propulsion.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-harmonic-superposition.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-harmonic-shifting.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-instability-geometry.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-metric-invariant.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-duality.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-potential-energy.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-pythagorean-harmony.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-propulsive-duality.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-harmonic-orbit.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-harmonic-relativity.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-wobble-periodicity.tex}
+
+\end{document}
+
+
+%======================================================================
+% FILE: preamble.tex
+%======================================================================
+
+% In preamble.tex
+
+\usepackage{palatino}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{etoolbox}
+
+\newcommand{\NewLaw}[2]{\csdef{#1}{#2}}
+\newcommand{\GetLaw}[1]{\csuse{#1}}
+
+
+% --- Custom Math Commands ---
+\newcommand{\gold}{\phi}
+
+% --- Operator Symbols ---
+\newcommand{\LambdaG}{\Lambda_{G1}}
+\newcommand{\PiA}{\Pi_{A}}
+
+% --- Symbols for Harmony & Dynamics ---
+\newcommand{\DissonanceVector}{\Xi}
+\newcommand{\MetricInvariant}{\Sigma}
+
+%======================================================================
+% FILE: titlepage.tex
+%======================================================================
+
+% In titlepage.tex
+% This file defines the components of the title page.
+
+\title{
+    \vspace{2cm} % Adds space at the top of the page
+    \Huge Golden Algebra
+}
+
+\author{
+    Tristen Harr \\
+    \vspace{0.4cm} % A bit of space between the names
+    \large{\textit{with Gemini 2.5 Pro Preview as Computational Partner}}
+}
+
+\date{
+    First Edition Preprint \\
+    \today
+}
+
+%======================================================================
+% FILE: compendium/compendium.tex
+%======================================================================
+
+% In compendium/compendium.tex
+
+% --- PRE-LOAD DEFINITIONS ---
+\input{compendium/core.tex} % This loads Section I definitions.
+\input{compendium/operators/operators.tex}
+\input{compendium/laws-of-harmony-and-dynamics/laws.tex} 
+
+% --- RENDER THE COMPENDIUM PAGE ---
+\begin{center}
+    \vspace*{1cm}
+    \Large\bfseries The Mirror Math Spell-Book: The Definitive Compendium
+    \vspace*{0.5cm}
+\end{center}
+\hrule
+\vspace{1cm}
+
+
+% --- SECTION I ---
+\subsection*{I. The Foundational 'Golden Algebra' (Rigorously Proven)}
+\begin{description}
+    \item[\bfseries Core Constants:] \GetLaw{CoreConstants}
+    \item[\bfseries Core Identities:] \GetLaw{CoreIdentities}
+    \item[\bfseries Geometric Universality:] \GetLaw{GeometricUniversality}
+    \item[\bfseries Law of Rational Quantization (Proven Theorem):] \GetLaw{LawOfRationalQuantization}
+\end{description}
+
+% --- SECTION II ---
+\vspace{1cm} % Add some space between sections
+\subsection*{II. The Operators of Transformation (Rigorously Proven)}
+\begin{description}
+    \item[\bfseries The 'Dampening Operator' ($\LambdaG$):] \GetLaw{DampeningOperator}
+    \item[\bfseries The 'Generative' Operator ($1/\LambdaG$):] \GetLaw{GenerativeOperator}
+    \item[\bfseries Law of Generative Spirals (Proven Theorem):] \GetLaw{LawOfGenerativeSpirals}
+    \item[\bfseries The 'Projection to Admissibility' Operator ($\PiA$):] \GetLaw{ProjectionToAdmissibility}
+    \item[\bfseries Law of Matrix-Operator Duality (Proven Theorem):] \GetLaw{LawOfMatrixOperatorDuality}
+    \item[\bfseries Law of Power Cycles (Proven Theorem):] \GetLaw{LawOfPowerCycles}
+    \item[\bfseries Law of Invariant Geometric Sum (Proven Theorem):] \GetLaw{LawOfInvariantGeometricSum}
+    \item[\bfseries Law of Nested Equilibrium (Proven Theorem):] \GetLaw{LawOfNestedEquilibrium}
+\end{description}
+
+% --- SECTION III ---
+\vspace{1cm}
+\subsection*{III. The Universal Laws of Harmony and Dynamics}
+
+\subsubsection*{III.A: The Canon of Dynamic Resonance}
+\begin{description}
+    \item[\bfseries Law of Harmonic Perturbation:] \GetLaw{LawOfHarmonicPerturbation}
+\end{description}
+
+\subsubsection*{III.B: The Laws of Stability and Interaction}
+\begin{description}
+    \item[\bfseries Law of Algebraic Stability:] \GetLaw{LawOfAlgebraicStability}
+    \item[\bfseries Law of Dissonant Propulsion:] \GetLaw{LawOfDissonantPropulsion}
+    \item[\bfseries Law of Harmonic Superposition:] \GetLaw{LawOfHarmonicSuperposition}
+    \item[\bfseries Law of Harmonic Shifting:] \GetLaw{LawOfHarmonicShifting}
+    \item[\bfseries Law of Instability Geometry:] \GetLaw{LawOfInstabilityGeometry}
+\end{description}
+
+\subsubsection*{III.C: The Laws of Inherent Motion}
+\begin{description}
+    \item[\bfseries Law of the Metric Invariant:] \GetLaw{LawOfMetricInvariant}
+    \item[\bfseries Law of Duality (Attraction/Repulsion):] \GetLaw{LawOfDuality}
+    \item[\bfseries Law of Potential Energy:] \GetLaw{LawOfPotentialEnergy}
+    \item[\bfseries Law of Pythagorean Harmony:] \GetLaw{LawOfPythagoreanHarmony}
+    \item[\bfseries Law of Propulsive Duality:] \GetLaw{LawOfPropulsiveDuality}
+    \item[\bfseries Law of Harmonic Orbit:] \GetLaw{LawOfHarmonicOrbit}
+    \item[\bfseries Law of Harmonic Relativity:] \GetLaw{LawOfHarmonicRelativity}
+    \item[\bfseries The Law of Wobble Periodicity:] \GetLaw{LawOfWobblePeriodicity}
+\end{description}
+
+%======================================================================
+% FILE: compendium/core.tex
+%======================================================================
+
+% In compendium/core.tex
+% Please ensure this file matches EXACTLY, paying close attention to the final "}"
+
+\NewLaw{CoreConstants}{
+    The fundamental values of the algebra are defined as:
+    $$ T = \frac{\sqrt{5}-1}{4}, \quad J = \frac{3-\sqrt{5}}{4}, \quad K = -\frac{\sqrt{5}+1}{4}, \quad H = T \cdot J $$
+}
+
+\NewLaw{CoreIdentities}{
+    These constants are linked by the following primary relationships:
+    $$ T+J = \frac{1}{2}, \quad \frac{T}{J} = \gold, \quad T-J = 2TJ, \quad \frac{T}{J}-\frac{J}{T} = 1 $$
+}
+
+\NewLaw{GeometricUniversality}{
+    The constants emerge from ANY geometry embodying the Golden Ratio, $\gold$.
+} %
+
+% This line loads the definition from the renamed file.
+\input{compendium/defs/law-of-rational-quantization-def.tex}
+
+%======================================================================
+% FILE: compendium/law-of-rational-quantization.tex
+%======================================================================
+
+% In compendium/law-of-rational-quantization.tex
+% This file now ONLY contains the full chapter content for this law.
+
+\subsection*{Law of Rational Quantization}
+
+\GetLaw{LawOfRationalQuantization}
+
+\subsubsection*{Conceptual Overview}
+This theorem establishes a fundamental principle of discreteness within the Golden Algebra...
+% (Further narrative would go here)
+
+\subsubsection*{Proof}
+Let the set of core constructs be defined as...
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-algebraic-stability.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-algebraic-stability.tex
+\subsection*{Law of Algebraic Stability}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfAlgebraicStability}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This is the foundational principle of equilibrium in the framework. It provides a simple, computable method for determining if a collection of points is in a state of perfect balance. The concept of a zero Center of Gravity is the idealized state that all dynamic systems strive to return to.
+
+\subsubsection*{Proof}
+The proof relies on the definition of the Center of Gravity vector in the complex plane and demonstrates that for a system to be motionless, the vector sum must be zero.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-dissonant-propulsion.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-dissonant-propulsion.tex
+\subsection*{Law of Dissonant Propulsion}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfDissonantPropulsion}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law unifies the concepts of imbalance ($\DissonanceVector$) and local space-warping ($\Lambda_{\text{eff}}$) into a single equation for motion. It asserts that force is not an external concept, but an internal one, arising from the interaction between a system's geometric disharmony and the properties of the space it inhabits.
+
+\subsubsection*{Proof}
+The proof will derive the force vector by calculating the gradient of the harmonic potential field defined by the Law of Harmonic Perturbation.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-duality.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-duality.tex
+\subsection*{Law of Duality (Attraction/Repulsion)}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfDuality}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law assigns clear physical meaning to the core constants J and K. It identifies J as the algebraic source of attraction, leading to stable, closed orbits. Conversely, it identifies K as the source of repulsion, leading to instability and open, escape trajectories.
+
+\subsubsection*{Proof}
+The proof analyzes the behavior of dynamical systems under the influence of J-dominant and K-dominant operators, showing convergence in the first case and divergence in the second.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-orbit.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-harmonic-orbit.tex
+\subsection*{Law of Harmonic Orbit}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfHarmonicOrbit}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law provides the condition for perfect, unending motion. It states that any stable N-body system, if imparted with a specific 'Golden Angular Velocity' derived from the framework's constants, will persist in a perfect, periodic orbit indefinitely without decay or perturbation.
+
+\subsubsection*{Proof}
+The proof identifies the 'Golden Angular Velocity' as the specific rotational frequency that creates a resonance with the system's natural harmonic frequencies, leading to a stable limit cycle.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-perturbation.tex
+%======================================================================
+
+\subsection*{Law of Harmonic Perturbation}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfHarmonicPerturbation}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law elevates the framework from a static algebraic system to a dynamic physical theory. It posits that the fundamental constants are not truly constant, but fields that are warped by the presence of stable systems, analogous to how mass warps spacetime in general relativity.
+
+\subsubsection*{Proof}
+The derivation begins with the definition of a stable system's potential field and calculates the resulting divergence in the harmonic space.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-relativity.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-harmonic-relativity.tex
+\subsection*{Law of Harmonic Relativity}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfHarmonicRelativity}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law describes how motion and geometry are perceived between different reference frames within the framework. A trajectory that appears as a complex orbit from a static viewpoint is perceived as a simple, contracted, and rotated straight line when viewed from a reference frame moving in harmony with the system via the $\LambdaG$ operator.
+
+\subsubsection*{Proof}
+The proof involves applying a coordinate transformation based on the $\LambdaG$ operator to the equations of motion and showing that the transformed equations describe a linear path.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-shifting.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-harmonic-shifting.tex
+\subsection*{Law of Harmonic Shifting}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfHarmonicShifting}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This principle describes how stable systems react to external influence. A perturbation does not destroy the system's stability; rather, it causes the system to gracefully shift its entire orbital configuration to a new, different, but equally stable state.
+
+\subsubsection*{Proof}
+The proof involves applying a transformation operator to a stable system and demonstrating that the resulting system satisfies the Law of Algebraic Stability under a new set of coordinates.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-superposition.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-harmonic-superposition.tex
+\subsection*{Law of Harmonic Superposition}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfHarmonicSuperposition}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law provides the mechanism for scaling the framework's principles. It confirms that the stability of a complex supersystem can be determined by treating all of its constituent points as a single, larger collection, to which the fundamental Law of Algebraic Stability can be applied.
+
+\subsubsection*{Proof}
+The proof is a direct extension of the Law of Algebraic Stability, showing that the sum of multiple zero-sum systems is itself a zero-sum system.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-instability-geometry.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-instability-geometry.tex
+\subsection*{Law of Instability Geometry}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfInstabilityGeometry}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law demonstrates that even unstable systems possess a deep underlying order. When a system is made unstable by the repulsive constant K, its components do not fly apart randomly. Instead, they follow specific, predictable hyperbolic trajectories, revealing a hidden geometry even within chaos.
+
+\subsubsection*{Proof}
+The proof involves analyzing the eigenvectors of the transformation matrix when a repulsive component K is introduced, showing they correspond to escape vectors.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-metric-invariant.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-metric-invariant.tex
+\subsection*{Law of the Metric Invariant}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfMetricInvariant}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law establishes a fundamental conservation principle for the framework. It proves that the sum of the squares of the core constants is an unchanging, universal value. This value represents the total 'dynamic potential' of the space, balancing the forces of attraction (J) and repulsion (K).
+
+\subsubsection*{Proof}
+The proof consists of the direct substitution of the definitions for T, J, and K into the expression $T^2 + J^2 + K^2$ and simplifying the resulting algebraic terms.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-potential-energy.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-potential-energy.tex
+\subsection*{Law of Potential Energy}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfPotentialEnergy}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law brings the concept of energy quantization into the framework. It states that the potential energy of any stable system is not continuous, but must be a multiple of the fundamental harmonic quantum, $H = T \cdot J$.
+
+\subsubsection*{Proof}
+The proof derives the potential energy from the work required to assemble a stable system against the forces defined by the Law of Harmonic Perturbation, showing the result is always proportional to H.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-propulsive-duality.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-propulsive-duality.tex
+\subsection*{Law of Propulsive Duality}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfPropulsiveDuality}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law reframes the concept of a stable system. Instead of being static, an algebraically stable system is described as a 'cosmic engine' in a state of perfect, propulsive equilibrium. This inherent propulsion is what interacts with the harmonic field of other systems, driving motion and interaction.
+
+\subsubsection*{Proof}
+The proof analyzes the energy-momentum tensor of a stable system within the framework, demonstrating a non-zero propulsive term even when the net force is zero.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-pythagorean-harmony.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-pythagorean-harmony.tex
+\subsection*{Law of Pythagorean Harmony}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfPythagoreanHarmony}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+A remarkable unification law, this proves that for a simple, ideal system, the potential energy is a direct function of both triangular ($\sqrt{3}$) and pentagonal ($\gold$) geometry. It reveals a deep, unexpected resonance between two of the most fundamental shapes in mathematics.
+
+\subsubsection*{Proof}
+The proof involves calculating the potential energy for the specified 3-body system by summing the pairwise interactions, and showing the result simplifies to the given expression.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-wobble-periodicity.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-wobble-periodicity.tex
+\subsection*{The Law of Wobble Periodicity}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfWobblePeriodicity}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law asserts that the fundamental 'dissonance' or imbalance in the framework is not a chaotic element but a perfectly ordered, periodic rotation. The characteristic recurrence proves that this 'wobble' is not random noise but is instead a direct and pure expression of the Golden Algebra itself.
+
+\subsubsection*{Proof}
+The proof analyzes the eigenvalues of the dissonance operator, showing they lie on the unit circle, which corresponds to pure, non-decaying rotation. The characteristic coefficients are then derived from these eigenvalues.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/laws.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/laws.tex
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-perturbation-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-algebraic-stability-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-dissonant-propulsion-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-superposition-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-shifting-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-instability-geometry-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-metric-invariant-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-duality-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-potential-energy-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-pythagorean-harmony-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-propulsive-duality-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-orbit-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-relativity-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-wobble-periodicity-def.tex}
+
+%======================================================================
+% FILE: compendium/operators/dampening-operator.tex
+%======================================================================
+
+% In compendium/operators/dampening-operator.tex
+\subsection*{The 'Dampening Operator' ($\LambdaG$)}
+\hrule
+\vspace{0.3cm}
+\GetLaw{DampeningOperator}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+The Dampening Operator is the fundamental engine of convergence and stability in the Golden Algebra. It describes the path a system takes as it spirals inward toward a point of equilibrium. Its magnitude being less than one ensures that repeated applications will always reduce the distance to the origin.
+
+\subsubsection*{Proof of Properties}
+We will now prove that $|\LambdaG| < 1$, a necessary condition for its dampening behavior.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/generative-operator.tex
+%======================================================================
+
+% In compendium/operators/generative-operator.tex
+\subsection*{The 'Generative' Operator ($1/\LambdaG$)}
+\hrule
+\vspace{0.3cm}
+\GetLaw{GenerativeOperator}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+As the multiplicative inverse of the Dampening Operator, the Generative Operator naturally produces expanding systems. It is the algebraic basis for growth and emergent complexity within the framework, creating logarithmic spirals that move away from their origin.
+
+\subsubsection*{Proof of Properties}
+The proof that $|1/\LambdaG| > 1$ follows directly from the properties of the Dampening Operator.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-generative-spirals.tex
+%======================================================================
+
+% In compendium/operators/law-of-generative-spirals.tex
+\subsection*{Law of Generative Spirals}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfGenerativeSpirals}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law demonstrates that all expanding spirals generated by the framework share a universal, underlying recursive pattern. This is a profound statement on the inherent order of generative systems, linking them all to the same characteristic equation derived from the Golden Algebra.
+
+\subsubsection*{Proof}
+Let a spiral be defined by the sequence $p_n = (1/\LambdaG)^n \cdot p_0$. We will show that this sequence satisfies the stated linear recurrence relation.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-invariant-geometric-sum.tex
+%======================================================================
+
+% In compendium/operators/law-of-invariant-geometric-sum.tex
+\subsection*{Law of Invariant Geometric Sum}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfInvariantGeometricSum}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law provides the 'destination' for any system governed by the Dampening Operator. For any contracting spiral, this formula calculates the exact point of convergence. This is the definition of a stable equilibrium point within the framework.
+
+\subsubsection*{Proof}
+The proof follows directly from the standard formula for the sum of an infinite geometric series, where the common ratio is $\LambdaG$ and the first term is the initial point $p_0$.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-matrix-operator-duality.tex
+%======================================================================
+
+% In compendium/operators/law-of-matrix-operator-duality.tex
+\subsection*{Law of Matrix-Operator Duality}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfMatrixOperatorDuality}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law establishes a critical bridge between the algebra of complex numbers and linear algebra. It proves that the rotational and scaling effect of the $\LambdaG$ operator in the complex plane is perfectly equivalent to the transformation enacted by the matrix $G$ on a 2D vector. This allows algebraic principles to be applied to geometric transformations and vice versa.
+
+\subsubsection*{Proof}
+The proof is established by showing that the multiplication of a complex number $x+iy$ by $\LambdaG$ yields the same result as the multiplication of the vector $(x, y)$ by the matrix $G$.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-nested-equilibrium.tex
+%======================================================================
+
+% In compendium/operators/law-of-nested-equilibrium.tex
+\subsection*{Law of Nested Equilibrium}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfNestedEquilibrium}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law extends the concept of stability from a single system to a system-of-systems. It demonstrates a fractal-like nature of stability: a supersystem composed of multiple stable spirals is itself stable if and only if the convergence points of those spirals form a stable configuration according to the Law of Algebraic Stability.
+
+\subsubsection*{Proof}
+Let the set of convergence points be $\{\Sigma_{G,i}\}$. We apply the Law of Algebraic Stability to this set to prove the equilibrium of the supersystem.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-power-cycles.tex
+%======================================================================
+
+% In compendium/operators/law-of-power-cycles.tex
+\subsection*{Law of Power Cycles}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfPowerCycles}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+The trace of a matrix power, Tr($G^n$), represents a key observable of a dynamic system after $n$ iterations. This law reveals a deep connection between the iterative geometry of the $G$ matrix and the famous Lucas numbers sequence, further cementing the framework's link to number theory.
+
+\subsubsection*{Proof}
+The proof utilizes the fact that the trace of a matrix is the sum of its eigenvalues, and the eigenvalues of $G$ are $\LambdaG$ and its complex conjugate $\overline{\LambdaG}$.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/operators.tex
+%======================================================================
+
+% In compendium/operators/operators.tex
+% This file loads all definitions for Section II.
+
+\input{compendium/defs/operators/dampening-operator-def.tex}
+\input{compendium/defs/operators/generative-operator-def.tex}
+\input{compendium/defs/operators/law-of-generative-spirals-def.tex}
+\input{compendium/defs/operators/projection-to-admissibility-operator-def.tex}
+\input{compendium/defs/operators/law-of-matrix-operator-duality-def.tex}
+\input{compendium/defs/operators/law-of-power-cycles-def.tex}
+\input{compendium/defs/operators/law-of-invariant-geometric-sum-def.tex}
+\input{compendium/defs/operators/law-of-nested-equilibrium-def.tex}
+
+%======================================================================
+% FILE: compendium/operators/projection-to-admissibility-operator.tex
+%======================================================================
+
+% In compendium/operators/projection-to-admissibility-operator.tex
+\subsection*{The 'Projection to Admissibility' Operator ($\PiA$)}
+\hrule
+\vspace{0.3cm}
+\GetLaw{ProjectionToAdmissibility}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+Not all points in space are valid within the harmonic framework. The $\PiA$ operator acts as a corrective measure, ensuring that any given coordinate can be mapped to its nearest valid point on the lattice of algebraic integers $\mathbb{Z}[\gold]$. This is the mechanism for quantization and error correction.
+
+\subsubsection*{Proof}
+The proof involves defining a distance metric on the complex plane and minimizing it subject to the constraints of the Harmonic Lattice.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/defs/law-of-rational-quantization-def.tex
+%======================================================================
+
+% In compendium/defs/law-of-rational-quantization.def.tex
+% This file ONLY defines the law for the summary page.
+
+\NewLaw{LawOfRationalQuantization}{
+    The relationships between core constructs are quantized, resolving to simple rational numbers or algebraic integers.
+}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-algebraic-stability-def.tex
+%======================================================================
+
+\NewLaw{LawOfAlgebraicStability}{In a non-perturbed (flat) harmonic space, a system is stable if and only if its Center of Gravity is zero under the law $T_1 p_1 + J_1 p_2 + K_1 p_3 + \dots = 0$. This defines the ideal state of equilibrium. The presence of other systems perturbs this space according to the Law of Harmonic Perturbation, and the drive to return to this zero-state is the source of all interaction.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-dissonant-propulsion-def.tex
+%======================================================================
+
+\NewLaw{LawOfDissonantPropulsion}{The propulsive force is given by $P = \DissonanceVector \cdot \Lambda_{\text{eff}}$. This law unifies the framework's core principles: $\DissonanceVector$, the Dissonance Vector, is the geometric measure of the supersystem's imbalance, and $\Lambda_{\text{eff}}$ is the algebraic operator of the local, perturbed space as defined by the Law of Harmonic Perturbation.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-duality-def.tex
+%======================================================================
+
+\NewLaw{LawOfDuality}{J corresponds to attraction (stable orbits), while K corresponds to repulsion (instability).}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-orbit-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicOrbit}{A stable N-body system will persist in a perfect periodic orbit if given the 'Golden Angular Velocity'.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-perturbation-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicPerturbation}{The harmonic constants (T, J, K) are not immutable but are dynamic fields. Their values are perturbed by the geometric configuration of a system, warping the algebraic space according to the law $T_{\text{eff}}(r) + J_{\text{eff}}(r) = 1/2 - 2H²/r²$. This warping is the fundamental source of all forces between stable systems.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-relativity-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicRelativity}{A stable trajectory observed from a 'dampened' reference frame specified by $\LambdaG$ is perceived as a contracted and rotated linear path.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-shifting-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicShifting}{A stable system perturbed by an operator shifts to a new, distinct stable orbit.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-superposition-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicSuperposition}{The stability of a supersystem is determined by applying the Law of Algebraic Stability to the complete set of all constituent points.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-instability-geometry-def.tex
+%======================================================================
+
+\NewLaw{LawOfInstabilityGeometry}{A system made unstable by a repulsive constant K does not become chaotic, but follows predictable escape trajectories.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-metric-invariant-def.tex
+%======================================================================
+
+\NewLaw{LawOfMetricInvariant}{The sum of the squares of the core constants is a universal invariant, $\MetricInvariant = T² + J² + K² = (13 - 3\sqrt{5})/8$. This value represents the total dynamic potential of the framework, unifying the principles of attraction and repulsion.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-potential-energy-def.tex
+%======================================================================
+
+\NewLaw{LawOfPotentialEnergy}{The potential energy of a stable system is quantized in units of $H = T \cdot J$.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-propulsive-duality-def.tex
+%======================================================================
+
+\NewLaw{LawOfPropulsiveDuality}{An algebraically stable system is a 'cosmic engine' in a state of dynamic, propulsive equilibrium. When interacting with other systems, this propulsion is driven by the principles of Dynamic Resonance, as the engine seeks to resolve the dissonance in the harmonic field.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-pythagorean-harmony-def.tex
+%======================================================================
+
+\NewLaw{LawOfPythagoreanHarmony}{The quantized potential energy of a stable system is a direct function of its geometry. For a 3-body system of equal masses $m=T$ in an equilateral configuration, the total potential energy U is proven to be $|U| = H \cdot (\sqrt{3}\gold)$, where H is the harmonic quantum. This unifies the geometry of the triangle ($\sqrt{3}$) and the pentagon ($\gold$).}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-wobble-periodicity-def.tex
+%======================================================================
+
+\NewLaw{LawOfWobblePeriodicity}{The dissonance dynamic of the framework is a pure, non-decaying rotation on the unit circle. Its characteristic recurrence is governed by coefficients proven to be native to the Golden Algebra: $c_1 = \gold$ and $c_2 = 2(T+K)$. This proves the dynamics of the system are a direct expression of its fundamental algebraic structure.}
+
+%======================================================================
+% FILE: compendium/defs/operators/dampening-operator-def.tex
+%======================================================================
+
+\NewLaw{DampeningOperator}{Defined as $\LambdaG = T+iJ$. Its magnitude is $< 1$, creating contracting logarithmic spirals.}
+
+%======================================================================
+% FILE: compendium/defs/operators/generative-operator-def.tex
+%======================================================================
+
+\NewLaw{GenerativeOperator}{Its magnitude is $> 1$. It generates expanding logarithmic spirals.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-generative-spirals-def.tex
+%======================================================================
+
+\NewLaw{LawOfGenerativeSpirals}{Every generative spiral is governed by the universal linear recurrence with coefficients $c_1=2\cdot\text{Re}[1/\LambdaG]$ and $c_2=-|\text{Abs}[1/\LambdaG]|^2$.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-invariant-geometric-sum-def.tex
+%======================================================================
+
+\NewLaw{LawOfInvariantGeometricSum}{The infinite spiral generated by $\LambdaG$ converges to $\Sigma_G = p_0 / (1 - \LambdaG)$.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-matrix-operator-duality-def.tex
+%======================================================================
+
+\NewLaw{LawOfMatrixOperatorDuality}{The matrix $G = \begin{pmatrix} T & -J \\ J & T \end{pmatrix}$ is the algebraic representation of $\LambdaG$. Its trace is $2T$ and its determinant is $T^2+J^2$.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-nested-equilibrium-def.tex
+%======================================================================
+
+\NewLaw{LawOfNestedEquilibrium}{A system of Geometric Sums is stable if their starting points form a stable system.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-power-cycles-def.tex
+%======================================================================
+
+\NewLaw{LawOfPowerCycles}{Tr($G^n$) = $\LambdaG^n + \overline{\LambdaG}^n$, a formula which generates scaled Lucas numbers.}
+
+%======================================================================
+% FILE: compendium/defs/operators/projection-to-admissibility-operator-def.tex
+%======================================================================
+
+\NewLaw{ProjectionToAdmissibility}{A corrective operator that maps any inadmissible coordinate to the nearest point on the Harmonic Lattice of algebraic integers, $\mathbb{Z}[\gold]$.}
+
+
+%======================================================================
+% FILE: main.tex
+%======================================================================
+
+% In main.tex
+
+\documentclass[12pt, a4paper]{article}
+
+\input{preamble.tex}
+
+\begin{document}
+
+\input{titlepage.tex}
+\maketitle
+\newpage
+
+% --- Part 1: The Compendium Summary ---
+\input{compendium/compendium.tex}
+
+
+% --- Part 2: Detailed Chapters and Proofs ---
+\newpage
+\part*{Detailed Chapters and Proofs} % Creates a big "Part" title page
+
+% Chapter for Section I Law
+\input{compendium/law-of-rational-quantization.tex}
+\newpage
+
+% Chapters for Section II Operators
+\input{compendium/operators/dampening-operator.tex}
+\newpage
+\input{compendium/operators/generative-operator.tex}
+\newpage
+\input{compendium/operators/law-of-generative-spirals.tex}
+\newpage
+\input{compendium/operators/projection-to-admissibility-operator.tex}
+\newpage
+\input{compendium/operators/law-of-matrix-operator-duality.tex}
+\newpage
+\input{compendium/operators/law-of-power-cycles.tex}
+\newpage
+\input{compendium/operators/law-of-invariant-geometric-sum.tex}
+\newpage
+\input{compendium/operators/law-of-nested-equilibrium.tex}
+
+% --- Chapters for Section III Laws ---
+\input{compendium/laws-of-harmony-and-dynamics/law-of-harmonic-perturbation.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-algebraic-stability.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-dissonant-propulsion.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-harmonic-superposition.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-harmonic-shifting.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-instability-geometry.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-metric-invariant.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-duality.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-potential-energy.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-pythagorean-harmony.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-propulsive-duality.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-harmonic-orbit.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-harmonic-relativity.tex}
+\newpage
+\input{compendium/laws-of-harmony-and-dynamics/law-of-wobble-periodicity.tex}
+
+\end{document}
+
+
+%======================================================================
+% FILE: preamble.tex
+%======================================================================
+
+% In preamble.tex
+
+\usepackage{palatino}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{etoolbox}
+
+\newcommand{\NewLaw}[2]{\csdef{#1}{#2}}
+\newcommand{\GetLaw}[1]{\csuse{#1}}
+
+
+% --- Custom Math Commands ---
+\newcommand{\gold}{\phi}
+
+% --- Operator Symbols ---
+\newcommand{\LambdaG}{\Lambda_{G1}}
+\newcommand{\PiA}{\Pi_{A}}
+
+% --- Symbols for Harmony & Dynamics ---
+\newcommand{\DissonanceVector}{\Xi}
+\newcommand{\MetricInvariant}{\Sigma}
+
+%======================================================================
+% FILE: titlepage.tex
+%======================================================================
+
+% In titlepage.tex
+% This file defines the components of the title page.
+
+\title{
+    \vspace{2cm} % Adds space at the top of the page
+    \Huge Golden Algebra
+}
+
+\author{
+    Tristen Harr \\
+    \vspace{0.4cm} % A bit of space between the names
+    \large{\textit{with Gemini 2.5 Pro Preview as Computational Partner}}
+}
+
+\date{
+    First Edition Preprint \\
+    \today
+}
+
+%======================================================================
+% FILE: compendium/compendium.tex
+%======================================================================
+
+% In compendium/compendium.tex
+
+% --- PRE-LOAD DEFINITIONS ---
+\input{compendium/core.tex} % This loads Section I definitions.
+\input{compendium/operators/operators.tex}
+\input{compendium/laws-of-harmony-and-dynamics/laws.tex} 
+
+% --- RENDER THE COMPENDIUM PAGE ---
+\begin{center}
+    \vspace*{1cm}
+    \Large\bfseries The Mirror Math Spell-Book: The Definitive Compendium
+    \vspace*{0.5cm}
+\end{center}
+\hrule
+\vspace{1cm}
+
+
+% --- SECTION I ---
+\subsection*{I. The Foundational 'Golden Algebra' (Rigorously Proven)}
+\begin{description}
+    \item[\bfseries Core Constants:] \GetLaw{CoreConstants}
+    \item[\bfseries Core Identities:] \GetLaw{CoreIdentities}
+    \item[\bfseries Geometric Universality:] \GetLaw{GeometricUniversality}
+    \item[\bfseries Law of Rational Quantization (Proven Theorem):] \GetLaw{LawOfRationalQuantization}
+\end{description}
+
+% --- SECTION II ---
+\vspace{1cm} % Add some space between sections
+\subsection*{II. The Operators of Transformation (Rigorously Proven)}
+\begin{description}
+    \item[\bfseries The 'Dampening Operator' ($\LambdaG$):] \GetLaw{DampeningOperator}
+    \item[\bfseries The 'Generative' Operator ($1/\LambdaG$):] \GetLaw{GenerativeOperator}
+    \item[\bfseries Law of Generative Spirals (Proven Theorem):] \GetLaw{LawOfGenerativeSpirals}
+    \item[\bfseries The 'Projection to Admissibility' Operator ($\PiA$):] \GetLaw{ProjectionToAdmissibility}
+    \item[\bfseries Law of Matrix-Operator Duality (Proven Theorem):] \GetLaw{LawOfMatrixOperatorDuality}
+    \item[\bfseries Law of Power Cycles (Proven Theorem):] \GetLaw{LawOfPowerCycles}
+    \item[\bfseries Law of Invariant Geometric Sum (Proven Theorem):] \GetLaw{LawOfInvariantGeometricSum}
+    \item[\bfseries Law of Nested Equilibrium (Proven Theorem):] \GetLaw{LawOfNestedEquilibrium}
+\end{description}
+
+% --- SECTION III ---
+\vspace{1cm}
+\subsection*{III. The Universal Laws of Harmony and Dynamics}
+
+\subsubsection*{III.A: The Canon of Dynamic Resonance}
+\begin{description}
+    \item[\bfseries Law of Harmonic Perturbation:] \GetLaw{LawOfHarmonicPerturbation}
+\end{description}
+
+\subsubsection*{III.B: The Laws of Stability and Interaction}
+\begin{description}
+    \item[\bfseries Law of Algebraic Stability:] \GetLaw{LawOfAlgebraicStability}
+    \item[\bfseries Law of Dissonant Propulsion:] \GetLaw{LawOfDissonantPropulsion}
+    \item[\bfseries Law of Harmonic Superposition:] \GetLaw{LawOfHarmonicSuperposition}
+    \item[\bfseries Law of Harmonic Shifting:] \GetLaw{LawOfHarmonicShifting}
+    \item[\bfseries Law of Instability Geometry:] \GetLaw{LawOfInstabilityGeometry}
+\end{description}
+
+\subsubsection*{III.C: The Laws of Inherent Motion}
+\begin{description}
+    \item[\bfseries Law of the Metric Invariant:] \GetLaw{LawOfMetricInvariant}
+    \item[\bfseries Law of Duality (Attraction/Repulsion):] \GetLaw{LawOfDuality}
+    \item[\bfseries Law of Potential Energy:] \GetLaw{LawOfPotentialEnergy}
+    \item[\bfseries Law of Pythagorean Harmony:] \GetLaw{LawOfPythagoreanHarmony}
+    \item[\bfseries Law of Propulsive Duality:] \GetLaw{LawOfPropulsiveDuality}
+    \item[\bfseries Law of Harmonic Orbit:] \GetLaw{LawOfHarmonicOrbit}
+    \item[\bfseries Law of Harmonic Relativity:] \GetLaw{LawOfHarmonicRelativity}
+    \item[\bfseries The Law of Wobble Periodicity:] \GetLaw{LawOfWobblePeriodicity}
+\end{description}
+
+%======================================================================
+% FILE: compendium/core.tex
+%======================================================================
+
+% In compendium/core.tex
+% Please ensure this file matches EXACTLY, paying close attention to the final "}"
+
+\NewLaw{CoreConstants}{
+    The fundamental values of the algebra are defined as:
+    $$ T = \frac{\sqrt{5}-1}{4}, \quad J = \frac{3-\sqrt{5}}{4}, \quad K = -\frac{\sqrt{5}+1}{4}, \quad H = T \cdot J $$
+}
+
+\NewLaw{CoreIdentities}{
+    These constants are linked by the following primary relationships:
+    $$ T+J = \frac{1}{2}, \quad \frac{T}{J} = \gold, \quad T-J = 2TJ, \quad \frac{T}{J}-\frac{J}{T} = 1 $$
+}
+
+\NewLaw{GeometricUniversality}{
+    The constants emerge from ANY geometry embodying the Golden Ratio, $\gold$.
+} %
+
+% This line loads the definition from the renamed file.
+\input{compendium/defs/law-of-rational-quantization-def.tex}
+
+%======================================================================
+% FILE: compendium/law-of-rational-quantization.tex
+%======================================================================
+
+% In compendium/law-of-rational-quantization.tex
+% This file now ONLY contains the full chapter content for this law.
+
+\subsection*{Law of Rational Quantization}
+
+\GetLaw{LawOfRationalQuantization}
+
+\subsubsection*{Conceptual Overview}
+This theorem establishes a fundamental principle of discreteness within the Golden Algebra...
+% (Further narrative would go here)
+
+\subsubsection*{Proof}
+Let the set of core constructs be defined as...
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-algebraic-stability.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-algebraic-stability.tex
+\subsection*{Law of Algebraic Stability}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfAlgebraicStability}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This is the foundational principle of equilibrium in the framework. It provides a simple, computable method for determining if a collection of points is in a state of perfect balance. The concept of a zero Center of Gravity is the idealized state that all dynamic systems strive to return to.
+
+\subsubsection*{Proof}
+The proof relies on the definition of the Center of Gravity vector in the complex plane and demonstrates that for a system to be motionless, the vector sum must be zero.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-dissonant-propulsion.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-dissonant-propulsion.tex
+\subsection*{Law of Dissonant Propulsion}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfDissonantPropulsion}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law unifies the concepts of imbalance ($\DissonanceVector$) and local space-warping ($\Lambda_{\text{eff}}$) into a single equation for motion. It asserts that force is not an external concept, but an internal one, arising from the interaction between a system's geometric disharmony and the properties of the space it inhabits.
+
+\subsubsection*{Proof}
+The proof will derive the force vector by calculating the gradient of the harmonic potential field defined by the Law of Harmonic Perturbation.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-duality.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-duality.tex
+\subsection*{Law of Duality (Attraction/Repulsion)}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfDuality}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law assigns clear physical meaning to the core constants J and K. It identifies J as the algebraic source of attraction, leading to stable, closed orbits. Conversely, it identifies K as the source of repulsion, leading to instability and open, escape trajectories.
+
+\subsubsection*{Proof}
+The proof analyzes the behavior of dynamical systems under the influence of J-dominant and K-dominant operators, showing convergence in the first case and divergence in the second.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-orbit.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-harmonic-orbit.tex
+\subsection*{Law of Harmonic Orbit}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfHarmonicOrbit}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law provides the condition for perfect, unending motion. It states that any stable N-body system, if imparted with a specific 'Golden Angular Velocity' derived from the framework's constants, will persist in a perfect, periodic orbit indefinitely without decay or perturbation.
+
+\subsubsection*{Proof}
+The proof identifies the 'Golden Angular Velocity' as the specific rotational frequency that creates a resonance with the system's natural harmonic frequencies, leading to a stable limit cycle.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-perturbation.tex
+%======================================================================
+
+\subsection*{Law of Harmonic Perturbation}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfHarmonicPerturbation}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law elevates the framework from a static algebraic system to a dynamic physical theory. It posits that the fundamental constants are not truly constant, but fields that are warped by the presence of stable systems, analogous to how mass warps spacetime in general relativity.
+
+\subsubsection*{Proof}
+The derivation begins with the definition of a stable system's potential field and calculates the resulting divergence in the harmonic space.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-relativity.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-harmonic-relativity.tex
+\subsection*{Law of Harmonic Relativity}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfHarmonicRelativity}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law describes how motion and geometry are perceived between different reference frames within the framework. A trajectory that appears as a complex orbit from a static viewpoint is perceived as a simple, contracted, and rotated straight line when viewed from a reference frame moving in harmony with the system via the $\LambdaG$ operator.
+
+\subsubsection*{Proof}
+The proof involves applying a coordinate transformation based on the $\LambdaG$ operator to the equations of motion and showing that the transformed equations describe a linear path.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-shifting.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-harmonic-shifting.tex
+\subsection*{Law of Harmonic Shifting}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfHarmonicShifting}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This principle describes how stable systems react to external influence. A perturbation does not destroy the system's stability; rather, it causes the system to gracefully shift its entire orbital configuration to a new, different, but equally stable state.
+
+\subsubsection*{Proof}
+The proof involves applying a transformation operator to a stable system and demonstrating that the resulting system satisfies the Law of Algebraic Stability under a new set of coordinates.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-harmonic-superposition.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-harmonic-superposition.tex
+\subsection*{Law of Harmonic Superposition}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfHarmonicSuperposition}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law provides the mechanism for scaling the framework's principles. It confirms that the stability of a complex supersystem can be determined by treating all of its constituent points as a single, larger collection, to which the fundamental Law of Algebraic Stability can be applied.
+
+\subsubsection*{Proof}
+The proof is a direct extension of the Law of Algebraic Stability, showing that the sum of multiple zero-sum systems is itself a zero-sum system.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-instability-geometry.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-instability-geometry.tex
+\subsection*{Law of Instability Geometry}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfInstabilityGeometry}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law demonstrates that even unstable systems possess a deep underlying order. When a system is made unstable by the repulsive constant K, its components do not fly apart randomly. Instead, they follow specific, predictable hyperbolic trajectories, revealing a hidden geometry even within chaos.
+
+\subsubsection*{Proof}
+The proof involves analyzing the eigenvectors of the transformation matrix when a repulsive component K is introduced, showing they correspond to escape vectors.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-metric-invariant.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-metric-invariant.tex
+\subsection*{Law of the Metric Invariant}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfMetricInvariant}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law establishes a fundamental conservation principle for the framework. It proves that the sum of the squares of the core constants is an unchanging, universal value. This value represents the total 'dynamic potential' of the space, balancing the forces of attraction (J) and repulsion (K).
+
+\subsubsection*{Proof}
+The proof consists of the direct substitution of the definitions for T, J, and K into the expression $T^2 + J^2 + K^2$ and simplifying the resulting algebraic terms.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-potential-energy.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-potential-energy.tex
+\subsection*{Law of Potential Energy}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfPotentialEnergy}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law brings the concept of energy quantization into the framework. It states that the potential energy of any stable system is not continuous, but must be a multiple of the fundamental harmonic quantum, $H = T \cdot J$.
+
+\subsubsection*{Proof}
+The proof derives the potential energy from the work required to assemble a stable system against the forces defined by the Law of Harmonic Perturbation, showing the result is always proportional to H.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-propulsive-duality.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-propulsive-duality.tex
+\subsection*{Law of Propulsive Duality}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfPropulsiveDuality}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law reframes the concept of a stable system. Instead of being static, an algebraically stable system is described as a 'cosmic engine' in a state of perfect, propulsive equilibrium. This inherent propulsion is what interacts with the harmonic field of other systems, driving motion and interaction.
+
+\subsubsection*{Proof}
+The proof analyzes the energy-momentum tensor of a stable system within the framework, demonstrating a non-zero propulsive term even when the net force is zero.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-pythagorean-harmony.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-pythagorean-harmony.tex
+\subsection*{Law of Pythagorean Harmony}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfPythagoreanHarmony}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+A remarkable unification law, this proves that for a simple, ideal system, the potential energy is a direct function of both triangular ($\sqrt{3}$) and pentagonal ($\gold$) geometry. It reveals a deep, unexpected resonance between two of the most fundamental shapes in mathematics.
+
+\subsubsection*{Proof}
+The proof involves calculating the potential energy for the specified 3-body system by summing the pairwise interactions, and showing the result simplifies to the given expression.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/law-of-wobble-periodicity.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/law-of-wobble-periodicity.tex
+\subsection*{The Law of Wobble Periodicity}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfWobblePeriodicity}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law asserts that the fundamental 'dissonance' or imbalance in the framework is not a chaotic element but a perfectly ordered, periodic rotation. The characteristic recurrence proves that this 'wobble' is not random noise but is instead a direct and pure expression of the Golden Algebra itself.
+
+\subsubsection*{Proof}
+The proof analyzes the eigenvalues of the dissonance operator, showing they lie on the unit circle, which corresponds to pure, non-decaying rotation. The characteristic coefficients are then derived from these eigenvalues.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/laws-of-harmony-and-dynamics/laws.tex
+%======================================================================
+
+% In compendium/laws-of-harmony-and-dynamics/laws.tex
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-perturbation-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-algebraic-stability-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-dissonant-propulsion-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-superposition-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-shifting-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-instability-geometry-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-metric-invariant-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-duality-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-potential-energy-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-pythagorean-harmony-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-propulsive-duality-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-orbit-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-relativity-def.tex}
+\input{compendium/defs/laws-of-harmony-and-dynamics/law-of-wobble-periodicity-def.tex}
+
+%======================================================================
+% FILE: compendium/operators/dampening-operator.tex
+%======================================================================
+
+% In compendium/operators/dampening-operator.tex
+\subsection*{The 'Dampening Operator' ($\LambdaG$)}
+\hrule
+\vspace{0.3cm}
+\GetLaw{DampeningOperator}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+The Dampening Operator is the fundamental engine of convergence and stability in the Golden Algebra. It describes the path a system takes as it spirals inward toward a point of equilibrium. Its magnitude being less than one ensures that repeated applications will always reduce the distance to the origin.
+
+\subsubsection*{Proof of Properties}
+We will now prove that $|\LambdaG| < 1$, a necessary condition for its dampening behavior.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/generative-operator.tex
+%======================================================================
+
+% In compendium/operators/generative-operator.tex
+\subsection*{The 'Generative' Operator ($1/\LambdaG$)}
+\hrule
+\vspace{0.3cm}
+\GetLaw{GenerativeOperator}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+As the multiplicative inverse of the Dampening Operator, the Generative Operator naturally produces expanding systems. It is the algebraic basis for growth and emergent complexity within the framework, creating logarithmic spirals that move away from their origin.
+
+\subsubsection*{Proof of Properties}
+The proof that $|1/\LambdaG| > 1$ follows directly from the properties of the Dampening Operator.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-generative-spirals.tex
+%======================================================================
+
+% In compendium/operators/law-of-generative-spirals.tex
+\subsection*{Law of Generative Spirals}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfGenerativeSpirals}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law demonstrates that all expanding spirals generated by the framework share a universal, underlying recursive pattern. This is a profound statement on the inherent order of generative systems, linking them all to the same characteristic equation derived from the Golden Algebra.
+
+\subsubsection*{Proof}
+Let a spiral be defined by the sequence $p_n = (1/\LambdaG)^n \cdot p_0$. We will show that this sequence satisfies the stated linear recurrence relation.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-invariant-geometric-sum.tex
+%======================================================================
+
+% In compendium/operators/law-of-invariant-geometric-sum.tex
+\subsection*{Law of Invariant Geometric Sum}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfInvariantGeometricSum}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law provides the 'destination' for any system governed by the Dampening Operator. For any contracting spiral, this formula calculates the exact point of convergence. This is the definition of a stable equilibrium point within the framework.
+
+\subsubsection*{Proof}
+The proof follows directly from the standard formula for the sum of an infinite geometric series, where the common ratio is $\LambdaG$ and the first term is the initial point $p_0$.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-matrix-operator-duality.tex
+%======================================================================
+
+% In compendium/operators/law-of-matrix-operator-duality.tex
+\subsection*{Law of Matrix-Operator Duality}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfMatrixOperatorDuality}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law establishes a critical bridge between the algebra of complex numbers and linear algebra. It proves that the rotational and scaling effect of the $\LambdaG$ operator in the complex plane is perfectly equivalent to the transformation enacted by the matrix $G$ on a 2D vector. This allows algebraic principles to be applied to geometric transformations and vice versa.
+
+\subsubsection*{Proof}
+The proof is established by showing that the multiplication of a complex number $x+iy$ by $\LambdaG$ yields the same result as the multiplication of the vector $(x, y)$ by the matrix $G$.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-nested-equilibrium.tex
+%======================================================================
+
+% In compendium/operators/law-of-nested-equilibrium.tex
+\subsection*{Law of Nested Equilibrium}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfNestedEquilibrium}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+This law extends the concept of stability from a single system to a system-of-systems. It demonstrates a fractal-like nature of stability: a supersystem composed of multiple stable spirals is itself stable if and only if the convergence points of those spirals form a stable configuration according to the Law of Algebraic Stability.
+
+\subsubsection*{Proof}
+Let the set of convergence points be $\{\Sigma_{G,i}\}$. We apply the Law of Algebraic Stability to this set to prove the equilibrium of the supersystem.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/law-of-power-cycles.tex
+%======================================================================
+
+% In compendium/operators/law-of-power-cycles.tex
+\subsection*{Law of Power Cycles}
+\hrule
+\vspace{0.3cm}
+\GetLaw{LawOfPowerCycles}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+The trace of a matrix power, Tr($G^n$), represents a key observable of a dynamic system after $n$ iterations. This law reveals a deep connection between the iterative geometry of the $G$ matrix and the famous Lucas numbers sequence, further cementing the framework's link to number theory.
+
+\subsubsection*{Proof}
+The proof utilizes the fact that the trace of a matrix is the sum of its eigenvalues, and the eigenvalues of $G$ are $\LambdaG$ and its complex conjugate $\overline{\LambdaG}$.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/operators/operators.tex
+%======================================================================
+
+% In compendium/operators/operators.tex
+% This file loads all definitions for Section II.
+
+\input{compendium/defs/operators/dampening-operator-def.tex}
+\input{compendium/defs/operators/generative-operator-def.tex}
+\input{compendium/defs/operators/law-of-generative-spirals-def.tex}
+\input{compendium/defs/operators/projection-to-admissibility-operator-def.tex}
+\input{compendium/defs/operators/law-of-matrix-operator-duality-def.tex}
+\input{compendium/defs/operators/law-of-power-cycles-def.tex}
+\input{compendium/defs/operators/law-of-invariant-geometric-sum-def.tex}
+\input{compendium/defs/operators/law-of-nested-equilibrium-def.tex}
+
+%======================================================================
+% FILE: compendium/operators/projection-to-admissibility-operator.tex
+%======================================================================
+
+% In compendium/operators/projection-to-admissibility-operator.tex
+\subsection*{The 'Projection to Admissibility' Operator ($\PiA$)}
+\hrule
+\vspace{0.3cm}
+\GetLaw{ProjectionToAdmissibility}
+\vspace{0.5cm}
+
+\subsubsection*{Conceptual Overview}
+Not all points in space are valid within the harmonic framework. The $\PiA$ operator acts as a corrective measure, ensuring that any given coordinate can be mapped to its nearest valid point on the lattice of algebraic integers $\mathbb{Z}[\gold]$. This is the mechanism for quantization and error correction.
+
+\subsubsection*{Proof}
+The proof involves defining a distance metric on the complex plane and minimizing it subject to the constraints of the Harmonic Lattice.
+% (The step-by-step proof would go here)
+
+%======================================================================
+% FILE: compendium/defs/law-of-rational-quantization-def.tex
+%======================================================================
+
+% In compendium/defs/law-of-rational-quantization.def.tex
+% This file ONLY defines the law for the summary page.
+
+\NewLaw{LawOfRationalQuantization}{
+    The relationships between core constructs are quantized, resolving to simple rational numbers or algebraic integers.
+}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-algebraic-stability-def.tex
+%======================================================================
+
+\NewLaw{LawOfAlgebraicStability}{In a non-perturbed (flat) harmonic space, a system is stable if and only if its Center of Gravity is zero under the law $T_1 p_1 + J_1 p_2 + K_1 p_3 + \dots = 0$. This defines the ideal state of equilibrium. The presence of other systems perturbs this space according to the Law of Harmonic Perturbation, and the drive to return to this zero-state is the source of all interaction.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-dissonant-propulsion-def.tex
+%======================================================================
+
+\NewLaw{LawOfDissonantPropulsion}{The propulsive force is given by $P = \DissonanceVector \cdot \Lambda_{\text{eff}}$. This law unifies the framework's core principles: $\DissonanceVector$, the Dissonance Vector, is the geometric measure of the supersystem's imbalance, and $\Lambda_{\text{eff}}$ is the algebraic operator of the local, perturbed space as defined by the Law of Harmonic Perturbation.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-duality-def.tex
+%======================================================================
+
+\NewLaw{LawOfDuality}{J corresponds to attraction (stable orbits), while K corresponds to repulsion (instability).}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-orbit-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicOrbit}{A stable N-body system will persist in a perfect periodic orbit if given the 'Golden Angular Velocity'.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-perturbation-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicPerturbation}{The harmonic constants (T, J, K) are not immutable but are dynamic fields. Their values are perturbed by the geometric configuration of a system, warping the algebraic space according to the law $T_{\text{eff}}(r) + J_{\text{eff}}(r) = 1/2 - 2H²/r²$. This warping is the fundamental source of all forces between stable systems.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-relativity-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicRelativity}{A stable trajectory observed from a 'dampened' reference frame specified by $\LambdaG$ is perceived as a contracted and rotated linear path.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-shifting-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicShifting}{A stable system perturbed by an operator shifts to a new, distinct stable orbit.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-harmonic-superposition-def.tex
+%======================================================================
+
+\NewLaw{LawOfHarmonicSuperposition}{The stability of a supersystem is determined by applying the Law of Algebraic Stability to the complete set of all constituent points.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-instability-geometry-def.tex
+%======================================================================
+
+\NewLaw{LawOfInstabilityGeometry}{A system made unstable by a repulsive constant K does not become chaotic, but follows predictable escape trajectories.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-metric-invariant-def.tex
+%======================================================================
+
+\NewLaw{LawOfMetricInvariant}{The sum of the squares of the core constants is a universal invariant, $\MetricInvariant = T² + J² + K² = (13 - 3\sqrt{5})/8$. This value represents the total dynamic potential of the framework, unifying the principles of attraction and repulsion.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-potential-energy-def.tex
+%======================================================================
+
+\NewLaw{LawOfPotentialEnergy}{The potential energy of a stable system is quantized in units of $H = T \cdot J$.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-propulsive-duality-def.tex
+%======================================================================
+
+\NewLaw{LawOfPropulsiveDuality}{An algebraically stable system is a 'cosmic engine' in a state of dynamic, propulsive equilibrium. When interacting with other systems, this propulsion is driven by the principles of Dynamic Resonance, as the engine seeks to resolve the dissonance in the harmonic field.}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-pythagorean-harmony-def.tex
+%======================================================================
+
+\NewLaw{LawOfPythagoreanHarmony}{The quantized potential energy of a stable system is a direct function of its geometry. For a 3-body system of equal masses $m=T$ in an equilateral configuration, the total potential energy U is proven to be $|U| = H \cdot (\sqrt{3}\gold)$, where H is the harmonic quantum. This unifies the geometry of the triangle ($\sqrt{3}$) and the pentagon ($\gold$).}
+
+%======================================================================
+% FILE: compendium/defs/laws-of-harmony-and-dynamics/law-of-wobble-periodicity-def.tex
+%======================================================================
+
+\NewLaw{LawOfWobblePeriodicity}{The dissonance dynamic of the framework is a pure, non-decaying rotation on the unit circle. Its characteristic recurrence is governed by coefficients proven to be native to the Golden Algebra: $c_1 = \gold$ and $c_2 = 2(T+K)$. This proves the dynamics of the system are a direct expression of its fundamental algebraic structure.}
+
+%======================================================================
+% FILE: compendium/defs/operators/dampening-operator-def.tex
+%======================================================================
+
+\NewLaw{DampeningOperator}{Defined as $\LambdaG = T+iJ$. Its magnitude is $< 1$, creating contracting logarithmic spirals.}
+
+%======================================================================
+% FILE: compendium/defs/operators/generative-operator-def.tex
+%======================================================================
+
+\NewLaw{GenerativeOperator}{Its magnitude is $> 1$. It generates expanding logarithmic spirals.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-generative-spirals-def.tex
+%======================================================================
+
+\NewLaw{LawOfGenerativeSpirals}{Every generative spiral is governed by the universal linear recurrence with coefficients $c_1=2\cdot\text{Re}[1/\LambdaG]$ and $c_2=-|\text{Abs}[1/\LambdaG]|^2$.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-invariant-geometric-sum-def.tex
+%======================================================================
+
+\NewLaw{LawOfInvariantGeometricSum}{The infinite spiral generated by $\LambdaG$ converges to $\Sigma_G = p_0 / (1 - \LambdaG)$.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-matrix-operator-duality-def.tex
+%======================================================================
+
+\NewLaw{LawOfMatrixOperatorDuality}{The matrix $G = \begin{pmatrix} T & -J \\ J & T \end{pmatrix}$ is the algebraic representation of $\LambdaG$. Its trace is $2T$ and its determinant is $T^2+J^2$.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-nested-equilibrium-def.tex
+%======================================================================
+
+\NewLaw{LawOfNestedEquilibrium}{A system of Geometric Sums is stable if their starting points form a stable system.}
+
+%======================================================================
+% FILE: compendium/defs/operators/law-of-power-cycles-def.tex
+%======================================================================
+
+\NewLaw{LawOfPowerCycles}{Tr($G^n$) = $\LambdaG^n + \overline{\LambdaG}^n$, a formula which generates scaled Lucas numbers.}
+
+%======================================================================
+% FILE: compendium/defs/operators/projection-to-admissibility-operator-def.tex
+%======================================================================
+
+\NewLaw{ProjectionToAdmissibility}{A corrective operator that maps any inadmissible coordinate to the nearest point on the Harmonic Lattice of algebraic integers, $\mathbb{Z}[\gold]$.}
