@@ -1,0 +1,20 @@
+# ===================================================================
+# Revised .gitignore for Golden Algebra Project
+# ===================================================================
+
+# 1. Ignore the entire build directory
+# This is still the most important rule. It handles all the clutter
+# like .aux, .log, .fdb_latexmk, etc.
+build/
+
+# 2. Ignore other generated files (BUT NOT THE PDF)
+# We will still ignore the SyncTeX file as it's not useful to track.
+*.synctex.gz
+
+# We are intentionally NOT ignoring *.pdf
+
+# 3. Ignore common OS and editor junk files
+.DS_Store
+Thumbs.db
+*.swp
+*~
