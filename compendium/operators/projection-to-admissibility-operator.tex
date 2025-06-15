@@ -28,7 +28,7 @@ The lattice is spanned by the basis vectors corresponding to $a=1, b=0$ and $a=0
 \end{itemize}
 Any point $p$ on the lattice can be expressed as $p = a v_1 + b v_2$ for some integers $a$ and $b$.
 
-\paragraph{2. The Projection Algorithm (Harr's Rounding)}
+\paragraph{2. The Projection Algorithm}
 For an arbitrary point $z = (x, y)$ in the plane, we want to find the integer coefficients $(a,b)$ that minimize the Euclidean distance $\|z - (a v_1 + b v_2)\|$. This can be solved by expressing $z$ in the basis of the lattice and rounding the coefficients to the nearest integers.
 
 Let the basis matrix be $B = \begin{pmatrix} 1 & \phi \\ 1 & \bar{\phi} \end{pmatrix}$. We solve for the real-valued coefficients $c = (c_1, c_2)$ in the equation $z = c_1 v_1 + c_2 v_2$, which is equivalent to $c = B^{-1} z^T$.
