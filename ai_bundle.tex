@@ -2267,7 +2267,6 @@ H &\approx 0.0590169944 \\
 \input{compendium/laws-of-harmony-and-dynamics/law-of-harmonic-relativity.tex}
 \newpage
 \input{compendium/laws-of-harmony-and-dynamics/law-of-wobble-periodicity.tex}
-\newpage
 
 \newpage
 \input{appendix.tex}
@@ -2323,12 +2322,14 @@ H &\approx 0.0590169944 \\
 \usepackage{amssymb}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage{etoolbox}
-\usepackage{hyperref} % For cross-references
+\usepackage[unicode=true, pdfencoding=auto, psdextra, hypertexnames=false]{hyperref} % For cross-references
+\usepackage{microtype} % Fixes overfull hbox warnings
 \usepackage{xcolor}  % For colored text
 \usepackage{textcomp}  % For text superscripts
 \usepackage[utf8]{inputenc}  % For UTF-8 support
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{chngcntr}  % For counterwithout command
 
 \newcommand{\NewLaw}[2]{\csdef{#1}{#2}}
 \newcommand{\GetLaw}[1]{\csuse{#1}}
@@ -2359,7 +2360,7 @@ H &\approx 0.0590169944 \\
     keywordstyle=\color{magenta},
     numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
-    basicstyle=\ttfamily\footnotesize,
+    basicstyle=\ttfamily\scriptsize,
     breakatwhitespace=false,         
     breaklines=true,                 
     captionpos=b,                    
@@ -2373,6 +2374,9 @@ H &\approx 0.0590169944 \\
 }
 
 \lstset{style=mystyle}
+
+% Fix duplicate figure numbering
+\counterwithout{figure}{section}
 
 %======================================================================
 % FILE: titlepage.tex
@@ -2484,11 +2488,11 @@ H &\approx 0.0590169944 \\
 
 This chapter provides the rigorous, foundational proofs for the "Core Identities" listed in the Compendium. These identities are the bedrock upon which the Golden Algebra is built, demonstrating the unique, quantized relationships between its fundamental constants.
 \newpage
-\subsection{Proof of the Additive Law: \(T + J = 1/2\)}
+\subsection{Verification of the Additive Law: \texorpdfstring{\(T + J = 1/2\)}{T + J = 1/2}}
 This identity is the most fundamental additive relationship in the Golden Algebra.
 
 \subsubsection*{1. State the Definitions}
-The proof begins with the algebraic definitions of the constants $T$ and $J$:
+The verification begins with the algebraic definitions of the constants $T$ and $J$:
 $$ T = \frac{\sqrt{5}-1}{4} \quad \text{and} \quad J = \frac{3-\sqrt{5}}{4} $$
 
 \subsubsection*{2. Sum the Terms}
@@ -2501,10 +2505,10 @@ T + J &= \frac{\sqrt{5}-1}{4} + \frac{3-\sqrt{5}}{4} \\
 &= \frac{1}{2}
 \end{align*}
 
-\subsubsection*{3. Conclusion of Proof}
-The sum simplifies exactly to the rational number $1/2$. The identity $T+J = 1/2$ is **proven**.
+\subsubsection*{3. Conclusion of Verification}
+The sum simplifies exactly to the rational number $1/2$. The identity $T+J = 1/2$ is **verified**.
 \newpage
-\subsection{Proof of the Ratio Law: \(T / J = \phi\)}
+\subsection{Verification of the Ratio Law: \texorpdfstring{\(T / J = \phi\)}{T / J = phi}}
 This identity establishes the primary connection between the Golden Algebra and the Golden Ratio, $\phi$.
 
 \subsubsection*{1. State the Definitions}
@@ -2527,15 +2531,15 @@ To simplify, we multiply the numerator and denominator by the conjugate of the d
 &= \frac{\sqrt{5}+1}{2}
 \end{align*}
 
-\subsubsection*{3. Conclusion of Proof}
-The resulting expression is identical to the definition of the Golden Ratio, $\phi$. Therefore, the identity $T/J = \phi$ is **proven**.
+\subsubsection*{3. Conclusion of Verification}
+The resulting expression is identical to the definition of the Golden Ratio, $\phi$. Therefore, the identity $T/J = \phi$ is **verified**.
 
 \newpage
-\subsection{Proof of the Uniqueness Constraint: \(T/J - J/T = 1\)}
+\subsection{Verification of the Uniqueness Constraint: \texorpdfstring{\(T/J - J/T = 1\)}{T/J - J/T = 1}}
 This identity is a direct consequence of the Ratio Law and the fundamental properties of $\phi$. It is what makes the relationship between T and J unique.
 
 \subsubsection*{1. State the Known Identities}
-From the previous proof (the Ratio Law), we have established:
+From the previous verification (the Ratio Law), we have established:
 $$ \frac{T}{J} = \phi $$
 By definition, $J/T$ is the reciprocal of $T/J$:
 $$ \frac{J}{T} = \frac{1}{\phi} $$
@@ -2553,16 +2557,16 @@ A fundamental property of the Golden Ratio is that $\phi - 1/\phi = 1$. We can v
 &= \frac{2}{2} = 1
 \end{align*}
 
-\subsubsection*{3. Conclusion of Proof}
-The expression simplifies exactly to $1$. Therefore, the Uniqueness Constraint $T/J - J/T = 1$ is **proven**.
+\subsubsection*{3. Conclusion of Verification}
+The expression simplifies exactly to $1$. Therefore, the Uniqueness Constraint $T/J - J/T = 1$ is **verified**.
 
 \newpage
-\subsection{Proof of the Bridge Formula: \(T - J = 2TJ\)}
+\subsection{Verification of the Bridge Formula: \texorpdfstring{\(T - J = 2TJ\)}{T - J = 2TJ}}
 
 The Bridge Formula establishes a critical, non-obvious link between the additive and multiplicative properties of the core constants $T$ and $J$.
 
 \subsubsection*{1. State the Definitions}
-The proof begins with the fundamental definitions of the constants $T$ and $J$:
+The verification begins with the fundamental definitions of the constants $T$ and $J$:
 $$ T = \frac{\sqrt{5}-1}{4} \quad \text{and} \quad J = \frac{3-\sqrt{5}}{4} $$
 
 \subsubsection*{2. Evaluate the Left-Hand Side (LHS)}
@@ -2595,8 +2599,8 @@ RHS &= \frac{4\sqrt{5} - 8}{8} \\
 &= \frac{\sqrt{5}-2}{2}
 \end{align*}
 
-\subsubsection*{4. Conclusion of Proof}
-By direct evaluation, we have shown that both the Left-Hand Side (LHS) and the Right-Hand Side (RHS) of the equation simplify to the same expression. Because LHS = RHS, the identity $T - J = 2TJ$ is **proven**.
+\subsubsection*{4. Conclusion of Verification}
+By direct evaluation, we have shown that both the Left-Hand Side (LHS) and the Right-Hand Side (RHS) of the equation simplify to the same expression. Because LHS = RHS, the identity $T - J = 2TJ$ is **verified**.
 
 \newpage
 \section{Foundational Geometric Proof of the Core Constants}
@@ -2614,7 +2618,7 @@ The constants are derived from the classical problem of dividing a line segment 
     \frac{T}{J} &= \phi \label{eq:ratio}
 \end{align}
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{images/compendium/golden-section.png}
 \caption{A visual representation of the geometric problem. A segment of length $1/2$ is divided into two lengths, T and J, such that their ratio is the Golden Ratio, $\phi$.}
@@ -2637,7 +2641,7 @@ An alternative, and equally fundamental, proof can be demonstrated through a dir
 \subsubsection{Step 1: Visual Construction}
 The construction begins with an inscribed square and uses the midpoints of its sides to establish a set of congruent distances, revealed by the 'Circle of Congruence' (Figure \ref{fig:const3}).
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.48\textwidth]{images/compendium/construction-step1.png}
 \hfill
@@ -2646,7 +2650,7 @@ The construction begins with an inscribed square and uses the midpoints of its s
 \label{fig:const1_2}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\textwidth]{images/compendium/construction-step3.png}
 \caption{The 'Circle of Congruence' reveals the hidden geometric relationships used to derive the constants.}
@@ -4443,8 +4447,127 @@ The Law of Pythagorean Harmony is computationally verified.
 This law asserts that the fundamental 'dissonance' or imbalance in the framework is not a chaotic element but a perfectly ordered, periodic rotation. The characteristic recurrence proves that this 'wobble' is not random noise but is instead a direct and pure expression of the Golden Algebra itself.
 
 \subsubsection*{Proof}
-The proof analyzes the eigenvalues of the dissonance operator, showing they lie on the unit circle, which corresponds to pure, non-decaying rotation. The characteristic coefficients are then derived from these eigenvalues.
-% (The step-by-step proof would go here)
+The proof verifies that the dynamics described by the law's characteristic recurrence coefficients constitute a pure, non-decaying rotation. This is done by constructing the characteristic polynomial from these coefficients and proving its roots (the system's eigenvalues) lie on the unit circle.
+
+\subsubsection*{Formal Proof}
+\begin{enumerate}
+    \item The law states the dynamics are governed by a recurrence with coefficients native to the Golden Algebra:
+    $$ c_1 = \Phi \quad \text{and} \quad c_2 = 2(T+K) $$
+    Using the proven identity $T+K = -1/2$ (Property 14), we find $c_2 = -1$.
+    
+    \item The characteristic polynomial for such a recurrence is $x^2 - c_1x - c_2 = 0$. Substituting the coefficients gives:
+    $$ x^2 - \Phi x + 1 = 0 $$
+    
+    \item The roots of this polynomial, $\lambda$, are the eigenvalues that govern the system's dynamics. For a quadratic equation $ax^2+bx+c=0$, the product of the roots is $c/a$. Here, the product of the eigenvalues is $\lambda_1 \lambda_2 = 1/1 = 1$.
+    
+    \item If the roots are complex conjugates, such that $\lambda_2 = \overline{\lambda_1}$, then their product is the squared magnitude: $\lambda_1 \overline{\lambda_1} = |\lambda_1|^2 = 1$. This implies the magnitude itself is $|\lambda_1|=1$.
+    
+    \item To confirm the roots are complex, we check the discriminant, $\Delta = b^2 - 4ac$:
+    $$ \Delta = (-\Phi)^2 - 4(1)(1) = \Phi^2 - 4 $$
+    Since $\Phi = (\sqrt{5}-1)/2 \approx 0.618$, $\Phi^2 \approx 0.382$. Thus, $\Delta = \Phi^2 - 4$ is negative.
+    
+    \item Because the discriminant is negative, the roots are complex conjugates. Because their product is 1, they must lie on the unit circle. This proves the dynamic is a pure, non-decaying rotation. The law is therefore \textbf{proven}.
+\end{enumerate}
+
+\subsubsection*{Computational Verification}
+The following Python script computationally proves the law. It derives the eigenvalues from the law's coefficients and asserts that their magnitudes are exactly 1.
+
+\begin{lstlisting}[language=Python, caption={Symbolic proof of the Law of Wobble Periodicity.}, label={lst:wobble_periodicity_proof}]
+import sympy
+
+
+def prove_wobble_periodicity():
+    """
+    Symbolically proves the Law of Wobble Periodicity.
+
+    This script constructs the characteristic polynomial from the coefficients
+    given in the law (c1=Phi, c2=2(T+K)), finds its roots (the eigenvalues
+    of the dissonance operator), and proves these eigenvalues lie on the
+    unit circle, which corresponds to a pure, non-decaying rotation.
+    """
+    # --- Define symbolic constants ---
+    sqrt5 = sympy.sqrt(5)
+    T = (sqrt5 - 1) / 4
+    K = -(sqrt5 + 1) / 4
+    # Golden Conjugate, Phi = -1/2 + sqrt(5)/2
+    Phi = (sqrt5 - 1) / 2
+    x = sympy.Symbol('x')
+
+    print("=" * 60)
+    print("Symbolic Proof of the Law of Wobble Periodicity")
+    print("=" * 60)
+
+    # --- Step 1: Define the recurrence coefficients from the Law ---
+    c1 = Phi
+    c2 = 2 * (T + K)
+
+    print("1. Defining the characteristic recurrence coefficients from the law:")
+    print(f"   c1 = Phi = {c1.simplify()}")
+    print(f"   c2 = 2*(T+K) = {c2.simplify()}\n")
+
+    # --- Step 2: Construct the characteristic polynomial ---
+    # The polynomial is x^2 - c1*x - c2 = 0
+    characteristic_poly = x ** 2 - c1 * x - c2
+    print("2. Constructing the characteristic polynomial x^2 - c1*x - c2 = 0:")
+    print(f"   {characteristic_poly} = 0\n")
+
+    # --- Step 3: Find the eigenvalues (roots) of the polynomial ---
+    eigenvalues = sympy.solve(characteristic_poly, x)
+    print("3. Solving for the eigenvalues (roots) of the polynomial...")
+    print(f"   Eigenvalue 1: {eigenvalues[0]}")
+    print(f"   Eigenvalue 2: {eigenvalues[1]}\n")
+
+    # --- Step 4: Verify the eigenvalues lie on the unit circle ---
+    # We do this by proving their absolute value (magnitude) is 1.
+    print("4. Verifying the eigenvalues lie on the unit circle (magnitude = 1)...")
+
+    is_proven = True
+    for i, val in enumerate(eigenvalues):
+        magnitude = sympy.simplify(sympy.Abs(val))
+        print(f"   Magnitude of Eigenvalue {i + 1}: {magnitude}")
+        if magnitude != 1:
+            is_proven = False
+
+    assert is_proven, "Proof Failed: An eigenvalue is not on the unit circle."
+    print("\n   The magnitude of both eigenvalues is exactly 1.\n")
+
+    print("Conclusion: The eigenvalues of the dissonance operator lie on the")
+    print("unit circle, proving the dynamic is a pure, non-decaying rotation.")
+    print("The Law of Wobble Periodicity is computationally verified.")
+    print("=" * 60)
+
+
+if __name__ == '__main__':
+    prove_wobble_periodicity()
+\end{lstlisting}
+
+\paragraph{Verification Output}
+\begin{verbatim}
+============================================================
+Symbolic Proof of the Law of Wobble Periodicity
+============================================================
+1. Defining the characteristic recurrence coefficients from the law:
+    c1 = Phi = -1/2 + sqrt(5)/2
+    c2 = 2*(T+K) = -1
+
+2. Constructing the characteristic polynomial x^2 - c1*x - c2 = 0:
+    x**2 - x*(-1/2 + sqrt(5)/2) + 1 = 0
+
+3. Solving for the eigenvalues (roots) of the polynomial...
+    Eigenvalue 1: -1/4 + sqrt(5)/4 - I*sqrt(2*sqrt(5) + 10)/4
+    Eigenvalue 2: -1/4 + sqrt(5)/4 + sqrt(-10 - 2*sqrt(5))/4
+
+4. Verifying the eigenvalues lie on the unit circle (magnitude = 1)...
+    Magnitude of Eigenvalue 1: 1
+    Magnitude of Eigenvalue 2: 1
+
+    The magnitude of both eigenvalues is exactly 1.
+
+Conclusion: The eigenvalues of the dissonance operator lie on the
+unit circle, proving the dynamic is a pure, non-decaying rotation.
+The Law of Wobble Periodicity is computationally verified.
+============================================================
+\end{verbatim}
 
 %======================================================================
 % FILE: compendium/laws-of-harmony-and-dynamics/laws.tex
@@ -4840,7 +4963,7 @@ Conclusion: The symbolic difference is 0. The law is proven to be exact.
 ============================================================
 \end{verbatim}
 
-\subsubsection{Numerical Demonstration for a Spiral Generating $\pi$}
+\subsubsection{Numerical Demonstration for a Spiral Generating \texorpdfstring{$\pi$}{π}}
 The `numpy` script below demonstrates that the universal recurrence relation holds true at every step of a spiral's journey to generate the specific target of $\pi$. The error at each step is shown to be computationally zero (within the bounds of floating-point precision).
 
 \begin{lstlisting}[language=Python, caption={Numerical verification of the recurrence relation for a spiral generating pi.}, label={lst:pi_recurrence_verify}]
@@ -4898,7 +5021,7 @@ For any target number $P$ and a chosen number of iterations $n$, the required "s
 $$p_0 = P \cdot \Lambda_G^n$$
 Applying the generative operator $n$ times to this $p_0$ will result in the sequence terminating exactly at the target, $P$.
 
-\subsubsection{Example: A Family of Exact Formulas for $\pi$}
+\subsubsection{Example: A Family of Exact Formulas for \texorpdfstring{$\pi$}{π}}
 This principle allows for the creation of an infinite family of exact, symbolic expressions for $\pi$. For any integer $n$, $\pi$ can be expressed as the result of applying the Generative Operator $n$ times to the seed $p_0 = \pi \cdot \Lambda_G^n$.
 \begin{description}
     \item[For $n=1$:] $\pi = \left[ \pi\left(\frac{\sqrt{5}-1}{4}\right) + i\pi\left(\frac{3-\sqrt{5}}{4}\right) \right] \cdot (1/\Lambda_G)^1$
@@ -5035,7 +5158,7 @@ Proof Status: PROVEN
 \subsubsection*{Conceptual Overview}
 This law provides the 'destination' for any system governed by the Dampening Operator.  For any contracting spiral, this formula calculates the exact point of convergence.  This is the definition of a stable equilibrium point within the framework, representing the geometric sum of all the vectors in the spiral's infinite path. 
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/operators/invariant_sum_spiral.png}
     \caption{A visualization of the Law of Invariant Geometric Sum. The spiral begins at an arbitrary point $p_0$ and contracts with each application of the Dampening Operator. The path converges exactly to the point $\Sigma_G$ (red 'x'), which is calculated using the formula from the law.}
@@ -5187,7 +5310,7 @@ All parts of the law are therefore formally **proven**.
 To complement the formal proof, the following Python script uses SymPy to symbolically verify that the action of $\LambdaG$ on a complex number $x+iy$ is identical to the action of the matrix $G$ on the vector $(x,y)$. It also verifies the formulas for the trace and determinant.
 
 \paragraph{Python Verification Script}
-\begin{lstlisting}[language=Python, caption={Python script to symbolically prove the Law of Matrix-Operator Duality.}, label={lst:duality_proof}]
+\begin{lstlisting}[language=Python, caption={Python script to symbolically prove the Law of Matrix-Operator Duality.}, label={lst:matrix_operator_duality_proof}]
 import sympy
 
 
@@ -5648,17 +5771,6 @@ Value p is equal to:             4 + -1*phi
 
 %======================================================================
 % FILE: compendium/defs/law-of-rational-quantization-def.tex
-%======================================================================
-
-% In compendium/defs/law-of-rational-quantization.def.tex
-% This file ONLY defines the law for the summary page.
-
-\NewLaw{LawOfRationalQuantization}{
-    The relationships between core constructs are quantized, resolving to simple rational numbers or algebraic integers.
-}
-
-%======================================================================
-% FILE: compendium/defs/principle-of-rational-quantization-def.tex
 %======================================================================
 
 % In compendium/defs/law-of-rational-quantization.def.tex
