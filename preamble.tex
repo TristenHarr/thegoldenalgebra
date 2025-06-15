@@ -5,12 +5,14 @@
 \usepackage{amssymb}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage{etoolbox}
-\usepackage{hyperref} % For cross-references
+\usepackage[unicode=true, pdfencoding=auto, psdextra, hypertexnames=false]{hyperref} % For cross-references
+\usepackage{microtype} % Fixes overfull hbox warnings
 \usepackage{xcolor}  % For colored text
 \usepackage{textcomp}  % For text superscripts
 \usepackage[utf8]{inputenc}  % For UTF-8 support
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{chngcntr}  % For counterwithout command
 
 \newcommand{\NewLaw}[2]{\csdef{#1}{#2}}
 \newcommand{\GetLaw}[1]{\csuse{#1}}
@@ -41,7 +43,7 @@
     keywordstyle=\color{magenta},
     numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
-    basicstyle=\ttfamily\footnotesize,
+    basicstyle=\ttfamily\scriptsize,
     breakatwhitespace=false,         
     breaklines=true,                 
     captionpos=b,                    
@@ -55,3 +57,6 @@
 }
 
 \lstset{style=mystyle}
+
+% Fix duplicate figure numbering
+\counterwithout{figure}{section}

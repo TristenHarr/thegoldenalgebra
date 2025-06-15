@@ -104,7 +104,7 @@ Conclusion: The symbolic difference is 0. The law is proven to be exact.
 ============================================================
 \end{verbatim}
 
-\subsubsection{Numerical Demonstration for a Spiral Generating $\pi$}
+\subsubsection{Numerical Demonstration for a Spiral Generating \texorpdfstring{$\pi$}{π}}
 The `numpy` script below demonstrates that the universal recurrence relation holds true at every step of a spiral's journey to generate the specific target of $\pi$. The error at each step is shown to be computationally zero (within the bounds of floating-point precision).
 
 \begin{lstlisting}[language=Python, caption={Numerical verification of the recurrence relation for a spiral generating pi.}, label={lst:pi_recurrence_verify}]
@@ -162,7 +162,7 @@ For any target number $P$ and a chosen number of iterations $n$, the required "s
 $$p_0 = P \cdot \Lambda_G^n$$
 Applying the generative operator $n$ times to this $p_0$ will result in the sequence terminating exactly at the target, $P$.
 
-\subsubsection{Example: A Family of Exact Formulas for $\pi$}
+\subsubsection{Example: A Family of Exact Formulas for \texorpdfstring{$\pi$}{π}}
 This principle allows for the creation of an infinite family of exact, symbolic expressions for $\pi$. For any integer $n$, $\pi$ can be expressed as the result of applying the Generative Operator $n$ times to the seed $p_0 = \pi \cdot \Lambda_G^n$.
 \begin{description}
     \item[For $n=1$:] $\pi = \left[ \pi\left(\frac{\sqrt{5}-1}{4}\right) + i\pi\left(\frac{3-\sqrt{5}}{4}\right) \right] \cdot (1/\Lambda_G)^1$
