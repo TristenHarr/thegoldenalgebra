@@ -32,5 +32,53 @@ We must show $G\mathbf{v_2} = \lambda_2\mathbf{v_2}$:
 \end{align*}
 The results are identical. The relationship is proven. The computational verification confirms this exact symbolic match.
 
+\subsection*{Computational Verification}
+The following script provides incorruptible, symbolic proof of the eigenvector identities. It constructs the matrix G, the eigenvalues $\lambda_1, \lambda_2$, and the proposed eigenvectors $\mathbf{v_1}, \mathbf{v_2}$, then asserts that the difference $(G\mathbf{v} - \lambda\mathbf{v})$ is the zero vector for both cases.
+
+\begin{lstlisting}[language=Python, caption={Symbolic proof of the Eigenvector Identities for Matrix G.}]
+import sympy
+
+def prove_eigenvector_identities():
+    """
+    Directly proves that [1, -i] and [1, i] are the eigenvectors
+    of the matrix G, corresponding to eigenvalues T+iJ and T-iJ.
+    """
+    # --- Define Symbolic Constants ---
+    sqrt5 = sympy.sqrt(5)
+    T_sym = (sqrt5 - 1) / 4
+    J_sym = (3 - sqrt5) / 4
+
+    # --- Define Symbolic Components ---
+    G = sympy.Matrix([[T_sym, -J_sym], [J_sym, T_sym]])
+    lambda1 = T_sym + sympy.I * J_sym
+    lambda2 = T_sym - sympy.I * J_sym
+    v1 = sympy.Matrix([1, -sympy.I])
+    v2 = sympy.Matrix([1, sympy.I])
+
+    print("--- Verifying Eigenvector 1: G*v1 = lambda1*v1 ---")
+    G_v1 = G * v1
+    lambda1_v1 = lambda1 * v1
+    assert sympy.simplify(G_v1 - lambda1_v1) == sympy.Matrix([0, 0])
+    print("[PROOF PASSED]: The first eigenvector relationship is verified.")
+
+    print("\n--- Verifying Eigenvector 2: G*v2 = lambda2*v2 ---")
+    G_v2 = G * v2
+    lambda2_v2 = lambda2 * v2
+    assert sympy.simplify(G_v2 - lambda2_v2) == sympy.Matrix([0, 0])
+    print("[PROOF PASSED]: The second eigenvector relationship is verified.")
+
+if __name__ == '__main__':
+    prove_eigenvector_identities()
+\end{lstlisting}
+
+\paragraph{Verification Output}
+\begin{verbatim}
+--- Verifying Eigenvector 1: G*v1 = lambda1*v1 ---
+[PROOF PASSED]: The first eigenvector relationship is verified.
+
+--- Verifying Eigenvector 2: G*v2 = lambda2*v2 ---
+[PROOF PASSED]: The second eigenvector relationship is verified.
+\end{verbatim}
+
 \subsection*{Conclusion}
 The core transformation of the Golden Algebra possesses the fundamental basis vectors of rotation, $[1, \pm i]$. This provides a powerful geometric justification for the framework, framing it as the natural algebra of spiral-rotations.
