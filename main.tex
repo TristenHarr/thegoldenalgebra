@@ -10,21 +10,25 @@
 \maketitle
 \newpage
 
-% --- Part 1: The Compendium Summary ---
+% --- Part 1: Introduction and Summary ---
 \input{compendium/compendium.tex}
-
-
-% --- Part 2: Detailed Chapters and Proofs ---
 \newpage
-\part*{Detailed Chapters and Proofs} % Creates a big "Part" title page
 
+% --- Part 2: Justification of the Foundational Principles ---
+\part{Justification of the Foundational Principles}
+\input{compendium/postulates.tex}
+\newpage
+\input{compendium/justification-suite.tex}
+\newpage
+% --- Part 3: The Golden Algebra: Core Identities and Operators ---
+\part{The Golden Algebra: Core Identities and Operators}
 \input{compendium/core-foundations.tex}
+\newpage
 
 % Chapter for Section I Law
 \input{compendium/law-of-rational-quantization.tex}
 \newpage
-
-% Chapters for Section II Operators
+% This section now contains the proofs of the algebra's internal properties
 \input{compendium/operators/dampening-operator.tex}
 \newpage
 \input{compendium/operators/generative-operator.tex}
@@ -35,16 +39,23 @@
 \newpage
 \input{compendium/operators/law-of-matrix-operator-duality.tex}
 \newpage
+\input{compendium/operators/law-of-harmonic-eigenvalues.tex}
+\newpage
 \input{compendium/operators/law-of-harmonic-eigenvalues.tex} 
+\newpage
+\input{compendium/operators/law-of-harmonic-eigenvalues.tex}
 \newpage
 \input{compendium/operators/law-of-power-cycles.tex}
 \newpage
 \input{compendium/operators/law-of-invariant-geometric-sum.tex}
 \newpage
 \input{compendium/operators/law-of-nested-equilibrium.tex}
-\newpage
 
-% --- Chapters for Section III Laws ---
+% --- Part 4: The Laws of Harmony and Dynamics ---
+\part{The Laws of Harmony and Dynamics}
+% This section contains all of your original laws of interaction.
+% Their status is now elevated because the principles they rely on
+% have been justified in Part 2.
 \input{compendium/laws-of-harmony-and-dynamics/law-of-harmonic-perturbation.tex}
 \newpage
 \input{compendium/laws-of-harmony-and-dynamics/law-of-algebraic-stability.tex}
@@ -72,6 +83,12 @@
 \input{compendium/laws-of-harmony-and-dynamics/law-of-harmonic-relativity.tex}
 \newpage
 \input{compendium/laws-of-harmony-and-dynamics/law-of-wobble-periodicity.tex}
+\newpage
+
+% --- Part 5: Capstone Applications (NEW) ---
+\part{Capstone Applications}
+\input{compendium/connections/number-theory.tex} % A new file for Pell, etc.
+% \input{compendium/riemann_proof.tex} % A new file for the final RH proof.
 
 \newpage
 \input{appendix.tex}
