@@ -1,4 +1,3 @@
-% In compendium/operators/law-of-matrix-operator-duality.tex
 \subsection*{Law of Matrix-Operator Duality}
 \hrule
 \vspace{0.3cm}
@@ -6,8 +5,140 @@
 \vspace{0.5cm}
 
 \subsubsection*{Conceptual Overview}
-This law establishes a critical bridge between the algebra of complex numbers and linear algebra. It proves that the rotational and scaling effect of the $\LambdaG$ operator in the complex plane is perfectly equivalent to the transformation enacted by the matrix $G$ on a 2D vector. This allows algebraic principles to be applied to geometric transformations and vice versa.
+This law establishes a critical bridge between the algebra of complex numbers and linear algebra. It proves that the rotational and scaling effect of the $\LambdaG$ operator in the complex plane is perfectly equivalent to the transformation enacted by the matrix $G$ on a 2D vector. This allows algebraic principles to be applied to geometric transformations and vice versa, creating a powerful synergy between the two mathematical domains.
 
-\subsubsection*{Proof}
-The proof is established by showing that the multiplication of a complex number $x+iy$ by $\LambdaG$ yields the same result as the multiplication of the vector $(x, y)$ by the matrix $G$.
-% (The step-by-step proof would go here)
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/operators/matrix_operator_duality.png}
+    \caption{A visualization of the Law of Matrix-Operator Duality. The blue vector represents an initial complex number $z$. The red vector represents the result of the transformation. As shown, applying the complex operator ($\LambdaG \cdot z$) and the matrix operator ($G \cdot v$) both yield the identical result, demonstrating their perfect equivalence.}
+    \label{fig:duality_viz}
+\end{figure}
+
+\subsubsection*{Formal Proof}
+The proof is established in two parts. First, by showing that the multiplication of an arbitrary complex number $z = x+iy$ by $\LambdaG$ yields the same result as the multiplication of the corresponding vector $v = (x, y)$ by the matrix $G$. Second, by directly calculating the trace and determinant of $G$.
+
+\paragraph{1. Equivalence of Transformation}
+Let an arbitrary complex number be $z = x+iy$, and its corresponding vector be $v = \begin{pmatrix} x \\ y \end{pmatrix}$.
+
+First, we evaluate the complex multiplication:
+\begin{align*}
+    \LambdaG \cdot z &= (T + iJ)(x + iy) \\
+    &= (Tx - Jy) + i(Ty + Jx)
+\end{align*}
+The resulting complex number corresponds to the 2D vector $\begin{pmatrix} Tx - Jy \\ Ty + Jx \end{pmatrix}$.
+
+Next, we evaluate the matrix-vector multiplication:
+\begin{align*}
+    G \cdot v &= \begin{pmatrix} T & -J \\ J & T \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix} \\
+    &= \begin{pmatrix} T \cdot x - J \cdot y \\ J \cdot x + T \cdot y \end{pmatrix}
+\end{align*}
+The resulting vector from the matrix multiplication is identical to the vector representation derived from the complex number multiplication. This proves the equivalence of the transformations.
+
+\paragraph{2. Trace and Determinant}
+The definition of the law also states the properties of the matrix's trace and determinant. These are proven by direct inspection of the matrix $G$:
+\begin{itemize}
+    \item \textbf{Trace:} The trace is the sum of the diagonal elements.
+    $$ \text{trace}(G) = T + T = 2T $$
+    \item \textbf{Determinant:} The determinant is calculated as follows:
+    $$ \text{det}(G) = (T)(T) - (-J)(J) = T^2 + J^2 $$
+\end{itemize}
+All parts of the law are therefore formally **proven**.
+
+\subsubsection*{Computational Verification}
+To complement the formal proof, the following Python script uses SymPy to symbolically verify that the action of $\LambdaG$ on a complex number $x+iy$ is identical to the action of the matrix $G$ on the vector $(x,y)$. It also verifies the formulas for the trace and determinant.
+
+\paragraph{Python Verification Script}
+\begin{lstlisting}[language=Python, caption={Python script to symbolically prove the Law of Matrix-Operator Duality.}, label={lst:duality_proof}]
+import sympy
+
+
+def prove_matrix_operator_duality():
+    """
+    Symbolically proves the Law of Matrix-Operator Duality.
+    """
+    print("=" * 60)
+    print("Symbolic Proof of the Law of Matrix-Operator Duality")
+    print("=" * 60)
+
+    # Define symbolic constants and variables
+    sqrt5 = sympy.sqrt(5)
+    T_def = (sqrt5 - 1) / 4
+    J_def = (3 - sqrt5) / 4
+    T, J = sympy.symbols('T J', real=True)
+    x, y = sympy.symbols('x y', real=True)
+
+    # Define the operator and an arbitrary complex number
+    Lambda_G1 = T + sympy.I * J
+    z = x + sympy.I * y
+
+    # Define the matrix and an arbitrary vector
+    G = sympy.Matrix([[T, -J], [J, T]])
+    v = sympy.Matrix([x, y])
+
+    # 1. Verify Transformation Equivalence
+    print("--- Verifying Transformation Equivalence ---")
+
+    # Action of the operator on the complex number
+    op_result = sympy.expand(Lambda_G1 * z)
+    op_result_vec = sympy.Matrix([sympy.re(op_result), sympy.im(op_result)])
+    print(f"Operator Result (vector form): {op_result_vec.T}")
+
+    # Action of the matrix on the vector
+    matrix_result_vec = G * v
+    print(f"Matrix Result (vector form):   {matrix_result_vec.T}")
+
+    # The I**2 term in the output is -1, so we must substitute it
+    # before comparing to the matrix result which does not have it.
+    op_result_vec_subbed = op_result_vec.subs(sympy.I ** 2, -1)
+    assert sympy.simplify(op_result_vec_subbed - matrix_result_vec) == sympy.Matrix([0, 0])
+    print("Proof Status: PROVEN")
+
+    # 2. Verify Trace and Determinant with substituted values
+    print("--- Verifying Trace and Determinant ---")
+    G_subbed = G.subs({T: T_def, J: J_def})
+
+    # Trace
+    trace_G = sympy.simplify(G_subbed.trace())
+    trace_formula = sympy.simplify(2 * T_def)
+    print(f"Calculated Trace(G): {trace_G}")
+    print(f"Formula (2*T):       {trace_formula}")
+    assert trace_G == trace_formula
+    print("Trace Verified: PROVEN")
+
+    # Determinant
+    det_G = sympy.simplify(G_subbed.det())
+    det_formula = sympy.simplify(T_def ** 2 + J_def ** 2)
+    print(f"Calculated Det(G):   {det_G}")
+    print(f"Formula (T^2+J^2):   {det_formula}")
+    assert det_G == det_formula
+    print("Determinant Verified: PROVEN")
+
+    print("=" * 60)
+    print("Conclusion: All parts of the law are computationally verified.")
+    print("=" * 60)
+
+
+if __name__ == '__main__':
+    prove_matrix_operator_duality()
+\end{lstlisting}
+
+\paragraph{Verification Output}
+\begin{verbatim}
+============================================================
+Symbolic Proof of the Law of Matrix-Operator Duality
+============================================================
+--- Verifying Transformation Equivalence ---
+Operator Result (vector form): Matrix([[-J*y + T*x, J*x + T*y]])
+Matrix Result (vector form):   Matrix([[-J*y + T*x, J*x + T*y]])
+Proof Status: PROVEN
+--- Verifying Trace and Determinant ---
+Calculated Trace(G): -1/2 + sqrt(5)/2
+Formula (2*T):       -1/2 + sqrt(5)/2
+Trace Verified: PROVEN
+Calculated Det(G):   5/4 - sqrt(5)/2
+Formula (T^2+J^2):   5/4 - sqrt(5)/2
+Determinant Verified: PROVEN
+============================================================
+Conclusion: All parts of the law are computationally verified.
+============================================================
+\end{verbatim}
