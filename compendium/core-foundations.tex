@@ -46,3 +46,69 @@ RHS &= \frac{4\sqrt{5} - 8}{8} \\
 
 \subsubsection*{4. Conclusion of Proof}
 By direct evaluation, we have shown that both the Left-Hand Side (LHS) and the Right-Hand Side (RHS) of the equation simplify to the same expression. Because LHS = RHS, the identity $T - J = 2TJ$ is **proven**.
+
+\section{Foundational Geometric Proof of the Core Constants}
+\label{sec:geometric_proof}
+\hrule
+\vspace{1em}
+
+\subsection{Proof 1: Division in Extreme and Mean Ratio}
+The Law of Geometric Universality states that the core constants of the algebra emerge from any geometry embodying the Golden Ratio, $\phi$. The first proof demonstrates this by showing that the constants $T$ and $J$ are the unique solutions to a fundamental geometric problem constructible with a straight-edge and compass.
+
+\subsubsection{The Geometric Problem}
+The constants are derived from the classical problem of dividing a line segment according to the Golden Ratio. Specifically, we seek to divide a line segment of length $1/2$ into two smaller segments, which we shall call T and J, that satisfy two simultaneous conditions:
+\begin{align}
+    T + J &= 1/2 \label{eq:sum} \\
+    \frac{T}{J} &= \phi \label{eq:ratio}
+\end{align}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\textwidth]{images/compendium/golden-section.png}
+\caption{A visual representation of the geometric problem. A segment of length $1/2$ is divided into two lengths, T and J, such that their ratio is the Golden Ratio, $\phi$.}
+\label{fig:golden_section}
+\end{figure}
+
+\subsubsection{The Geometric Solution and Verification}
+Solving this geometric system yields the necessary lengths for T and J. From equation \eqref{eq:ratio}, we have $T = J\phi$. Substituting this into equation \eqref{eq:sum} yields the unique geometric lengths:
+$$ T = \frac{1}{2\phi} \quad \text{and} \quad J = \frac{1}{2\phi^2} $$
+The final step of the proof is to show that these geometrically derived lengths are identical to the algebraic definitions of the constants. For the constant T:
+$$ T = \frac{1}{2\phi} = \frac{1}{2 \left( \frac{1+\sqrt{5}}{2} \right)} = \frac{1}{1+\sqrt{5}} \cdot \frac{1-\sqrt{5}}{1-\sqrt{5}} = \frac{1-\sqrt{5}}{-4} = \frac{\sqrt{5}-1}{4} $$
+This is identical to the algebraic definition of $T$. For the constant J:
+$$ J = \frac{1}{2\phi^2} = \frac{1}{2 \left( \frac{1+\sqrt{5}}{2} \right)^2} = \frac{1}{3+\sqrt{5}} \cdot \frac{3-\sqrt{5}}{3-\sqrt{5}} = \frac{3-\sqrt{5}}{4} $$
+This is identical to the algebraic definition of $J$. This confirms that T and J are the necessary result of this fundamental geometric problem.
+
+\newpage
+\subsection{Proof 2: Construction from an Inscribed Square}
+An alternative, and equally fundamental, proof can be demonstrated through a direct visual construction starting from a square. This method builds the lengths T and J from the ground up and verifies their relationship to $\phi$.
+
+\subsubsection{Step 1: Visual Construction}
+The construction begins with an inscribed square and uses the midpoints of its sides to establish a set of congruent distances, revealed by the 'Circle of Congruence' (Figure \ref{fig:const3}).
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.48\textwidth]{images/compendium/construction-step1.png}
+\hfill
+\includegraphics[width=0.48\textwidth]{images/compendium/construction-step2.png}
+\caption{Initial construction of the inscribed square (left) and identification of its midpoints (right).}
+\label{fig:const1_2}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{images/compendium/construction-step3.png}
+\caption{The 'Circle of Congruence' reveals the hidden geometric relationships used to derive the constants.}
+\label{fig:const3}
+\end{figure}
+
+\subsubsection{Step 2: Symbolic Derivation}
+From the geometric relationships revealed in the construction, we can derive the lengths of key segments. If we set the characteristic side-length of the square to $X=1$, the construction yields two crucial segments, Tc and Ic, with the following lengths:
+$$ \text{Length(Tc)} = \frac{\sqrt{5} - 1}{4} $$
+$$ \text{Length(Ic)} = \frac{3 - \sqrt{5}}{4} $$
+
+\subsubsection{Step 3: Conclusion of Proof}
+By inspection, these geometrically constructed lengths are precisely the constants of the Golden Algebra:
+$$ \text{Tc} = T_1 \quad \text{and} \quad \text{Ic} = J_1 $$
+Furthermore, the ratio of these constructed lengths is proven to be the Golden Ratio:
+$$ \frac{\text{Tc}}{\text{Ic}} = \frac{\frac{(\sqrt{5} - 1)}{4}}{\frac{(3 - \sqrt{5})}{4}} = \frac{1+\sqrt{5}}{2} = \phi $$
+This second proof, illustrated by direct construction, also confirms the Law of Geometric Universality.
