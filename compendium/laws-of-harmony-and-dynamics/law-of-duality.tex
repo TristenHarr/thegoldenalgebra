@@ -10,4 +10,131 @@ This law assigns clear physical meaning to the core constants J and K. It identi
 
 \subsubsection*{Proof}
 The proof analyzes the behavior of dynamical systems under the influence of J-dominant and K-dominant operators, showing convergence in the first case and divergence in the second.
-% (The step-by-step proof would go here)
+
+\subsubsection*{Formal Proof}
+The proof is established by analyzing the eigenvalues of the transformation matrices associated with J and K. An eigenvalue with magnitude less than 1 implies convergence (attraction), while an eigenvalue with magnitude greater than 1 implies divergence (repulsion).
+
+\paragraph{Part 1: The Attractive Nature of J}
+\begin{enumerate}
+    \item The J-dominant system is represented by the stable matrix $G = \begin{pmatrix} T & -J \\ J & T \end{pmatrix}$, as defined in the \textbf{Law of Matrix-Operator Duality}.
+    \item The eigenvalues of this matrix were proven to be $\Lambda_G = T+iJ$ and its conjugate in the \textbf{Law of Harmonic Eigenvalues}.
+    \item In the chapter on the \textbf{Dampening Operator}, the magnitude of these eigenvalues was formally proven to be less than 1:
+    $$ |\Lambda_G| = \sqrt{T^2+J^2} \approx 0.363 < 1 $$
+    \item Since all modes of transformation for the J-dominant system are convergent, this proves that \textbf{J corresponds to attraction}.
+\end{enumerate}
+
+\paragraph{Part 2: The Repulsive Nature of K}
+\begin{enumerate}
+    \item The K-dominant system is represented by the unstable matrix $G_{\text{unstable}} = \begin{pmatrix} T & K \\ K & T \end{pmatrix}$, as defined in the \textbf{Law of Instability Geometry}.
+    \item The eigenvalues of this matrix were proven to be $\lambda_1 = T-K$ and $\lambda_2 = T+K$.
+    \item The magnitude of the first eigenvalue is:
+    $$ |\lambda_1| = |T-K| = \frac{\sqrt{5}}{2} \approx 1.118 $$
+    \item Because there exists an eigenvalue with a magnitude greater than 1, this system possesses a divergent mode. Repeated application of this transformation will result in expansion along the corresponding eigenvector.
+    \item This proves that \textbf{K corresponds to repulsion}. The duality is hereby \textbf{proven}.
+\end{enumerate}
+
+\subsubsection*{Computational Verification}
+The following Python script computationally verifies the duality by analyzing the eigenvalues of the J-dominant (stable) and K-dominant (unstable) matrices.
+
+\begin{lstlisting}[language=Python, caption={Symbolic proof of the Law of Duality.}, label={lst:duality_proof}]
+import sympy
+
+
+def prove_law_of_duality():
+    """
+    Symbolically proves the Law of Duality (Attraction/Repulsion).
+
+    This script analyzes the eigenvalues of two matrices:
+    1. A J-dominant matrix (the stable matrix G), to show its eigenvalues
+        have a magnitude < 1, causing convergence (attraction).
+    2. A K-dominant matrix (the unstable matrix), to show it has at least
+        one eigenvalue with magnitude > 1, causing divergence (repulsion).
+    """
+    # --- Define symbolic constants ---
+    sqrt5 = sympy.sqrt(5)
+    T = (sqrt5 - 1) / 4
+    J = (3 - sqrt5) / 4
+    K = -(sqrt5 + 1) / 4
+
+    print("=" * 60)
+    print("Symbolic Proof of the Law of Duality (Attraction/Repulsion)")
+    print("=" * 60)
+
+    # --- Part 1: J-Dominant System (Attraction) ---
+    print("\n--- 1. Analyzing J-Dominant System for Attraction ---")
+    G_stable = sympy.Matrix([[T, -J], [J, T]])
+    stable_eigenvalues = list(G_stable.eigenvals().keys())
+
+    print(f"The stable matrix G is:\n{G_stable}\n")
+    print(f"Its eigenvalues are: {stable_eigenvalues}")
+
+    # We only need to check one eigenvalue, as they are complex conjugates
+    # and thus have the same magnitude.
+    stable_mag_sq = sympy.simplify(sympy.Abs(stable_eigenvalues[0]) ** 2)
+    print(f"The squared magnitude of the eigenvalues is: {stable_mag_sq.evalf()}")
+
+    assert stable_mag_sq < 1, "J-dominant system should be convergent."
+    print("Result: Magnitude is < 1. This system CONVERGES (Attraction).")
+
+    # --- Part 2: K-Dominant System (Repulsion) ---
+    print("\n--- 2. Analyzing K-Dominant System for Repulsion ---")
+    G_unstable = sympy.Matrix([[T, K], [K, T]])
+    unstable_eigenvalues = list(G_unstable.eigenvals().keys())
+
+    print(f"The unstable matrix G_unstable is:\n{G_unstable}\n")
+    print(f"Its eigenvalues are: {unstable_eigenvalues}")
+
+    # Check the magnitude of each real eigenvalue
+    has_divergent_mode = False
+    for val in unstable_eigenvalues:
+        mag = sympy.Abs(val)
+        print(f"Analyzing eigenvalue {val.simplify()}: Magnitude is {mag.evalf()}")
+        if mag > 1:
+            has_divergent_mode = True
+
+    assert has_divergent_mode, "K-dominant system should be divergent."
+    print("Result: At least one eigenvalue has magnitude > 1. This system DIVERGES (Repulsion).")
+
+    # --- Conclusion ---
+    print("\n" + "=" * 60)
+    print("Conclusion: The J-dominant system is purely convergent, while the")
+    print("K-dominant system possesses a divergent mode. This confirms the")
+    print("duality of J as attractive and K as repulsive.")
+    print("The Law of Duality is computationally verified.")
+    print("=" * 60)
+
+
+if __name__ == '__main__':
+    prove_law_of_duality()
+\end{lstlisting}
+
+\paragraph{Verification Output}
+\begin{verbatim}
+============================================================
+Symbolic Proof of the Law of Duality (Attraction/Repulsion)
+============================================================
+
+--- 1. Analyzing J-Dominant System for Attraction ---
+The stable matrix G is:
+Matrix([[-1/4 + sqrt(5)/4, -3/4 + sqrt(5)/4], [3/4 - sqrt(5)/4, -1/4 + sqrt(5)/4]])
+
+Its eigenvalues are: [-1/4 + sqrt(5)/4 - sqrt(2)*sqrt(-7 + 3*sqrt(5))/4, -1/4 + sqrt(5)/4 + sqrt(2)*sqrt(-7 + 3*sqrt(5))/4]
+The squared magnitude of the eigenvalues is: 0.131966011250105
+Result: Magnitude is < 1. This system CONVERGES (Attraction).
+
+--- 2. Analyzing K-Dominant System for Repulsion ---
+The unstable matrix G_unstable is:
+Matrix([[-1/4 + sqrt(5)/4, -sqrt(5)/4 - 1/4], [-sqrt(5)/4 - 1/4, -1/4 + sqrt(5)/4]])
+
+Its eigenvalues are: [sqrt(5)/2, -1/2]
+Analyzing eigenvalue sqrt(5)/2: Magnitude is 1.11803398874989
+Analyzing eigenvalue -1/2: Magnitude is 0.500000000000000
+Result: At least one eigenvalue has magnitude > 1. This system DIVERGES (Repulsion).
+
+============================================================
+Conclusion: The J-dominant system is purely convergent, while the
+K-dominant system possesses a divergent mode. This confirms the
+duality of J as attractive and K as repulsive.
+The Law of Duality is computationally verified.
+============================================================
+\end{verbatim}
