@@ -10,4 +10,101 @@ This law establishes a fundamental conservation principle for the framework. It 
 
 \subsubsection*{Proof}
 The proof consists of the direct substitution of the definitions for T, J, and K into the expression $T^2 + J^2 + K^2$ and simplifying the resulting algebraic terms.
-% (The step-by-step proof would go here)
+
+\subsubsection*{Formal Proof}
+We will substitute the definitions of the constants and simplify the expression algebraically.
+
+\begin{enumerate}
+    \item The definitions of the constants are:
+    $$ T = \frac{\sqrt{5}-1}{4}, \quad J = \frac{3-\sqrt{5}}{4}, \quad K = -\frac{\sqrt{5}+1}{4} $$
+    
+    \item First, we find the square of each constant:
+    \begin{align*}
+        T^2 &= \left(\frac{\sqrt{5}-1}{4}\right)^2 = \frac{5 - 2\sqrt{5} + 1}{16} = \frac{6 - 2\sqrt{5}}{16} \\
+        J^2 &= \left(\frac{3-\sqrt{5}}{4}\right)^2 = \frac{9 - 6\sqrt{5} + 5}{16} = \frac{14 - 6\sqrt{5}}{16} \\
+        K^2 &= \left(-\frac{\sqrt{5}+1}{4}\right)^2 = \frac{5 + 2\sqrt{5} + 1}{16} = \frac{6 + 2\sqrt{5}}{16}
+    \end{align*}
+    
+    \item Next, we sum the three squared terms:
+    \begin{align*}
+        \Sigma = T^2 + J^2 + K^2 &= \frac{(6 - 2\sqrt{5}) + (14 - 6\sqrt{5}) + (6 + 2\sqrt{5})}{16} \\
+        &= \frac{6 - 2\sqrt{5} + 14 - 6\sqrt{5} + 6 + 2\sqrt{5}}{16} \\
+        &= \frac{(6+14+6) + (-2\sqrt{5}-6\sqrt{5}+2\sqrt{5})}{16} \\
+        &= \frac{26 - 6\sqrt{5}}{16}
+    \end{align*}
+    
+    \item Finally, we simplify the fraction by dividing the numerator and denominator by 2:
+    $$ \Sigma = \frac{13 - 3\sqrt{5}}{8} $$
+    
+    \item This result matches the value stated in the law's definition. The Law of the Metric Invariant is therefore \textbf{proven}.
+\end{enumerate}
+
+\subsubsection*{Computational Verification}
+The following Python script uses the SymPy library to confirm this derivation by simplifying the symbolic expression for $T^2 + J^2 + K^2$.
+
+\begin{lstlisting}[language=Python, caption={Symbolic proof of the Law of the Metric Invariant.}, label={lst:metric_invariant_proof}]
+import sympy
+
+
+def prove_metric_invariant():
+    """
+    Symbolically proves the Law of the Metric Invariant.
+
+    This script calculates the sum of the squares of the core constants
+    (T^2 + J^2 + K^2) and verifies that it simplifies to the
+    universal invariant value (13 - 3*sqrt(5))/8.
+    """
+    # --- Define symbolic constants ---
+    sqrt5 = sympy.sqrt(5)
+    T = (sqrt5 - 1) / 4
+    J = (3 - sqrt5) / 4
+    K = -(sqrt5 + 1) / 4
+
+    print("=" * 60)
+    print("Symbolic Proof of the Law of the Metric Invariant")
+    print("=" * 60)
+
+    # --- Step 1: Calculate the sum of the squares ---
+    metric_invariant_calc = T ** 2 + J ** 2 + K ** 2
+    simplified_calc = sympy.simplify(metric_invariant_calc)
+
+    print("1. Calculating the expression for the Metric Invariant (Sigma)...")
+    print(f"   Sigma = T^2 + J^2 + K^2")
+    print(f"   Sigma simplifies to: {simplified_calc}\n")
+
+    # --- Step 2: Define the expected value of the invariant ---
+    expected_invariant = (13 - 3 * sqrt5) / 8
+
+    print("2. Stating the expected value from the Law's definition...")
+    print(f"   Expected Value = {expected_invariant}\n")
+
+    # --- Step 3: Verify the calculated result matches the expected value ---
+    assert simplified_calc == expected_invariant, "The calculated invariant does not match the expected value."
+
+    print("Conclusion: The calculated sum of squares is identical to the")
+    print("expected value for the Metric Invariant.")
+    print("The Law of the Metric Invariant is computationally verified.")
+    print("=" * 60)
+
+
+if __name__ == '__main__':
+    prove_metric_invariant()
+\end{lstlisting}
+
+\paragraph{Verification Output}
+\begin{verbatim}
+============================================================
+Symbolic Proof of the Law of the Metric Invariant
+============================================================
+1. Calculating the expression for the Metric Invariant (Sigma)...
+    Sigma = T^2 + J^2 + K^2
+    Sigma simplifies to: 13/8 - 3*sqrt(5)/8
+
+2. Stating the expected value from the Law's definition...
+    Expected Value = 13/8 - 3*sqrt(5)/8
+
+Conclusion: The calculated sum of squares is identical to the
+expected value for the Metric Invariant.
+The Law of the Metric Invariant is computationally verified.
+============================================================
+\end{verbatim}
