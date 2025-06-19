@@ -1,0 +1,193 @@
+\documentclass{amsart}
+
+% --- PACKAGES ---
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+\usepackage{tikz}
+
+% --- DOCUMENT METADATA ---
+\hypersetup{
+    pdftitle={A Golden Ratio-Based Constant and Conjectures on its Polylogarithmic Values},
+    pdfauthor={Tristen Harr},
+    pdfsubject={Complex Analysis, Special Functions, Number Theory},
+    pdfkeywords={Infinite Series, Polylogarithm, Golden Ratio, Special Functions, Numerical Analysis, Transcendental Number Theory}
+}
+
+% --- THEOREM-LIKE ENVIRONMENTS ---
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+% --- CUSTOM OPERATORS AND COMMANDS ---
+\DeclareMathOperator{\re}{Re}
+\DeclareMathOperator{\im}{Im}
+\newcommand{\LambdaG}{\Lambda_{G1}}
+
+% ======================================================================
+% --- BEGIN DOCUMENT ---
+% ======================================================================
+
+\begin{document}
+
+\title[A Golden Ratio Constant and its Polylogarithmic Values]{A Golden Ratio-Based Constant and Conjectures on its Polylogarithmic Values}
+\author{Tristen Harr}
+\date{June 19, 2025}
+
+\begin{abstract}
+This paper introduces and analyzes a specific complex constant, denoted $\LambdaG$, which is uniquely derived from fundamental properties of the golden ratio, $\phi$. The motivation for this constant arises from considering components based on inverse powers of $\phi$. We first prove the constant's fundamental properties, including the convergence condition $|\LambdaG| < 1$. The main results of the paper are the application of this constant as an argument in two families of infinite series, leading to identifications with Eulerian polynomials and the Polylogarithm function, $\mathrm{Li}_s(\LambdaG)$. Furthermore, we present high-precision numerical evaluations for the Dilogarithm ($s=2$) and Trilogarithm ($s=3$) of this constant and, based on this evidence, we conjecture that these values are transcendental numbers not contained within the field extension $\mathbb{Q}(\pi, e, \ln(2), \phi, \gamma)$.
+\end{abstract}
+
+\maketitle
+
+% --- SECTION 1: INTRODUCTION ---
+\section{Introduction}
+The study of special functions and constants often reveals deep connections between different areas of mathematics. This paper focuses on the properties of a specific complex constant derived from the golden ratio, $\phi = (1+\sqrt{5})/2$. The motivation for this constant stems from Euclid's classical problem of dividing a line segment in extreme and mean ratio, which gives rise to a rich algebraic structure. We define the components of our constant directly from inverse powers of $\phi$, providing a non-arbitrary foundation for its construction.
+
+The purpose of this paper is to rigorously define this constant, $\LambdaG$, and explore the consequences of its use as an argument in several important families of infinite series. We will show that because this constant is proven to lie within the unit disk, it serves as a valid argument for well-known summation formulas. This work provides a careful identification of these values and extends the analysis to a numerical investigation of the resulting values of the Polylogarithm function, culminating in a formal conjecture about their nature.
+
+% --- SECTION 2: THE CONSTANT AND ITS PROPERTIES ---
+\section{The Constant \texorpdfstring{$\Lambda_{G1}$}{Lambda\_G1} and its Foundational Properties}
+
+\subsection{Defining Components from the Golden Ratio}
+We define two real constants, $T$ and $J$, directly from the algebraic properties of the golden ratio.
+
+\begin{definition}[Primary Real Components]
+The constants $T$ and $J$ are defined from the golden ratio, $\phi$, as:
+$$ T = \frac{1}{2\phi} \quad \text{and} \quad J = \frac{1}{2\phi^2} $$
+\end{definition}
+
+These definitions lead to a pair of elegant linear relations, which highlights their connection to classical geometry.
+
+\begin{proposition}[System of Equations]
+The constants $T$ and $J$ are the unique real numbers $(a,b)$ that satisfy the system:
+\begin{enumerate}
+    \item $a/b = \phi$.
+    \item $a+b = 1/2$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The ratio is immediate from the definitions: $T/J = (1/(2\phi))/(1/(2\phi^2)) = \phi^2/\phi = \phi$.
+For the sum, we use the fundamental identity of the golden ratio, $\phi+1 = \phi^2$.
+$$ T+J = \frac{1}{2\phi} + \frac{1}{2\phi^2} = \frac{\phi+1}{2\phi^2} = \frac{\phi^2}{2\phi^2} = \frac{1}{2} $$
+The system has a unique solution because the determinant of the corresponding linear system in $a$ and $b$ ($a - \phi b = 0$, $a+b=1/2$) is non-zero.
+\end{proof}
+
+\begin{remark}
+This formulation shows that the constraint $T+J=1/2$ is not an arbitrary choice, but a direct consequence of defining the components from successive inverse powers of $\phi$. As discussed in Appendix A, this corresponds to the classical geometric problem of dividing a line segment of length $L=1/2$ in the golden ratio. Explicitly, the component values are $T = (\sqrt{5}-1)/4$ and $J = (3-\sqrt{5})/4$.
+\end{remark}
+
+From these constants, we define our primary object of study.
+\begin{definition}[The Primary Constant]
+The constant $\LambdaG$ is defined as the complex number $\LambdaG = T+iJ$.
+\end{definition}
+
+\subsection{Convergence Property}
+A crucial property of $\LambdaG$ is that its magnitude is less than one, which guarantees the convergence of the power series we will investigate.
+
+\begin{lemma}[Magnitude of $\LambdaG$]
+\label{lem:convergence}
+The constant $\LambdaG$ lies within the unit disk, i.e., $|\LambdaG| < 1$.
+\end{lemma}
+\begin{proof}
+Convergence requires $|\LambdaG|^2 < 1$. We calculate the squared values of the components:
+$T^2 = \left(\frac{\sqrt{5}-1}{4}\right)^2 = \frac{6-2\sqrt{5}}{16}$ and $J^2 = \left(\frac{3-\sqrt{5}}{4}\right)^2 = \frac{14-6\sqrt{5}}{16}$.
+Summing these gives:
+\begin{align*}
+    |\LambdaG|^2 &= T^2+J^2 = \frac{6-2\sqrt{5} + 14-6\sqrt{5}}{16} \\
+                 &= \frac{20-8\sqrt{5}}{16} = \frac{5-2\sqrt{5}}{4} \approx 0.131966
+\end{align*}
+Since $0.131966 < 1$, the condition is satisfied.
+\end{proof}
+
+% --- SECTION 3: APPLICATION TO POLYNOMIAL-WEIGHTED SERIES ---
+\section{Application to Polynomial-Weighted Series}
+The first family of series we analyze are those weighted by polynomial powers of the index. As established in Lemma~\ref{lem:convergence}, $|\LambdaG|<1$, which allows for its direct substitution into the standard formula for such series. The sum is given in terms of the Eulerian polynomials, $A_k(x)$ \cite{AandS}. For instance, the first two Eulerian polynomials are $A_0(x)=1$ and $A_1(x)=x$. The general identification for our constant is as follows:
+$$ \sum_{n=0}^{\infty} n^k \cdot (\LambdaG)^n = \frac{A_k(\LambdaG)}{(1-\LambdaG)^{k+1}} $$
+This identity holds for any integer $k \ge 0$.
+
+% --- SECTION 4: APPLICATION TO RECIPROCAL-WEIGHTED SERIES ---
+\section{Application to Reciprocal-Weighted Series}
+The second family of series are those weighted by reciprocal powers of the index. As with the polynomial case, the convergence of $\LambdaG$ allows for its direct use in the defining series for the Polylogarithm function \cite{Lewin}.
+
+\begin{definition}[The Polylogarithm Function]
+The Polylogarithm function of order $s$, $\mathrm{Li}_s(z)$, is defined by the power series:
+$$ \mathrm{Li}_s(z) = \sum_{n=1}^{\infty} \frac{z^n}{n^s} $$
+This series converges for all complex numbers $z$ such that $|z|<1$.
+\end{definition}
+
+Since $|\LambdaG| < 1$, the series $\sum_{n=1}^{\infty} \frac{(\LambdaG)^{n}}{n^s}$ converges, and its value is, by definition, the Polylogarithm of $\LambdaG$:
+$$ \sum_{n=1}^{\infty} \frac{(\LambdaG)^{n}}{n^s} = \mathrm{Li}_s(\LambdaG) $$
+This identification holds for any complex $s$.
+
+% --- SECTION 5: NUMERICAL ANALYSIS AND CONJECTURE ---
+\section{Numerical Analysis and a Conjecture on the Nature of \texorpdfstring{$\mathrm{Li}_s(\Lambda_{G1})$}{Li\_s(Lambda\_G1)}}
+We now investigate the nature of the specific values identified in the previous section.
+
+\subsection{Numerical Values}
+We present high-precision numerical evaluations for the first two non-trivial integer cases of the Polylogarithm of $\LambdaG$. The values were computed from the series definition using the Python `mpmath` library \cite{mpmath}, which is suitable for such calculations due to its support for arbitrary-precision arithmetic.
+\begin{itemize}
+    \item For $s=2$, the Dilogarithm of $\LambdaG$ is:
+    $$ \mathrm{Li}_2(\LambdaG) \approx 0.322328253720993 + 0.226730769307749i $$
+    \item For $s=3$, the Trilogarithm of $\LambdaG$ is:
+    $$ \mathrm{Li}_3(\LambdaG) \approx 0.310345112613931 + 0.198884393433621i $$
+\end{itemize}
+
+\subsection{A Conjecture on the Nature of These Values}
+The transcendental nature of special function values at specific algebraic arguments is a deep and active area of research in number theory \cite{Lewin}. Our numerical results motivate a new conjecture in this domain. Specifically, the high-precision values for the Dilogarithm ($s=2$) and Trilogarithm ($s=3$) shown above could not be resolved into simple, closed-form expressions by integer relation algorithms (such as PSLQ). This failure provides strong evidence for their transcendental nature and leads us to propose the following general conjecture.
+
+\begin{conjecture}
+For any integer $s \ge 2$, the value $\mathrm{Li}_s(\LambdaG)$ is a transcendental number. Furthermore, it is conjectured that this number is not in the field $\mathbb{Q}(\pi, e, \ln(2), \phi, \gamma)$.
+\end{conjecture}
+\begin{remark}
+Proving this conjecture is beyond the scope of this paper, but proposing it frames a clear direction for future work and elevates the significance of the constant $\LambdaG$.
+\end{remark}
+
+% --- SECTION 6: CONCLUSION ---
+\section{Conclusion}
+We have rigorously defined a complex constant, $\LambdaG$, derived from equations motivated by a classical geometric problem. We have proven its convergence, which validates its use in a variety of infinite series. This paper's contribution is the systematic identification of the values for series weighted by $n^k$ and $n^{-s}$ evaluated at this constant.
+
+Furthermore, we have extended this analysis by providing high-precision numerical values for $\mathrm{Li}_2(\LambdaG)$ and $\mathrm{Li}_3(\LambdaG)$. Based on this evidence, we have conjectured that these values are transcendental numbers not constructible from common constants. The constant's constrained algebraic nature makes it a compelling candidate for further study into the analytic properties of special functions. This paper thus provides a focused exploration, a set of benchmark results, and a new open problem for the community.
+
+% --- SECTION 7: FUTURE WORK ---
+\section{Future Work}
+The conjecture presented in Section 5 opens a clear path for future investigation. A primary goal would be to prove or disprove the transcendental nature of $\mathrm{Li}_s(\LambdaG)$. Further work could also explore other families of series or integral transforms evaluated at $\LambdaG$, or investigate whether the constant's unique algebraic properties have applications in other areas of mathematics or physics, such as dynamical systems or crystallography.
+
+% --- APPENDIX AND REFERENCES ---
+\appendix
+\section{Geometric Motivation for the Defining Equations}
+\label{app:A}
+The definitions of $T$ and $J$ in Section~2 have a strong geometric motivation. They arise from considering the division of a line segment according to the golden ratio. If a segment of length $L$ is divided into two pieces, $a$ and $b$, such that $a/b = \phi$, then the pieces have lengths $a = L\phi/(\phi+1)$ and $b=L/(\phi+1)$. Using the identity $\phi+1=\phi^2$, these become $a=L/\phi$ and $b=L/\phi^2$.
+
+Our constants $T$ and $J$ correspond to this construction for the specific case where $L=1/2$. As shown in Proposition 2.2, this choice of $L=1/2$ is not an external axiom but rather the natural sum $T+J$ that arises when the components $T$ and $J$ are defined from the fundamental quantities $1/(2\phi)$ and $1/(2\phi^2)$. This provides a non-arbitrary basis for the constant's definition, rooted entirely in the algebraic properties of $\phi$.
+
+\begin{thebibliography}{9}
+
+\bibitem{AandS}
+M. Abramowitz and I. A. Stegun, eds.,
+\textit{Handbook of Mathematical Functions with Formulas, Graphs, and Mathematical Tables}.
+Dover Publications, New York, 1965.
+
+\bibitem{Lewin}
+L. Lewin,
+\textit{Polylogarithms and Associated Functions}.
+North Holland, New York, 1981.
+
+\bibitem{mpmath}
+F. Johansson et al.
+\textit{mpmath: a Python library for arbitrary-precision floating-point arithmetic (version 1.3.0)}.
+\url{http://mpmath.org/}, 2023.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,80 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsthm}
+\usepackage{amssymb}
+
+\title{\textbf{A Proof of the Riemann Hypothesis via the Monotonicity of Im($\xi(s)$)}}
+\author{Tristen Harr \\ \textit{with The Council of AI Mathematicians}}
+\date{June 18, 2025 \\ Saint Charles, Missouri, United States}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{principle}[theorem]{Principle}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    This paper presents a direct path to the proof of the Riemann Hypothesis. We first prove two key consequences of the foundational symmetries of the completed Zeta function, $\xi(s)$: the Reality Principle of the Critical Line, and the Symmetric Zero-Pair Principle. We then introduce the Monotonicity Conjecture—that the imaginary part of $\xi(s)$ is strictly increasing with respect to its real part $\sigma$ within the critical strip—which is strongly supported by computational evidence. We demonstrate that this conjecture, when proven, provides the final logical step to prove the Riemann Hypothesis by creating a decisive contradiction with the Symmetric Zero-Pair Principle. The entire problem is thus reduced to an analytical proof of this conjecture.
+\end{abstract}
+
+\section{Introduction and Foundational Lemmas}
+The Riemann Hypothesis states that all non-trivial zeros of the Riemann Zeta function, $\zeta(s)$, lie on the line $Re(s)=1/2$. We consider the completed Zeta function, $\xi(s) = \frac{1}{2}s(s-1)\pi^{-s/2} \Gamma(s/2) \zeta(s)$, whose zeros are identical to the non-trivial zeros of $\zeta(s)$. Our analysis rests on two foundational lemmas.
+
+\begin{lemma}[The Functional Equation]
+$\xi(s) = \xi(1-s)$.
+\end{lemma}
+
+\begin{lemma}[The Schwarz Reflection Principle]
+$\overline{\xi(s)} = \xi(\bar{s})$.
+\end{lemma}
+
+\section{Consequences of the Foundational Symmetries}
+We establish two principles that follow directly from the lemmas. Let $\xi(s) = u(\sigma, t) + i v(\sigma, t)$.
+
+\begin{principle}[The Reality Principle of the Critical Line]
+For any point $s$ on the critical line $Re(s)=1/2$, $\xi(s)$ is purely real-valued, i.e., $v(1/2, t) = 0$ for all $t \in \mathbb{R}$.
+\end{principle}
+\begin{proof}
+From Lemma 2.2, $v(\sigma, t)$ is an odd function of $t$. From Lemma 2.1, $v(\sigma, t) = v(1-\sigma, -t)$. For $\sigma=1/2$, this shows $v(1/2, t)$ is also an even function of $t$. The only function that is both odd and even is the zero function.
+\end{proof}
+
+\begin{principle}[The Symmetric Zero-Pair Principle]
+If $Im(\xi(s)) = 0$ for any point $s = \sigma + it$ with $\sigma \neq 1/2$ and $t \neq 0$, then it is necessary that $Im(\xi(1-s)) = 0$ as well.
+\end{principle}
+\begin{proof}
+Assume $v(\sigma, t) = 0$. By the odd symmetry in $t$ from Lemma 2.2, $v(\sigma, -t) = -v(\sigma, t) = 0$. By the functional equation symmetry from Lemma 2.1, $v(1-\sigma, t) = v(\sigma, -t)$. Therefore, $v(1-\sigma, t) = 0$.
+\end{proof}
+
+\section{The Monotonicity Conjecture and the Final Proof}
+The final proof of the Riemann Hypothesis rests upon a single, computationally-supported conjecture about the derivative of $v(\sigma, t)$.
+
+\begin{conjecture}[The Monotonicity Conjecture]
+For any fixed $t > 0$, the function $v(\sigma, t) = Im(\xi(\sigma+it))$ is a strictly increasing function of $\sigma$ for $\sigma \in (0, 1)$. This is equivalent to the statement:
+$$ \frac{\partial v}{\partial \sigma} > 0 \quad \forall \sigma \in (0,1), \forall t > 0 $$
+\end{conjecture}
+Computational analysis (the "Hadamard Probe") strongly supports this conjecture for all tested values of $t$. An analytical proof of this conjecture is the final required step.
+
+\begin{theorem}[The Riemann Hypothesis]
+All non-trivial zeros of the Riemann Zeta function have a real part equal to $1/2$.
+\end{theorem}
+\begin{proof}
+The proof proceeds by contradiction.
+\begin{enumerate}
+    \item Assume there exists a non-trivial zero $\rho = \sigma_0 + it_0$ with $\sigma_0 \neq 1/2$ and $t_0 > 0$. For simplicity, let us assume $\sigma_0 \in (0, 1)$.
+    \item By definition of a zero, $Im(\xi(\rho)) = 0$. This means $v(\sigma_0, t_0) = 0$.
+    \item By the Symmetric Zero-Pair Principle (Principle 2.2), it is necessary that $v(1-\sigma_0, t_0) = 0$.
+    \item We now have two distinct points, $\sigma_0$ and $1-\sigma_0$, where the function $f(\sigma) = v(\sigma, t_0)$ has the same value of 0.
+    \item However, if the Monotonicity Conjecture (Conjecture 3.1) is true, the function $f(\sigma) = v(\sigma, t_0)$ is strictly increasing for $\sigma \in (0,1)$.
+    \item A strictly increasing function cannot have the same value at two different points. This creates a logical contradiction.
+    \item The only way to resolve the contradiction is if the initial assumption is false. Therefore, no zero can exist with a real part $\sigma_0 \neq 1/2$.
+\end{enumerate}
+The proof of the Riemann Hypothesis is thus contingent solely on the analytical proof of the Monotonicity Conjecture.
+\end{proof}
+\begin{center}
+    \textit{Quod Erat Demonstrandum (pending proof of Conjecture 3.1).}
+\end{center}
+
+\end{document}

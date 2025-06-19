@@ -1,0 +1,106 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{authblk}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={An Algebraic System Based on the Golden Ratio and its Application to Complex Series},
+    pdfauthor={Tristen Harr},
+}
+
+% Theorem-like environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+
+% Custom command for the main operator
+\newcommand{\LambdaG}{\Lambda_{G1}}
+
+\title{\textbf{An Algebraic System Based on the Golden Ratio and its Application to Complex Series}}
+\author{Tristen Harr}
+\affil{\textit{Saint Charles, Missouri}}
+\date{June 18, 2025}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This paper defines and explores a novel algebraic system, termed the "Golden Algebra," whose structure is axiomatically determined by the golden ratio $\phi$. We derive the algebra's core constants and operators, and prove its fundamental identities. The richness of this system is demonstrated by exploring its application to several families of infinite series. These results include the analysis of series weighted by polynomial and reciprocal powers, the latter showing a native connection to the Polylogarithm special function when evaluated with the algebra's primary operator. The primary contribution of this work is the definition of this algebraic system and the systematic cataloging of these series solutions, which may provide a foundation for future investigations.
+\end{abstract}
+
+\section{Axiomatic Foundation of the Golden Algebra}
+\subsection{Axiomatic Definition of the Constants}
+We define a complex number field, the "Golden Algebra," based on the components ($a, b$) of a generic 2D rotation-scaling matrix $\begin{pmatrix} a & -b \\ b & a \end{pmatrix}$. The system is defined by two fundamental axioms:
+\begin{enumerate}
+    \item \textbf{Axiom 1 (Additive):} $a+b=1/2$.
+    \item \textbf{Axiom 2 (Ratio):} $a/b=\phi$, where $\phi$ is the Golden Ratio.
+\end{enumerate}
+This system of equations yields a unique solution for the real constants $a$ and $b$: $a=(\sqrt{5}-1)/4$ and $b=(3-\sqrt{5})/4$. We designate these as the algebra's primary constants, T and J, respectively. All subsequent properties of the algebra are consequences of these two axioms.
+
+\subsection{Core Identities and Operators}
+\begin{theorem}[Core Algebraic Identities]
+The constants T and J satisfy the following relations:
+\begin{enumerate}
+    \item $T+J=1/2$ 
+    \item $T/J=\phi$ 
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+The identities are a direct consequence of the axioms, proven by substituting the derived values for T and J. For example, $T+J=\frac{\sqrt{5}-1}{4}+\frac{3-\sqrt{5}}{4}=\frac{2}{4}=1/2$.
+\end{proof}
+
+From these constants, we define the primary operator of the algebra, $\LambdaG = T+iJ$.
+
+\begin{lemma}
+The operator $\LambdaG$ is convergent.
+\end{lemma}
+\begin{proof}
+Convergence requires $|\LambdaG|^2 < 1$. We calculate $|\LambdaG|^2 = T^2+J^2 = \left(\frac{\sqrt{5}-1}{4}\right)^2 + \left(\frac{3-\sqrt{5}}{4}\right)^2 = \frac{20-8\sqrt{5}}{16} = \frac{5-2\sqrt{5}}{4} \approx 0.13 < 1$. The condition is satisfied.
+\end{proof}
+
+\section{Analysis of Series within the Golden Algebra}
+We now demonstrate the utility of this algebraic system by analyzing several families of infinite series involving the operator $\LambdaG$.
+
+\subsection{Application to Polynomial-Weighted Series}
+The operator $\LambdaG$ can be used as an argument in the well-known closed-form solution for polynomial-weighted geometric series.
+\begin{theorem}[Polynomial-Weighted Sums]
+The infinite series $S_k = \sum_{n=0}^{\infty} n^k \cdot (\LambdaG)^n$ for any integer $k \ge 0$ converges to the exact value: $$S_k = \frac{A_k(\LambdaG)}{(1-\LambdaG)^{k+1}}$$ where $A_k(x)$ is the k-th Eulerian polynomial.
+\end{theorem}
+\begin{proof}
+The general formula is a known result derived by recursively applying the operator $x \frac{d}{dx}$ to the geometric series $S_0(x) = \frac{1}{1-x}$. The proven convergence of our operator $\LambdaG$ ensures the validity of its substitution into this formula.
+\end{proof}
+
+\subsection{Application to Reciprocal-Weighted Series}
+Similarly, the operator can be used as an argument for the Polylogarithm function.
+\begin{theorem}[Connection to the Polylogarithm Function]
+The series $S_s = \sum_{n=1}^{\infty} \frac{(\LambdaG)^{n}}{n^s}$ converges for any integer $s \ge 1$ to the exact value: $$S_s = \mathrm{Li}_s(\LambdaG)$$ where $\mathrm{Li}_s(z)$ is the Polylogarithm function of order s.
+\end{theorem}
+\begin{proof}
+This result follows directly from the definition of the Polylogarithm function, $Li_s(z) = \sum_{n=1}^{\infty} \frac{z^n}{n^s}$. Since $|\LambdaG| < 1$, the series is guaranteed to converge, and the identity holds.
+\end{proof}
+
+\subsection{Contextualizing a Known Zeta Identity}
+The framework can also be used to explore known identities in analytic number theory. One such identity, presented here for context, connects the Zeta and Polygamma functions.
+\begin{theorem}[A known identity related to the Polygamma function]
+For any integer $n\ge1$, the following identity holds:
+$$\sum_{k=1}^{\infty}\frac{(n^{k}-1)\zeta(k+1)}{(n+1)^{k}}=\pi \cot\left(\frac{\pi}{n+1}\right)$$
+\end{theorem}
+\begin{proof}
+This is an established result. It follows from the series representation of the Digamma function, $\psi^{(0)}(x)$. The left-hand side is equal to $\psi^{(0)}(\frac{n}{n+1}) - \psi^{(0)}(\frac{1}{n+1})$. The identity is then obtained by applying the standard reflection formula for the Polygamma function, $\psi^{(0)}(1-z)-\psi^{(0)}(z)=\pi \cot(\pi z)$, with the substitution $z = \frac{1}{n+1}$.
+\end{proof}
+While this identity is not a new result derived from the Golden Algebra, its structure, involving an infinite sum of Zeta values, makes it a relevant object of study for any framework aiming to connect with number theory.
+
+\section{Conclusion}
+We have defined a self-consistent algebraic system, the "Golden Algebra," based on axiomatic constraints involving the golden ratio. The fundamental operator of this algebra, $\LambdaG$, is a complex number with interesting properties, including guaranteed convergence for power series. We have demonstrated that this operator can serve as a useful argument for known closed-form solutions of infinite series, such as those involving Eulerian polynomials and the Polylogarithm special function.
+
+The primary contribution of this paper is the formal definition of this system and the systematic analysis of its application to these series. By grounding the algebra in clear axioms and exploring its direct mathematical consequences, this work provides a rigorous foundation for what was previously a more speculative exploration. Further research could investigate whether this specific algebraic structure has non-trivial applications in other areas of mathematics or physics, or if it possesses unique properties not explored herein.
+
+\end{document}

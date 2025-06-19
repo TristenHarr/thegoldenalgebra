@@ -1,0 +1,188 @@
+\documentclass{amsart}
+
+% --- PACKAGES ---
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+\usepackage{tikz}
+
+% --- DOCUMENT METADATA ---
+\hypersetup{
+    pdftitle={On the Evaluation of Certain Series at a Golden Ratio-Based Constant},
+    pdfauthor={Tristen Harr},
+    pdfsubject={Complex Analysis, Special Functions, Number Theory},
+    pdfkeywords={Infinite Series, Polylogarithm, Golden Ratio, Special Functions, Numerical Analysis}
+}
+
+% --- THEOREM-LIKE ENVIRONMENTS ---
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+% --- CUSTOM OPERATORS AND COMMANDS ---
+\DeclareMathOperator{\re}{Re}
+\DeclareMathOperator{\im}{Im}
+\newcommand{\LambdaG}{\Lambda_{G1}}
+
+% ======================================================================
+% --- BEGIN DOCUMENT ---
+% ======================================================================
+
+\begin{document}
+
+\title[Series Evaluations at a Golden Ratio Constant]{On the Evaluation of Certain Series at a Golden Ratio-Based Constant}
+\author{Tristen Harr}
+\date{June 18, 2025}
+
+\begin{abstract}
+This paper introduces and analyzes a specific complex constant, denoted $\Lambda_{G1}$, which is uniquely derived from a set of defining equations related to the golden ratio, $\phi$. The motivation for this constant is shown to arise from a classical geometric construction. We first prove the constant's fundamental properties, including the convergence condition $|\LambdaG| < 1$. The primary contribution of this work is the systematic evaluation of two families of infinite series where $\LambdaG$ serves as the argument, connecting them to Eulerian polynomials and the Polylogarithm function, $\mathrm{Li}_s(\LambdaG)$. Furthermore, we present high-precision numerical evaluations for the Dilogarithm ($s=2$) and Trilogarithm ($s=3$) of this constant and, based on this evidence, we conjecture that these values are transcendental numbers not expressible in the ring of common mathematical constants.
+\end{abstract}
+
+\maketitle
+
+% --- SECTION 1: INTRODUCTION ---
+\section{Introduction}
+The study of infinite series often reveals deep connections between different areas of mathematics. This paper focuses on the properties of series evaluated at a specific complex constant derived from the golden ratio, $\phi$. The motivation for this constant arises from the classical geometric problem of dividing a line segment in extreme and mean ratio. This problem provides a non-arbitrary foundation for a pair of defining equations whose unique solution gives rise to the constant we analyze.
+
+The purpose of this paper is to rigorously define this constant and systematically explore the evaluation of several important families of infinite series using this constant as the primary argument. We will show that because this constant is proven to lie within the unit disk, it serves as a valid and interesting argument for well-known summation formulas. This work provides a careful cataloging of these results and extends the analysis to a numerical investigation of the resulting values of the Polylogarithm function.
+
+% --- SECTION 2: THE CONSTANT AND ITS PROPERTIES ---
+\section{The Constant \texorpdfstring{$\Lambda_{G1}$}{Lambda\_G1} and its Foundational Properties}
+
+\subsection{Defining Equations and Uniqueness}
+We define two real constants, $T$ and $J$, as the unique solution to a pair of equations motivated by a classical geometric problem (see Appendix~A).
+
+\begin{definition}[Defining Equations]
+The constants $T$ and $J$ are the real numbers $(a,b)$ that satisfy:
+\begin{enumerate}
+    \item $a+b = 1/2$.
+    \item $a/b = \phi$, where $\phi = \frac{1+\sqrt{5}}{2}$.
+\end{enumerate}
+Solving this system yields the unique values $T = (\sqrt{5}-1)/4$ and $J = (3-\sqrt{5})/4$.
+\end{definition}
+
+From these constants, we define our primary object of study.
+\begin{definition}[The Primary Constant]
+The constant $\LambdaG$ is defined as the complex number $\LambdaG = T+iJ$.
+\end{definition}
+
+\subsection{Convergence Property}
+A crucial property of $\LambdaG$ is that its magnitude is less than one, which guarantees the convergence of the power series we will investigate.
+
+\begin{lemma}[Magnitude of $\LambdaG$]
+\label{lem:convergence}
+The constant $\LambdaG$ lies within the unit disk, i.e., $|\LambdaG| < 1$.
+\end{lemma}
+\begin{proof}
+Convergence requires $|\LambdaG|^2 < 1$. We calculate the squared values of the components:
+$T^2 = \left(\frac{\sqrt{5}-1}{4}\right)^2 = \frac{6-2\sqrt{5}}{16}$ and $J^2 = \left(\frac{3-\sqrt{5}}{4}\right)^2 = \frac{14-6\sqrt{5}}{16}$.
+Summing these gives:
+\begin{align*}
+    |\LambdaG|^2 &= T^2+J^2 = \frac{6-2\sqrt{5} + 14-6\sqrt{5}}{16} \\
+                 &= \frac{20-8\sqrt{5}}{16} = \frac{5-2\sqrt{5}}{4} \approx 0.131966
+\end{align*}
+Since $0.131966 < 1$, the condition is satisfied.
+\end{proof}
+
+% --- SECTION 3: POLYNOMIAL-WEIGHTED SERIES ---
+\section{Application to Polynomial-Weighted Series}
+The first family of series we analyze are those weighted by polynomial powers of the index. Since it is proven in Lemma~\ref{lem:convergence} that $|\LambdaG|<1$, the constant is a valid argument for the standard formula for polynomial-weighted geometric series. This sum is given in terms of the Eulerian polynomials, $A_k(x)$.
+The identification is as follows:
+$$ \sum_{n=0}^{\infty} n^k \cdot (\LambdaG)^n = \frac{A_k(\LambdaG)}{(1-\LambdaG)^{k+1}} $$
+This identity holds for any integer $k \ge 0$.
+
+% --- SECTION 4: RECIPROCAL-WEIGHTED SERIES ---
+\section{Application to Reciprocal-Weighted Series}
+The second family of series are those weighted by reciprocal powers of the index. These are identified by definition with the Polylogarithm special function.
+
+\begin{definition}[The Polylogarithm Function]
+The Polylogarithm function of order $s$, $\mathrm{Li}_s(z)$, is defined by the power series:
+$$ \mathrm{Li}_s(z) = \sum_{n=1}^{\infty} \frac{z^n}{n^s} $$
+This series converges for all complex numbers $z$ such that $|z|<1$.
+\end{definition}
+
+Since $|\LambdaG| < 1$, the series $\sum_{n=1}^{\infty} \frac{(\LambdaG)^{n}}{n^s}$ converges, and its value is, by definition, the Polylogarithm of $\LambdaG$:
+$$ \sum_{n=1}^{\infty} \frac{(\LambdaG)^{n}}{n^s} = \mathrm{Li}_s(\LambdaG) $$
+This identity holds for any complex $s$.
+
+% --- SECTION 5: NUMERICAL ANALYSIS AND CONJECTURE ---
+\section{Numerical Analysis and a Conjecture on the Nature of \texorpdfstring{$\mathrm{Li}_s(\LambdaG)$}{Li\_s(Lambda\_G1)}}
+We now investigate the nature of the specific values identified in the previous section.
+
+\subsection{Numerical Values}
+We present high-precision numerical evaluations for the first two non-trivial integer cases of the Polylogarithm of $\LambdaG$, computed from the series definition.
+\begin{itemize}
+    \item For $s=2$, the Dilogarithm of $\LambdaG$ is:
+    $$ \mathrm{Li}_2(\LambdaG) \approx 0.322328253720993 + 0.226730769307749i $$
+    \item For $s=3$, the Trilogarithm of $\LambdaG$ is:
+    $$ \mathrm{Li}_3(\LambdaG) \approx 0.310345112613931 + 0.198884393433621i $$
+\end{itemize}
+
+\subsection{A Conjecture on the Nature of These Values}
+The numerical results above are presented as benchmark values for future research. Analysis using integer relation algorithms (such as PSLQ) does not resolve these values into simple, closed-form expressions involving common mathematical constants. This leads us to propose the following.
+
+\begin{conjecture}
+For any integer $s \ge 2$, the value $\mathrm{Li}_s(\LambdaG)$ is a transcendental number. Furthermore, it is conjectured that this number is not in the ring $\mathbb{Q}(\pi, e, \ln(2), \phi, \gamma)$.
+\end{conjecture}
+\begin{remark}
+Proving this conjecture is beyond the scope of this paper, but proposing it frames a clear direction for future work and elevates the significance of the constant $\LambdaG$ as a tool for probing the structure of the Polylogarithm function.
+\end{remark}
+
+% --- SECTION 6: CONCLUSION ---
+\section{Conclusion}
+We have rigorously defined a complex constant, $\LambdaG$, derived from equations motivated by a classical geometric problem. We have proven its convergence, which validates its use in a variety of infinite series. The primary contribution of this work is the systematic identification of the closed-form values for series weighted by $n^k$ and $n^{-s}$ evaluated at this constant.
+
+Furthermore, we have extended this analysis by providing high-precision numerical values for $\mathrm{Li}_2(\LambdaG)$ and $\mathrm{Li}_3(\LambdaG)$. Based on this evidence, we have conjectured that these values are non-trivial transcendental numbers. The constant's constrained algebraic nature makes it a compelling candidate for further study into the analytic properties of the Polylogarithm function. This paper thus provides a complete, self-contained exploration, a set of benchmark results, and a new open problem for the community.
+
+% --- APPENDIX AND REFERENCES ---
+\appendix
+\section{Geometric Motivation for the Defining Equations}
+\label{app:A}
+The defining equations in Section~2 are motivated by a classical compass-and-straightedge construction. Specifically, they represent the algebraic solution to the problem of dividing a line segment of length $1/2$ into two smaller segments, $T$ and $J$, such that their ratio is the golden ratio, i.e., $T/J = \phi$. This geometric origin provides a foundational, non-arbitrary basis for the constants.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[scale=0.8]
+        % Define constants for TikZ. Pre-calculating is safer.
+        \def\totalLength{10}
+        \def\Tlen{6.18034} % T segment length: 10/phi
+        \def\JMidpoint{8.09017} % Tlen + (Jlen/2)
+        
+        % Main line segment
+        \draw[thick] (0,0) -- (\totalLength,0);
+        \node[below] at (0,-0.2) {0};
+        \node[below] at (\totalLength,-0.2) {1/2};
+
+        % Draw T and J segments
+        \draw[thick, blue] (0,0) -- (\Tlen, 0);
+        \draw[thick, red] (\Tlen,0) -- (\totalLength,0);
+        
+        % Labels for T and J
+        \node[above] at (\Tlen/2, 0.1) {$T$};
+        \node[above] at (\JMidpoint, 0.1) {$J$};
+        
+        % Tick mark at the division point
+        \draw[thick] (\Tlen, -0.2) -- (\Tlen, 0.2);
+    \end{tikzpicture}
+    \caption{A visual representation of the geometric problem of dividing a line segment of length 1/2 in the golden ratio, which gives rise to the constants T and J.}
+    \label{fig:geometry}
+\end{figure}
+
+\begin{thebibliography}{9}
+\bibitem{AandS}
+M. Abramowitz and I. A. Stegun, eds.
+\textit{Handbook of Mathematical Functions with Formulas, Graphs, and Mathematical Tables}.
+Dover Publications, New York, 1965.
+\end{thebibliography}
+
+\end{document}

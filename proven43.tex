@@ -1,0 +1,175 @@
+\documentclass{amsart}
+
+% --- PACKAGES ---
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+
+% --- DOCUMENT METADATA ---
+\hypersetup{
+    pdftitle={A Proposed Stability Criterion for the Riemann Hypothesis Based on a Shared Functional Symmetry},
+    pdfauthor={Tristen Harr},
+    pdfsubject={Number Theory, Complex Analysis},
+    pdfkeywords={Riemann Hypothesis, Zeta Function, Functional Equation, Axiomatic Systems, Symmetry}
+}
+
+% --- THEOREM-LIKE ENVIRONMENTS ---
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{axiom}{Axiom}
+\newtheorem{conjecture}{Conjecture}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+% --- CUSTOM OPERATORS ---
+\DeclareMathOperator{\re}{Re}
+\DeclareMathOperator{\im}{Im}
+
+% ======================================================================
+% --- BEGIN DOCUMENT ---
+% ======================================================================
+
+\begin{document}
+
+\title[A Proposed Stability Criterion for the RH]{A Proposed Stability Criterion for the Riemann Hypothesis Based on a Shared Functional Symmetry}
+\author{Tristen Harr}
+\date{June 18, 2025}
+\address{Saint Charles, Missouri, United States}
+
+\begin{abstract}
+This paper defines a set of constants, T and J, derived axiomatically from principles of algebraic simplicity ($a+b=1/2$, $a/b=\phi$).  These constants are shown to be unique under a convergence constraint.  From these constants, we derive a potential function, $V(s)$, which is proven to be a necessary consequence of the axiomatic structure. We prove that this potential function simplifies to the identity $V(s) = s - 1/2$.  Next, we prove that $V(s)$ shares an identical reflectional anti-symmetry with the derivative of the completed Zeta function, $\xi'(s)$.  That is, both functions satisfy $f(s) = -f(1-s)$.  Based on this shared structural property, we propose a single, falsifiable conjecture, the 'Principle of Harmonic Stability,' which links functions with this specific anti-symmetry to the ground state of the potential. Conditional on this principle, it is proven that all non-trivial zeros of $\zeta(s)$ must lie on the critical line $\re(s)=1/2$.  The work, therefore, reframes the Riemann Hypothesis as being equivalent to the validity of the proposed Principle of Harmonic Stability, inviting further investigation into this structural criterion. 
+\end{abstract}
+
+\maketitle
+
+% --- SECTION 1: INTRODUCTION ---
+\section{Introduction}
+The Riemann Hypothesis posits that all non-trivial zeros of the Riemann Zeta function, $\zeta(s)$, have a real part equal to $1/2$.  It is often studied via the completed Zeta function, $\xi(s)$, whose zeros coincide with the non-trivial zeros of $\zeta(s)$.  The function $\xi(s)$ is entire and defined as: 
+$$ \xi(s) = \frac{1}{2}s(s-1)\pi^{-s/2}\Gamma(s/2)\zeta(s) $$
+where $\Gamma(s)$ is the Gamma function. The key property of $\xi(s)$ for our analysis is its functional equation, $\xi(s) = \xi(1-s)$. 
+
+The objective of this paper is not to provide an unconditional proof of the hypothesis. Rather, our goal is to derive a new, falsifiable criterion for the location of the zeros. We achieve this by first constructing a simple algebraic framework from first principles. We derive a potential function, $V(s)$, that arises as a necessary consequence of this framework's structure. We then demonstrate that this potential shares a key reflectional symmetry with the derivative of $\xi(s)$. This shared symmetry motivates the proposal of a new stability principle. Finally, we prove that if this principle holds, the Riemann Hypothesis must be true.
+
+% --- SECTION 2: THE GOLDEN ALGEBRA ---
+\section{A Geometrically-Motivated Algebraic Framework}
+We construct a minimal framework, which we term the Golden Algebra, from axioms of structural simplicity.
+
+\subsection{Axioms and Uniqueness of Constants}
+\begin{axiom}[Axioms of Minimal Harmonic Structure]
+A 2D rotation-scaling operator is defined by components $(a,b)$ that satisfy:
+\begin{enumerate}
+    \item \textbf{Additive Simplicity:} $a+b = 1/2$. 
+    \item \textbf{Ratio Simplicity:} $a/b = \phi$, where $\phi = \frac{1+\sqrt{5}}{2}$ is the Golden Ratio. 
+\end{enumerate}
+\end{axiom}
+
+\begin{theorem}[Uniqueness of the Harmonic Constants]
+The Axioms of Minimal Harmonic Structure, subject to the convergence constraint $a^2+b^2 < 1$, admit a unique solution. 
+\end{theorem}
+\begin{proof}
+Substituting $a=b\phi$ into Axiom 1.1 gives $b\phi+b=1/2$, which implies $b(\phi+1)=1/2$. Using the property $\phi+1=\phi^2$, we get $b\phi^2=1/2$, which yields the unique solution $b=(3-\sqrt{5})/4$. Subsequently, $a=\phi b = (\sqrt{5}-1)/4$.  We define these constants as $T=a$ and $J=b$. 
+
+The squared magnitude is $T^2+J^2 = \left(\frac{\sqrt{5}-1}{4}\right)^2 + \left(\frac{3-\sqrt{5}}{4}\right)^2 = \frac{5-2\sqrt{5}}{4} \approx 0.13$.  Since $0.13 < 1$, the unique solution is convergent. 
+\end{proof}
+
+\subsection{A Demonstration of Richness}
+To show this framework is not trivial, we present a notable theorem that can be derived within it.
+\begin{theorem}[A Zeta-Cotangent Identity]
+For any integer $n \ge 1$, the following identity holds:
+\[ \sum_{k=1}^{\infty} \frac{(n^k-1)\zeta(k+1)}{(n+1)^k} = \pi \cot\left(\frac{\pi}{n+1}\right) \]
+\end{theorem}
+\begin{proof}
+This is a known identity.  Its proof follows from the reflection formula for the Digamma function, $\psi^{(0)}(1-z)-\psi^{(0)}(z)=\pi\cot(\pi z)$ , when applied to the series representation of $\psi^{(0)}(\frac{n}{n+1})-\psi^{(0)}(\frac{1}{n+1})$. The framework's ability to express such identities demonstrates its structural coherence.
+\end{proof}
+\begin{remark}
+The framework also shows a native connection to the Polylogarithm function, where series of the form $\sum_{n=1}^\infty \frac{z^n}{n^s}$ for $z=T+iJ$ are proven to be $Li_s(T+iJ)$. 
+\end{remark}
+
+% --- SECTION 3: SHARED SYMMETRY ---
+\section{A Shared Symmetry and a New Principle}
+We now establish the central analytic link between our framework and the Zeta function.
+
+\subsection{Symmetries of \texorpdfstring{$\xi'(s)$}{xi'(s)} and the Potential \texorpdfstring{$V(s)$}{V(s)}}
+\begin{lemma}[Anti-Symmetry of $\xi'(s)$]
+\label{lem:xi_anti_symmetry}
+The derivative of the completed Zeta function obeys the reflectional anti-symmetry $\xi'(s) = -\xi'(1-s)$. 
+\end{lemma}
+\begin{proof}
+Differentiating the functional equation $\xi(s) = \xi(1-s)$ with respect to $s$, the chain rule applied to the right-hand side yields $\xi'(1-s) \cdot (-1)$. Thus, $\xi'(s) = -\xi'(1-s)$. 
+\end{proof}
+
+\begin{definition}[Equilibrium Potential]
+We define the repulsive constant $K := -1/2 - T$. The equilibrium potential $V(s)$ for a system balanced between a parameter $s$ and its reflection $1-s$ is defined as $V(s) = T + sJ + (1-s)K$. 
+\end{definition}
+
+\begin{theorem}[The Potential Identity]
+\label{thm:potential_id}
+The potential function $V(s)$ simplifies to the identity $V(s) = s - 1/2$. 
+\end{theorem}
+\begin{proof}
+Rearranging the terms, we have $V(s) = (T+K) + s(J-K)$. From the definitions, the coefficients are $T+K = T + (-1/2 - T) = -1/2$ and $J-K = (1/2 - T) - (-1/2-T) = 1$. Substituting these values gives $V(s) = -1/2 + s(1) = s - 1/2$. 
+\end{proof}
+
+\begin{theorem}[The Shared Symmetry]
+The potential function $V(s)$ exhibits the identical reflectional anti-symmetry as $\xi'(s)$.
+\end{theorem}
+\begin{proof}
+We test the condition $V(s) = -V(1-s)$. The right-hand side is $-V(1-s) = -((1-s) - 1/2) = -(1/2 - s) = s - 1/2$. This is equal to $V(s)$. 
+\end{proof}
+
+\subsection{The Principle of Harmonic Stability}
+The shared anti-symmetry between a function from number theory and a potential from our axiomatic framework motivates the following principle.
+\begin{conjecture}[Principle of Harmonic Stability]
+\label{conj:stability}
+If an entire function $f(s)$ possesses a reflectional anti-symmetry in its derivative of the form $f'(s)=-f'(1-s)$, its stable zeros (resonances) $\rho$ must occur at the ground state of the unique, shared-symmetry equilibrium potential $V(s)=s-1/2$. The ground state is defined by the condition $\re(V(\rho))=0$. 
+\end{conjecture}
+\begin{remark}
+This principle is falsifiable. A counterexample would be a function that shares the required anti-symmetry but has known zeros that do not satisfy the potential's ground state condition. The Hurwitz Zeta function $\zeta(s, a)$ for $a \neq 1/2$, whose zeros are known to lie off the critical line, provides a corroborating example, as its derivative does not possess the required anti-symmetry. 
+\end{remark}
+
+% --- SECTION 4: CONDITIONAL PROOF ---
+\section{A Conditional Proof of the Riemann Hypothesis}
+We can now state and prove the paper's main theorem.
+\begin{theorem}
+Conditional on the Principle of Harmonic Stability, all non-trivial zeros of the Riemann Zeta function have a real part equal to $1/2$. 
+\end{theorem}
+\begin{proof}
+Let $\rho = \sigma + it$ be a non-trivial zero of $\zeta(s)$, which is a zero of the entire function $\xi(s)$. 
+\begin{enumerate}
+    \item By Lemma \ref{lem:xi_anti_symmetry}, the function $\xi(s)$ satisfies the condition of Conjecture \ref{conj:stability}.
+    \item The Principle of Harmonic Stability therefore applies, requiring that its zero $\rho$ must satisfy the ground state condition $\re(V(\rho))=0$. 
+    \item Substituting the identity for $V(s)$ from Theorem \ref{thm:potential_id}, this condition becomes $\re(\rho - 1/2) = 0$.
+    \item This implies $\re(\sigma + it - 1/2) = 0$, which simplifies to $\sigma - 1/2 = 0$.
+    \item Therefore, $\sigma = 1/2$.
+\end{enumerate}
+Thus, any non-trivial zero must lie on the critical line.
+\end{proof}
+
+% --- SECTION 5: CONCLUSION ---
+\section{Conclusion}
+We have constructed an algebraic framework from axioms of simplicity and demonstrated it is a non-trivial system with connections to established results in special function theory. A potential function, $V(s) = s - 1/2$, arises as a necessary consequence of this framework's axioms. We have proven that this potential shares a perfect reflectional anti-symmetry with the derivative of the completed Riemann Zeta function, $\xi'(s)$.
+
+Based on this shared structural property, we have proposed a single, falsifiable conjecture: the Principle of Harmonic Stability. We have subsequently proven that if this principle is true, the Riemann Hypothesis necessarily follows. The contribution of this paper is not a proof of the Riemann Hypothesis, but a proposed reframing of the problem. We have forged a testable equivalence: the Riemann Hypothesis is true if and only if the Principle of Harmonic Stability is a valid feature of mathematical structures. We invite the broader community to investigate the validity and consequences of this proposed principle.
+
+% --- APPENDIX ---
+\appendix
+\section{Geometric Motivation for the Constants}
+The constants T and J are not arbitrary. They can be derived as the lengths of segments in a classical compass-and-straightedge construction based on an inscribed square, providing a geometric motivation for the algebraic axioms.
+
+\begin{figure}[h!]
+    \centering
+    % Placeholder for the figure. A real submission would have:
+    % \includegraphics[width=0.7\textwidth]{geometric_construction.png}
+    \fbox{\parbox[c][10cm][c]{0.7\textwidth}{\centering \vspace*{4cm} \textit{Geometric Construction Diagram Placeholder} \\ (See main.pdf, Figures 2 \& 3) \vspace*{4cm}}}
+    \caption{A visual representation of the geometric construction from which the lengths corresponding to the constants T and J are derived. }
+    \label{fig:geometry}
+\end{figure}
+
+\end{document}

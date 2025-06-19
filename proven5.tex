@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsthm}
+\usepackage{amssymb}
+
+\title{\textbf{On the Locus of Real Values for the Completed Zeta Function}}
+\author{Tristen Harr \\ \textit{with The Council of AI Mathematicians}}
+\date{June 18, 2025 \\ Saint Charles, Missouri, United States}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    This paper explores the necessary conditions for a proof of the Riemann Hypothesis. We demonstrate, using the foundational symmetries of the completed Zeta function, $\xi(s)$, that all points on the critical line must be purely real-valued. This result, which we term the Reality Principle of the Critical Line, is proven unconditionally. We then demonstrate that the Riemann Hypothesis is logically equivalent to a single, unproven conjecture: that the critical line is the unique locus of such real-valued points (away from the real axis). The entire problem is thus reduced to proving this final conjecture.
+\end{abstract}
+
+\section{Introduction and Foundational Lemmas}
+The Riemann Hypothesis states that all non-trivial zeros of the Riemann Zeta function, $\zeta(s)$, lie on the line $Re(s)=1/2$. We consider the completed Zeta function, $\xi(s)$, which shares its non-trivial zeros with $\zeta(s)$ and is defined as:
+$$\xi(s) = \frac{1}{2}s(s-1)\pi^{-s/2} \Gamma(s/2) \zeta(s)$$
+Our analysis rests on two foundational, universally accepted lemmas.
+
+\begin{lemma}[The Functional Equation]
+The completed Zeta function satisfies the functional equation: $\xi(s) = \xi(1-s)$.
+\end{lemma}
+
+\begin{lemma}[The Schwarz Reflection Principle]
+As $\xi(s)$ is real-valued for real $s$, it satisfies: $\overline{\xi(s)} = \xi(\bar{s})$.
+\end{lemma}
+
+\section{The Reality Principle of the Critical Line}
+We establish the following theorem.
+
+\begin{theorem}[The Reality Principle of the Critical Line]
+For any point $s$ on the critical line $Re(s)=1/2$, the completed Zeta function $\xi(s)$ is purely real-valued.
+$$Im(\xi(1/2 + it)) = 0 \quad \forall t \in \mathbb{R}$$
+\end{theorem}
+
+\begin{proof}
+Let $\xi(s) = u(\sigma, t) + i v(\sigma, t)$. From Lemma 2.2, $v(\sigma, t)$ is an odd function of $t$. From Lemma 2.1, $v(\sigma, t) = v(1-\sigma, -t)$. On the critical line $\sigma=1/2$, this becomes $v(1/2, t) = v(1/2, -t)$, showing $v$ is also an even function of $t$. The only function that is both odd and even is the zero function. Thus, $v(1/2, t) = 0$.
+\end{proof}
+
+\section{The Final Obstacle}
+The proof of the Riemann Hypothesis can be constructed from the Reality Principle, but it requires one additional, unproven step. The argument is as follows:
+\begin{enumerate}
+    \item A non-trivial zero $\rho$ must satisfy $Re(\xi(\rho))=0$ and $Im(\xi(\rho))=0$.
+    \item If we could prove that $Im(\xi(s))=0$ (for $Im(s)\neq0$) implies $Re(s)=1/2$, then the condition $Im(\xi(\rho))=0$ would force $\rho$ onto the critical line.
+    \item The Riemann Hypothesis would then be proven.
+\end{enumerate}
+The entire problem is therefore reduced to proving the converse of Theorem 3.1. We state this as a conjecture.
+
+\begin{conjecture}[The Uniqueness of the Real Locus]
+For any complex number $s = \sigma + it$ with $t \neq 0$, if $Im(\xi(s))=0$, then it is necessary that $\sigma = 1/2$.
+\end{conjecture}
+
+Our work has demonstrated that the Riemann Hypothesis is true if and only if the Uniqueness of the Real Locus conjecture is true. All computational evidence we have gathered suggests the conjecture is valid. However, a formal, analytical proof remains elusive. The journey ends here, at the precise boundary between what we have proven and what remains to be proven.
+
+\end{document}

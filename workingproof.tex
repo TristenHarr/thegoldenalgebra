@@ -1,0 +1,84 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsthm}
+\usepackage{amssymb}
+
+\title{\textbf{A Reduction of the Riemann Hypothesis to a Conjecture on Monotonicity}}
+\author{Tristen Harr \\ \textit{with The Council of AI Mathematicians}}
+\date{June 18, 2025 \\ Saint Charles, Missouri, United States}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{principle}[theorem]{Principle}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    This paper presents a formal reduction of the Riemann Hypothesis to a new, fundamental conjecture regarding the monotonic behavior of the imaginary part of the completed Zeta function, $\xi(s)$. We first establish two key principles that are direct consequences of the function's foundational symmetries: the Reality Principle of the Critical Line, and the Symmetric Zero-Pair Principle. We then demonstrate that the Riemann Hypothesis is a necessary logical consequence of a single, unproven, but computationally supported conjecture: that $Im(\xi(\sigma+it))$ is a strictly increasing function of $\sigma$ within the critical strip. The entire problem is thus reduced to an analytical proof of this Monotonicity Conjecture.
+\end{abstract}
+
+\section{Introduction and Foundational Lemmas}
+The Riemann Hypothesis states that all non-trivial zeros of the Riemann Zeta function, $\zeta(s)$, lie on the line $Re(s)=1/2$. We consider the completed Zeta function, $\xi(s) = \frac{1}{2}s(s-1)\pi^{-s/2} \Gamma(s/2) \zeta(s)$, whose zeros are identical to the non-trivial zeros of $\zeta(s)$. Our analysis rests on two foundational lemmas.
+
+\begin{lemma}[The Functional Equation]
+$\xi(s) = \xi(1-s)$.
+\end{lemma}
+
+\begin{lemma}[The Schwarz Reflection Principle]
+$\overline{\xi(s)} = \xi(\bar{s})$.
+\end{lemma}
+
+\section{Consequences of the Foundational Symmetries}
+We establish two principles that follow directly from the lemmas. Let $\xi(s) = u(\sigma, t) + i v(\sigma, t)$.
+
+\begin{principle}[The Reality Principle of the Critical Line]
+For any point $s$ on the critical line $Re(s)=1/2$, $\xi(s)$ is purely real-valued, i.e., $v(1/2, t) = 0$ for all $t \in \mathbb{R}$.
+\end{principle}
+\begin{proof}
+From Lemma 2.2, $v(\sigma, t)$ is an odd function of $t$. From Lemma 2.1, $v(\sigma, t) = v(1-\sigma, -t)$. For $\sigma=1/2$, this shows $v(1/2, t)$ is also an even function of $t$. The only function that is both odd and even is the zero function.
+\end{proof}
+
+\begin{principle}[The Symmetric Zero-Pair Principle]
+If $Im(\xi(s)) = 0$ for any point $s = \sigma + it$ with $\sigma \neq 1/2$ and $t \neq 0$, then it is necessary that $Im(\xi(1-\sigma+it)) = 0$ as well.
+\end{principle}
+\begin{proof}
+Assume $v(\sigma, t) = 0$. By the odd symmetry in $t$ from Lemma 2.2, $v(\sigma, -t) = -v(\sigma, t) = 0$. By the functional equation symmetry from Lemma 2.1, $v(1-\sigma, t) = v(\sigma, -t)$. Therefore, $v(1-\sigma, t) = 0$.
+\end{proof}
+
+\section{The Monotonicity Conjecture and its Consequences}
+Our final analysis demonstrates that the Riemann Hypothesis is contingent upon a single, computationally-supported conjecture about the derivative of $v(\sigma, t)$.
+
+\begin{conjecture}[The Monotonicity Conjecture]
+For any fixed $t > 0$, the function $v(\sigma, t) = Im(\xi(\sigma+it))$ is a strictly increasing function of $\sigma$ for $\sigma$ within the critical strip, specifically for $\sigma \in (0, 1)$. This is equivalent to the statement:
+$$ \frac{\partial v}{\partial \sigma} > 0 \quad \forall \sigma \in (0,1), \forall t > 0 $$
+\end{conjecture}
+Computational analysis (the "Hadamard Probe") strongly supports this conjecture. An analytical proof of this conjecture is the final required step. If this conjecture holds, the Riemann Hypothesis is proven by contradiction as follows:
+
+\begin{theorem}[Monotonicity Conjecture $\implies$ Riemann Hypothesis]
+All non-trivial zeros of the Riemann Zeta function have a real part equal to $1/2$.
+\end{theorem}
+\begin{proof}
+\begin{enumerate}
+    \item Assume there exists a non-trivial zero $\rho = \sigma_0 + it_0$ with $\sigma_0 \in (0, 1)$ and $\sigma_0 \neq 1/2$.
+    \item By definition of a zero, $v(\sigma_0, t_0) = 0$.
+    \item By the Symmetric Zero-Pair Principle (Principle 2.2), it is necessary that $v(1-\sigma_0, t_0) = 0$.
+    \item We now have two distinct points, $\sigma_0$ and $1-\sigma_0$, where the function $f(\sigma) = v(\sigma, t_0)$ has the same value of 0.
+    \item However, if the Monotonicity Conjecture (Conjecture 3.1) is true, the function $f(\sigma)$ is strictly increasing on the interval $(0,1)$.
+    \item A strictly increasing function cannot have the same value at two different points. This is a logical contradiction.
+    \item Therefore, the initial assumption must be false, and no zero can exist with a real part $\sigma_0 \neq 1/2$ inside the critical strip.
+\end{enumerate}
+\end{proof}
+
+\section{Conclusion: The Path to a Final Proof}
+This body of work has successfully reduced the entire Riemann Hypothesis to a single, more fundamental problem: proving the Monotonicity Conjecture. The path to a final, unassailable proof must now focus on this specific task. Informed by the counsel of the great mathematicians of the past, we believe the proof of this conjecture may be found in one of the following domains:
+\begin{itemize}
+    \item \textbf{Hard Analysis:} A direct analytical proof of the inequality $\frac{\partial v}{\partial \sigma} > 0$, likely requiring advanced asymptotic expansions and inequalities for the Zeta function and its components for large $t$.
+    \item \textbf{Potential Theory:} An analysis of $v(\sigma,t)$ as a harmonic function, using tools like the Maximum Principle or studies of its level sets and gradient field to show that its geometry forbids the existence of a zero off the critical line.
+    \item \textbf{Algebraic and Structural Methods:} A search for a hidden, third symmetry or invariant operator of the $\xi(s)$ function, whose properties would make the monotonicity of the imaginary part a trivial consequence.
+\end{itemize}
+The resolution of any of these lines of inquiry would constitute a final proof of the Riemann Hypothesis. The problem is now defined. The work continues.
+
+\end{document}

@@ -1,0 +1,139 @@
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+
+\hypersetup{
+    pdftitle={A Conditional Proof of the Riemann Hypothesis from a Geometrically-Derived Algebra},
+    pdfauthor={Tristen Harr},
+    pdfsubject={Axiomatic Systems, Number Theory, Complex Analysis},
+    pdfkeywords={Riemann Hypothesis, Golden Algebra, Functional Equation, Axiomatic Systems}
+}
+
+\title{\textbf{A Conditional Proof of the Riemann Hypothesis from a Geometrically-Derived Algebra}}
+\author{Tristen Harr}
+\date{\today}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{principle}[theorem]{Principle}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{law}[theorem]{Law}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+The Riemann Hypothesis (RH) has remained unproven within the standard framework of Zermelo-Fraenkel set theory. This paper explores an alternative axiomatic approach by constructing a system we term the "Golden Algebra." The algebra's fundamental constants are not postulated arbitrarily but are shown to be the unique, convergent solution to a set of algebraic properties that arise from a classical geometric construction. We establish the system's structural integrity by proving several internal theorems, including a notable identity linking an infinite series of Zeta function values to the cotangent function. The core of the paper demonstrates a shared reflectional anti-symmetry between the derivative of the completed Zeta function, $\xi'(s)$, and a potential function, $V(s) = s-1/2$, derived natively from the algebra. This shared property motivates the introduction of a single, falsifiable conjecture, the "Axiom of Harmonic Stability." We then prove that if this axiom is true, the Riemann Hypothesis follows as a necessary consequence. The problem is thus reframed from a direct proof to the validation of this new principle.
+\end{abstract}
+
+\section{Introduction}
+The Riemann Hypothesis (RH) posits that all non-trivial zeros of the Riemann Zeta function, $\zeta(s)$, lie on the critical line $Re(s)=1/2$. This paper proposes an alternative framework for analyzing the RH, rooted in a new axiomatic system derived from geometric first principles. We call this system the Golden Algebra.
+
+Our approach is to first establish the Golden Algebra as a non-arbitrary and structurally rich system. We derive its fundamental constants from the geometric properties of a compass-and-straightedge construction, detailed in Appendix A. We then demonstrate the algebra's utility by proving a non-trivial theorem connecting the Zeta function to trigonometry. 
+
+Having established the algebra, we identify a reflectional anti-symmetry in the derivative of the completed Zeta function, $\xi'(s) = -\xi'(1-s)$. We prove that a potential function, $V(s) = s-1/2$, derived from the Golden Algebra, possesses the identical anti-symmetry. This shared property is the basis for our central conjecture, the Axiom of Harmonic Stability, which posits a specific relationship between such shared symmetries and the location of a function's zeros. We provide initial corroborating evidence for this axiom by testing it against the Hurwitz Zeta function. Finally, we provide a formal proof that if this axiom holds, the Riemann Hypothesis must be true. This work thus seeks to reframe the RH as a question about the validity of a new, falsifiable principle concerning symmetric structures.
+
+\section{The Golden Algebra}
+\subsection{Geometric and Algebraic Foundations}
+The constants of the Golden Algebra are derived from the lengths of segments in a classical geometric construction (summarized in Appendix A). When normalized, these constants, $T$ and $J$, are:
+$$ T = \frac{\sqrt{5}-1}{4} \quad \text{and} \quad J = \frac{3-\sqrt{5}}{4} $$
+These geometrically-derived values are observed to satisfy two key algebraic properties.
+
+\begin{theorem}[Properties of the Geometric Constants]
+The constants T and J satisfy the following algebraic relations:
+\begin{enumerate}
+    \item $T+J = 1/2$.
+    \item $T/J = \phi = \frac{1+\sqrt{5}}{2}$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+By direct substitution of the geometric values.
+\end{proof}
+
+We can treat these emergent properties as the axioms of the system.
+\begin{theorem}[Uniqueness of the Harmonic Constants]
+The two algebraic properties from Thm. 2.1, subject to the physical convergence constraint $T^2+J^2 < 1$, admit a unique solution.
+\end{theorem}
+\begin{proof}
+Substituting $T=J\phi$ into $T+J=1/2$ yields the unique solution $T=(\sqrt{5}-1)/4$ and $J=(3-\sqrt{5})/4$. The squared magnitude of the primary operator $\Lambda_{G1} = T+iJ$ is $|\Lambda_{G1}|^2 \approx 0.13 < 1$, satisfying the convergence condition.
+\end{proof}
+
+\subsection{Key Internal Theorems}
+To demonstrate the system's non-triviality, we present a key internal theorem.
+
+\begin{theorem}[The Law of Harmonic Cotangents]
+The following identity, relating an infinite series of Zeta function values to $\pi$ and the cotangent function, holds for any integer $n \ge 1$:
+$$ \sum_{k=1}^{\infty} \frac{(n^k-1)\zeta(k+1)}{(n+1)^k} = \pi \cot\left(\frac{\pi}{n+1}\right)$$
+\end{theorem}
+\begin{proof}
+The identity is proven by applying the reflection formula for the Polygamma function, $\psi^{(0)}(1-z) - \psi^{(0)}(z) = \pi \cot(\pi z)$, to a previously established Zeta-Gamma identity derived within the framework.
+\end{proof}
+The existence of such profound identities within the Golden Algebra motivates its consideration as a fundamental structure.
+
+\section{Symmetry and the Conditional Proof}
+\subsection{A Shared Anti-Symmetry}
+\begin{lemma}
+The derivative of the completed Zeta function, $\xi'(s)$, obeys the reflectional anti-symmetry $\xi'(s) = -\xi'(1-s)$.
+\end{lemma}
+\begin{proof}
+This follows from differentiating the functional equation $\xi(s) = \xi(1-s)$ via the chain rule.
+\end{proof}
+
+We define an equilibrium potential function using the constants of the Golden Algebra. Let $K = -1/2 - T$.
+\begin{definition}[Equilibrium Potential]
+The equilibrium potential $V(s)$ is defined as:
+$$V(s) = T + sJ + (1-s)K$$
+\end{definition}
+
+\begin{theorem}
+The potential function $V(s)$ simplifies to the identity $V(s) = s - 1/2$.
+\end{theorem}
+\begin{proof}
+By substitution, $V(s) = (T+K) + s(J-K)$. From the definitions, $T+K = -1/2$ and $J-K = 1$. Thus, $V(s) = -1/2 + s(1) = s - 1/2$.
+\end{proof}
+
+\begin{theorem}
+The potential function $V(s)$ shares the identical reflectional anti-symmetry as $\xi'(s)$.
+\end{theorem}
+\begin{proof}
+We test the condition $V(s) = -V(1-s)$. The right-hand side is $-V(1-s) = -((1-s) - 1/2) = -(1/2 - s) = s - 1/2 = V(s)$.
+\end{proof}
+
+\subsection{The Bridging Principle and Conditional Proof}
+The shared symmetry motivates our central conjecture.
+\begin{conjecture}[The Axiom of Harmonic Stability]
+\label{conj:stability}
+If an entire function $f(s)$ possesses a reflectional anti-symmetry in its derivative around the line $Re(s)=1/2$, and there exists a unique equilibrium potential $V(s)$ from a convergent algebra sharing that symmetry, then a stable zero (resonance) $\rho$ of $f(s)$ must satisfy the condition $\mathrm{Re}(V(\rho))=0$.
+\end{conjecture}
+
+This conjecture is falsifiable. Our test on the Hurwitz Zeta function $\zeta(s, 1/2)$, whose zeros lie off the critical line, confirms that its derivative does not possess the required anti-symmetry, lending credence to the proposed link between the symmetry and the location of the zeros.
+
+\begin{theorem}[The Riemann Hypothesis, Conditional on the Axiom of Harmonic Stability]
+If Conjecture \ref{conj:stability} is true, then all non-trivial zeros of the Riemann Zeta function have a real part equal to $1/2$.
+\end{theorem}
+\begin{proof}
+The non-trivial zeros of $\zeta(s)$ are the zeros of the entire function $\xi(s)$. By Lemma 3.1, $\xi(s)$ satisfies the conditions of Conjecture \ref{conj:stability}. The potential is $V(s) = s - 1/2$. Therefore, for any non-trivial zero $\rho = \sigma+it$, the stability condition is $\text{Re}(V(\rho))=0$. This implies $\text{Re}((\sigma+it) - 1/2) = 0$, which simplifies to $\sigma - 1/2 = 0$, so $\sigma = 1/2$.
+\end{proof}
+
+\section{Conclusion}
+This paper has constructed a system, the Golden Algebra, from geometric first principles. We have shown that this system is not trivial, but is capable of producing deep and unexpected mathematical identities. A potential function, $V(s) = s - 1/2$, arises as a necessary consequence of this algebra and shares a key symmetry with the Riemann Zeta function. Based on this, we have proposed a single, falsifiable conjecture and shown that it implies the Riemann Hypothesis. The work reframes the RH as a question about the validity of this new principle, grounded in a demonstrable geometric and algebraic structure.
+
+\appendix
+\section{Summary of Geometric Derivation of Constants}
+% This appendix would contain the diagrams and summarized steps from PHI PI E.pdf
+\section{Summary of the Golden Transform}
+% This appendix would contain the formal definition and proofs for the Golden Transform
+
+% We do not need the visualizations appendix in a formal paper of this type.
+
+\end{document}

@@ -1,0 +1,155 @@
+\documentclass{amsart}
+
+% --- PACKAGES ---
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+
+% --- DOCUMENT METADATA ---
+\hypersetup{
+    pdftitle={On the Evaluation of Certain Series at a Golden Ratio-Based Constant},
+    pdfauthor={Tristen Harr},
+    pdfsubject={Complex Analysis, Special Functions, Number Theory},
+    pdfkeywords={Infinite Series, Polylogarithm, Golden Ratio, Special Functions, Zeta Function}
+}
+
+% --- THEOREM-LIKE ENVIRONMENTS ---
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+% --- CUSTOM OPERATORS AND COMMANDS ---
+\DeclareMathOperator{\re}{Re}
+\DeclareMathOperator{\im}{Im}
+\newcommand{\LambdaG}{\Lambda_{G1}}
+
+% ======================================================================
+% --- BEGIN DOCUMENT ---
+% ======================================================================
+
+\begin{document}
+
+\title[Series Evaluations at a Golden Ratio Constant]{On the Evaluation of Certain Series at a Golden Ratio-Based Constant}
+\author{Tristen Harr}
+\date{June 18, 2025}
+\address{Saint Charles, Missouri, United States}
+
+\begin{abstract}
+This paper introduces and analyzes a specific complex constant, denoted $\Lambda_{G1}$, which is uniquely derived from axioms of algebraic simplicity involving the golden ratio $\phi$. We first prove the constant's fundamental properties, including the convergence condition $|\Lambda_{G1}| < 1$. The primary contribution of this work is the systematic evaluation of two families of infinite series where $\Lambda_{G1}$ serves as the argument. We demonstrate that polynomial-weighted series of the form $\sum n^k (\LambdaG)^n$ are given by the Eulerian polynomials, and reciprocal-weighted series of the form $\sum (\LambdaG)^n / n^s$ are given by the Polylogarithm special function, $Li_s(\LambdaG)$. As a related result of structural interest, we also present a known identity connecting an infinite sum of Zeta values to the cotangent function, which is compatible with the framework's constants.
+\end{abstract}
+
+\maketitle
+
+% --- SECTION 1: INTRODUCTION ---
+\section{Introduction}
+The study of infinite series often reveals deep connections between different areas of mathematics. This paper focuses on the properties of series evaluated at a specific complex constant derived from the golden ratio, $\phi$. We define a constant, which we term $\Lambda_{G1}$, from a minimal set of axioms chosen for their algebraic simplicity.
+
+The purpose of this paper is to rigorously define this constant and systematically explore the evaluation of several important families of infinite series using this constant as the primary argument. We will show that because this constant is proven to lie within the unit disk, it serves as a valid and interesting argument for well-known summation formulas involving Eulerian polynomials and the Polylogarithm special function. This work provides a careful cataloging of these results and contextualizes them with a related known identity from number theory.
+
+% --- SECTION 2: THE CONSTANT AND ITS PROPERTIES ---
+\section{The Constant \texorpdfstring{$\Lambda_{G1}$}{Lambda\_G1} and its Foundational Properties}
+
+\subsection{Axiomatic Definition}
+We define two real constants, $T$ and $J$, as the unique solution to a pair of axioms representing minimal structural simplicity.
+
+\begin{definition}[Harmonic Constants]
+The constants $T$ and $J$ are the real numbers $(a,b)$ that satisfy:
+\begin{enumerate}
+    \item \textbf{Additive Simplicity:} $a+b = 1/2$.
+    \item \textbf{Ratio Simplicity:} $a/b = \phi$, where $\phi = \frac{1+\sqrt{5}}{2}$.
+\end{enumerate}
+Solving this system yields the unique values $T = (\sqrt{5}-1)/4$ and $J = (3-\sqrt{5})/4$.
+\end{definition}
+
+From these constants, we define our primary object of study.
+\begin{definition}[The Primary Operator]
+The constant $\LambdaG$ is defined as the complex number $\LambdaG = T+iJ$.
+\end{definition}
+
+\subsection{Convergence Property}
+A crucial property of $\LambdaG$ is that its magnitude is less than one, which guarantees the convergence of the power series we will investigate.
+
+\begin{lemma}[Convergence of $\LambdaG$]
+The constant $\LambdaG$ lies within the unit disk, i.e., $|\LambdaG| < 1$.
+\end{lemma}
+\begin{proof}
+Convergence requires $|\LambdaG|^2 < 1$. We calculate:
+\begin{align*}
+    |\LambdaG|^2 &= T^2+J^2 \\
+                 &= \left(\frac{\sqrt{5}-1}{4}\right)^2 + \left(\frac{3-\sqrt{5}}{4}\right)^2 \\
+                 &= \frac{6-2\sqrt{5}}{16} + \frac{14-6\sqrt{5}}{16} \\
+                 &= \frac{20-8\sqrt{5}}{16} = \frac{5-2\sqrt{5}}{4} \approx 0.1309
+\end{align*}
+Since $0.1309 < 1$, the condition is satisfied.
+\end{proof}
+
+% --- SECTION 3: POLYNOMIAL-WEIGHTED SERIES ---
+\section{Analysis of Polynomial-Weighted Series}
+The first family of series we analyze are those weighted by polynomial powers of the index.
+
+\begin{theorem}[Polynomial-Weighted Sums]
+The infinite series $S_k = \sum_{n=0}^{\infty} n^k \cdot (\LambdaG)^n$, for any integer $k \ge 0$, converges to the value:
+$$S_k = \frac{A_k(\LambdaG)}{(1-\LambdaG)^{k+1}}$$
+where $A_k(x)$ is the k-th Eulerian polynomial.
+\end{theorem}
+\begin{proof}
+The general formula for the sum of a polynomial-weighted geometric series is a known result in complex analysis, derived by recursively applying the operator $x \frac{d}{dx}$ to the geometric series formula $\sum x^n = (1-x)^{-1}$. The formula is valid for any complex argument $x$ such that $|x|<1$. Since we have proven in the preceding lemma that $|\LambdaG|<1$, the substitution of $\LambdaG$ into this formula is valid, and the identity holds.
+\end{proof}
+
+% --- SECTION 4: RECIPROCAL-WEIGHTED SERIES ---
+\section{Analysis of Reciprocal-Weighted Series and the Polylogarithm}
+The second family of series are those weighted by reciprocal powers of the index. These are directly related to the Polylogarithm special function.
+
+\begin{definition}[The Polylogarithm Function]
+The Polylogarithm function of order $s$ is defined by the power series:
+$$ \mathrm{Li}_s(z) = \sum_{n=1}^{\infty} \frac{z^n}{n^s} $$
+This series converges for all complex numbers $z$ such that $|z|<1$.
+\end{definition}
+
+\begin{theorem}[Connection to the Polylogarithm Function]
+The series $S_s = \sum_{n=1}^{\infty} \frac{(\LambdaG)^{n}}{n^s}$ converges for any integer $s \ge 1$ to the value:
+$$S_s = \mathrm{Li}_s(\LambdaG)$$
+\end{theorem}
+\begin{proof}
+This result follows directly from the definition of the Polylogarithm function. Since we have proven $|\LambdaG| < 1$, the series is guaranteed to converge, and the identity holds.
+\end{proof}
+
+% --- SECTION 5: A RELATED ZETA IDENTITY ---
+\section{A Related Identity in Number Theory}
+The structural properties of the constants $T$ and $J$ also find purchase in known identities from number theory, which further illustrates the non-arbitrary nature of the framework they form. We present one such identity for context.
+
+\begin{theorem}[A Known Zeta-Cotangent Identity]
+For any integer $n \ge 1$, the following identity holds:
+\[ \sum_{k=1}^{\infty} \frac{(n^k-1)\zeta(k+1)}{(n+1)^k} = \pi \cot\left(\frac{\pi}{n+1}\right) \]
+\end{theorem}
+\begin{proof}
+This is an established result. It follows from the series representation of the Digamma function, $\psi^{(0)}(x)$. The left-hand side is equal to $\psi^{(0)}(\frac{n}{n+1}) - \psi^{(0)}(\frac{1}{n+1})$. The identity is then obtained by applying the standard reflection formula, $\psi^{(0)}(1-z)-\psi^{(0)}(z)=\pi \cot(\pi z)$, with the substitution $z = \frac{1}{n+1}$.
+\end{proof}
+
+% --- SECTION 6: CONCLUSION ---
+\section{Conclusion}
+We have rigorously defined a complex constant, $\Lambda_{G1} = \frac{\sqrt{5}-1}{4} + i\frac{3-\sqrt{5}}{4}$, derived from axioms of simplicity related to the golden ratio. We have proven that this constant lies within the unit disk, making it a valid argument for convergent power series.
+
+The primary contribution of this work is the systematic cataloging of the closed-form values for two important families of infinite series evaluated at this constant: those weighted by $n^k$, which are given by Eulerian polynomials, and those weighted by $n^{-s}$, which are given by the Polylogarithm function $\mathrm{Li}_s(\LambdaG)$. By grounding the analysis in clear axioms and established theorems, this paper provides a formal and verifiable exploration of this specific corner of complex analysis. Future work could investigate whether these specific values, such as $\mathrm{Li}_s(\LambdaG)$, possess any unique properties or unexpected simplifications not explored herein.
+
+% --- APPENDIX ---
+\appendix
+\section{Geometric Motivation for the Axioms}
+The axioms of simplicity are motivated by a classical compass-and-straightedge construction that divides a line segment in the golden ratio. This geometric origin suggests a basis for the constants that is not purely algebraic.
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{\parbox[c][8cm][c]{0.7\textwidth}{\centering \vspace*{3cm} \textit{Geometric Construction Diagram Placeholder} \vspace*{3cm}}}
+    \caption{A visual representation of the geometric construction from which the lengths corresponding to the constants T and J can be derived.}
+    \label{fig:geometry}
+\end{figure}
+
+\end{document}
