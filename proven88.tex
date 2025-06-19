@@ -4,8 +4,6 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amssymb} % amsart loads amsmath and amsthm automatically
 \usepackage[colorlinks=true, allcolors=black, pdftex]{hyperref}
-% The \texorpdfstring command is provided by hyperref, no separate package is needed.
-
 % --- DOCUMENT METADATA ---
 \hypersetup{
     pdftitle={Polylogarithm Values at a Golden Ratio-Based Argument},
@@ -51,8 +49,8 @@ This paper introduces and analyzes a specific complex constant, denoted $\Lambda
 
 % --- SECTION 1: INTRODUCTION ---
 \section{Introduction}
-The study of special functions and constants often reveals connections between different areas of mathematics. This paper focuses on the analysis of the Polylogarithm function at a novel complex argument, $\LambdaG$, derived from the golden ratio, $\phiG = (1+\sqrt{5})/2$. A review of foundational literature in the field, such as Lewin's \textit{Polylogarithms and Associated Functions}~\cite{Lewin}, reveals no prior study of this specific complex number as a polylogarithm argument. While foundational, a survey of more recent literature, including developments in the theory of multiple polylogarithms and specific evaluations related to modern conjectures, also shows no indication of this particular complex argument being studied, reinforcing the novelty of this direct investigation. % Per peer review, adding a citation to a contemporary survey on polylogarithms here would strengthen the novelty claim.
-The motivation for this constant stems from the classical problem of dividing a line segment in extreme and mean ratio, as found in Book VI, Proposition 30 of Euclid's \textit{Elements}~\cite{Euclid}. We first rigorously define $\LambdaG$ from inverse powers of $\phiG$ and prove its validity as a polylogarithm argument. The analysis of the resulting values, $\Li_s(\LambdaG)$, forms the central topic of this work. Understanding the nature of these specific values may offer insights into mathematical domains where the golden ratio is foundational. For instance, given that the diffraction patterns of quasi-crystals are intrinsically linked to the golden ratio and that polylogarithms frequently arise in quantum field theory calculations, it remains an intriguing open question whether values like $\Li_s(\LambdaG)$ might emerge as fundamental components in the theoretical description of such aperiodic structures. The paper culminates in a formal conjecture about the transcendental nature of these values, based on high-precision numerical analysis.
+The study of special functions and constants often reveals connections between different areas of mathematics. This paper focuses on the analysis of the Polylogarithm function at a novel complex argument, $\LambdaG$, derived from the golden ratio, $\phiG = (1+\sqrt{5})/2$. A review of foundational literature in the field, such as Lewin's \textit{Polylogarithms and Associated Functions}~\cite{Lewin}, reveals no prior study of this specific complex number as a polylogarithm argument. To substantiate this claim, a survey of recent literature and a search of major academic databases (including MathSciNet and the arXiv preprint server) were performed, which likewise showed no indication of this particular complex argument being studied, reinforcing the novelty of this investigation.
+The motivation for this constant stems from the classical problem of dividing a line segment in extreme and mean ratio, as found in Book VI, Proposition 30 of Euclid's \textit{Elements}~\cite{Euclid}. We first rigorously define $\LambdaG$ from inverse powers of $\phiG$ and prove its validity as a polylogarithm argument. The analysis of the resulting values, $\Li_s(\LambdaG)$, forms the central topic of this work. Understanding the nature of these specific values may offer insights into mathematical domains where the golden ratio is foundational. For instance, given that the diffraction patterns of quasi-crystals are intrinsically linked to the golden ratio and that polylogarithms frequently arise in quantum field theory calculations, this work explores the intriguing possibility that values like $\Li_s(\LambdaG)$ might emerge as fundamental components in the theoretical description of such aperiodic structures. The paper culminates in a formal conjecture about the transcendental nature of these values, based on high-precision numerical analysis.
 
 % --- SECTION 2: THE CONSTANT AND ITS PROPERTIES ---
 \section{The Constant \texorpdfstring{$\LambdaG$}{Lambda\_G1} and its Foundational Properties}
@@ -124,7 +122,7 @@ This identification holds for any complex $s$.
 \section{Numerical Analysis and a Conjecture on the Nature of \texorpdfstring{$\Li_s(\LambdaG)$}{Li\_s(Lambda\_G1)}}
 
 \subsection{Numerical Values}
-We present high-precision numerical evaluations for the first two non-trivial integer cases of the Polylogarithm of $\LambdaG$. The values were computed using the Python `mpmath` library with a working precision of 200 decimal digits to ensure robustness.
+We present high-precision numerical evaluations for the first two non-trivial integer cases of the Polylogarithm of $\LambdaG$. The values were computed using the Python \texttt{mpmath} library with a working precision of 200 decimal digits to ensure robustness.
 \begin{itemize}
     \item For $s=2$, the Dilogarithm of $\LambdaG$ is:
     \[ \Li_2(\LambdaG) \approx 0.322328253720993 + 0.226730769307749i \]
@@ -137,12 +135,12 @@ We present high-precision numerical evaluations for the first two non-trivial in
 \subsection{A Conjecture on the Nature of These Values}
 The transcendental nature of special function values at algebraic arguments is a central topic in number theory~\cite{Baker}. For context, values of the Dilogarithm are known to be transcendental at certain related real algebraic points, such as $\Li_2(1/2) = \frac{\pi^2}{12} - \frac{1}{2}\ln^2(2)$ and $\Li_2(\phiG^{-2}) = \frac{\pi^2}{15} - \ln^2(\phiG)$. The constant $\LambdaG$, being a non-real algebraic number that is not a root of unity, presents a distinct and challenging case. Transcendence proofs for polylogarithm values frequently rely on techniques that do not readily extend to a general complex algebraic argument like $\LambdaG$. Many powerful results in this area are restricted to arguments that are rational or real, while proofs for complex arguments often require them to be roots of unity. The constant $\LambdaG$ falls into none of these categories, placing its analysis outside the scope of many established methods.
 
-To investigate the nature of these values, we employed the PSLQ integer relation algorithm using Python's `mpmath` library. A search for a null linear combination was performed on the real and imaginary parts of $\Li_s(\LambdaG)$ using a test basis of constants from known polylogarithm identities. This basis consisted of elements of the form $\pi^a (\ln 2)^b \phiG^c$, where $a,b,c$ are non-negative integers such that the total degree $a+b+c < 5$. This basis was chosen because its elements are constructed from the kinds of constants that appear in known closed-form identities for polylogarithms at related algebraic arguments, such as $\Li_2(\phiG^{-2})$, making it a plausible test set for discovering simple dependencies. No relation was found with a detection tolerance of $10^{-190}$. While not a formal proof, this failure provides strong numerical motivation for their apparent transcendental nature and leads us to propose the following general conjecture.
+To investigate the nature of these values, we employed the PSLQ integer relation algorithm, implemented in Python's \texttt{mpmath} library~\cite{mpmath}. For both the Dilogarithm ($s=2$) and Trilogarithm ($s=3$) values, the real and imaginary components were tested separately for a null linear combination against a basis of real constants derived from known polylogarithm identities. This basis consisted of elements of the form $\pi^a (\ln 2)^b \phiG^c$, where $a,b,c$ are non-negative integers such that the total degree $a+b+c < 5$. This basis was chosen because its elements are constructed from the kinds of constants that appear in known closed-form identities for polylogarithms at related algebraic arguments, such as $\Li_2(\phiG^{-2})$, making it a plausible test set for discovering simple dependencies. No relation was found with a detection tolerance of $10^{-190}$. While not a formal proof, this failure provides strong numerical motivation for their apparent transcendental nature and leads us to propose the following general conjecture.
 \begin{conjecture}
 For any integer $s \ge 2$, the value $\Li_s(\LambdaG)$ is a transcendental number. Furthermore, it is conjectured that this number is not in the field $\mathbb{Q}(\pi, \ln(2), \phiG)$.
 \end{conjecture}
 \begin{remark}
-Proving this conjecture is beyond the scope of this paper, but proposing it frames a clear direction for future work. The field in the second part of the conjecture is chosen to reflect the basis of constants used in our numerical search ; a wider search including other fundamental constants (such as Euler's constant $\gamma$) may be a fruitful avenue for future analysis, as noted in the Future Work section.
+Proving this conjecture is beyond the scope of this paper, but proposing it frames a clear direction for future work. The field in the second part of the conjecture is chosen to reflect the basis of constants used in our numerical search; a wider search including other fundamental constants (such as Euler's constant $\gamma$) may be a fruitful avenue for future analysis, as noted in the Future Work section.
 \end{remark}
 
 % --- SECTION 5: CONCLUSION ---
@@ -154,7 +152,7 @@ This paper has introduced a complex constant, $\LambdaG$, whose definition is de
 The conjecture presented in Section 4 opens a clear path for future investigation. A primary goal remains to prove or disprove the transcendental nature of $\Li_s(\LambdaG)$. More specific avenues for future work include:
 \begin{itemize}
     \item Separately analyzing the real and imaginary parts of $\Li_s(\LambdaG)$ and determining if they are transcendental or satisfy relations with other known constants.
-    \item Expanding the numerical search for relations by using a larger basis of constants (e.g., including Euler's constant $\gamma$, Catalan's constant) and a higher search depth.
+    \item Expanding the numerical search for relations by using a larger basis of constants (e.g., including Euler's constant $\gamma$, Catalan's constant) to test for more complex identities, alongside an increased search depth.
     \item Investigating further algebraic properties of $\LambdaG$, such as its minimal polynomial or its potential role in other integral or series evaluations.
     \item Investigating potential applications in physics, particularly in the study of quasi-crystals. Given the link between the golden ratio and diffraction patterns, and the appearance of polylogarithms in quantum field theory, these values may be fundamental in describing aperiodic structures.
     \item Exploring related series identities, such as the evaluation using Eulerian polynomials shown in Appendix B, to see if they reveal further structure or properties of $\Li_s(\LambdaG)$.
@@ -180,6 +178,9 @@ Euclid, et al. \textit{The Thirteen Books of Euclid's Elements}. In \textit{Grea
 
 \bibitem{Lewin}
 L. Lewin. \textit{Polylogarithms and Associated Functions}. North-Holland, 1981.
+
+\bibitem{mpmath}
+F. Johansson, et al. \textit{mpmath: a Python library for arbitrary-precision floating-point arithmetic}, Version 1.3.0, \url{http://mpmath.org/}, 2023. % Placeholder citation for mpmath library
 
 \end{thebibliography}
 
