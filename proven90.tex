@@ -43,7 +43,7 @@
 \date{Revised June 2025}
 
 \begin{abstract}
-This paper introduces and analyzes a specific complex constant, denoted $\LambdaG$, which is derived from inverse powers of the golden ratio, $\phiG$. We define the constant's components and prove that its magnitude is less than one. This validates the use of $\LambdaG$ as an argument in the Polylogarithm function, $\Li_s(z)$. We present high-precision numerical evaluations for the Dilogarithm ($s=2$) and Trilogarithm ($s=3$) of this constant. Based on this numerical evidence, we conjecture that the values $\Li_s(\LambdaG)$ are transcendental for all integers $s \ge 2$. Furthermore, we conjecture that these values do not belong to the field extension $\mathbb{Q}(\pi, \ln(2), \phiG)$, a field chosen based on known polylogarithm identities. This line of inquiry is motivated in part by potential applications in the study of quasi-crystals.
+This paper introduces and analyzes a specific complex constant, denoted $\LambdaG$, which is derived from inverse powers of the golden ratio, $\phiG$. We define the constant's real and imaginary components and prove that its magnitude is less than one. This validates the use of $\LambdaG$ as an argument in the Polylogarithm function, $\Li_s(z)$. We present high-precision numerical evaluations for the Dilogarithm ($s=2$) and Trilogarithm ($s=3$) of this constant. Based on this numerical evidence, we conjecture that the values $\Li_s(\LambdaG)$ are transcendental for all integers $s \ge 2$. Furthermore, we conjecture that these values do not belong to the field extension $\mathbb{Q}(\pi, \ln(2), \phiG)$, a field chosen based on known polylogarithm identities. This line of inquiry is motivated in part by potential applications in the study of quasi-crystals.
 \end{abstract}
 
 \maketitle
@@ -62,7 +62,6 @@ We define two real constants, $T$ and $J$, directly from the algebraic propertie
 \begin{definition}[Primary Real Components]
 The constants $T$ and $J$ are defined from the golden ratio, $\phiG$, as:
 \[ T = \frac{1}{2\phiG} \quad \text{and} \quad J = \frac{1}{2\phiG^2} \]
-
 \end{definition}
 
 These definitions lead to a pair of linear relations that highlight their connection to classical geometry; as will be further elaborated in Appendix A, they are chosen to correspond to the division of a line segment in the golden ratio.
@@ -72,7 +71,6 @@ The constants $T$ and $J$ are the unique real numbers $(a,b)$ that satisfy the s
     a/b &= \phiG \label{eq:1} \\
     a+b &= 1/2 \label{eq:2}
 \end{align}
-
 \end{proposition}
 \begin{proof}
 The ratio is immediate from the definitions: $T/J = (1/(2\phiG))/(1/(2\phiG^2)) = \phiG^2/\phiG = \phiG$. For the sum, we use the identity $\phiG+1 = \phiG^2$:
@@ -131,7 +129,7 @@ This identification holds for any complex $s$.
 \section{Numerical Analysis and a Conjecture on the Nature of \texorpdfstring{$\Li_s(\LambdaG)$}{Li\_s(Lambda\_G1)}}
 
 \subsection{High-Precision Numerical Evaluations}
-We present high-precision numerical evaluations for the first two non-trivial integer cases of the Polylogarithm of $\LambdaG$. The values were computed using the Python \texttt{mpmath} library with a working precision of 200 decimal digits to ensure robustness.
+We present high-precision numerical evaluations for the first two non-trivial integer cases of the Polylogarithm of $\LambdaG$. The values were computed using the Python \texttt{mpmath} library~\cite{mpmath} with a working precision of 200 decimal digits to ensure robustness.
 \begin{itemize}
     \item For $s=2$, the Dilogarithm of $\LambdaG$ is:
     \[ \Li_2(\LambdaG) \approx 0.322328253720993 + 0.226730769307749i \]
@@ -144,12 +142,12 @@ We present high-precision numerical evaluations for the first two non-trivial in
 \subsection{A Conjecture on the Nature of These Values}
 The transcendental nature of special function values at algebraic arguments is a central topic in number theory~\cite{Baker}. For context, values of the Dilogarithm are known to be transcendental at certain related real algebraic points, such as $\Li_2(1/2) = \frac{\pi^2}{12} - \frac{1}{2}\ln^2(2)$ and $\Li_2(\phiG^{-2}) = \frac{\pi^2}{15} - \ln^2(\phiG)$. The constant $\LambdaG$, being a non-real algebraic number that is not a root of unity, presents a distinct and challenging case. Transcendence proofs for polylogarithm values frequently rely on techniques that do not readily extend to a general complex algebraic argument like $\LambdaG$. Many powerful results in this area are restricted to arguments that are rational or real, while proofs for complex arguments often require them to be roots of unity. The constant $\LambdaG$ falls into none of these categories, placing its analysis outside the scope of many established methods.
 
-To investigate the nature of these values, we employed the PSLQ integer relation algorithm, implemented in Python's \texttt{mpmath} library~\cite{mpmath}. For both the Dilogarithm ($s=2$) and Trilogarithm ($s=3$) values, the real and imaginary components were tested separately for a null linear combination against a basis of real constants. This basis consisted of elements of the form $\pi^a (\ln 2)^b \phiG^c$, where $a,b,c$ are non-negative integers such that the total degree $a+b+c < 5$. This basis was chosen because its elements are constructed from the kinds of constants that appear in known closed-form identities for polylogarithms at related algebraic arguments, such as the well-known identity $\Li_2(\phiG^{-2})=\frac{\pi^{2}}{15}-ln^{2}(\phi)$, making it a plausible test set for discovering simple dependencies. No relation was found with a detection tolerance of $10^{-190}$. While not a formal proof, this failure provides strong numerical motivation for their apparent transcendental nature and leads us to propose the following general conjecture.
+To investigate the nature of these values, we employed the PSLQ integer relation algorithm. For both the Dilogarithm ($s=2$) and Trilogarithm ($s=3$) values, the real and imaginary components were tested separately for a null linear combination against a basis of real constants. This basis consisted of elements of the form $\pi^a (\ln 2)^b \phiG^c$, where $a,b,c$ are non-negative integers such that the total degree $a+b+c < 5$. This basis was chosen because its elements are constructed from the kinds of constants that appear in known closed-form identities for polylogarithms at related algebraic arguments, such as the well-known identity $\Li_2(\phiG^{-2})=\frac{\pi^{2}}{15}-\ln^{2}(\phiG)$, making it a plausible test set for discovering simple dependencies. The computational cost of PSLQ searches increases significantly with the size of the basis, so the chosen one represents a practical and logical first step. No relation was found with a detection tolerance of $10^{-190}$. While not a formal proof, this failure provides strong numerical motivation for their apparent transcendental nature and leads us to propose the following general conjecture.
 \begin{conjecture}
 For any integer $s \ge 2$, the value $\Li_s(\LambdaG)$ is a transcendental number. Furthermore, it is conjectured that this number is not in the field $\mathbb{Q}(\pi, \ln(2), \phiG)$.
 \end{conjecture}
 \begin{remark}
-Proving this conjecture is beyond the scope of this paper, but proposing it frames a clear direction for future work. The field in the second part of the conjecture is chosen to reflect the basis of constants used in our numerical search; a wider search including other fundamental constants (such as Euler's constant $\gamma$) may be a fruitful avenue for future analysis, as noted in the Future Work section.
+Proving this conjecture is beyond the scope of this paper, but proposing it frames a clear direction for future work. The field in the second part of the conjecture is chosen to reflect the basis of constants used in our numerical search; a wider search including other fundamental constants may be a fruitful avenue for future analysis, as noted in the Future Work section.
 \end{remark}
 
 % --- SECTION 5: CONCLUSION ---
@@ -161,7 +159,7 @@ This paper has introduced a complex constant, $\LambdaG$, whose definition is de
 The conjecture presented in Section 4 opens a clear path for future investigation. A primary goal remains to prove or disprove the transcendental nature of $\Li_s(\LambdaG)$. More specific avenues for future work include:
 \begin{itemize}
     \item Separately analyzing the real and imaginary parts of $\Li_s(\LambdaG)$ and determining if they are transcendental or satisfy relations with other known constants.
-    \item Expanding the numerical search for relations by using a larger basis of constants (e.g., including Euler's constant $\gamma$, Catalan's constant) to test for more complex identities, alongside an increased search depth.
+    \item Expanding the numerical search for relations by using a larger basis of constants (e.g., including Euler's constant $\gamma$ and Catalan's constant) to test for more complex identities, alongside an increased search depth.
     \item Investigating further algebraic properties of $\LambdaG$, such as its minimal polynomial or its potential role in other integral or series evaluations.
     \item Investigating potential applications in physics, particularly in the study of quasi-crystals. Given the link between the golden ratio and diffraction patterns, and the appearance of polylogarithms in quantum field theory calculations, these values may be fundamental in describing aperiodic structures.
     \item Exploring related series identities, such as the evaluation using Eulerian polynomials shown in Appendix B, to see if they reveal further structure or properties of $\Li_s(\LambdaG)$.
@@ -170,7 +168,7 @@ The conjecture presented in Section 4 opens a clear path for future investigatio
 % --- APPENDICES AND REFERENCES ---
 \appendix
 \section{Geometric Motivation for the Defining Equations}
-The definitions of $T$ and $J$ have a direct geometric motivation arising from the division of a line segment according to the golden ratio. If a segment of length $L$ is divided into two pieces, $a$ and $b$, such that $a/b = \phiG$, the pieces have lengths $a=L/\phiG$ and $b=L/\phiG^2$. Our constants $T$ and $J$ correspond to this construction for $L=1/2$. As shown in Proposition 2.2, the sum $T+J=1/2$ arises as a direct consequence of defining the components from the fundamental quantities $1/(2\phiG)$ and $1/(2\phiG^2)$. This provides a non-arbitrary basis for the constant's definition.
+The definitions of $T$ and $J$ have a direct geometric motivation arising from the division of a line segment according to the golden ratio. If a segment of length $L$ is divided into two pieces, $a$ and $b$, such that $a/b = \phiG$, the pieces have lengths $a=L/\phiG$ and $b=L/\phiG^2$. Our constants $T$ and $J$ correspond to this construction for $L=1/2$. This provides a non-arbitrary basis for the constant's definition.
 
 \section{Evaluation of a Related Polynomial-Weighted Series}
 As a consequence of Lemma~\ref{lem:convergence}, $\LambdaG$ is a valid argument in the series whose sum is given by Eulerian polynomials, $A_k(x)$. This provides a direct evaluation for a family of series with $\LambdaG$ as the base. For any integer $k \ge 0$:
@@ -190,7 +188,7 @@ T. L. Heath, translator. \textit{The Thirteen Books of Euclid's Elements}, 2nd e
 L. Lewin. \textit{Polylogarithms and Associated Functions}. North-Holland, 1981. 
 
 \bibitem{mpmath}
-F. Johansson, et al. \textit{mpmath: a Python library for arbitrary-precision floating-point arithmetic}, Version 1.3.0, \url{http://mpmath.org/}, 2023. 
+F. Johansson, et al. \textit{mpmath: a Python library for arbitrary-precision floating-point arithmetic}, Version 1.3.0, \url{http://mpmath.org/}, 2023. (Accessed June 18, 2025).
 
 \end{thebibliography}
 
