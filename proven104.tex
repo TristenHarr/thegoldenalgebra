@@ -61,7 +61,7 @@ This paper introduces and analyzes a specific complex constant, denoted $\Lambda
 \section{Introduction}
 The study of special functions and constants often reveals connections between different areas of mathematics. This paper focuses on the analysis of the Polylogarithm function at a novel complex argument, $\LambdaG$, derived from the golden ratio, $\phiG = (1+\sqrt{5})/2$. A review of foundational literature, such as Lewin's \textit{Polylogarithms and Associated Functions}~\cite{Lewin}, reveals no prior study of this specific complex argument. To the best of the author's knowledge, and after a careful review of the literature, this specific argument has not been previously studied, reinforcing the novelty of this investigation.
 
-The motivation for this constant stems from the classical problem of dividing a line segment in extreme and mean ratio, as found in Book VI, Proposition 30 of Euclid's \textit{Elements}~\cite{Euclid}. The paper proceeds by rigorously defining $\LambdaG$ from inverse powers of $\phiG$ and proving its validity as a polylogarithm argument. The analysis of the resulting values, $\Li_s(\LambdaG)$, form the central topic of this work. Understanding the nature of these specific values may offer insights into mathematical domains where the golden ratio is foundational. For instance, the diffraction patterns of quasicrystals are intrinsically linked to the golden ratio~\cite{Levine1984} , and polylogarithms frequently arise in quantum field theory calculations. Because physical properties of such systems (e.g., electron transport in aperiodic structures, where models often involve complex hopping parameters) involve complex phase factors, it is plausible that a constant like $\LambdaG$—which combines the golden ratio with a non-trivial complex phase in a geometrically-grounded way—could serve as a more natural argument for these functions than purely real values. This work explores the possibility that $\Li_s(\LambdaG)$ might emerge as a fundamental constant in the theoretical description of aperiodic structures. The paper culminates in a formal conjecture about the transcendental nature of these values, based on high-precision numerical analysis.
+The motivation for this constant stems from the classical problem of dividing a line segment in extreme and mean ratio, as found in Book VI, Proposition 30 of Euclid's \textit{Elements}~\cite{Euclid}. The paper proceeds by rigorously defining $\LambdaG$ from inverse powers of $\phiG$ and proving its validity as a polylogarithm argument. The analysis of the resulting values, $\Li_s(\LambdaG)$, form the central topic of this work. Understanding the nature of these specific values may offer insights into mathematical domains where the golden ratio is foundational. For instance, the diffraction patterns of quasicrystals are intrinsically linked to the golden ratio~\cite{Levine1984}, and polylogarithms frequently arise in quantum field theory calculations. Because physical properties of such systems (e.g., electron transport in aperiodic structures, where models often involve complex hopping parameters) involve complex phase factors, it is plausible that a constant like $\LambdaG$—which combines the golden ratio with a non-trivial complex phase in a geometrically-grounded way—could serve as a more natural argument for these functions than purely real values. This work explores the possibility that $\Li_s(\LambdaG)$ might emerge as a fundamental constant in the theoretical description of aperiodic structures. The paper culminates in a formal conjecture about the transcendental nature of these values, based on high-precision numerical analysis.
 
 % --- SECTION 2: THE CONSTANT AND ITS PROPERTIES ---
 \section{Definition, Properties, and Polylogarithm Convergence}
@@ -71,7 +71,6 @@ We define two real constants, $T$ and $J$, directly from the algebraic propertie
 \begin{definition}[Primary Real Components]
 The constants $T$ and $J$ are defined from the golden ratio, $\phiG$, as:
 \[ T = \frac{1}{2\phiG} \quad \text{and} \quad J = \frac{1}{2\phiG^2} \]
-
 \end{definition}
 
 These definitions lead to a pair of linear relations that highlight their connection to classical geometry; as will be further elaborated in Appendix A, they are chosen to correspond directly to the division of a line segment in the golden ratio.
@@ -81,11 +80,10 @@ The constants $T$ and $J$ are the unique real numbers $(a,b)$ that satisfy the s
     a/b &= \phiG \label{eq:1} \\
     a+b &= 1/2 \label{eq:2}
 \end{align}
-
 \end{proposition}
 \begin{proof}
 First, we show that $T$ and $J$ satisfy the system. The ratio is immediate from the definitions: $T/J = (1/(2\phiG))/(1/(2\phiG^2)) = \phiG^2/\phiG = \phiG$. For the sum, we use the identity $\phiG+1 = \phiG^2$:
-\[ T+J = \frac{1}{2\phiG} + \frac{1}{2\phiG^2} = \frac{\phiG+1}{2\phiG^2} = \frac{\phiG^2}{2\phiG^2} = \frac{1}{2} \] 
+\[ T+J = \frac{1}{2\phiG} + \frac{1}{2\phiG^2} = \frac{\phiG+1}{2\phiG^2} = \frac{\phiG^2}{2\phiG^2} = \frac{1}{2}. \] 
 
 The two equations, (\ref{eq:1}) and (\ref{eq:2}), form a linear system in variables $(a,b)$, which can be written as $a - \phiG b = 0$ and $a+b=1/2$. The determinant of the coefficient matrix is $\begin{vmatrix} 1 & -\phiG \\ 1 & 1 \end{vmatrix} = 1 - (-\phiG) = 1+\phiG$. Since $1+\phiG = \phiG^2 \neq 0$, the system has a unique solution.
 \end{proof}
@@ -153,7 +151,7 @@ The constant $\LambdaG$ lies within the unit disk, i.e., $|\LambdaG| < 1$.
 We require $|\LambdaG|^2 < 1$. We calculate the squared values of the components, $T^2 = \frac{6-2\sqrt{5}}{16}$ and $J^2 = \frac{14-6\sqrt{5}}{16}$. Summing these gives:
 \begin{align*}
     |\LambdaG|^2 &= T^2+J^2 = \frac{6-2\sqrt{5} + 14-6\sqrt{5}}{16} \\
-                 &= \frac{20-8\sqrt{5}}{16} = \frac{5-2\sqrt{5}}{4} \approx 0.131966
+                 &= \frac{20-8\sqrt{5}}{16} = \frac{5-2\sqrt{5}}{4} \approx 0.131966.
 \end{align*}
 
 Since $0.131966 < 1$, the condition is satisfied.
@@ -163,13 +161,13 @@ Since $0.131966 < 1$, the condition is satisfied.
 The property $|\LambdaG| < 1$ is central to this paper, as it allows us to define the Polylogarithm values at this constant.
 \begin{definition}[The Polylogarithm Function]
 For any complex $s$, the Polylogarithm function of order $s$, $\Li_s(z)$, is defined by the power series:
-\[ \Li_s(z) = \sum_{n=1}^{\infty} \frac{z^n}{n^s} \]
+\[ \Li_s(z) = \sum_{n=1}^{\infty} \frac{z^n}{n^s}. \]
 
 This series converges for all complex numbers $z$ such that $|z|<1$.
 \end{definition}
 
 Since $\LambdaG$ satisfies the convergence condition, we can define the specific numerical values that are the subject of our main conjecture:
-\[ \Li_s(\LambdaG) = \sum_{n=1}^{\infty} \frac{(\LambdaG)^{n}}{n^s} \]
+\[ \Li_s(\LambdaG) = \sum_{n=1}^{\infty} \frac{(\LambdaG)^{n}}{n^s}. \]
 
 This identification holds for any complex $s$.
 
@@ -202,7 +200,7 @@ Proving this conjecture is beyond the scope of this paper, but proposing it fram
 
 % --- SECTION 4: CONCLUSION ---
 \section{Conclusion}
-This paper has introduced a complex constant, $\LambdaG$, whose definition is derived non-arbitrarily from the golden ratio. We have proven that it is an algebraic number lying within the unit disk, which validates its use as an argument in the Polylogarithm function. The primary contribution of this work is the introduction of this constant and the subsequent analysis of its polylogarithmic values, $\Li_s(\LambdaG)$. Based on high-precision numerical evidence from the $s=2$ and $s=3$ cases~\cite{mpmath} , we have proposed a new open problem: a conjecture on the transcendental nature of these values.
+This paper has introduced a complex constant, $\LambdaG$, whose definition is derived non-arbitrarily from the golden ratio. We have proven that it is an algebraic number lying within the unit disk, which validates its use as an argument in the Polylogarithm function. The primary contribution of this work is the introduction of this constant and the subsequent analysis of its polylogarithmic values, $\Li_s(\LambdaG)$. Based on high-precision numerical evidence from the $s=2$ and $s=3$ cases~\cite{mpmath}, we have proposed a new open problem: a conjecture on the transcendental nature of these values.
 
 % --- SECTION 5: FUTURE WORK ---
 \section{Future Work}
@@ -222,7 +220,7 @@ The definitions of $T$ and $J$ have a direct geometric motivation arising from t
 
 \section{Evaluation of a Related Polynomial-Weighted Series}
 As a consequence of Lemma~\ref{lem:convergence}, $\LambdaG$ is a valid argument in the series whose sum is given by Eulerian polynomials, $A_k(x)$. This provides a direct evaluation for a family of series with $\LambdaG$ as the base. For any integer $k \ge 0$:
-\[ \sum_{n=0}^{\infty} n^k \cdot (\LambdaG)^n = \frac{A_k(\LambdaG)}{(1-\LambdaG)^{k+1}} \]
+\[ \sum_{n=0}^{\infty} n^k \cdot (\LambdaG)^n = \frac{A_k(\LambdaG)}{(1-\LambdaG)^{k+1}}. \]
 
 While not central to the paper's main conjecture, this identity is an interesting property of the constant and demonstrates its utility in evaluating other classes of well-known series.
 
