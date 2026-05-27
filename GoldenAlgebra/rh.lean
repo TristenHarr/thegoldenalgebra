@@ -19018,6 +19018,147 @@ theorem concreteS_halfLogPlusHalf_of_globalTrudgian_and_plattTrudgian_tighter
     (BacklundFiniteBandCheck140_exp633_100.of_plattTrudgian Hfinite)
     hT
 
+/-! ### CW34: Platt--Trudgian global estimate with a shorter finite band -/
+
+/-- Platt--Trudgian explicit `S(T)` envelope:
+`0.110 log T + 0.290 log log T + 2.290`. -/
+noncomputable def plattTrudgianBacklundEnvelope (T : ℝ) : ℝ :=
+  (11 / 100 : ℝ) * Real.log T
+    + (29 / 100 : ℝ) * Real.log (Real.log T)
+    + 229 / 100
+
+/-- Published Platt--Trudgian global explicit `S(T)` estimate on
+`T ≥ e`. -/
+structure PlattTrudgianBacklundGlobalInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (1 : ℝ) ≤ T →
+      |concreteS T| ≤ plattTrudgianBacklundEnvelope T
+
+/-- The Platt--Trudgian envelope is below the public
+half-log-plus-half target already at `log T ≥ 593/100`. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_593_100
+    {T : ℝ} (hL : (593 / 100 : ℝ) ≤ Real.log T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hLpos : 0 < Real.log T := by linarith
+  have hloglog :=
+    backlund_log_log_le_one_seventh_log_plus_nineteen_twentieths hLpos
+  have hmul :
+      (29 / 100 : ℝ) * Real.log (Real.log T)
+        ≤ (29 / 100 : ℝ)
+            * ((1 / 7 : ℝ) * Real.log T + 19 / 20) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  unfold plattTrudgianBacklundEnvelope
+  nlinarith
+
+/-- For `T ≥ exp (593/100)`, `log T ≥ 593/100`. -/
+theorem backlund_log_ge_593_100_of_ge_exp_593_100
+    {T : ℝ} (hT : Real.exp (593 / 100 : ℝ) ≤ T) :
+    (593 / 100 : ℝ) ≤ Real.log T := by
+  have h_exp_pos : 0 < Real.exp (593 / 100 : ℝ) := Real.exp_pos _
+  have h := Real.log_le_log h_exp_pos hT
+  rwa [Real.log_exp] at h
+
+/-- The Platt--Trudgian envelope is below the target for every
+`T ≥ exp (593/100)`. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_593_100
+    {T : ℝ} (hT : Real.exp (593 / 100 : ℝ) ≤ T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_593_100
+    (backlund_log_ge_593_100_of_ge_exp_593_100 hT)
+
+/-- `exp (593/100) < 1200`, so the Platt--Trudgian finite band sits
+inside the older `1200` infrastructure. -/
+theorem backlund_exp_593_100_lt_1200 :
+    Real.exp (593 / 100 : ℝ) < 1200 := by
+  have hle :
+      Real.exp (593 / 100 : ℝ) ≤ Real.exp (633 / 100 : ℝ) :=
+    Real.exp_le_exp.mpr (by norm_num)
+  exact lt_of_le_of_lt hle backlund_exp_633_100_lt_1200
+
+/-- Platt--Trudgian tail estimate on the tail needed by the public
+target, namely `T ≥ exp (593/100)`. -/
+structure PlattTrudgianBacklundTailInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (593 / 100 : ℝ) ≤ T →
+      |concreteS T| ≤ plattTrudgianBacklundEnvelope T
+
+/-- A global Platt--Trudgian estimate supplies the `exp (593/100)`
+tail estimate. -/
+noncomputable def PlattTrudgianBacklundTailInput.of_global
+    (H : PlattTrudgianBacklundGlobalInput) :
+    PlattTrudgianBacklundTailInput where
+  bound := by
+    intro T hT
+    have h_exp_one_le_exp_cut :
+        Real.exp (1 : ℝ) ≤ Real.exp (593 / 100 : ℝ) :=
+      Real.exp_le_exp.mpr (by norm_num)
+    exact H.bound T (le_trans h_exp_one_le_exp_cut hT)
+
+/-- Finite-band check left after using the Platt--Trudgian tail:
+`[140, exp (593/100)]`. -/
+structure BacklundFiniteBandCheck140_exp593_100 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ Real.exp (593 / 100 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- The Platt/Trudgian finite-range `2.5167` bound supplies the shorter
+finite band `[140, exp (593/100)]`. -/
+noncomputable def BacklundFiniteBandCheck140_exp593_100.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_exp593_100 where
+  bound := by
+    intro T hT140 hTexp
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) := by
+      have hT1200 : T ≤ (1200 : ℝ) :=
+        le_trans hTexp (le_of_lt backlund_exp_593_100_lt_1200)
+      linarith
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- Platt--Trudgian tail plus the shorter finite-band check gives the
+good-height Backlund argument bound. -/
+noncomputable def BacklundGoodHeightArgumentBound.of_plattTrudgian_tail_and_finite
+    (Htail : PlattTrudgianBacklundTailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp593_100) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTail : Real.exp (593 / 100 : ℝ) ≤ T
+    · exact le_trans (Htail.bound T hTail)
+        (plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_593_100
+          hTail)
+    · have hTle : T ≤ Real.exp (593 / 100 : ℝ) := le_of_not_ge hTail
+      exact Hfinite.bound T hT hTle
+
+/-- Final headline theorem from the Platt--Trudgian global tail and
+finite band `[140, exp (593/100)]`. -/
+theorem concreteS_halfLogPlusHalf_of_plattTrudgian_tail_and_finite
+    (Htail : PlattTrudgianBacklundTailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp593_100)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_plattTrudgian_tail_and_finite
+      Htail Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the finite-range `2.5167` input, using the shorter finite
+band `[140, exp (593/100)]`. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_tail_and_finite
+    (PlattTrudgianBacklundTailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp593_100.of_plattTrudgian Hfinite)
+    hT
+
 /-- The two sourced ingredients for the concrete Backlund/Turing `S(T)`
 bound:
 
