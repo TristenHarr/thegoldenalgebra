@@ -18002,6 +18002,343 @@ theorem concreteS_halfLogPlusHalf_of_trudgian_and_plattTrudgian
     (BacklundFiniteBandCheck140_1200.of_plattTrudgian Hfinite)
     hT
 
+/-- Hasanalizade--Shen--Wong large-height explicit `S(T)` envelope from
+the 2022 zero-counting paper:
+`0.1095 log T + 0.2042 log log T + 3.0305`. -/
+noncomputable def hasanalizadeShenWongBacklundEnvelope (T : ℝ) : ℝ :=
+  (219 / 2000 : ℝ) * Real.log T
+    + (1021 / 5000 : ℝ) * Real.log (Real.log T)
+    + 6061 / 2000
+
+/-- `exp 8 < 30610046000`, the Platt finite-range endpoint used by the
+modern Hasanalizade--Shen--Wong split. -/
+theorem backlund_exp_eight_lt_30610046000 :
+    Real.exp (8 : ℝ) < 30610046000 := by
+  have h1 : Real.exp 1 < 2.72 :=
+    lt_trans Real.exp_one_lt_d9 (by norm_num)
+  have h7 : Real.exp (7 : ℝ) < 1200 :=
+    backlund_exp_seven_lt_1200
+  have hmul1 :
+      Real.exp (7 : ℝ) * Real.exp 1 < (1200 : ℝ) * Real.exp 1 :=
+    mul_lt_mul_of_pos_right h7 (Real.exp_pos 1)
+  have hmul2 : (1200 : ℝ) * Real.exp 1 < (1200 : ℝ) * 2.72 :=
+    mul_lt_mul_of_pos_left h1 (by norm_num)
+  have hmul : Real.exp (7 : ℝ) * Real.exp 1 < (1200 : ℝ) * 2.72 :=
+    lt_trans hmul1 hmul2
+  have h8 : Real.exp (8 : ℝ) = Real.exp (7 : ℝ) * Real.exp 1 := by
+    rw [← Real.exp_add]
+    norm_num
+  rw [h8]
+  nlinarith
+
+/-- For `T ≥ 30610046000`, `log T ≥ 8`. -/
+theorem backlund_log_ge_eight_of_ge_30610046000
+    {T : ℝ} (hT : (30610046000 : ℝ) ≤ T) :
+    (8 : ℝ) ≤ Real.log T := by
+  have h_exp_lt : Real.exp (8 : ℝ) < T :=
+    lt_of_lt_of_le backlund_exp_eight_lt_30610046000 hT
+  have h_exp_pos : 0 < Real.exp (8 : ℝ) := Real.exp_pos 8
+  have h := Real.log_le_log h_exp_pos (le_of_lt h_exp_lt)
+  rwa [Real.log_exp] at h
+
+/-- The Hasanalizade--Shen--Wong large-height envelope is below the
+target half-log-plus-half budget at the Platt endpoint and beyond. -/
+theorem hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_ge_30610046000
+    {T : ℝ} (hT : (30610046000 : ℝ) ≤ T) :
+    hasanalizadeShenWongBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hT1200 : (1200 : ℝ) ≤ T := by linarith
+  have hL8 : (8 : ℝ) ≤ Real.log T :=
+    backlund_log_ge_eight_of_ge_30610046000 hT
+  have hloglog :=
+    backlund_log_log_le_three_tenths_log_of_ge_1200 hT1200
+  have hmul :
+      (1021 / 5000 : ℝ) * Real.log (Real.log T)
+        ≤ (1021 / 5000 : ℝ) * ((3 / 10 : ℝ) * Real.log T) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  unfold hasanalizadeShenWongBacklundEnvelope
+  nlinarith
+
+/-- Hasanalizade--Shen--Wong large-height explicit `S(T)` estimate,
+restricted to the range after the Platt computational endpoint. -/
+structure HasanalizadeShenWongLargeHeightInput : Prop where
+  bound :
+    ∀ T : ℝ, (30610046000 : ℝ) ≤ T →
+      |concreteS T| ≤ hasanalizadeShenWongBacklundEnvelope T
+
+/-- The modern Hasanalizade--Shen--Wong large-height envelope plus the
+Platt/Trudgian finite-range computation give the good-height Backlund
+argument bound. -/
+noncomputable def BacklundGoodHeightArgumentBound.of_hsw_large_and_plattTrudgian
+    (Hlarge : HasanalizadeShenWongLargeHeightInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTfinite : T ≤ (30610046000 : ℝ)
+    · have hT0 : 0 ≤ T := by linarith
+      exact le_trans (Hfinite.bound T hT0 hTfinite)
+        (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT)
+    · have hLarge : (30610046000 : ℝ) ≤ T :=
+        le_of_lt (lt_of_not_ge hTfinite)
+      exact le_trans (Hlarge.bound T hLarge)
+        (hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_ge_30610046000 hLarge)
+
+/-- Final headline theorem from the modern Hasanalizade--Shen--Wong
+large-height explicit `S(T)` bound and the Platt/Trudgian finite-range
+computational bound. -/
+theorem concreteS_halfLogPlusHalf_of_hsw_and_plattTrudgian
+    (Hlarge : HasanalizadeShenWongLargeHeightInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_hsw_large_and_plattTrudgian
+      Hlarge Hfinite)
+    hT
+
+/-- If `log T ≥ 8`, then `log log T ≤ (3/10) log T`.  This sharper
+form avoids tying the modern large-height split to the much larger
+Platt endpoint. -/
+theorem backlund_log_log_le_three_tenths_log_of_log_ge_eight
+    {T : ℝ} (hL8 : (8 : ℝ) ≤ Real.log T) :
+    Real.log (Real.log T) ≤ (3 / 10 : ℝ) * Real.log T := by
+  have hLpos : 0 < Real.log T := by linarith
+  have htangent :=
+    backlund_log_le_tangent
+      (T := Real.log T) (T₀ := (10 : ℝ)) hLpos (by norm_num)
+  have h1 :
+      Real.log (Real.log T) ≤
+        Real.log 10 + (Real.log T - 10) / 10 :=
+    htangent
+  have h2 :
+      Real.log 10 + (Real.log T - 10) / 10
+        ≤ (3 / 10 : ℝ) * Real.log T := by
+    have hlog10 := backlund_log_ten_le_twelve_fifths
+    linarith
+  exact le_trans h1 h2
+
+/-- The Hasanalizade--Shen--Wong envelope is below the public
+half-log-plus-half target as soon as `log T ≥ 8`. -/
+theorem hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_log_ge_eight
+    {T : ℝ} (hL8 : (8 : ℝ) ≤ Real.log T) :
+    hasanalizadeShenWongBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hloglog :=
+    backlund_log_log_le_three_tenths_log_of_log_ge_eight hL8
+  have hmul :
+      (1021 / 5000 : ℝ) * Real.log (Real.log T)
+        ≤ (1021 / 5000 : ℝ) * ((3 / 10 : ℝ) * Real.log T) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  unfold hasanalizadeShenWongBacklundEnvelope
+  nlinarith
+
+/-- For `T ≥ exp 8`, `log T ≥ 8`. -/
+theorem backlund_log_ge_eight_of_ge_exp_eight
+    {T : ℝ} (hT : Real.exp (8 : ℝ) ≤ T) :
+    (8 : ℝ) ≤ Real.log T := by
+  have h_exp_pos : 0 < Real.exp (8 : ℝ) := Real.exp_pos 8
+  have h := Real.log_le_log h_exp_pos hT
+  rwa [Real.log_exp] at h
+
+/-- The Hasanalizade--Shen--Wong envelope is below the target for every
+`T ≥ exp 8`. -/
+theorem hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_ge_exp_eight
+    {T : ℝ} (hT : Real.exp (8 : ℝ) ≤ T) :
+    hasanalizadeShenWongBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_log_ge_eight
+    (backlund_log_ge_eight_of_ge_exp_eight hT)
+
+/-- Hasanalizade--Shen--Wong large-height explicit `S(T)` estimate on
+the only tail needed by the half-log-plus-half target, namely
+`T ≥ exp 8`. -/
+structure HasanalizadeShenWongTailInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (8 : ℝ) ≤ T →
+      |concreteS T| ≤ hasanalizadeShenWongBacklundEnvelope T
+
+/-- Finite-band check left after using the HSW tail at `exp 8`.  This
+is a far smaller computational interval than the full Platt endpoint. -/
+structure BacklundFiniteBandCheck140_exp8 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ Real.exp (8 : ℝ) →
+      |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- The Platt/Trudgian finite-range bound supplies the smaller finite
+band `[140, exp 8]`. -/
+noncomputable def BacklundFiniteBandCheck140_exp8.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_exp8 where
+  bound := by
+    intro T hT140 hTexp
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) :=
+      le_trans hTexp (le_of_lt backlund_exp_eight_lt_30610046000)
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- HSW tail plus the reduced finite-band check gives the good-height
+Backlund argument bound. -/
+noncomputable def BacklundGoodHeightArgumentBound.of_hsw_tail_and_finiteExpEight
+    (Htail : HasanalizadeShenWongTailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp8) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTail : Real.exp (8 : ℝ) ≤ T
+    · exact le_trans (Htail.bound T hTail)
+        (hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_ge_exp_eight hTail)
+    · have hTle : T ≤ Real.exp (8 : ℝ) := le_of_not_ge hTail
+      exact Hfinite.bound T hT hTle
+
+/-- Final headline theorem from the HSW tail estimate and the reduced
+finite band `[140, exp 8]`. -/
+theorem concreteS_halfLogPlusHalf_of_hsw_tail_and_finiteExpEight
+    (Htail : HasanalizadeShenWongTailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp8)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_hsw_tail_and_finiteExpEight
+      Htail Hfinite)
+    hT
+
+/-- Final headline theorem from the HSW tail estimate and the older
+Platt/Trudgian finite-range input, via the reduced finite band. -/
+theorem concreteS_halfLogPlusHalf_of_hsw_tail_and_plattTrudgian
+    (Htail : HasanalizadeShenWongTailInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_hsw_tail_and_finiteExpEight
+    Htail
+    (BacklundFiniteBandCheck140_exp8.of_plattTrudgian Hfinite)
+    hT
+
+/-- If `log T ≥ 77/10`, then `log log T ≤ (3/10) log T`. -/
+theorem backlund_log_log_le_three_tenths_log_of_log_ge_77_10
+    {T : ℝ} (hL : (77 / 10 : ℝ) ≤ Real.log T) :
+    Real.log (Real.log T) ≤ (3 / 10 : ℝ) * Real.log T := by
+  have hLpos : 0 < Real.log T := by linarith
+  have htangent :=
+    backlund_log_le_tangent
+      (T := Real.log T) (T₀ := (10 : ℝ)) hLpos (by norm_num)
+  have h1 :
+      Real.log (Real.log T) ≤
+        Real.log 10 + (Real.log T - 10) / 10 :=
+    htangent
+  have h2 :
+      Real.log 10 + (Real.log T - 10) / 10
+        ≤ (3 / 10 : ℝ) * Real.log T := by
+    have hlog10 := backlund_log_ten_le_twelve_fifths
+    linarith
+  exact le_trans h1 h2
+
+/-- The HSW envelope is below the target already at `log T ≥ 77/10`. -/
+theorem hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_log_ge_77_10
+    {T : ℝ} (hL : (77 / 10 : ℝ) ≤ Real.log T) :
+    hasanalizadeShenWongBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hloglog :=
+    backlund_log_log_le_three_tenths_log_of_log_ge_77_10 hL
+  have hmul :
+      (1021 / 5000 : ℝ) * Real.log (Real.log T)
+        ≤ (1021 / 5000 : ℝ) * ((3 / 10 : ℝ) * Real.log T) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  unfold hasanalizadeShenWongBacklundEnvelope
+  nlinarith
+
+/-- For `T ≥ exp (77/10)`, `log T ≥ 77/10`. -/
+theorem backlund_log_ge_77_10_of_ge_exp_77_10
+    {T : ℝ} (hT : Real.exp (77 / 10 : ℝ) ≤ T) :
+    (77 / 10 : ℝ) ≤ Real.log T := by
+  have h_exp_pos : 0 < Real.exp (77 / 10 : ℝ) := Real.exp_pos _
+  have h := Real.log_le_log h_exp_pos hT
+  rwa [Real.log_exp] at h
+
+/-- The HSW envelope is below the target for every
+`T ≥ exp (77/10)`. -/
+theorem hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_ge_exp_77_10
+    {T : ℝ} (hT : Real.exp (77 / 10 : ℝ) ≤ T) :
+    hasanalizadeShenWongBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_log_ge_77_10
+    (backlund_log_ge_77_10_of_ge_exp_77_10 hT)
+
+/-- `exp (77/10) < 30610046000`, so the sharper finite-band target is
+covered by the older Platt endpoint. -/
+theorem backlund_exp_77_10_lt_30610046000 :
+    Real.exp (77 / 10 : ℝ) < 30610046000 := by
+  have hle : Real.exp (77 / 10 : ℝ) ≤ Real.exp (8 : ℝ) :=
+    Real.exp_le_exp.mpr (by norm_num)
+  exact lt_of_le_of_lt hle backlund_exp_eight_lt_30610046000
+
+/-- Hasanalizade--Shen--Wong tail estimate on the sharper tail needed by
+the public target, `T ≥ exp (77/10)`. -/
+structure HasanalizadeShenWongSharpTailInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (77 / 10 : ℝ) ≤ T →
+      |concreteS T| ≤ hasanalizadeShenWongBacklundEnvelope T
+
+/-- Finite-band check left after using the sharper HSW tail:
+`[140, exp (77/10)]`. -/
+structure BacklundFiniteBandCheck140_exp77_10 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ Real.exp (77 / 10 : ℝ) →
+      |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- The Platt/Trudgian finite-range bound supplies the sharper finite
+band `[140, exp (77/10)]`. -/
+noncomputable def BacklundFiniteBandCheck140_exp77_10.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_exp77_10 where
+  bound := by
+    intro T hT140 hTexp
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) :=
+      le_trans hTexp (le_of_lt backlund_exp_77_10_lt_30610046000)
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- Sharp HSW tail plus the reduced finite-band check gives the
+good-height Backlund argument bound. -/
+noncomputable def BacklundGoodHeightArgumentBound.of_hsw_sharpTail_and_finite
+    (Htail : HasanalizadeShenWongSharpTailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp77_10) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTail : Real.exp (77 / 10 : ℝ) ≤ T
+    · exact le_trans (Htail.bound T hTail)
+        (hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_ge_exp_77_10 hTail)
+    · have hTle : T ≤ Real.exp (77 / 10 : ℝ) := le_of_not_ge hTail
+      exact Hfinite.bound T hT hTle
+
+/-- Final headline theorem from the sharp HSW tail and the finite band
+`[140, exp (77/10)]`. -/
+theorem concreteS_halfLogPlusHalf_of_hsw_sharpTail_and_finite
+    (Htail : HasanalizadeShenWongSharpTailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp77_10)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_hsw_sharpTail_and_finite
+      Htail Hfinite)
+    hT
+
+/-- Final headline theorem from the sharp HSW tail and the older
+Platt/Trudgian finite-range input. -/
+theorem concreteS_halfLogPlusHalf_of_hsw_sharpTail_and_plattTrudgian
+    (Htail : HasanalizadeShenWongSharpTailInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_hsw_sharpTail_and_finite
+    Htail
+    (BacklundFiniteBandCheck140_exp77_10.of_plattTrudgian Hfinite)
+    hT
+
 /-- The two sourced ingredients for the concrete Backlund/Turing `S(T)`
 bound:
 
@@ -52172,6 +52509,123 @@ theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_unguardedMidHig
     Hhad
     (ClassicalPathBStieltjesInputsAFZ.of_unguarded_midHigh_lowFirstZeroFormula
       HmidHigh Hlow)
+
+-- =====================================================================
+-- §CDXLV. One-bundle non-Turing Path B input
+-- =====================================================================
+
+/-- 📦 **`PathBNonTuringInputs`** — all Path B input data except the
+Backlund/Turing-style envelope estimates.
+
+The fields are deliberately the canonical entire-ξ/Γ-discharged objects:
+the zero-start datum, the entire-ξ Hadamard theorem, and the
+reassembled AFZ Stieltjes identity bundle keyed to the canonical
+completed-ξ source. -/
+structure PathBNonTuringInputs
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (ι : Type) : Type where
+  h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i
+  Hhad : EntireXiClassicalHadamardTheorem ι
+  Hst :
+    ClassicalPathBStieltjesInputsAFZ
+      Dzero 10
+      (pullbackZeroContribution
+        Hhad.toCompletedXiSourceAFZ_canonical)
+
+/-- 🌟🌟 **PROVED — build the non-Turing bundle from the publication-level
+Stieltjes cloud/tail input.** -/
+def PathBNonTuringInputs.of_classicalStieltjes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    {finiteCloud tail : ℂ → ℂ}
+    (Hst :
+      ClassicalStieltjesExplicitFormulaInputs
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)
+        finiteCloud tail) :
+    PathBNonTuringInputs Dzero ι := by
+  have Hstarts : DzeroStartsAfter Dzero 14 :=
+    DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15
+  exact
+    PathBNonTuringInputs.mk
+      h_Z_ge_15
+      Hhad
+      (Hst.toClassicalPathBStieltjesInputsAFZ Hstarts)
+
+/-- 🌟🌟 **PROVED — build the non-Turing bundle from an already assembled
+canonical AFZ Stieltjes bundle.** -/
+def PathBNonTuringInputs.of_stieltjesInputs
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hst :
+      ClassicalPathBStieltjesInputsAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)) :
+    PathBNonTuringInputs Dzero ι :=
+  PathBNonTuringInputs.mk
+    h_Z_ge_15
+    Hhad
+    Hst
+
+/-- 🌟🌟🌟 **PROVED — unpack the non-Turing Path B bundle to the canonical
+publication theorem.** -/
+theorem PathBNonTuringInputs_to_target
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (H : PathBNonTuringInputs Dzero ι)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget := by
+  exact
+    XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesInputs
+      Dzero
+      H.h_Z_ge_15
+      hTuring
+      hHighLog
+      H.Hhad
+      H.Hst
+
+/-- 🌟🌟🌟🌟 **PATH B FRONT DOOR (only envelopes unbundled).**
+
+Once `PathBNonTuringInputs Dzero ι` is available, the only visible
+remaining hypotheses are the Backlund/Turing envelope estimates. -/
+theorem XiPullbackAntiHerglotzTarget_of_nonTuringInputs_and_turingEnvelopes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (H : PathBNonTuringInputs Dzero ι)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  PathBNonTuringInputs_to_target Dzero H hTuring hHighLog
 
 /-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
 **PATH B PUBLICATION THEOREM (entire-ξ Hadamard, canonical Γ bridge)**.

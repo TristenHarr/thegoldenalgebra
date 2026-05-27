@@ -45,7 +45,8 @@ inequality on the compact low box — are *all* discharged unconditionally
 inside the file.
 
 The conditional sign law has now been reduced to its cleanest form:
-Theorem 6 and the canonical-source variants immediately after it. The
+Theorem 6, the canonical-source variants, and the one-bundle non-Turing
+front door immediately after them. The
 Γ-cancellation bridge between the textbook $\xi$ and Mathlib's
 `entireRiemannXi` — once a three-piece structural input of Theorem 4,
 then a one-Mathlib-identity input of Theorem 5 — has been **fully
@@ -60,7 +61,8 @@ the cleanest possible:
 * an **entire-ξ Hadamard product theorem** against Mathlib's
   pole-subtracted `entireRiemannXi` (P2);
 * three AFZ-guarded Stieltjes equalities, the low band being a pure
-  zero-index splitting (P3).
+  zero-index splitting (P3), now also bundled with the Hadamard and
+  zero-start data as `PathBNonTuringInputs`.
 
 An *audit layer* (§§CCCLXVI–CCCLXVIII) formally certifies that the
 Hadamard and Stieltjes bundles carry only *identity content* — no
@@ -70,7 +72,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-52,220 lines and roughly 2,578 top-level declarations. It contains no
+52,674 lines and roughly 2,611 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -80,9 +82,9 @@ names quoted below are real Lean declarations.
 
 The cleanest current statement of the reduction is the Lean theorem
 ```
-XiPullbackAntiHerglotzTarget_of_entireHadamard_and_classicalStieltjes
+XiPullbackAntiHerglotzTarget_of_nonTuringInputs_and_turingEnvelopes
 ```
-(§CDXLIV of `rh.lean`):
+(§CDXLV of `rh.lean`):
 $$
 \bigl(h_{\text{Turing}} \,+\, h_{\text{HighLog}}\bigr)
 \;\oplus\;
@@ -93,11 +95,14 @@ $$
 \text{RH}.
 $$
 The two log envelopes are classical Backlund/Turing analytic number
-theory; the entire-ξ Hadamard theorem is the classical genus-1
-factorization for a function that is *entire by construction*; and the
-three Stieltjes equalities are the AFZ-guarded explicit-formula
-identifications, with the low band collapsed to a pure zero-index
-splitting. The canonical version packages the completed-ξ source as
+theory; the non-Turing bundle packages the atom-level zero-start datum,
+the entire-ξ Hadamard theorem, and the publication-level Stieltjes
+explicit-formula bundle keyed to the canonical completed-ξ source. The
+entire-ξ Hadamard theorem is the classical genus-1 factorization for a
+function that is *entire by construction*; and the three Stieltjes
+equalities are the AFZ-guarded explicit-formula identifications, with
+the low band collapsed to a pure zero-index splitting. The canonical
+version packages the completed-ξ source as
 `Hhad.toCompletedXiSourceAFZ_canonical`, so the Stieltjes hypotheses
 are stated against a stable named source rather than a repeated
 bridge expression. The full Γ-cancellation between the textbook $\xi$
@@ -123,7 +128,9 @@ are progressively sharper restatements of the same conditional sign
 law. §CDXLIV adds canonical-source front doors for the same theorem,
 including direct low-zero-split, low-IBP-source, combined-mid/high,
 unguarded-compatibility, reassembled-Stieltjes, and publication-level
-classical-Stieltjes forms; each follows from the previous by an
+classical-Stieltjes forms. §CDXLV bundles all non-Turing data into
+`PathBNonTuringInputs`, leaving only the two visible envelope
+hypotheses; each front door follows from the previous by an
 unconditional structural reduction (§9).
 
 ```
@@ -152,8 +159,9 @@ unconditional structural reduction (§9).
      │  3 Stieltjes equalities (P3) ─────┘ -only    │
      └─ trivial atom-level Z ≥ 15                    │
      ⇑   (canonical named completed-ξ source, §CDXLIV)
-   Path B publication front door:
-   entire-ξ Hadamard + ClassicalStieltjesExplicitFormulaInputs
+     ⇑   (bundle all non-Turing data, §CDXLV)
+   Path B one-bundle front door:
+   PathBNonTuringInputs + Turing envelopes
                                                      ↓
                                        audit layer (§10) confirms
                                        identity bundles are identity
@@ -1301,7 +1309,21 @@ the three obligation lines, with concrete handoff targets in each case.
   `BacklundNumericalExtractionInput` API via
   `ClassicalBacklundTuringVerifiedInputs.toNumericalExtraction`, so the
   Trudgian/Platt route can feed both the modern `S`-bound interfaces
-  and the earlier numerical-extraction frontier.
+  and the earlier numerical-extraction frontier. A second sourced route
+  now records the modern Hasanalizade--Shen--Wong large-height envelope
+  `hasanalizadeShenWongBacklundEnvelope` together with the
+  Platt/Trudgian finite-range computation:
+  `BacklundGoodHeightArgumentBound.of_hsw_large_and_plattTrudgian`
+  and `concreteS_halfLogPlusHalf_of_hsw_and_plattTrudgian` prove the
+  same half-log-plus-half `concreteS` bound from those inputs. The HSW
+  route has also been sharpened into tail-threshold variants at
+  `exp 8` and `exp (77/10)`, with reduced finite-band checks
+  `BacklundFiniteBandCheck140_exp8` and
+  `BacklundFiniteBandCheck140_exp77_10`; the headline theorems
+  `concreteS_halfLogPlusHalf_of_hsw_tail_and_plattTrudgian` and
+  `concreteS_halfLogPlusHalf_of_hsw_sharpTail_and_plattTrudgian`
+  route those tail estimates through the older Platt/Trudgian finite
+  input.
 
 * **(P2) Entire-ξ Hadamard bundle.** Inhabit
   `EntireXiClassicalHadamardTheorem ι` (§CCCLXXXVIII) — the per-field
@@ -1360,9 +1382,18 @@ the three obligation lines, with concrete handoff targets in each case.
   split is the conceptual statement
   $\mathrm{ZC}(z) = P(z) + \text{tailZC}(z)$.
 
-Once each of (P1), (P2), (P3) is inhabited for the *same* index
-$\iota$ and the *same* `Dzero`, the publication-level §CDXLIV front
-door fires unconditionally. To translate the resulting
+For convenience, `PathBNonTuringInputs Dzero ι` bundles (P2), (P3),
+and the zero-start condition in one structure, with the Stieltjes side
+stored as the assembled `ClassicalPathBStieltjesInputsAFZ` keyed to the
+canonical completed-ξ source. The constructors
+`PathBNonTuringInputs.of_classicalStieltjes` and
+`PathBNonTuringInputs.of_stieltjesInputs` build it from either the
+publication-level cloud/tail input or an already assembled canonical
+AFZ bundle. Once this bundle is inhabited for the same `Dzero`, the
+§CDXLV theorem
+`XiPullbackAntiHerglotzTarget_of_nonTuringInputs_and_turingEnvelopes`
+leaves only the two envelope hypotheses from (P1) visible. To translate
+the resulting
 `XiPullbackAntiHerglotzTarget` into a Mathlib-grade RH theorem, compose
 with `XiPullback_logDeriv_chain_rule` and the Mathlib-side capstone
 `EntireXiPullback_zeros_real_of_signTarget`.
@@ -1411,7 +1442,13 @@ CW30 exports `ClassicalBacklundTuringProofInputs` and
 `140` and constants `C = D = 1/2`; the accompanying rfl-field and
 direct-bound theorems make the exported packages easy to rewrite, and
 the `concreteS_highLogEnvelope` theorems feed the high-side residual
-bound directly.
+bound directly. The same area now includes the HSW large-height
+envelope and the bridge
+`BacklundGoodHeightArgumentBound.of_hsw_large_and_plattTrudgian`,
+plus the verified-input export
+`ClassicalBacklundTuringVerifiedInputs.toNumericalExtraction`. The HSW
+tail has reduced-threshold front doors at `exp 8` and `exp (77/10)`,
+with finite-band adapters from the Platt/Trudgian range.
 
 **Argument-principle scaffolding** (Q–Z and AA–BO namespaces).
 Rectangle-contour geometry, edge integrability, residue-theorem chain,
@@ -1608,6 +1645,15 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   components of a combined AFZ mid/high equality, while the
   `of_unguarded` helpers weaken older global equalities into the AFZ
   hypotheses used by the final chain.
+* §CDXLV — **one-bundle non-Turing input**:
+  `PathBNonTuringInputs` packages the zero-start datum, entire-ξ
+  Hadamard theorem, and assembled AFZ Stieltjes bundle keyed to
+  `Hhad.toCompletedXiSourceAFZ_canonical`.
+  `PathBNonTuringInputs.of_classicalStieltjes`,
+  `PathBNonTuringInputs.of_stieltjesInputs`,
+  `PathBNonTuringInputs_to_target`, and
+  `XiPullbackAntiHerglotzTarget_of_nonTuringInputs_and_turingEnvelopes`
+  leave only the two Backlund/Turing envelope hypotheses visible.
 
 ## 13. Companion Python pipeline
 
@@ -1645,7 +1691,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-52,220 lines and roughly 2,578 top-level declarations.
+52,674 lines and roughly 2,611 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
