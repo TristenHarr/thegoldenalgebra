@@ -19159,6 +19159,179 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange
     (BacklundFiniteBandCheck140_exp593_100.of_plattTrudgian Hfinite)
     hT
 
+/-! ### CW35: marginally tighter Platt--Trudgian split at `592/100` -/
+
+/-- `log 6 ≤ 9/5`, used for the tangent-at-six comparison. -/
+theorem backlund_log_six_le_nine_fifths :
+    Real.log (6 : ℝ) ≤ 9 / 5 := by
+  have h_e_gt : (2.71 : ℝ) < Real.exp 1 :=
+    lt_trans (by norm_num : (2.71 : ℝ) < 2.7182818283)
+      Real.exp_one_gt_d9
+  have h_pow_lt : (2.71 : ℝ)^9 < (Real.exp 1)^9 :=
+    pow_lt_pow_left₀ h_e_gt (by norm_num) (by norm_num)
+  have h_6_pow : (6 : ℝ)^5 < (2.71 : ℝ)^9 := by norm_num
+  have h_6_pow_lt_exp9 : (6 : ℝ)^5 < (Real.exp 1)^9 := by
+    linarith
+  have h_exp9_eq : Real.exp (9 : ℝ) = (Real.exp 1)^9 := by
+    have h := Real.exp_one_pow 9
+    have h_cast : ((9 : ℕ) : ℝ) = (9 : ℝ) := by norm_num
+    rw [← h_cast]
+    exact h.symm
+  have h_exp_9_5_pow : (Real.exp (9 / 5 : ℝ))^5 = Real.exp 9 := by
+    have h := Real.exp_nat_mul (9 / 5 : ℝ) 5
+    have h_eq : ((5 : ℕ) : ℝ) * (9 / 5 : ℝ) = 9 := by norm_num
+    rw [h_eq] at h
+    exact h.symm
+  have h6_nonneg : (0 : ℝ) ≤ 6 := by norm_num
+  have hexp_nonneg : 0 ≤ Real.exp (9 / 5 : ℝ) :=
+    le_of_lt (Real.exp_pos _)
+  have h6_le_exp : (6 : ℝ) ≤ Real.exp (9 / 5 : ℝ) := by
+    apply
+      (pow_le_pow_iff_left₀ h6_nonneg hexp_nonneg
+        (by norm_num : (5 : ℕ) ≠ 0)).mp
+    rw [h_exp_9_5_pow, h_exp9_eq]
+    exact le_of_lt h_6_pow_lt_exp9
+  have h := Real.log_le_log (by norm_num : (0 : ℝ) < 6) h6_le_exp
+  rwa [Real.log_exp] at h
+
+/-- Tangent comparison at `6`:
+`log log T ≤ (1/6) log T + 4/5` whenever `log T > 0`. -/
+theorem backlund_log_log_le_one_sixth_log_plus_four_fifths
+    {T : ℝ} (hLpos : 0 < Real.log T) :
+    Real.log (Real.log T)
+      ≤ (1 / 6 : ℝ) * Real.log T + 4 / 5 := by
+  have htangent :=
+    backlund_log_le_tangent
+      (T := Real.log T) (T₀ := (6 : ℝ)) hLpos (by norm_num)
+  have hlog6 := backlund_log_six_le_nine_fifths
+  linarith
+
+/-- The Platt--Trudgian envelope is below the public target already at
+`log T ≥ 592/100`. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_592_100
+    {T : ℝ} (hL : (592 / 100 : ℝ) ≤ Real.log T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hLpos : 0 < Real.log T := by linarith
+  have hloglog :=
+    backlund_log_log_le_one_sixth_log_plus_four_fifths hLpos
+  have hmul :
+      (29 / 100 : ℝ) * Real.log (Real.log T)
+        ≤ (29 / 100 : ℝ)
+            * ((1 / 6 : ℝ) * Real.log T + 4 / 5) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  unfold plattTrudgianBacklundEnvelope
+  nlinarith
+
+/-- For `T ≥ exp (592/100)`, `log T ≥ 592/100`. -/
+theorem backlund_log_ge_592_100_of_ge_exp_592_100
+    {T : ℝ} (hT : Real.exp (592 / 100 : ℝ) ≤ T) :
+    (592 / 100 : ℝ) ≤ Real.log T := by
+  have h_exp_pos : 0 < Real.exp (592 / 100 : ℝ) := Real.exp_pos _
+  have h := Real.log_le_log h_exp_pos hT
+  rwa [Real.log_exp] at h
+
+/-- The Platt--Trudgian envelope is below the target for every
+`T ≥ exp (592/100)`. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_592_100
+    {T : ℝ} (hT : Real.exp (592 / 100 : ℝ) ≤ T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_592_100
+    (backlund_log_ge_592_100_of_ge_exp_592_100 hT)
+
+/-- `exp (592/100) < 1200`, so the marginally tighter finite band sits
+inside the older `1200` infrastructure. -/
+theorem backlund_exp_592_100_lt_1200 :
+    Real.exp (592 / 100 : ℝ) < 1200 := by
+  have hle :
+      Real.exp (592 / 100 : ℝ) ≤ Real.exp (593 / 100 : ℝ) :=
+    Real.exp_le_exp.mpr (by norm_num)
+  exact lt_of_le_of_lt hle backlund_exp_593_100_lt_1200
+
+/-- Platt--Trudgian tail estimate on the marginally tighter tail needed
+by the public target, namely `T ≥ exp (592/100)`. -/
+structure PlattTrudgianBacklundTighterTailInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (592 / 100 : ℝ) ≤ T →
+      |concreteS T| ≤ plattTrudgianBacklundEnvelope T
+
+/-- A global Platt--Trudgian estimate supplies the `exp (592/100)`
+tail estimate. -/
+noncomputable def PlattTrudgianBacklundTighterTailInput.of_global
+    (H : PlattTrudgianBacklundGlobalInput) :
+    PlattTrudgianBacklundTighterTailInput where
+  bound := by
+    intro T hT
+    have h_exp_one_le_exp_cut :
+        Real.exp (1 : ℝ) ≤ Real.exp (592 / 100 : ℝ) :=
+      Real.exp_le_exp.mpr (by norm_num)
+    exact H.bound T (le_trans h_exp_one_le_exp_cut hT)
+
+/-- Finite-band check left after using the tighter Platt--Trudgian tail:
+`[140, exp (592/100)]`. -/
+structure BacklundFiniteBandCheck140_exp592_100 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ Real.exp (592 / 100 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- The Platt/Trudgian finite-range `2.5167` bound supplies the tighter
+finite band `[140, exp (592/100)]`. -/
+noncomputable def BacklundFiniteBandCheck140_exp592_100.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_exp592_100 where
+  bound := by
+    intro T hT140 hTexp
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) := by
+      have hT1200 : T ≤ (1200 : ℝ) :=
+        le_trans hTexp (le_of_lt backlund_exp_592_100_lt_1200)
+      linarith
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- Tighter Platt--Trudgian tail plus the shorter finite-band check gives
+the good-height Backlund argument bound. -/
+noncomputable def
+    BacklundGoodHeightArgumentBound.of_plattTrudgian_tighterTail_and_finite
+    (Htail : PlattTrudgianBacklundTighterTailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp592_100) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTail : Real.exp (592 / 100 : ℝ) ≤ T
+    · exact le_trans (Htail.bound T hTail)
+        (plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_592_100
+          hTail)
+    · have hTle : T ≤ Real.exp (592 / 100 : ℝ) := le_of_not_ge hTail
+      exact Hfinite.bound T hT hTle
+
+/-- Final headline theorem from the tighter Platt--Trudgian global tail
+and finite band `[140, exp (592/100)]`. -/
+theorem concreteS_halfLogPlusHalf_of_plattTrudgian_tighterTail_and_finite
+    (Htail : PlattTrudgianBacklundTighterTailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp592_100)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_plattTrudgian_tighterTail_and_finite
+      Htail Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the finite-range `2.5167` input, using the tighter finite
+band `[140, exp (592/100)]`. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_tighter
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_tighterTail_and_finite
+    (PlattTrudgianBacklundTighterTailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp592_100.of_plattTrudgian Hfinite)
+    hT
+
 /-- The two sourced ingredients for the concrete Backlund/Turing `S(T)`
 bound:
 
