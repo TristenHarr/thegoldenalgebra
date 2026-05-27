@@ -19394,6 +19394,75 @@ noncomputable def BacklundFiniteBandUniform25167Check140_374.toFiniteBandCheck
     exact le_trans (H.bound T hT140 hT374)
       (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
 
+/-- A local count/main-term slab certificate for the remaining concrete
+finite band.  On one slab `[A, B]`, the weighted zero count is fixed at
+`count`, while the smooth Riemann--von Mangoldt main term is squeezed
+between `mainLower` and `mainUpper`.  The two endpoint inequalities are
+exactly the arithmetic needed to prove the uniform `2.5167` bound for
+`concreteS`. -/
+structure BacklundCountMainSlabCertificate where
+  A : ℝ
+  B : ℝ
+  count : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  count_eq :
+    ∀ (T : ℝ) (hT0 : 0 ≤ T), A ≤ T → T ≤ B →
+      zetaWeightedZeroCountUpToHeight T hT0 = count
+  main_bounds :
+    ∀ T : ℝ, A ≤ T → T ≤ B →
+      mainLower ≤ smoothMainTerm T ∧ smoothMainTerm T ≤ mainUpper
+  count_minus_lower_le :
+    (count : ℝ) - mainLower ≤ (25167 / 10000 : ℝ)
+  upper_minus_count_le :
+    mainUpper - (count : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- A count/main-term slab certificate gives the uniform `2.5167` bound
+on its slab. -/
+theorem BacklundCountMainSlabCertificate.uniform25167
+    (S : BacklundCountMainSlabCertificate)
+    {T : ℝ} (hT0 : 0 ≤ T) (hA : S.A ≤ T) (hB : T ≤ S.B) :
+    |concreteS T| ≤ (25167 / 10000 : ℝ) := by
+  have hcount := S.count_eq T hT0 hA hB
+  have hcount_real :
+      (zetaWeightedZeroCountUpToHeight T hT0 : ℝ) = (S.count : ℝ) := by
+    exact_mod_cast hcount
+  have hmain := S.main_bounds T hA hB
+  have h_upper :
+      smoothMainTerm T - (S.count : ℝ) ≤ (25167 / 10000 : ℝ) := by
+    linarith [hmain.2, S.upper_minus_count_le]
+  have h_lower :
+      (S.count : ℝ) - smoothMainTerm T ≤ (25167 / 10000 : ℝ) := by
+    linarith [hmain.1, S.count_minus_lower_le]
+  rw [concreteS_eq_weighted_count_sub_smoothMainTerm hT0, hcount_real]
+  rw [abs_le]
+  constructor
+  · linarith
+  · exact h_lower
+
+/-- A finite list of count/main-term slabs covering `[140, 374]`.
+
+This is the next executable certificate target: once the actual slab
+table is supplied, Lean reduces the finite band to interval coverage,
+local zero-count identities, and elementary main-term bounds. -/
+structure BacklundFiniteBandCountMainCertificate140_374 where
+  slabs : List BacklundCountMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
+      ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-- Count/main-term slab certificates supply the narrow uniform finite
+band certificate on `[140, 374]`. -/
+noncomputable def
+    BacklundFiniteBandCountMainCertificate140_374.toUniform25167Check
+    (C : BacklundFiniteBandCountMainCertificate140_374) :
+    BacklundFiniteBandUniform25167Check140_374 where
+  bound := by
+    intro T hT140 hT374
+    obtain ⟨S, _hS, hA, hB⟩ := C.cover T hT140 hT374
+    have hT0 : 0 ≤ T := by linarith
+    exact S.uniform25167 hT0 hA hB
+
 /-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
 concrete finite-band target `[140, 374]`. -/
 noncomputable def BacklundFiniteBandCheck140_374.of_plattTrudgian
@@ -19453,6 +19522,22 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite374
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite374
     Hglobal
     Hfinite.toFiniteBandCheck
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and a concrete count/main-term slab certificate on `[140, 374]`.
+This is the finite-band front door closest to the actual computation:
+prove the zero-count table, prove the smooth-main-term interval bounds,
+and the already-proved tail/finite arithmetic closes the public theorem. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countMainFinite374
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCountMainCertificate140_374)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite374
+    Hglobal
+    Hfinite.toUniform25167Check
     hT
 
 /-- The two sourced ingredients for the concrete Backlund/Turing `S(T)`
