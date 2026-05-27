@@ -67,7 +67,8 @@ the cleanest possible:
 * three AFZ-guarded Stieltjes equalities, the low band being a pure
   zero-index splitting (P3), now also bundled with the Hadamard and
   zero-start data as `PathBNonTuringInputs`, and lowerable further to
-  the completed-ξ-source bundle `PathBNonTuringSourceInputs`.
+  the completed-ξ-source bundle `PathBNonTuringSourceInputs` and the
+  direct canonical AFZ bundle `PathBDirectNonTuringInputsAFZ`.
 
 An *audit layer* (§§CCCLXVI–CCCLXVIII) formally certifies that the
 Hadamard and Stieltjes bundles carry only *identity content* — no
@@ -77,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-55,073 lines and roughly 2,767 top-level declarations. It contains no
+55,615 lines and roughly 2,806 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -87,9 +88,21 @@ names quoted below are real Lean declarations.
 
 The cleanest current statement of the reduction is the Lean theorem
 ```
-XiPullbackAntiHerglotzTarget_of_pathBSourceInputBundles
+XiPullbackAntiHerglotzTarget_of_directNonTuringInputsAFZ_turingBundle
 ```
-(§CDXLVI of `rh.lean`):
+(§CDXLVIII of `rh.lean`):
+$$
+\bigl(h_{\text{Turing}} \,+\, h_{\text{HighLog}}\bigr)
+\;\oplus\;
+\underbrace{H_{\text{direct}}}_{\substack{Z\ge15\\\text{direct canonical AFZ Stieltjes}}}
+\;\Longrightarrow\;
+\text{RH}.
+$$
+Its unbundled-envelope sibling is
+`XiPullbackAntiHerglotzTarget_of_directNonTuringInputsAFZ_turingEnvelopes`.
+The older source-level theorem
+`XiPullbackAntiHerglotzTarget_of_pathBSourceInputBundles` remains the
+completed-ξ-source capstone:
 $$
 \bigl(h_{\text{Turing}} \,+\, h_{\text{HighLog}}\bigr)
 \;\oplus\;
@@ -146,8 +159,10 @@ lowers the non-Turing side to the completed-ξ source-level bundle
 `PathBNonTuringSourceInputs`. §§CDXLVII–CDXLVIII add canonical
 completed-ξ and pullback-Ξ source front doors, so the same theorem can
 now be stated directly against the named canonical source packages.
-Each front door follows from the previous by an unconditional
-structural reduction (§9).
+§CDXLVIII also packages the direct canonical non-Turing payload as
+`PathBDirectNonTuringInputsAFZ`, with split, low-IBP, low-zero-split,
+and low-cloud/tail front doors. Each front door follows from the
+previous by an unconditional structural reduction (§9).
 
 ```
    RH for ζ
@@ -179,8 +194,9 @@ structural reduction (§9).
      ⇑   (bundle Turing envelopes, §CDXLVI)
      ⇑   (lower non-Turing data to a source bundle, §CDXLVI)
      ⇑   (canonical completed-ξ and pullback-Ξ sources, §§CDXLVII–CDXLVIII)
+     ⇑   (direct canonical non-Turing bundle, §CDXLVIII)
    Path B two-bundle capstone:
-   PathBNonTuringSourceInputs + PathBTuringEnvelopeInputs
+   PathBDirectNonTuringInputsAFZ + PathBTuringEnvelopeInputs
                                                      ↓
                                        audit layer (§10) confirms
                                        identity bundles are identity
@@ -1369,6 +1385,16 @@ the three obligation lines, with concrete handoff targets in each case.
   `BacklundGoodHeightArgumentBound.of_plattTrudgian_tail_and_finite`
   culminate in
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange`.
+  The endpoint-specialized route through `[140, 374]` is exposed by
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite374`,
+  with the broad finite-range source adapter
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete`.
+  The narrow computational-certificate interface
+  `BacklundFiniteBandUniform25167Check140_374` packages the uniform
+  `|S(T)| ≤ 2.5167` check on `[140, 374]`, converts through
+  `BacklundFiniteBandUniform25167Check140_374.toFiniteBandCheck`, and
+  yields the headline
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite374`.
 
 * **(P2) Entire-ξ Hadamard bundle.** Inhabit
   `EntireXiClassicalHadamardTheorem ι` (§CCCLXXXVIII) — the per-field
@@ -1496,6 +1522,19 @@ and
 `XiPullbackAntiHerglotzTarget_of_canonicalXiPullback_midHighAFZ_lowZeroSplit_turingBundle`,
 plus the low cloud/tail variant
 `XiPullbackAntiHerglotzTarget_of_canonicalXiPullback_midHighAFZ_lowCloudTail_turingBundle`.
+The direct canonical layer then packages these Stieltjes shapes as
+`CanonicalXiPullbackSplitStieltjesInputsAFZ`,
+`CanonicalXiPullbackIBPStieltjesInputsAFZ`,
+`CanonicalXiPullbackZeroSplitStieltjesInputsAFZ`, and
+`CanonicalXiPullbackCloudTailStieltjesInputsAFZ`, all feeding
+`PathBDirectNonTuringInputsAFZ`. The direct two-bundle capstone
+`XiPullbackAntiHerglotzTarget_of_directNonTuringInputsAFZ_turingBundle`
+consumes only `PathBDirectNonTuringInputsAFZ` and
+`PathBTuringEnvelopeInputs`; the unified source constructor
+`PathBDirectNonTuringInputsAFZ.of_stieltjesSource` gives direct access
+from `CanonicalXiPullbackStieltjesSourceAFZ`. The unified-source,
+split, low-IBP, low-zero-split, and low-cloud/tail front doors each
+have bundled-Turing and unbundled Turing-envelope variants.
 The §CDXLV
 theorem
 `XiPullbackAntiHerglotzTarget_of_nonTuringInputs_and_turingEnvelopes`
@@ -1841,6 +1880,23 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   `XiPullbackAntiHerglotzTarget_of_canonicalXiPullback_midHighAFZ_lowCloudTail_turingBundle`
   are the bundled-Turing front doors for those canonical pullback
   source shapes.
+  `CanonicalXiPullbackSplitStieltjesInputsAFZ`,
+  `CanonicalXiPullbackIBPStieltjesInputsAFZ`,
+  `CanonicalXiPullbackZeroSplitStieltjesInputsAFZ`, and
+  `CanonicalXiPullbackCloudTailStieltjesInputsAFZ` are the direct
+  canonical Stieltjes bundles; their `to_split`/`to_stieltjesSource`
+  adapters feed the final `PathBDirectNonTuringInputsAFZ` bundle.
+  `XiPullbackAntiHerglotzTarget_of_directNonTuringInputsAFZ_turingBundle`
+  is the direct two-bundle capstone. The unified source constructor
+  `PathBDirectNonTuringInputsAFZ.of_stieltjesSource` feeds
+  `XiPullbackAntiHerglotzTarget_of_directStieltjesSourceAFZ_turingBundle`;
+  sibling front doors include
+  `XiPullbackAntiHerglotzTarget_of_directSplitStieltjesInputsAFZ_turingBundle`,
+  `XiPullbackAntiHerglotzTarget_of_directIBPStieltjesInputsAFZ_turingBundle`,
+  `XiPullbackAntiHerglotzTarget_of_directZeroSplitStieltjesInputsAFZ_turingBundle`,
+  and
+  `XiPullbackAntiHerglotzTarget_of_directCloudTailStieltjesInputsAFZ_turingBundle`,
+  plus unbundled-envelope variants for each.
 
 ## 13. Companion Python pipeline
 
@@ -1878,7 +1934,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-55,073 lines and roughly 2,767 top-level declarations.
+55,615 lines and roughly 2,806 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
