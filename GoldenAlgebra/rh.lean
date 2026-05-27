@@ -19375,6 +19375,18 @@ structure BacklundFiniteBandCheck140_374 : Prop where
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
 
+/-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
+concrete finite-band target `[140, 374]`. -/
+noncomputable def BacklundFiniteBandCheck140_374.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_374 where
+  bound := by
+    intro T hT140 hT374
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) := by linarith
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
 /-- A concrete `[140, 374]` finite-band check supplies the symbolic
 `[140, exp (592/100)]` check. -/
 noncomputable def BacklundFiniteBandCheck140_exp592_100.of_140_374
