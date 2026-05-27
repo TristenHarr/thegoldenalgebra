@@ -18047,6 +18047,25 @@ theorem concreteS_halfLogPlusHalf_of_verifiedBacklundTuringInputs
   concreteS_halfLogPlusHalf_of_classicalProofInputs
     I.toProofInputs hT
 
+/-- The sourced verified inputs also supply the earlier numerical
+extraction frontier directly.  At each good height this packages the
+already-proved headline budget as a one-slot numerical budget, so the
+older `BacklundNumericalExtractionInput` API can consume the verified
+Trudgian/Platt route without another adapter. -/
+noncomputable def ClassicalBacklundTuringVerifiedInputs.toNumericalExtraction
+    (I : ClassicalBacklundTuringVerifiedInputs) :
+    BacklundNumericalExtractionInput where
+  extract := by
+    intro T _hgood hT _hJ _hR _hH
+    refine ⟨(1 / 2 : ℝ) * Real.log T + 1 / 2, 0, 0, ?_, ?_, ?_, ?_, ?_⟩
+    · have hT_one : (1 : ℝ) ≤ T := by linarith
+      have hlog : 0 ≤ Real.log T := Real.log_nonneg hT_one
+      nlinarith
+    · norm_num
+    · norm_num
+    · linarith
+    · simpa using concreteS_halfLogPlusHalf_of_verifiedBacklundTuringInputs I hT
+
 /-! ### CW30: export the Backlund--Turing proof as a Turing `S`-bound -/
 
 /-- The classical proof inputs supply the generic proved
@@ -52032,6 +52051,127 @@ theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHighAFZ_lowC
       Hhad
       (ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowCloudTailSplit
         HmidHigh Hlow Hstarts)
+
+/-- ⭐ **PROVED — AFZ mid/high Stieltjes equality from the older
+unguarded equality source.** This is the safe direction: an identity that
+holds at every point also holds away from zeros. -/
+theorem StieltjesMidHighTailEqualityAFZ.of_unguarded
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (H : StieltjesMidHighTailEquality Dzero T0 ZC) :
+    StieltjesMidHighTailEqualityAFZ Dzero T0 ZC :=
+  { mid_eq := fun hz _hne hmid hL => H.mid_eq hz hmid hL
+    high_eq := fun hT hz _hne hreg hL => H.high_eq hT hz hreg hL }
+
+/-- ⭐ **PROVED — AFZ low first-zero-gap formula from the older
+unguarded low formula.** -/
+theorem LowFiniteStieltjesFormulaOnFirstZeroGapAFZ.of_unguarded
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (H : LowFiniteStieltjesFormulaOnFirstZeroGap Dzero T0 ZC) :
+    LowFiniteStieltjesFormulaOnFirstZeroGapAFZ Dzero T0 ZC :=
+  ⟨fun z hz _hne Hgap => H.formula Hgap z hz⟩
+
+/-- ⭐ **PROVED — AFZ unified Stieltjes source from the older unguarded
+unified source.** -/
+theorem XiZeroContributionStieltjesEqualitySourceAFZ.of_unguarded
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (H : XiZeroContributionStieltjesEqualitySource Dzero T0 ZC) :
+    XiZeroContributionStieltjesEqualitySourceAFZ Dzero T0 ZC :=
+  { midHigh_eq := StieltjesMidHighTailEqualityAFZ.of_unguarded H.midHigh_eq
+    low_eq := LowFiniteStieltjesFormulaOnFirstZeroGapAFZ.of_unguarded H.low_eq }
+
+/-- 🌟🌟🌟 **PROVED — split AFZ Stieltjes bundle from older unguarded
+mid/high and low first-zero-gap formulas.** -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_unguarded_midHigh_lowFirstZeroFormula
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (HmidHigh : StieltjesMidHighTailEquality Dzero T0 ZC)
+    (Hlow : LowFiniteStieltjesFormulaOnFirstZeroGap Dzero T0 ZC) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  { mid := StieltjesMidTailEqualityAFZ.of_midHighAFZ
+      (StieltjesMidHighTailEqualityAFZ.of_unguarded HmidHigh)
+    high := StieltjesHighTailEqualityAFZ.of_midHighAFZ
+      (StieltjesMidHighTailEqualityAFZ.of_unguarded HmidHigh)
+    low := StieltjesLowEqualityAFZ.of_lowFiniteFormula
+      (LowFiniteStieltjesFormulaOnFirstZeroGapAFZ.of_unguarded Hlow) }
+
+/-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
+**PATH B FRONT DOOR (canonical source + older unguarded Stieltjes source)**.
+
+This compatibility front door lets older equality-only Stieltjes packages
+feed the canonical entire-ξ/Γ-discharged chain by weakening them to AFZ. -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_unguardedStieltjesSource
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySource
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesAFZ
+    Dzero h_Z_ge_15 hTuring hHighLog
+    Hhad
+    (XiZeroContributionStieltjesEqualitySourceAFZ.of_unguarded Hst)
+
+/-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
+**PATH B FRONT DOOR (canonical source + older unguarded split Stieltjes)**.
+
+This version accepts the older separate mid/high equality and low
+first-zero-gap formula, then routes through the canonical AFZ bundle. -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_unguardedMidHigh_lowFirstZeroFormula
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (HmidHigh :
+      StieltjesMidHighTailEquality
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hlow :
+      LowFiniteStieltjesFormulaOnFirstZeroGap
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesInputs
+    Dzero h_Z_ge_15 hTuring hHighLog
+    Hhad
+    (ClassicalPathBStieltjesInputsAFZ.of_unguarded_midHigh_lowFirstZeroFormula
+      HmidHigh Hlow)
 
 /-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
 **PATH B PUBLICATION THEOREM (entire-ξ Hadamard, canonical Γ bridge)**.

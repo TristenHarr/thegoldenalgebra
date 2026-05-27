@@ -70,7 +70,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-51,955 lines and roughly 2,567 top-level declarations. It contains no
+52,220 lines and roughly 2,578 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -122,9 +122,9 @@ identity), and Theorem 6 (§CDXLIII, Γ-cancellation fully discharged)
 are progressively sharper restatements of the same conditional sign
 law. §CDXLIV adds canonical-source front doors for the same theorem,
 including direct low-zero-split, low-IBP-source, combined-mid/high,
-reassembled-Stieltjes, and publication-level classical-Stieltjes
-forms; each follows from the previous by an unconditional structural
-reduction (§9).
+unguarded-compatibility, reassembled-Stieltjes, and publication-level
+classical-Stieltjes forms; each follows from the previous by an
+unconditional structural reduction (§9).
 
 ```
    RH for ζ
@@ -1297,7 +1297,11 @@ the three obligation lines, with concrete handoff targets in each case.
   fields definitionally visible, and
   `ClassicalBacklundTuringVerifiedInputs.concreteS_highLogEnvelope`
   supplies the downstream high-log envelope with the larger `49/20`
-  allowance.
+  allowance. The verified package also exports to the older
+  `BacklundNumericalExtractionInput` API via
+  `ClassicalBacklundTuringVerifiedInputs.toNumericalExtraction`, so the
+  Trudgian/Platt route can feed both the modern `S`-bound interfaces
+  and the earlier numerical-extraction frontier.
 
 * **(P2) Entire-ξ Hadamard bundle.** Inhabit
   `EntireXiClassicalHadamardTheorem ι` (§CCCLXXXVIII) — the per-field
@@ -1330,16 +1334,29 @@ the three obligation lines, with concrete handoff targets in each case.
   `StieltjesMidHighTailEqualityAFZ` is split into its mid and high
   components by `StieltjesMidTailEqualityAFZ.of_midHighAFZ` and
   `StieltjesHighTailEqualityAFZ.of_midHighAFZ`, then combined with the
-  low IBP source by
+  low zero split, low cloud/tail split, or low IBP source by
+  `ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowZeroSplit`,
+  `ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowCloudTailSplit`,
+  and
   `ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowIBPSource`.
   The theorem
   `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHighAFZ_lowIBPSource`
-  exposes that compact route directly. At the
+  exposes the compact low-IBP route directly, with sibling front doors
+  for the low-zero and low-cloud/tail forms. Older unguarded Stieltjes
+  equality sources can be safely weakened into AFZ form by
+  `StieltjesMidHighTailEqualityAFZ.of_unguarded`,
+  `LowFiniteStieltjesFormulaOnFirstZeroGapAFZ.of_unguarded`, and
+  `XiZeroContributionStieltjesEqualitySourceAFZ.of_unguarded`; the
+  compatibility front doors
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_unguardedStieltjesSource`
+  and
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_unguardedMidHigh_lowFirstZeroFormula`
+  route those older packages into the canonical chain. At the
   publication surface,
   `XiPullbackAntiHerglotzTarget_of_entireHadamard_and_classicalStieltjes`
   accepts `ClassicalStieltjesExplicitFormulaInputs` and performs the
   canonical reassembly internally. The mid/high equalities are the
-  tail-limit form of the explicit formula at $\Xi(z) \neq 0`; the low
+  tail-limit form of the explicit formula at $\Xi(z) \neq 0$; the low
   split is the conceptual statement
   $\mathrm{ZC}(z) = P(z) + \text{tailZC}(z)$.
 
@@ -1572,19 +1589,25 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesAFZ`,
   `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesInputs`,
   `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHigh_lowIBPSource`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHighAFZ_lowZeroSplit`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHighAFZ_lowCloudTailSplit`,
   `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHighAFZ_lowIBPSource`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_unguardedStieltjesSource`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_unguardedMidHigh_lowFirstZeroFormula`,
   and
   `XiPullbackAntiHerglotzTarget_of_entireHadamard_and_classicalStieltjes`
   expose the same Γ-discharged reduction with stable Stieltjes
   hypothesis shapes, from direct low-zero/low-IBP sources up to the
   publication-level classical Stieltjes bundle. The helper theorems
-  `ClassicalStieltjesExplicitFormulaInputs.toClassicalPathBStieltjesInputsAFZ`
+  `ClassicalStieltjesExplicitFormulaInputs.toClassicalPathBStieltjesInputsAFZ`,
   `ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource`, and
   `ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowIBPSource`
   perform the canonical Stieltjes reassembly; the mid/high splitters
   `StieltjesMidTailEqualityAFZ.of_midHighAFZ` and
   `StieltjesHighTailEqualityAFZ.of_midHighAFZ` expose the two
-  components of a combined AFZ mid/high equality.
+  components of a combined AFZ mid/high equality, while the
+  `of_unguarded` helpers weaken older global equalities into the AFZ
+  hypotheses used by the final chain.
 
 ## 13. Companion Python pipeline
 
@@ -1622,7 +1645,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-51,955 lines and roughly 2,567 top-level declarations.
+52,220 lines and roughly 2,578 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
