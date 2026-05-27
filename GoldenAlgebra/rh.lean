@@ -51827,6 +51827,212 @@ theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHigh_lowIBPS
       (ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource
         Hmid Hhigh Hlow Hstarts)
 
+/-- ⭐ **PROVED — split out the mid component of the combined AFZ
+mid/high Stieltjes equality.** -/
+theorem StieltjesMidTailEqualityAFZ.of_midHighAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (H : StieltjesMidHighTailEqualityAFZ Dzero T0 ZC) :
+    StieltjesMidTailEqualityAFZ Dzero T0 ZC :=
+  ⟨fun hz hne hmid hL => H.mid_eq hz hne hmid hL⟩
+
+/-- ⭐ **PROVED — split out the high component of the combined AFZ
+mid/high Stieltjes equality.** -/
+theorem StieltjesHighTailEqualityAFZ.of_midHighAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (H : StieltjesMidHighTailEqualityAFZ Dzero T0 ZC) :
+    StieltjesHighTailEqualityAFZ Dzero T0 ZC :=
+  ⟨fun hT hz hne hreg hL => H.high_eq hT hz hne hreg hL⟩
+
+/-- 🌟🌟🌟 **PROVED — split Stieltjes bundle from the combined AFZ
+mid/high equality plus the direct low finite Stieltjes IBP source.** -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowIBPSource
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (HmidHigh : StieltjesMidHighTailEqualityAFZ Dzero T0 ZC)
+    (Hlow : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC)
+    (Hstarts : DzeroStartsAfter Dzero 14) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource
+    (StieltjesMidTailEqualityAFZ.of_midHighAFZ HmidHigh)
+    (StieltjesHighTailEqualityAFZ.of_midHighAFZ HmidHigh)
+    Hlow
+    Hstarts
+
+/-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
+**PATH B FRONT DOOR (canonical source + combined mid/high + low IBP)**.
+
+This is a compact identity-side theorem: one combined AFZ mid/high
+Stieltjes equality plus the low finite IBP source, with Γ-cancellation
+already discharged. -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHighAFZ_lowIBPSource
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (HmidHigh :
+      StieltjesMidHighTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hlow :
+      LowFiniteStieltjesIBPSourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)) :
+    XiPullbackAntiHerglotzTarget := by
+  have Hstarts : DzeroStartsAfter Dzero 14 := by
+    refine ⟨?_⟩
+    intro i
+    have := h_Z_ge_15 i
+    linarith
+  exact
+    XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesInputs
+      Dzero h_Z_ge_15 hTuring hHighLog
+      Hhad
+      (ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowIBPSource
+        HmidHigh Hlow Hstarts)
+
+/-- 🌟🌟🌟 **PROVED — split Stieltjes bundle from the combined AFZ
+mid/high equality plus the direct low zero-contribution split.** -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowZeroSplit
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (HmidHigh : StieltjesMidHighTailEqualityAFZ Dzero T0 ZC)
+    (HlowSplit : LowZeroContributionSplitAFZ Dzero T0 ZC)
+    (Hstarts : DzeroStartsAfter Dzero 14) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit
+    (StieltjesMidTailEqualityAFZ.of_midHighAFZ HmidHigh)
+    (StieltjesHighTailEqualityAFZ.of_midHighAFZ HmidHigh)
+    HlowSplit
+    Hstarts
+
+/-- 🌟🌟🌟 **PROVED — split Stieltjes bundle from the combined AFZ
+mid/high equality plus the atomic low cloud/tail split.** -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowCloudTailSplit
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC finiteCloud tail : ℂ → ℂ}
+    (HmidHigh : StieltjesMidHighTailEqualityAFZ Dzero T0 ZC)
+    (Hlow : LowCloudTailSplitAFZ Dzero T0 ZC finiteCloud tail)
+    (Hstarts : DzeroStartsAfter Dzero 14) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowZeroSplit
+    HmidHigh
+    (LowZeroContributionSplitAFZ.of_cloudTailSplit Hlow)
+    Hstarts
+
+/-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
+**PATH B FRONT DOOR (canonical source + combined mid/high + low zero split)**.
+
+This variant takes one combined AFZ mid/high Stieltjes equality and the
+direct low zero-contribution split. -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHighAFZ_lowZeroSplit
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (HmidHigh :
+      StieltjesMidHighTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (HlowSplit :
+      LowZeroContributionSplitAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)) :
+    XiPullbackAntiHerglotzTarget := by
+  have Hstarts : DzeroStartsAfter Dzero 14 := by
+    refine ⟨?_⟩
+    intro i
+    have := h_Z_ge_15 i
+    linarith
+  exact
+    XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesInputs
+      Dzero h_Z_ge_15 hTuring hHighLog
+      Hhad
+      (ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowZeroSplit
+        HmidHigh HlowSplit Hstarts)
+
+/-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
+**PATH B FRONT DOOR (canonical source + combined mid/high + low cloud/tail)**.
+
+This is the compact cloud/tail variant: one combined AFZ mid/high
+Stieltjes equality plus the atomic low cloud/tail split. -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHighAFZ_lowCloudTailSplit
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (HmidHigh :
+      StieltjesMidHighTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    {finiteCloud tail : ℂ → ℂ}
+    (Hlow :
+      LowCloudTailSplitAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)
+        finiteCloud tail) :
+    XiPullbackAntiHerglotzTarget := by
+  have Hstarts : DzeroStartsAfter Dzero 14 := by
+    refine ⟨?_⟩
+    intro i
+    have := h_Z_ge_15 i
+    linarith
+  exact
+    XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesInputs
+      Dzero h_Z_ge_15 hTuring hHighLog
+      Hhad
+      (ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowCloudTailSplit
+        HmidHigh Hlow Hstarts)
+
 /-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
 **PATH B PUBLICATION THEOREM (entire-ξ Hadamard, canonical Γ bridge)**.
 

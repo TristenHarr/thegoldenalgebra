@@ -70,7 +70,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-51,874 lines and roughly 2,563 top-level declarations. It contains no
+51,955 lines and roughly 2,567 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -121,9 +121,10 @@ Hadamard), Theorem 4 (§CDXIV, entire-ξ Hadamard + three-piece
 identity), and Theorem 6 (§CDXLIII, Γ-cancellation fully discharged)
 are progressively sharper restatements of the same conditional sign
 law. §CDXLIV adds canonical-source front doors for the same theorem,
-including direct low-zero-split, low-IBP-source, reassembled-Stieltjes,
-and publication-level classical-Stieltjes forms; each follows from the
-previous by an unconditional structural reduction (§9).
+including direct low-zero-split, low-IBP-source, combined-mid/high,
+reassembled-Stieltjes, and publication-level classical-Stieltjes
+forms; each follows from the previous by an unconditional structural
+reduction (§9).
 
 ```
    RH for ζ
@@ -1325,6 +1326,15 @@ the three obligation lines, with concrete handoff targets in each case.
   can also be combined with a direct
   `LowFiniteStieltjesIBPSourceAFZ` through
   `ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource`. At the
+  compact identity-side surface, a single
+  `StieltjesMidHighTailEqualityAFZ` is split into its mid and high
+  components by `StieltjesMidTailEqualityAFZ.of_midHighAFZ` and
+  `StieltjesHighTailEqualityAFZ.of_midHighAFZ`, then combined with the
+  low IBP source by
+  `ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowIBPSource`.
+  The theorem
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHighAFZ_lowIBPSource`
+  exposes that compact route directly. At the
   publication surface,
   `XiPullbackAntiHerglotzTarget_of_entireHadamard_and_classicalStieltjes`
   accepts `ClassicalStieltjesExplicitFormulaInputs` and performs the
@@ -1562,14 +1572,19 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesAFZ`,
   `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesInputs`,
   `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHigh_lowIBPSource`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHighAFZ_lowIBPSource`,
   and
   `XiPullbackAntiHerglotzTarget_of_entireHadamard_and_classicalStieltjes`
   expose the same Γ-discharged reduction with stable Stieltjes
   hypothesis shapes, from direct low-zero/low-IBP sources up to the
   publication-level classical Stieltjes bundle. The helper theorems
   `ClassicalStieltjesExplicitFormulaInputs.toClassicalPathBStieltjesInputsAFZ`
-  and `ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource`
-  perform the canonical Stieltjes reassembly.
+  `ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource`, and
+  `ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowIBPSource`
+  perform the canonical Stieltjes reassembly; the mid/high splitters
+  `StieltjesMidTailEqualityAFZ.of_midHighAFZ` and
+  `StieltjesHighTailEqualityAFZ.of_midHighAFZ` expose the two
+  components of a combined AFZ mid/high equality.
 
 ## 13. Companion Python pipeline
 
@@ -1607,7 +1622,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-51,874 lines and roughly 2,563 top-level declarations.
+51,955 lines and roughly 2,567 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
