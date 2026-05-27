@@ -18707,6 +18707,144 @@ theorem concreteS_halfLogPlusHalf_of_globalTrudgian_and_plattTrudgian
     (BacklundFiniteBandCheck140_exp7.of_plattTrudgian Hfinite)
     hT
 
+/-! ### CW32: sharper Trudgian arithmetic split -/
+
+/-- Tangent comparison for the logarithmic secondary term:
+`log log T ≤ (1/10) log T + 7/5` whenever `log T > 0`. -/
+theorem backlund_log_log_le_one_tenth_log_plus_seven_fifths
+    {T : ℝ} (hLpos : 0 < Real.log T) :
+    Real.log (Real.log T)
+      ≤ (1 / 10 : ℝ) * Real.log T + 7 / 5 := by
+  have htangent :=
+    backlund_log_le_tangent
+      (T := Real.log T) (T₀ := (10 : ℝ)) hLpos (by norm_num)
+  have hlog10 := backlund_log_ten_le_twelve_fifths
+  linarith
+
+/-- The Trudgian envelope is below the public half-log-plus-half target
+already at `log T ≥ 647/100`. -/
+theorem trudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_647_100
+    {T : ℝ} (hL : (647 / 100 : ℝ) ≤ Real.log T) :
+    trudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hLpos : 0 < Real.log T := by linarith
+  have hloglog :=
+    backlund_log_log_le_one_tenth_log_plus_seven_fifths hLpos
+  have hmul :
+      (11 / 40 : ℝ) * Real.log (Real.log T)
+        ≤ (11 / 40 : ℝ)
+            * ((1 / 10 : ℝ) * Real.log T + 7 / 5) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  unfold trudgianBacklundEnvelope
+  nlinarith
+
+/-- For `T ≥ exp (647/100)`, `log T ≥ 647/100`. -/
+theorem backlund_log_ge_647_100_of_ge_exp_647_100
+    {T : ℝ} (hT : Real.exp (647 / 100 : ℝ) ≤ T) :
+    (647 / 100 : ℝ) ≤ Real.log T := by
+  have h_exp_pos : 0 < Real.exp (647 / 100 : ℝ) := Real.exp_pos _
+  have h := Real.log_le_log h_exp_pos hT
+  rwa [Real.log_exp] at h
+
+/-- The Trudgian envelope is below the target for every
+`T ≥ exp (647/100)`. -/
+theorem trudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_647_100
+    {T : ℝ} (hT : Real.exp (647 / 100 : ℝ) ≤ T) :
+    trudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  trudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_647_100
+    (backlund_log_ge_647_100_of_ge_exp_647_100 hT)
+
+/-- `exp (647/100) < 1200`, so the sharper finite band sits inside the
+older `exp 7`/`1200` infrastructure. -/
+theorem backlund_exp_647_100_lt_1200 :
+    Real.exp (647 / 100 : ℝ) < 1200 := by
+  have hle :
+      Real.exp (647 / 100 : ℝ) ≤ Real.exp (7 : ℝ) :=
+    Real.exp_le_exp.mpr (by norm_num)
+  exact lt_of_le_of_lt hle backlund_exp_seven_lt_1200
+
+/-- Trudgian tail estimate on the sharper tail needed by the public
+target, namely `T ≥ exp (647/100)`. -/
+structure TrudgianBacklundSharpTailInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (647 / 100 : ℝ) ≤ T →
+      |concreteS T| ≤ trudgianBacklundEnvelope T
+
+/-- A global Trudgian estimate supplies the sharper `exp (647/100)`
+tail estimate. -/
+noncomputable def TrudgianBacklundSharpTailInput.of_global
+    (H : TrudgianBacklundGlobalInput) :
+    TrudgianBacklundSharpTailInput where
+  bound := by
+    intro T hT
+    have h_exp_one_le_exp_cut :
+        Real.exp (1 : ℝ) ≤ Real.exp (647 / 100 : ℝ) :=
+      Real.exp_le_exp.mpr (by norm_num)
+    exact H.bound T (le_trans h_exp_one_le_exp_cut hT)
+
+/-- Finite-band check left after using the sharper Trudgian tail:
+`[140, exp (647/100)]`. -/
+structure BacklundFiniteBandCheck140_exp647_100 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ Real.exp (647 / 100 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- The Platt/Trudgian finite-range bound supplies the sharper finite
+band `[140, exp (647/100)]`. -/
+noncomputable def BacklundFiniteBandCheck140_exp647_100.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_exp647_100 where
+  bound := by
+    intro T hT140 hTexp
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) := by
+      have hT1200 : T ≤ (1200 : ℝ) :=
+        le_trans hTexp (le_of_lt backlund_exp_647_100_lt_1200)
+      linarith
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- Sharper Trudgian tail plus the reduced finite-band check gives the
+good-height Backlund argument bound. -/
+noncomputable def BacklundGoodHeightArgumentBound.of_trudgian_sharpTail_and_finite
+    (Htail : TrudgianBacklundSharpTailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp647_100) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTail : Real.exp (647 / 100 : ℝ) ≤ T
+    · exact le_trans (Htail.bound T hTail)
+        (trudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_647_100 hTail)
+    · have hTle : T ≤ Real.exp (647 / 100 : ℝ) := le_of_not_ge hTail
+      exact Hfinite.bound T hT hTle
+
+/-- Final headline theorem from the sharper Trudgian tail and finite
+band `[140, exp (647/100)]`. -/
+theorem concreteS_halfLogPlusHalf_of_trudgian_sharpTail_and_finite
+    (Htail : TrudgianBacklundSharpTailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp647_100)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_trudgian_sharpTail_and_finite
+      Htail Hfinite)
+    hT
+
+/-- Final headline theorem from the global Trudgian estimate and the
+Platt/Trudgian finite-range input, using the sharper finite band
+`[140, exp (647/100)]`. -/
+theorem concreteS_halfLogPlusHalf_of_globalTrudgian_and_plattTrudgian_sharp
+    (Hglobal : TrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_trudgian_sharpTail_and_finite
+    (TrudgianBacklundSharpTailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp647_100.of_plattTrudgian Hfinite)
+    hT
+
 /-- The two sourced ingredients for the concrete Backlund/Turing `S(T)`
 bound:
 
