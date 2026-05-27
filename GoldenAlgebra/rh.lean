@@ -7589,6 +7589,30 @@ theorem zetaWeightedZeroCountInHeightSlab_eq_sub
       (zetaZeroSetUpToHeight A hA)
       (zetaZeroSetUpToHeight B (le_trans hA hAB))
 
+/-- If a slab `(A, B]` has certified weighted count `slabCount`, then a
+known cumulative count at `A` propagates to the cumulative count at `B`.
+This is the arithmetic bridge from Turing interval counts to endpoint
+counts. -/
+theorem zetaWeightedZeroCountUpToHeight_right_eq_of_left_eq_slab_count
+    {A B : ℝ} {leftCount slabCount : ℕ}
+    (hA : 0 ≤ A) (hAB : A ≤ B)
+    (hleft :
+      zetaWeightedZeroCountUpToHeight A hA = leftCount)
+    (hslab :
+      zetaWeightedZeroCountInHeightSlab A B hA hAB = slabCount) :
+    zetaWeightedZeroCountUpToHeight B (le_trans hA hAB)
+      = leftCount + slabCount := by
+  have hsub :
+      zetaWeightedZeroCountUpToHeight B (le_trans hA hAB)
+        - zetaWeightedZeroCountUpToHeight A hA = slabCount := by
+    rw [← zetaWeightedZeroCountInHeightSlab_eq_sub hA hAB]
+    exact hslab
+  have hmono :
+      zetaWeightedZeroCountUpToHeight A hA ≤
+        zetaWeightedZeroCountUpToHeight B (le_trans hA hAB) :=
+    zetaWeightedZeroCountUpToHeight_mono hA (le_trans hA hAB) hAB
+  omega
+
 /-! ### Riemann–von Mangoldt decomposition interface -/
 
 /-- **F1.** The smooth Riemann–von Mangoldt main term used in the
@@ -19539,6 +19563,59 @@ theorem BacklundCountMainSlabCertificate.uniform25167
   · linarith
   · exact h_lower
 
+/-- A count-range/main-term slab certificate for the remaining concrete
+finite band.  Unlike `BacklundCountMainSlabCertificate`, this version
+allows zero jumps inside the slab by bounding the cumulative weighted
+zero count between two endpoint counts. -/
+structure BacklundCountRangeMainSlabCertificate where
+  A : ℝ
+  B : ℝ
+  countLower : ℕ
+  countUpper : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  count_bounds :
+    ∀ (T : ℝ) (hT0 : 0 ≤ T), A ≤ T → T ≤ B →
+      countLower ≤ zetaWeightedZeroCountUpToHeight T hT0 ∧
+        zetaWeightedZeroCountUpToHeight T hT0 ≤ countUpper
+  main_bounds :
+    ∀ T : ℝ, A ≤ T → T ≤ B →
+      mainLower ≤ smoothMainTerm T ∧ smoothMainTerm T ≤ mainUpper
+  upperCount_minus_lowerMain_le :
+    (countUpper : ℝ) - mainLower ≤ (25167 / 10000 : ℝ)
+  upperMain_minus_lowerCount_le :
+    mainUpper - (countLower : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- A count-range/main-term slab certificate gives the uniform `2.5167`
+bound on its slab. -/
+theorem BacklundCountRangeMainSlabCertificate.uniform25167
+    (S : BacklundCountRangeMainSlabCertificate)
+    {T : ℝ} (hT0 : 0 ≤ T) (hA : S.A ≤ T) (hB : T ≤ S.B) :
+    |concreteS T| ≤ (25167 / 10000 : ℝ) := by
+  have hcount := S.count_bounds T hT0 hA hB
+  have hmain := S.main_bounds T hA hB
+  have h_upper :
+      (zetaWeightedZeroCountUpToHeight T hT0 : ℝ) - smoothMainTerm T
+        ≤ (25167 / 10000 : ℝ) := by
+    have hcount_upper :
+        (zetaWeightedZeroCountUpToHeight T hT0 : ℝ)
+          ≤ (S.countUpper : ℝ) := by
+      exact_mod_cast hcount.2
+    linarith [hcount_upper, hmain.1, S.upperCount_minus_lowerMain_le]
+  have h_lower :
+      smoothMainTerm T - (zetaWeightedZeroCountUpToHeight T hT0 : ℝ)
+        ≤ (25167 / 10000 : ℝ) := by
+    have hcount_lower :
+        (S.countLower : ℝ)
+          ≤ (zetaWeightedZeroCountUpToHeight T hT0 : ℝ) := by
+      exact_mod_cast hcount.1
+    linarith [hcount_lower, hmain.2, S.upperMain_minus_lowerCount_le]
+  rw [concreteS_eq_weighted_count_sub_smoothMainTerm hT0]
+  rw [abs_le]
+  constructor
+  · linarith
+  · exact h_upper
+
 /-- A finite list of count/main-term slabs covering `[140, 374]`.
 
 This is the next executable certificate target: once the actual slab
@@ -19546,6 +19623,13 @@ table is supplied, Lean reduces the finite band to interval coverage,
 local zero-count identities, and elementary main-term bounds. -/
 structure BacklundFiniteBandCountMainCertificate140_374 where
   slabs : List BacklundCountMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
+      ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-- A finite list of count-range/main-term slabs covering `[140, 374]`. -/
+structure BacklundFiniteBandCountRangeMainCertificate140_374 where
+  slabs : List BacklundCountRangeMainSlabCertificate
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
@@ -19648,6 +19732,70 @@ noncomputable def
   count_minus_lower_le := S.count_minus_lower_le
   upper_minus_count_le := S.upper_minus_count_le
 
+/-- Endpoint count-range version of a Backlund finite-band slab.  The
+endpoint cumulative counts bound every interior cumulative count by
+monotonicity, so this shape can cover slabs containing zero ordinates. -/
+structure BacklundEndpointCountRangeMainSlabCertificate where
+  A : ℝ
+  B : ℝ
+  countLower : ℕ
+  countUpper : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  hA_two_pi : 2 * Real.pi ≤ A
+  hAB : A ≤ B
+  left_count_eq :
+    zetaWeightedZeroCountUpToHeight A
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hA_two_pi) =
+      countLower
+  right_count_eq :
+    zetaWeightedZeroCountUpToHeight B
+      (le_trans
+        (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hA_two_pi)
+        hAB) =
+      countUpper
+  mainLower_le_left :
+    mainLower ≤ smoothMainTerm A
+  right_le_mainUpper :
+    smoothMainTerm B ≤ mainUpper
+  upperCount_minus_lowerMain_le :
+    (countUpper : ℝ) - mainLower ≤ (25167 / 10000 : ℝ)
+  upperMain_minus_lowerCount_le :
+    mainUpper - (countLower : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- Endpoint count-range slabs lower to count-range/main-term slabs. -/
+noncomputable def BacklundEndpointCountRangeMainSlabCertificate.toRangeSlab
+    (S : BacklundEndpointCountRangeMainSlabCertificate) :
+    BacklundCountRangeMainSlabCertificate where
+  A := S.A
+  B := S.B
+  countLower := S.countLower
+  countUpper := S.countUpper
+  mainLower := S.mainLower
+  mainUpper := S.mainUpper
+  count_bounds := by
+    intro T hT0 hAT hTB
+    have hA0 : 0 ≤ S.A :=
+      le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) S.hA_two_pi
+    have hB0 : 0 ≤ S.B := le_trans hA0 S.hAB
+    have hleft :
+        zetaWeightedZeroCountUpToHeight S.A hA0 ≤
+          zetaWeightedZeroCountUpToHeight T hT0 :=
+      zetaWeightedZeroCountUpToHeight_mono hA0 hT0 hAT
+    have hright :
+        zetaWeightedZeroCountUpToHeight T hT0 ≤
+          zetaWeightedZeroCountUpToHeight S.B hB0 :=
+      zetaWeightedZeroCountUpToHeight_mono hT0 hB0 hTB
+    constructor
+    · simpa [S.left_count_eq] using hleft
+    · simpa [S.right_count_eq] using hright
+  main_bounds := by
+    intro T hA hB
+    exact smoothMainTerm_bounds_of_endpoint_bounds
+      S.hA_two_pi hA hB S.mainLower_le_left S.right_le_mainUpper
+  upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
+  upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
+
 /-- A finite list of endpoint-style slabs covering `[140, 374]`. -/
 structure BacklundFiniteBandEndpointCountMainCertificate140_374 where
   slabs : List BacklundEndpointCountMainSlabCertificate
@@ -19659,6 +19807,14 @@ structure BacklundFiniteBandEndpointCountMainCertificate140_374 where
 `[140, 374]`. -/
 structure BacklundFiniteBandEndpointCumulativeCountMainCertificate140_374 where
   slabs : List BacklundEndpointCumulativeCountMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
+      ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-- A finite list of endpoint count-range/main-term slabs covering
+`[140, 374]`. -/
+structure BacklundFiniteBandEndpointCountRangeMainCertificate140_374 where
+  slabs : List BacklundEndpointCountRangeMainSlabCertificate
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
@@ -19690,6 +19846,19 @@ noncomputable def
     refine ⟨S.toEndpointSlab, ?_, hA, hB⟩
     exact List.mem_map.mpr ⟨S, hS, rfl⟩
 
+/-- Endpoint count-range slabs supply count-range/main slabs. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_374.toCountRange
+    (C : BacklundFiniteBandEndpointCountRangeMainCertificate140_374) :
+    BacklundFiniteBandCountRangeMainCertificate140_374 where
+  slabs := C.slabs.map
+    (fun S : BacklundEndpointCountRangeMainSlabCertificate => S.toRangeSlab)
+  cover := by
+    intro T hT140 hT374
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT374
+    refine ⟨S.toRangeSlab, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
 /-- Count/main-term slab certificates supply the narrow uniform finite
 band certificate on `[140, 374]`. -/
 noncomputable def
@@ -19717,6 +19886,26 @@ noncomputable def
     (C : BacklundFiniteBandEndpointCumulativeCountMainCertificate140_374) :
     BacklundFiniteBandUniform25167Check140_374 :=
   C.toEndpoint.toUniform25167Check
+
+/-- Count-range/main-term slabs supply the narrow uniform finite-band
+certificate on `[140, 374]`. -/
+noncomputable def
+    BacklundFiniteBandCountRangeMainCertificate140_374.toUniform25167Check
+    (C : BacklundFiniteBandCountRangeMainCertificate140_374) :
+    BacklundFiniteBandUniform25167Check140_374 where
+  bound := by
+    intro T hT140 hT374
+    obtain ⟨S, _hS, hA, hB⟩ := C.cover T hT140 hT374
+    have hT0 : 0 ≤ T := by linarith
+    exact S.uniform25167 hT0 hA hB
+
+/-- Endpoint count-range slabs supply the narrow uniform finite-band
+certificate on `[140, 374]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_374.toUniform25167Check
+    (C : BacklundFiniteBandEndpointCountRangeMainCertificate140_374) :
+    BacklundFiniteBandUniform25167Check140_374 :=
+  C.toCountRange.toUniform25167Check
 
 /-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
 concrete finite-band target `[140, 374]`. -/
@@ -19793,6 +19982,34 @@ theorem
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite374
     Hglobal
     Hfinite.toUniform25167Check
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and count-range/main-term slabs on `[140, 374]`.  This version
+is robust across slabs containing zero ordinates: the certificate only
+needs lower and upper cumulative-count bounds. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countRangeMainFinite374
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCountRangeMainCertificate140_374)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite374
+    Hglobal
+    Hfinite.toUniform25167Check
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and endpoint count-range/main-term slabs on `[140, 374]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite374
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandEndpointCountRangeMainCertificate140_374)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countRangeMainFinite374
+    Hglobal
+    Hfinite.toCountRange
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
