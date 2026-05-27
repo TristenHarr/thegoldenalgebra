@@ -4353,6 +4353,85 @@ theorem deriv_smoothMainTerm
     deriv smoothMainTerm u = smoothDensity u := by
   simpa [smoothMainTerm, smoothDensity] using deriv_smoothZeroCountingN0 hu
 
+/-- Derivative form for the Backlund smooth main term. -/
+theorem hasDerivAt_smoothMainTerm
+    {u : ℝ} (hu : 0 < u) :
+    HasDerivAt smoothMainTerm (smoothDensity u) u := by
+  have h2pi_pos : (0 : ℝ) < 2 * Real.pi := by positivity
+  have hq_pos : (0 : ℝ) < u / (2 * Real.pi) := div_pos hu h2pi_pos
+  have hq_ne : u / (2 * Real.pi) ≠ 0 := ne_of_gt hq_pos
+  have hlin :
+      HasDerivAt (fun v : ℝ => v / (2 * Real.pi))
+        (1 / (2 * Real.pi)) u := by
+    simpa using (hasDerivAt_id u).div_const (2 * Real.pi)
+  have hlog :
+      HasDerivAt (fun v : ℝ => Real.log (v / (2 * Real.pi)))
+        (1 / u) u := by
+    have h := (Real.hasDerivAt_log hq_ne).comp u hlin
+    have hsimp :
+        (u / (2 * Real.pi))⁻¹ * (1 / (2 * Real.pi)) = 1 / u := by
+      field_simp
+      ring
+    rw [hsimp] at h
+    simpa [Function.comp_def] using h
+  have hprod := hlin.mul hlog
+  have hsub := hprod.sub hlin
+  have hfinal := hsub.add_const (7 / 8)
+  have hderiv :
+      (1 / (2 * Real.pi)) * Real.log (u / (2 * Real.pi))
+        + (u / (2 * Real.pi)) * (1 / u) - 1 / (2 * Real.pi)
+      = smoothDensity u := by
+    unfold smoothDensity zeroDensityRho
+    field_simp
+    ring
+  have hfunc :
+      (fun v : ℝ => (v / (2 * Real.pi)) * Real.log (v / (2 * Real.pi))
+                    - v / (2 * Real.pi) + 7 / 8)
+        = smoothMainTerm := by
+    funext v
+    rfl
+  rw [← hfunc, ← hderiv]
+  exact hfinal
+
+/-- The Backlund smooth main term is monotone on `[2π, ∞)`. -/
+theorem smoothMainTerm_monotoneOn_Ici_two_pi :
+    MonotoneOn smoothMainTerm (Set.Ici (2 * Real.pi)) := by
+  apply monotoneOn_of_deriv_nonneg (convex_Ici _)
+  · intro x hx
+    have hx_ge : 2 * Real.pi ≤ x := hx
+    have hx_pos : 0 < x := lt_of_lt_of_le (by positivity) hx_ge
+    exact (hasDerivAt_smoothMainTerm hx_pos).continuousAt.continuousWithinAt
+  · intro x hx
+    rw [interior_Ici] at hx
+    have hx_2pi : 2 * Real.pi < x := hx
+    have hx_pos : 0 < x := lt_trans (by positivity) hx_2pi
+    exact (hasDerivAt_smoothMainTerm hx_pos).differentiableAt.differentiableWithinAt
+  · intro x hx
+    rw [interior_Ici] at hx
+    have hx_2pi : 2 * Real.pi < x := hx
+    rw [(hasDerivAt_smoothMainTerm (lt_trans (by positivity) hx_2pi)).deriv]
+    exact smoothDensity_nonneg_of_ge_two_pi (le_of_lt hx_2pi)
+
+/-- Endpoint bounds for the monotone smooth main term bound the whole
+interval. -/
+theorem smoothMainTerm_bounds_of_endpoint_bounds
+    {A B T mainLower mainUpper : ℝ}
+    (hA2pi : 2 * Real.pi ≤ A)
+    (hAT : A ≤ T) (hTB : T ≤ B)
+    (hlow : mainLower ≤ smoothMainTerm A)
+    (hhigh : smoothMainTerm B ≤ mainUpper) :
+    mainLower ≤ smoothMainTerm T ∧ smoothMainTerm T ≤ mainUpper := by
+  have hmono := smoothMainTerm_monotoneOn_Ici_two_pi
+  have hT2pi : 2 * Real.pi ≤ T := le_trans hA2pi hAT
+  have hB2pi : 2 * Real.pi ≤ B := le_trans hT2pi hTB
+  have hleft : smoothMainTerm A ≤ smoothMainTerm T :=
+    hmono hA2pi hT2pi hAT
+  have hright : smoothMainTerm T ≤ smoothMainTerm B :=
+    hmono hT2pi hB2pi hTB
+  constructor
+  · exact le_trans hlow hleft
+  · exact le_trans hright hhigh
+
 /-! ### Zero-set predicates
 
 We define the predicates needed to talk about nontrivial zeta zeros up to
@@ -19451,6 +19530,66 @@ structure BacklundFiniteBandCountMainCertificate140_374 where
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
 
+/-- Endpoint-style version of a count/main slab.  Since the smooth main
+term is monotone on this range, the table only has to bound it at the
+two slab endpoints. -/
+structure BacklundEndpointCountMainSlabCertificate where
+  A : ℝ
+  B : ℝ
+  count : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  hA_two_pi : 2 * Real.pi ≤ A
+  count_eq :
+    ∀ (T : ℝ) (hT0 : 0 ≤ T), A ≤ T → T ≤ B →
+      zetaWeightedZeroCountUpToHeight T hT0 = count
+  mainLower_le_left :
+    mainLower ≤ smoothMainTerm A
+  right_le_mainUpper :
+    smoothMainTerm B ≤ mainUpper
+  count_minus_lower_le :
+    (count : ℝ) - mainLower ≤ (25167 / 10000 : ℝ)
+  upper_minus_count_le :
+    mainUpper - (count : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- Endpoint-style slabs lower to ordinary count/main slabs by monotonicity
+of the smooth main term. -/
+noncomputable def BacklundEndpointCountMainSlabCertificate.toSlab
+    (S : BacklundEndpointCountMainSlabCertificate) :
+    BacklundCountMainSlabCertificate where
+  A := S.A
+  B := S.B
+  count := S.count
+  mainLower := S.mainLower
+  mainUpper := S.mainUpper
+  count_eq := S.count_eq
+  main_bounds := by
+    intro T hA hB
+    exact smoothMainTerm_bounds_of_endpoint_bounds
+      S.hA_two_pi hA hB S.mainLower_le_left S.right_le_mainUpper
+  count_minus_lower_le := S.count_minus_lower_le
+  upper_minus_count_le := S.upper_minus_count_le
+
+/-- A finite list of endpoint-style slabs covering `[140, 374]`. -/
+structure BacklundFiniteBandEndpointCountMainCertificate140_374 where
+  slabs : List BacklundEndpointCountMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
+      ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-- Endpoint-style slabs supply the count/main finite-band certificate. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountMainCertificate140_374.toCountMain
+    (C : BacklundFiniteBandEndpointCountMainCertificate140_374) :
+    BacklundFiniteBandCountMainCertificate140_374 where
+  slabs := C.slabs.map
+    (fun S : BacklundEndpointCountMainSlabCertificate => S.toSlab)
+  cover := by
+    intro T hT140 hT374
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT374
+    refine ⟨S.toSlab, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
 /-- Count/main-term slab certificates supply the narrow uniform finite
 band certificate on `[140, 374]`. -/
 noncomputable def
@@ -19462,6 +19601,14 @@ noncomputable def
     obtain ⟨S, _hS, hA, hB⟩ := C.cover T hT140 hT374
     have hT0 : 0 ≤ T := by linarith
     exact S.uniform25167 hT0 hA hB
+
+/-- Endpoint-style slabs supply the narrow uniform finite-band certificate
+on `[140, 374]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountMainCertificate140_374.toUniform25167Check
+    (C : BacklundFiniteBandEndpointCountMainCertificate140_374) :
+    BacklundFiniteBandUniform25167Check140_374 :=
+  C.toCountMain.toUniform25167Check
 
 /-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
 concrete finite-band target `[140, 374]`. -/
@@ -19538,6 +19685,19 @@ theorem
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite374
     Hglobal
     Hfinite.toUniform25167Check
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and endpoint-style count/main slabs on `[140, 374]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountMainFinite374
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandEndpointCountMainCertificate140_374)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countMainFinite374
+    Hglobal
+    Hfinite.toCountMain
     hT
 
 /-- The two sourced ingredients for the concrete Backlund/Turing `S(T)`
