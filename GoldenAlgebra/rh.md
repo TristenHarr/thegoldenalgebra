@@ -72,7 +72,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-52,674 lines and roughly 2,611 top-level declarations. It contains no
+53,180 lines and roughly 2,634 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -1323,7 +1323,10 @@ the three obligation lines, with concrete handoff targets in each case.
   `concreteS_halfLogPlusHalf_of_hsw_tail_and_plattTrudgian` and
   `concreteS_halfLogPlusHalf_of_hsw_sharpTail_and_plattTrudgian`
   route those tail estimates through the older Platt/Trudgian finite
-  input.
+  input. The latest refinement tightens the tail threshold again to
+  `exp (769/100)` via `HasanalizadeShenWongTightTailInput`,
+  `BacklundFiniteBandCheck140_exp769_100`, and
+  `concreteS_halfLogPlusHalf_of_hsw_tightTail_and_plattTrudgian`.
 
 * **(P2) Entire-ξ Hadamard bundle.** Inhabit
   `EntireXiClassicalHadamardTheorem ι` (§CCCLXXXVIII) — the per-field
@@ -1389,7 +1392,10 @@ canonical completed-ξ source. The constructors
 `PathBNonTuringInputs.of_classicalStieltjes` and
 `PathBNonTuringInputs.of_stieltjesInputs` build it from either the
 publication-level cloud/tail input or an already assembled canonical
-AFZ bundle. Once this bundle is inhabited for the same `Dzero`, the
+AFZ bundle. Additional constructors build it from combined AFZ mid/high
+data plus low IBP, low zero-split, or low cloud/tail inputs, and from
+older unguarded Stieltjes packages. Once this bundle is inhabited for
+the same `Dzero`, the
 §CDXLV theorem
 `XiPullbackAntiHerglotzTarget_of_nonTuringInputs_and_turingEnvelopes`
 leaves only the two envelope hypotheses from (P1) visible. To translate
@@ -1402,6 +1408,10 @@ with `XiPullback_logDeriv_chain_rule` and the Mathlib-side capstone
 
 The file is organized into functional layers, each consuming the
 previous as a black box.
+
+**Lake targets.** `lakefile.toml` now registers `rh` as a Lean library
+and includes it in `defaultTargets`, so a default Lake build covers the
+RH formalization alongside `GoldenAlgebra`.
 
 **Sign-law engine** (§§1–6 of `rh.lean`). The atomic substrate:
 `AntiHerglotzUHP`, `PositiveUpperImaginaryEscape`, the residue-cloud
@@ -1447,8 +1457,9 @@ envelope and the bridge
 `BacklundGoodHeightArgumentBound.of_hsw_large_and_plattTrudgian`,
 plus the verified-input export
 `ClassicalBacklundTuringVerifiedInputs.toNumericalExtraction`. The HSW
-tail has reduced-threshold front doors at `exp 8` and `exp (77/10)`,
-with finite-band adapters from the Platt/Trudgian range.
+tail has reduced-threshold front doors at `exp 8`, `exp (77/10)`, and
+`exp (769/100)`, with finite-band adapters from the Platt/Trudgian
+range.
 
 **Argument-principle scaffolding** (Q–Z and AA–BO namespaces).
 Rectangle-contour geometry, edge integrability, residue-theorem chain,
@@ -1651,9 +1662,18 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   `Hhad.toCompletedXiSourceAFZ_canonical`.
   `PathBNonTuringInputs.of_classicalStieltjes`,
   `PathBNonTuringInputs.of_stieltjesInputs`,
+  `PathBNonTuringInputs.of_midHighAFZ_lowIBPSource`,
+  `PathBNonTuringInputs.of_midHighAFZ_lowZeroSplit`,
+  `PathBNonTuringInputs.of_midHighAFZ_lowCloudTailSplit`,
+  `PathBNonTuringInputs.of_unguardedMidHigh_lowFirstZeroFormula`,
+  `PathBNonTuringInputs.of_unguardedStieltjesSource`,
   `PathBNonTuringInputs_to_target`, and
   `XiPullbackAntiHerglotzTarget_of_nonTuringInputs_and_turingEnvelopes`
-  leave only the two Backlund/Turing envelope hypotheses visible.
+  leave only the two Backlund/Turing envelope hypotheses visible. The
+  sibling only-envelopes-unbundled front doors cover assembled
+  Stieltjes inputs, publication Stieltjes inputs, combined AFZ
+  mid/high with low IBP/zero/cloud-tail inputs, and older unguarded
+  Stieltjes packages.
 
 ## 13. Companion Python pipeline
 
@@ -1691,7 +1711,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-52,674 lines and roughly 2,611 top-level declarations.
+53,180 lines and roughly 2,634 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.

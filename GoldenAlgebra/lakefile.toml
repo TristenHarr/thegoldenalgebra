@@ -1,7 +1,7 @@
 name = "GoldenAlgebra"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["GoldenAlgebra"]
+defaultTargets = ["GoldenAlgebra", "rh"]
 
 [leanOptions]
 pp.unicode.fun = true # pretty-prints `fun a ↦ b`
@@ -13,3 +13,6 @@ scope = "leanprover-community"
 
 [[lean_lib]]
 name = "GoldenAlgebra"
+
+[[lean_lib]]
+name = "rh"
