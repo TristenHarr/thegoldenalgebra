@@ -18463,6 +18463,116 @@ theorem concreteS_halfLogPlusHalf_of_hsw_tightTail_and_plattTrudgian
     (BacklundFiniteBandCheck140_exp769_100.of_plattTrudgian Hfinite)
     hT
 
+/-- The HSW envelope is below the target already at
+`log T ≥ 76859/10000`.  This is a near-threshold rational cutoff for the
+current elementary comparison proof. -/
+theorem hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_log_ge_76859_10000
+    {T : ℝ} (hL : (76859 / 10000 : ℝ) ≤ Real.log T) :
+    hasanalizadeShenWongBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hloglog :=
+    backlund_log_log_le_three_tenths_log_of_log_ge_seven
+      (by linarith : (7 : ℝ) ≤ Real.log T)
+  have hmul :
+      (1021 / 5000 : ℝ) * Real.log (Real.log T)
+        ≤ (1021 / 5000 : ℝ) * ((3 / 10 : ℝ) * Real.log T) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  unfold hasanalizadeShenWongBacklundEnvelope
+  nlinarith
+
+/-- For `T ≥ exp (76859/10000)`, `log T ≥ 76859/10000`. -/
+theorem backlund_log_ge_76859_10000_of_ge_exp_76859_10000
+    {T : ℝ} (hT : Real.exp (76859 / 10000 : ℝ) ≤ T) :
+    (76859 / 10000 : ℝ) ≤ Real.log T := by
+  have h_exp_pos : 0 < Real.exp (76859 / 10000 : ℝ) := Real.exp_pos _
+  have h := Real.log_le_log h_exp_pos hT
+  rwa [Real.log_exp] at h
+
+/-- The HSW envelope is below the target for every
+`T ≥ exp (76859/10000)`. -/
+theorem hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_ge_exp_76859_10000
+    {T : ℝ} (hT : Real.exp (76859 / 10000 : ℝ) ≤ T) :
+    hasanalizadeShenWongBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_log_ge_76859_10000
+    (backlund_log_ge_76859_10000_of_ge_exp_76859_10000 hT)
+
+/-- `exp (76859/10000) < 30610046000`, so this near-threshold finite-band
+target is also covered by the older Platt endpoint. -/
+theorem backlund_exp_76859_10000_lt_30610046000 :
+    Real.exp (76859 / 10000 : ℝ) < 30610046000 := by
+  have hle :
+      Real.exp (76859 / 10000 : ℝ) ≤ Real.exp (769 / 100 : ℝ) :=
+    Real.exp_le_exp.mpr (by norm_num)
+  exact lt_of_le_of_lt hle backlund_exp_769_100_lt_30610046000
+
+/-- HSW tail estimate on the near-threshold tail needed by the public
+target, `T ≥ exp (76859/10000)`. -/
+structure HasanalizadeShenWongNearTailInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (76859 / 10000 : ℝ) ≤ T →
+      |concreteS T| ≤ hasanalizadeShenWongBacklundEnvelope T
+
+/-- Finite-band check left after using the near-threshold HSW tail:
+`[140, exp (76859/10000)]`. -/
+structure BacklundFiniteBandCheck140_exp76859_10000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ Real.exp (76859 / 10000 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- The Platt/Trudgian finite-range bound supplies the near-threshold
+finite band `[140, exp (76859/10000)]`. -/
+noncomputable def BacklundFiniteBandCheck140_exp76859_10000.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_exp76859_10000 where
+  bound := by
+    intro T hT140 hTexp
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) :=
+      le_trans hTexp (le_of_lt backlund_exp_76859_10000_lt_30610046000)
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- Near-threshold HSW tail plus the reduced finite-band check gives the
+good-height Backlund argument bound. -/
+noncomputable def BacklundGoodHeightArgumentBound.of_hsw_nearTail_and_finite
+    (Htail : HasanalizadeShenWongNearTailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp76859_10000) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTail : Real.exp (76859 / 10000 : ℝ) ≤ T
+    · exact le_trans (Htail.bound T hTail)
+        (hasanalizadeShenWongEnvelope_le_halfLogPlusHalf_of_ge_exp_76859_10000 hTail)
+    · have hTle : T ≤ Real.exp (76859 / 10000 : ℝ) :=
+        le_of_not_ge hTail
+      exact Hfinite.bound T hT hTle
+
+/-- Final headline theorem from the near-threshold HSW tail and finite
+band `[140, exp (76859/10000)]`. -/
+theorem concreteS_halfLogPlusHalf_of_hsw_nearTail_and_finite
+    (Htail : HasanalizadeShenWongNearTailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp76859_10000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_hsw_nearTail_and_finite
+      Htail Hfinite)
+    hT
+
+/-- Final headline theorem from the near-threshold HSW tail and the older
+Platt/Trudgian finite-range input. -/
+theorem concreteS_halfLogPlusHalf_of_hsw_nearTail_and_plattTrudgian
+    (Htail : HasanalizadeShenWongNearTailInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_hsw_nearTail_and_finite
+    Htail
+    (BacklundFiniteBandCheck140_exp76859_10000.of_plattTrudgian Hfinite)
+    hT
+
 /-- The two sourced ingredients for the concrete Backlund/Turing `S(T)`
 bound:
 
@@ -52720,6 +52830,35 @@ def PathBNonTuringInputs.of_midHighAFZ_lowIBPSource
       HmidHigh Hlow
       (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15))
 
+/-- 🌟🌟 **PROVED — build the non-Turing bundle from split AFZ mid/high
+plus the direct low finite Stieltjes IBP source.** -/
+def PathBNonTuringInputs.of_mid_high_lowIBPSource
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hlow :
+      LowFiniteStieltjesIBPSourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)) :
+    PathBNonTuringInputs Dzero ι :=
+  PathBNonTuringInputs.of_stieltjesInputs
+    Dzero h_Z_ge_15 Hhad
+    (ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource
+      Hmid Hhigh Hlow
+      (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15))
+
 /-- 🌟🌟 **PROVED — build the non-Turing bundle from combined AFZ
 mid/high plus the direct low zero-contribution split.** -/
 def PathBNonTuringInputs.of_midHighAFZ_lowZeroSplit
@@ -52742,6 +52881,35 @@ def PathBNonTuringInputs.of_midHighAFZ_lowZeroSplit
     Dzero h_Z_ge_15 Hhad
     (ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowZeroSplit
       HmidHigh HlowSplit
+      (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15))
+
+/-- 🌟🌟 **PROVED — build the non-Turing bundle from split AFZ mid/high
+plus the direct low zero-contribution split.** -/
+def PathBNonTuringInputs.of_mid_high_lowZeroSplit
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (HlowSplit :
+      LowZeroContributionSplitAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)) :
+    PathBNonTuringInputs Dzero ι :=
+  PathBNonTuringInputs.of_stieltjesInputs
+    Dzero h_Z_ge_15 Hhad
+    (ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit
+      Hmid Hhigh HlowSplit
       (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15))
 
 /-- 🌟🌟 **PROVED — build the non-Turing bundle from combined AFZ
@@ -52769,6 +52937,37 @@ def PathBNonTuringInputs.of_midHighAFZ_lowCloudTailSplit
     (ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowCloudTailSplit
       HmidHigh Hlow
       (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15))
+
+/-- 🌟🌟 **PROVED — build the non-Turing bundle from split AFZ mid/high
+plus the atomic low cloud/tail split.** -/
+def PathBNonTuringInputs.of_mid_high_lowCloudTailSplit
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    {finiteCloud tail : ℂ → ℂ}
+    (Hlow :
+      LowCloudTailSplitAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)
+        finiteCloud tail) :
+    PathBNonTuringInputs Dzero ι :=
+  PathBNonTuringInputs.of_classicalStieltjes
+    Dzero h_Z_ge_15 Hhad
+    { mid := Hmid
+      high := Hhigh
+      low := Hlow }
 
 /-- 🌟🌟 **PROVED — build the non-Turing bundle from older unguarded
 mid/high and low first-zero-gap Stieltjes identities.** -/
@@ -52938,6 +53137,140 @@ theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_classicalStieltjes_turing
     Dzero
     (PathBNonTuringInputs.of_classicalStieltjes
       Dzero h_Z_ge_15 Hhad Hst)
+    hTuring
+    hHighLog
+
+/-- 🌟🌟🌟🌟 **PATH B FRONT DOOR (split mid/high + low IBP,
+only envelopes unbundled).** -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_mid_high_lowIBP_turingEnvelopes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hlow :
+      LowFiniteStieltjesIBPSourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_nonTuringInputs_and_turingEnvelopes
+    Dzero
+    (PathBNonTuringInputs.of_mid_high_lowIBPSource
+      Dzero h_Z_ge_15 Hhad Hmid Hhigh Hlow)
+    hTuring
+    hHighLog
+
+/-- 🌟🌟🌟🌟 **PATH B FRONT DOOR (split mid/high + low zero split,
+only envelopes unbundled).** -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_mid_high_lowZeroSplit_turingEnvelopes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (HlowSplit :
+      LowZeroContributionSplitAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_nonTuringInputs_and_turingEnvelopes
+    Dzero
+    (PathBNonTuringInputs.of_mid_high_lowZeroSplit
+      Dzero h_Z_ge_15 Hhad Hmid Hhigh HlowSplit)
+    hTuring
+    hHighLog
+
+/-- 🌟🌟🌟🌟 **PATH B FRONT DOOR (split mid/high + low cloud/tail,
+only envelopes unbundled).** -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_mid_high_lowCloudTail_turingEnvelopes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    {finiteCloud tail : ℂ → ℂ}
+    (Hlow :
+      LowCloudTailSplitAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)
+        finiteCloud tail)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_nonTuringInputs_and_turingEnvelopes
+    Dzero
+    (PathBNonTuringInputs.of_mid_high_lowCloudTailSplit
+      Dzero h_Z_ge_15 Hhad Hmid Hhigh Hlow)
     hTuring
     hHighLog
 
