@@ -18047,6 +18047,187 @@ theorem concreteS_halfLogPlusHalf_of_verifiedBacklundTuringInputs
   concreteS_halfLogPlusHalf_of_classicalProofInputs
     I.toProofInputs hT
 
+/-! ### CW30: export the Backlund--Turing proof as a Turing `S`-bound -/
+
+/-- The classical proof inputs supply the generic proved
+Backlund/Turing package for `concreteS`, with threshold `140`. -/
+noncomputable def ClassicalBacklundTuringProofInputs.toProvenBacklundTuringBound
+    (I : ClassicalBacklundTuringProofInputs) :
+    ProvenBacklundTuringBound where
+  S := concreteS
+  lower := 140
+  lower_ge_two_pi := by
+    have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+    linarith
+  halfLogPlusHalf := by
+    intro u hu
+    exact concreteS_halfLogPlusHalf_of_classicalProofInputs I hu
+
+/-- The classical proof inputs supply the existing
+`HalfLogPlusHalfSBound` interface. -/
+noncomputable def ClassicalBacklundTuringProofInputs.toHalfLogPlusHalfSBound
+    (I : ClassicalBacklundTuringProofInputs) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBound.toHalfLogPlusHalfSBound
+
+/-- The classical proof inputs supply the existing general
+`TuringStyleSBound` interface, with `C = D = 1/2`. -/
+noncomputable def ClassicalBacklundTuringProofInputs.toTuringStyleSBound
+    (I : ClassicalBacklundTuringProofInputs) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBound.toTuringStyleSBound
+
+/-- The exported half-log-plus-half package is for `concreteS`. -/
+theorem ClassicalBacklundTuringProofInputs.toHalfLogPlusHalfSBound_S
+    (I : ClassicalBacklundTuringProofInputs) :
+    I.toHalfLogPlusHalfSBound.S = concreteS := rfl
+
+/-- The exported half-log-plus-half package starts at height `140`. -/
+theorem ClassicalBacklundTuringProofInputs.toHalfLogPlusHalfSBound_lower
+    (I : ClassicalBacklundTuringProofInputs) :
+    I.toHalfLogPlusHalfSBound.lower = 140 := rfl
+
+/-- The exported Turing-style package is for `concreteS`. -/
+theorem ClassicalBacklundTuringProofInputs.toTuringStyleSBound_S
+    (I : ClassicalBacklundTuringProofInputs) :
+    I.toTuringStyleSBound.S = concreteS := rfl
+
+/-- The exported Turing-style package has `C = 1/2`. -/
+theorem ClassicalBacklundTuringProofInputs.toTuringStyleSBound_C
+    (I : ClassicalBacklundTuringProofInputs) :
+    I.toTuringStyleSBound.C = (1 / 2 : ℝ) := rfl
+
+/-- The exported Turing-style package has `D = 1/2`. -/
+theorem ClassicalBacklundTuringProofInputs.toTuringStyleSBound_D
+    (I : ClassicalBacklundTuringProofInputs) :
+    I.toTuringStyleSBound.D = (1 / 2 : ℝ) := rfl
+
+/-- The exported Turing-style package starts at height `140`. -/
+theorem ClassicalBacklundTuringProofInputs.toTuringStyleSBound_lower
+    (I : ClassicalBacklundTuringProofInputs) :
+    I.toTuringStyleSBound.lower = 140 := rfl
+
+/-- Direct bound field for the `HalfLogPlusHalfSBound` exported from
+the classical proof inputs. -/
+theorem ClassicalBacklundTuringProofInputs.toHalfLogPlusHalfSBound_bound
+    (I : ClassicalBacklundTuringProofInputs)
+    {u : ℝ} (hu : (140 : ℝ) ≤ u) :
+    |I.toHalfLogPlusHalfSBound.S u|
+      ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.toHalfLogPlusHalfSBound.bound u hu
+
+/-- Direct bound field for the `TuringStyleSBound` exported from the
+classical proof inputs. -/
+theorem ClassicalBacklundTuringProofInputs.toTuringStyleSBound_bound
+    (I : ClassicalBacklundTuringProofInputs)
+    {u : ℝ} (hu : (140 : ℝ) ≤ u) :
+    |I.toTuringStyleSBound.S u|
+      ≤ I.toTuringStyleSBound.C * Real.log u
+          + I.toTuringStyleSBound.D :=
+  I.toTuringStyleSBound.bound u hu
+
+/-- The sourced verified inputs supply the generic proved
+Backlund/Turing package for `concreteS`, with threshold `140`. -/
+noncomputable def ClassicalBacklundTuringVerifiedInputs.toProvenBacklundTuringBound
+    (I : ClassicalBacklundTuringVerifiedInputs) :
+    ProvenBacklundTuringBound :=
+  I.toProofInputs.toProvenBacklundTuringBound
+
+/-- The sourced verified inputs supply the existing
+`HalfLogPlusHalfSBound` interface. -/
+noncomputable def ClassicalBacklundTuringVerifiedInputs.toHalfLogPlusHalfSBound
+    (I : ClassicalBacklundTuringVerifiedInputs) :
+    HalfLogPlusHalfSBound :=
+  I.toProofInputs.toHalfLogPlusHalfSBound
+
+/-- The sourced verified inputs supply the existing general
+`TuringStyleSBound` interface, with `C = D = 1/2`. -/
+noncomputable def ClassicalBacklundTuringVerifiedInputs.toTuringStyleSBound
+    (I : ClassicalBacklundTuringVerifiedInputs) :
+    TuringStyleSBound :=
+  I.toProofInputs.toTuringStyleSBound
+
+/-- The sourced half-log-plus-half package is for `concreteS`. -/
+theorem ClassicalBacklundTuringVerifiedInputs.toHalfLogPlusHalfSBound_S
+    (I : ClassicalBacklundTuringVerifiedInputs) :
+    I.toHalfLogPlusHalfSBound.S = concreteS := rfl
+
+/-- The sourced half-log-plus-half package starts at height `140`. -/
+theorem ClassicalBacklundTuringVerifiedInputs.toHalfLogPlusHalfSBound_lower
+    (I : ClassicalBacklundTuringVerifiedInputs) :
+    I.toHalfLogPlusHalfSBound.lower = 140 := rfl
+
+/-- The sourced Turing-style package is for `concreteS`. -/
+theorem ClassicalBacklundTuringVerifiedInputs.toTuringStyleSBound_S
+    (I : ClassicalBacklundTuringVerifiedInputs) :
+    I.toTuringStyleSBound.S = concreteS := rfl
+
+/-- The sourced Turing-style package has `C = 1/2`. -/
+theorem ClassicalBacklundTuringVerifiedInputs.toTuringStyleSBound_C
+    (I : ClassicalBacklundTuringVerifiedInputs) :
+    I.toTuringStyleSBound.C = (1 / 2 : ℝ) := rfl
+
+/-- The sourced Turing-style package has `D = 1/2`. -/
+theorem ClassicalBacklundTuringVerifiedInputs.toTuringStyleSBound_D
+    (I : ClassicalBacklundTuringVerifiedInputs) :
+    I.toTuringStyleSBound.D = (1 / 2 : ℝ) := rfl
+
+/-- The sourced Turing-style package starts at height `140`. -/
+theorem ClassicalBacklundTuringVerifiedInputs.toTuringStyleSBound_lower
+    (I : ClassicalBacklundTuringVerifiedInputs) :
+    I.toTuringStyleSBound.lower = 140 := rfl
+
+/-- Direct bound field for the `HalfLogPlusHalfSBound` exported from
+the sourced verified inputs. -/
+theorem ClassicalBacklundTuringVerifiedInputs.toHalfLogPlusHalfSBound_bound
+    (I : ClassicalBacklundTuringVerifiedInputs)
+    {u : ℝ} (hu : (140 : ℝ) ≤ u) :
+    |I.toHalfLogPlusHalfSBound.S u|
+      ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.toHalfLogPlusHalfSBound.bound u hu
+
+/-- Direct bound field for the `TuringStyleSBound` exported from the
+sourced verified inputs. -/
+theorem ClassicalBacklundTuringVerifiedInputs.toTuringStyleSBound_bound
+    (I : ClassicalBacklundTuringVerifiedInputs)
+    {u : ℝ} (hu : (140 : ℝ) ≤ u) :
+    |I.toTuringStyleSBound.S u|
+      ≤ I.toTuringStyleSBound.C * Real.log u
+          + I.toTuringStyleSBound.D :=
+  I.toTuringStyleSBound.bound u hu
+
+/-- High-side concrete `S` log envelope supplied by the classical
+Backlund/Turing proof inputs. -/
+theorem ClassicalBacklundTuringProofInputs.concreteS_highLogEnvelope
+    (I : ClassicalBacklundTuringProofInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (_hy : 0 < z.im)
+    (_hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 49 / 20 := by
+  have hu140 : (140 : ℝ) ≤ u := le_trans hT140 hTu
+  have hhalf :
+      |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+    concreteS_halfLogPlusHalf_of_classicalProofInputs I hu140
+  linarith
+
+/-- High-side concrete `S` log envelope supplied by the sourced
+Backlund/Turing inputs.  This is the direct `concreteS` analogue of the
+downstream `hHighLog` shape; the published Backlund/Turing
+half-log-plus-half bound is stronger than the high-side allowance
+`(1/2) * log u + 49/20`. -/
+theorem ClassicalBacklundTuringVerifiedInputs.concreteS_highLogEnvelope
+    (I : ClassicalBacklundTuringVerifiedInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (_hy : 0 < z.im)
+    (_hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 49 / 20 := by
+  exact I.toProofInputs.concreteS_highLogEnvelope hT140 ‹0 < z.im›
+    ‹2 * (1 + |z.re| + z.im) ≤ T› hTu
+
 /-! ### CW28: audit endpoint -/
 
 /-- **CW28 — AUDIT ENDPOINT.**  All Backlund–Turing infrastructure
@@ -51196,6 +51377,44 @@ theorem completedXiRawEntireXiOffPolePointwiseFormula :
     completedRiemannZetaZeroCorrectionFormula
     entireRiemannXiFormulaSource
 
+/-- 🌟🌟🌟🌟 **PROVED unconditionally** — the complete raw completed-ξ
+correctness package. -/
+theorem rawCompletedXiCorrectness :
+    RawCompletedXiCorrectness :=
+  RawCompletedXiCorrectness.of_pointwise
+    completedXiVanishesOnGammaPolePullback
+    completedXiRawEntireXiOffPolePointwiseFormula
+
+/-- 🌟🌟🌟🌟 **PROVED unconditionally** — local equality between raw
+completed ξ and Mathlib's entire ξ at all nonzero raw completed-ξ
+points. -/
+theorem completedXiRawEntireXiLocalEqualitySource :
+    CompletedXiRawEntireXiLocalEqualitySource :=
+  CompletedXiRawEntireXiLocalEqualitySource.of_rawCorrectness
+    rawCompletedXiCorrectness
+
+/-- 🌟🌟🌟🌟 **PROVED unconditionally** — raw completed ξ agrees locally
+with entire ξ off Γ-poles, with differentiability included. -/
+theorem completedXiRawEqualsEntireXiOffGammaPoles :
+    CompletedXiRawEqualsEntireXiOffGammaPoles :=
+  CompletedXiRawEqualsEntireXiOffGammaPoles.of_localEqualitySource
+    entireRiemannXi_differentiabilitySource
+    completedXiRawEntireXiLocalEqualitySource
+
+/-- 🌟🌟🌟🌟🌟 **PROVED unconditionally** — the completed-to-entire ξ
+log-derivative bridge. -/
+theorem entireXiToCompletedXiLogDerivBridge :
+    EntireXiToCompletedXiLogDerivBridge :=
+  EntireXiToCompletedXiLogDerivBridge.of_rawOffGammaPoles
+    completedXiRawEqualsEntireXiOffGammaPoles
+
+/-- 🌟🌟🌟🌟 **PROVED unconditionally from an entire-ξ Hadamard theorem** —
+the completed-ξ AFZ log-derivative source. -/
+noncomputable def EntireXiClassicalHadamardTheorem.toCompletedXiSourceAFZ_canonical
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι) :
+    CompletedXiLogDerivativeSourceAFZ :=
+  H.toCompletedXiSourceAFZ entireXiToCompletedXiLogDerivBridge
+
 -- =====================================================================
 -- §CDXLII. Final Path B theorem with Γ-cancellation reduced to
 --           zeta identities
@@ -51342,5 +51561,314 @@ theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_midHigh_lowSplit
     Dzero h_Z_ge_15 hTuring hHighLog
     completedXiRawEntireXiOffPolePointwiseFormula
     Hhad Hmid Hhigh Hlow
+
+-- =====================================================================
+-- §CDXLIV. Canonical final Path B theorem with named completed-ξ source
+-- =====================================================================
+
+/-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
+**PATH B FRONT DOOR (canonical named source)**.
+
+This is the same Γ-discharged theorem as above, but the Stieltjes
+hypotheses are keyed to the stable named source
+`Hhad.toCompletedXiSourceAFZ_canonical`. -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHigh_lowSplit
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    {finiteCloud tail : ℂ → ℂ}
+    (Hlow :
+      LowCloudTailSplitAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)
+        finiteCloud tail) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_entireXiHadamard_midHigh_lowSplit
+    Dzero h_Z_ge_15 hTuring hHighLog
+    entireXiToCompletedXiLogDerivBridge
+    Hhad Hmid Hhigh Hlow
+
+/-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
+**PATH B FRONT DOOR (canonical source + low zero split)**.
+
+This variant takes the low-side split in its direct canonical form
+`LowZeroContributionSplitAFZ`, avoiding an auxiliary cloud/tail
+decomposition at the call site. -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHigh_lowZeroSplit
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (HlowSplit :
+      LowZeroContributionSplitAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)) :
+    XiPullbackAntiHerglotzTarget := by
+  have Hstarts : DzeroStartsAfter Dzero 14 := by
+    refine ⟨?_⟩
+    intro i
+    have := h_Z_ge_15 i
+    linarith
+  exact
+    XiPullbackAntiHerglotzTarget_of_completedXiHadamardAndStieltjesAFZ
+      Dzero h_Z_ge_15 hTuring hHighLog
+      Hhad.toCompletedXiSourceAFZ_canonical
+      (ClassicalPathBStieltjesInputsAFZ.toEqualitySource
+        (ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit
+          Hmid Hhigh HlowSplit Hstarts))
+
+/-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
+**PATH B FRONT DOOR (canonical source + Stieltjes equality source)**.
+
+This variant accepts the reassembled AFZ Stieltjes equality source
+directly, keyed to `Hhad.toCompletedXiSourceAFZ_canonical`. -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hstieltjes :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_completedXiHadamardAndStieltjesAFZ
+    Dzero h_Z_ge_15 hTuring hHighLog
+    Hhad.toCompletedXiSourceAFZ_canonical
+    Hstieltjes
+
+/-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
+**PATH B FRONT DOOR (canonical source + split Stieltjes bundle)**.
+
+Same as `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesAFZ`,
+but accepts the mid/high/low Stieltjes bundle before reassembly. -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesInputs
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hstieltjes :
+      ClassicalPathBStieltjesInputsAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesAFZ
+    Dzero h_Z_ge_15 hTuring hHighLog
+    Hhad
+    Hstieltjes.toEqualitySource
+
+/-- 🌟🌟🌟 **PROVED — publication-level Stieltjes inputs to the
+canonical split Stieltjes bundle.** The only extra datum is the
+already-standard first-zero start condition. -/
+theorem ClassicalStieltjesExplicitFormulaInputs.toClassicalPathBStieltjesInputsAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC finiteCloud tail : ℂ → ℂ}
+    (H : ClassicalStieltjesExplicitFormulaInputs
+      Dzero T0 ZC finiteCloud tail)
+    (Hstarts : DzeroStartsAfter Dzero 14) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit
+    H.mid
+    H.high
+    (LowZeroContributionSplitAFZ.of_cloudTailSplit H.low)
+    Hstarts
+
+/-- 🌟🌟🌟 **PROVED — split Stieltjes bundle from mid/high plus the
+direct low finite Stieltjes IBP source.** This exposes the low-side
+explicit-formula identity in its natural form. -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (Hmid : StieltjesMidTailEqualityAFZ Dzero T0 ZC)
+    (Hhigh : StieltjesHighTailEqualityAFZ Dzero T0 ZC)
+    (Hlow : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC)
+    (Hstarts : DzeroStartsAfter Dzero 14) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  { mid := Hmid
+    high := Hhigh
+    low :=
+      StieltjesLowEqualityAFZ.of_lowZeroSumFormula
+        (LowFiniteZeroSumStieltjesFormulaAFZ.of_decomposition
+          (LowZeroContributionDecompositionAFZ.of_residualEquality
+            (LowStieltjesResidualEqualityAFZ.of_residualSource
+              (LowFiniteStieltjesResidualSourceAFZ.of_ibpSource_and_startsAfter
+                Hstarts Hlow)))) }
+
+/-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
+**PATH B FRONT DOOR (canonical source + low finite IBP source)**.
+
+This variant uses the direct low finite Stieltjes IBP source instead
+of a preassembled low cloud/tail split. -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHigh_lowIBPSource
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hlow :
+      LowFiniteStieltjesIBPSourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)) :
+    XiPullbackAntiHerglotzTarget := by
+  have Hstarts : DzeroStartsAfter Dzero 14 := by
+    refine ⟨?_⟩
+    intro i
+    have := h_Z_ge_15 i
+    linarith
+  exact
+    XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesInputs
+      Dzero h_Z_ge_15 hTuring hHighLog
+      Hhad
+      (ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource
+        Hmid Hhigh Hlow Hstarts)
+
+/-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
+**PATH B PUBLICATION THEOREM (entire-ξ Hadamard, canonical Γ bridge)**.
+
+This is the publication-style front door after Γ-cancellation has been
+fully discharged. It accepts the genuine entire-ξ Hadamard theorem and
+the publication-level Stieltjes explicit-formula bundle. -/
+theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_and_classicalStieltjes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    {finiteCloud tail : ℂ → ℂ}
+    (Hst :
+      ClassicalStieltjesExplicitFormulaInputs
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)
+        finiteCloud tail) :
+    XiPullbackAntiHerglotzTarget := by
+  have Hstarts : DzeroStartsAfter Dzero 14 := by
+    refine ⟨?_⟩
+    intro i
+    have := h_Z_ge_15 i
+    linarith
+  exact
+    XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesInputs
+      Dzero h_Z_ge_15 hTuring hHighLog
+      Hhad
+      (Hst.toClassicalPathBStieltjesInputsAFZ Hstarts)
 
 end OverflowResidueRH

@@ -44,11 +44,12 @@ $-\operatorname{Im}$, *and* the model-side numerical arithmetic
 inequality on the compact low box — are *all* discharged unconditionally
 inside the file.
 
-The conditional sign law has now been reduced to its cleanest form
-(Theorem 6 below). The Γ-cancellation bridge between the textbook $\xi$
-and Mathlib's `entireRiemannXi` — once a three-piece structural input
-of Theorem 4, then a one-Mathlib-identity input of Theorem 5 — has been
-**fully discharged unconditionally** inside the file. Mathlib's
+The conditional sign law has now been reduced to its cleanest form:
+Theorem 6 and the canonical-source variants immediately after it. The
+Γ-cancellation bridge between the textbook $\xi$ and Mathlib's
+`entireRiemannXi` — once a three-piece structural input of Theorem 4,
+then a one-Mathlib-identity input of Theorem 5 — has been **fully
+discharged unconditionally** inside the file. Mathlib's
 `Gammaℝ` factor in `completedRiemannZeta`, together with
 `Complex.Gamma_neg_nat_eq_zero` and `completedRiemannZeta_eq`, closes
 the raw-ζ off-pole formula `CompletedRiemannZetaRawOffPoleFormula`
@@ -69,7 +70,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-51,346 lines and roughly 2,495 top-level declarations. It contains no
+51,874 lines and roughly 2,563 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -79,9 +80,9 @@ names quoted below are real Lean declarations.
 
 The cleanest current statement of the reduction is the Lean theorem
 ```
-XiPullbackAntiHerglotzTarget_of_entireHadamard_midHigh_lowSplit
+XiPullbackAntiHerglotzTarget_of_entireHadamard_and_classicalStieltjes
 ```
-(§CDXLIII of `rh.lean`):
+(§CDXLIV of `rh.lean`):
 $$
 \bigl(h_{\text{Turing}} \,+\, h_{\text{HighLog}}\bigr)
 \;\oplus\;
@@ -96,14 +97,20 @@ theory; the entire-ξ Hadamard theorem is the classical genus-1
 factorization for a function that is *entire by construction*; and the
 three Stieltjes equalities are the AFZ-guarded explicit-formula
 identifications, with the low band collapsed to a pure zero-index
-splitting. The full Γ-cancellation between the textbook $\xi$ and
-Mathlib's `entireRiemannXi` has now been **fully discharged
-unconditionally**, via the chain §§CDXIX–CDXLII: closedness of the
+splitting. The canonical version packages the completed-ξ source as
+`Hhad.toCompletedXiSourceAFZ_canonical`, so the Stieltjes hypotheses
+are stated against a stable named source rather than a repeated
+bridge expression. The full Γ-cancellation between the textbook $\xi$
+and Mathlib's `entireRiemannXi` has now been **fully discharged
+unconditionally**, via the chain §§CDXIX–CDXLIV: closedness of the
 Γ-pole pullback set, the no-pole structural piece, the pole-vanishing
 identity, the $\xi$-formula source, the $\zeta_0$ correction formula,
-and finally the raw-ζ off-pole identity
-`completedRiemannZetaRawOffPoleFormula` (proved from Mathlib's
-`Gammaℝ`/`riemannZeta_def_of_ne_zero` chain) are all in the file.
+the raw-ζ off-pole identity `completedRiemannZetaRawOffPoleFormula`
+(proved from Mathlib's `Gammaℝ`/`riemannZeta_def_of_ne_zero` chain),
+the named raw/entire log-derivative bridge
+`entireXiToCompletedXiLogDerivBridge`, and finally the canonical
+Hadamard-to-completed-ξ source
+`EntireXiClassicalHadamardTheorem.toCompletedXiSourceAFZ_canonical`.
 
 A formal audit layer (§10) certifies that the Hadamard and Stieltjes
 bundles are *identity-only* — no positivity, sign, or zero-location
@@ -113,8 +120,10 @@ Hadamard), Theorem 4 (§CDXIV, entire-ξ Hadamard + three-piece
 Γ-bridge), Theorem 5 (§CDXLII, entire-ξ Hadamard + single raw-ζ
 identity), and Theorem 6 (§CDXLIII, Γ-cancellation fully discharged)
 are progressively sharper restatements of the same conditional sign
-law; each follows from the previous by an unconditional structural
-reduction (§9).
+law. §CDXLIV adds canonical-source front doors for the same theorem,
+including direct low-zero-split, low-IBP-source, reassembled-Stieltjes,
+and publication-level classical-Stieltjes forms; each follows from the
+previous by an unconditional structural reduction (§9).
 
 ```
    RH for ζ
@@ -141,6 +150,9 @@ reduction (§9).
      │  entire-ξ Hadamard theorem (P2) ──┐ identity │
      │  3 Stieltjes equalities (P3) ─────┘ -only    │
      └─ trivial atom-level Z ≥ 15                    │
+     ⇑   (canonical named completed-ξ source, §CDXLIV)
+   Path B publication front door:
+   entire-ξ Hadamard + ClassicalStieltjesExplicitFormulaInputs
                                                      ↓
                                        audit layer (§10) confirms
                                        identity bundles are identity
@@ -763,7 +775,7 @@ slack.
 
 ## 9. The main conditional theorems
 
-The Path B conditional sign law is now stated in *six* progressively
+The Path B conditional sign law is now stated in progressively
 sharper forms. Theorem 2 is the natural intermediate form. Theorem 3
 factors the xi-side analytic content into one classical Hadamard
 bundle plus three Stieltjes equalities (against `completedXiFunction`).
@@ -774,8 +786,10 @@ bridge pieces unconditionally and factors the third through two further
 Mathlib-internal identities, so that only a single Mathlib raw-ζ
 off-pole formula remains. Theorem 6 then closes that last identity
 unconditionally against Mathlib's `Gammaℝ` factor and exposes the
-final headline: an entire-ξ Hadamard bundle plus three Stieltjes
-equalities and the two slab envelopes — nothing else.
+Γ-discharged headline: an entire-ξ Hadamard bundle plus three
+Stieltjes equalities and the two slab envelopes — nothing else.
+The §CDXLIV canonical variants then name the completed-ξ source once
+and offer both split-Stieltjes and reassembled-Stieltjes front doors.
 
 ### Theorem 2 — natural Path B front door
 
@@ -1024,7 +1038,7 @@ $\tfrac12 s(s-1)\,\zeta_0(s) + \tfrac12 = \xi_{\text{entire}}(s)$ (the
 $+1/2$ correction is supplied by the algebra lemma
 `xi_completedZeta_correction_algebra` at $s \neq 0,1$).
 
-The Path B headline is then
+The intermediate Path B front door is
 ```lean
 theorem XiPullbackAntiHerglotzTarget_of_completedZetaRaw_entireHadamard_midHigh_lowSplit
     (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
@@ -1039,14 +1053,17 @@ theorem XiPullbackAntiHerglotzTarget_of_completedZetaRaw_entireHadamard_midHigh_
     (Hlow     : LowCloudTailSplitAFZ … finiteCloud tail) :
     XiPullbackAntiHerglotzTarget.
 ```
-The surviving inputs partition into four publication-grade analytic
-obligations: the slab-envelope pair $(h_{\text{Turing}}, h_{\text{HighLog}})$,
-the entire-ξ Hadamard bundle `Hhad`, the Stieltjes triple
+The surviving inputs partition into four obligation classes: the
+slab-envelope pair $(h_{\text{Turing}}, h_{\text{HighLog}})$, the
+entire-ξ Hadamard bundle `Hhad`, the Stieltjes triple
 $(H_{\text{mid}}, H_{\text{high}}, H_{\text{low}})$, and the single
 raw-ζ formula identity `HzetaRaw`. The Γ-cancellation between the
 textbook $\xi$ and Mathlib's `entireRiemannXi`, often treated as
 routine but combinatorially fiddly, is now a *one-Mathlib-identity*
-obligation rather than a multi-piece bridge.
+obligation rather than a multi-piece bridge. Theorem 6 below
+discharges that single identity, and §CDXLIV packages the resulting
+completed-ξ source canonically, leaving Path B with three obligation
+classes.
 
 ### Theorem 6 — Γ-cancellation fully discharged
 
@@ -1093,7 +1110,10 @@ threads it through internally via the unconditional
 `completedXiRawEntireXiOffPolePointwiseFormula` (§CDXLI). The
 publication-grade obligations are now exactly *three*: the slab
 envelopes (P1), the entire-ξ Hadamard theorem (P2), and the three
-Stieltjes equalities (P3).
+Stieltjes equalities (P3). The canonical §CDXLIV variants expose the
+same result with hypotheses keyed to
+`Hhad.toCompletedXiSourceAFZ_canonical`, including the bundled
+`ClassicalPathBStieltjesInputsAFZ` form.
 
 ### Why the AFZ guard is essential
 
@@ -1107,8 +1127,8 @@ At a zero $\Xi(\rho) = 0$ with $0 < \operatorname{Im}\rho$:
 No finite value of $\mathrm{ZC}(\rho)$ can satisfy both the Hadamard
 identity and the Stieltjes equality at a totalized zero. The AFZ
 guard `XiPullback z ≠ 0` is what makes both hypotheses
-*mathematically inhabitable*. Theorems 3, 4, and 5 are all strictly
-weaker than RH.
+*mathematically inhabitable*. Theorems 3, 4, 5, 6, and the canonical
+§CDXLIV variants are all strictly weaker than RH.
 
 ### From sign law to RH
 
@@ -1183,7 +1203,7 @@ legitimately enter Path B: the Backlund/Turing log envelopes
 `LowFirstZeroGapNoAtoms`, ultimately the one-liner `h_Z_ge_15`). A
 clean conceptual statement of Path B is
 
-> *identity bundles* (Hadamard + Γ-bridge + Stieltjes)
+> *identity bundles* (entire-ξ Hadamard + Stieltjes)
 > $\oplus$ *sign/envelope bundle* (Turing + HighLog + zero-gap)
 > $\Longrightarrow$ `XiPullbackAntiHerglotzTarget`.
 
@@ -1191,30 +1211,33 @@ The Γ-cancellation bridge added in Theorem 4 (`Hnopole`, `Hnhds`,
 `Hformula`) inherits the identity-only classification: `Hnopole` is
 structural, `Hnhds` is topological discreteness of the
 $\{-2n : n \in \mathbb{N}\}$ poles, and `Hformula` is a pointwise
-algebraic identity off the pole set. None carries sign content; two of
-the three have been proved unconditionally in the file, and the third
-collapses (Theorem 5) to one Mathlib raw-ζ formula identity that is
-likewise a pure identity.
+algebraic identity off the pole set. None carries sign content; all
+three have now been proved unconditionally in the file, and the
+single raw-ζ formula identity that Theorem 5 reduced them to is
+itself proved against Mathlib (Theorem 6). At Theorem 6 the Γ-bridge
+no longer appears as a hypothesis at all.
 
-If RH-power is hiding anywhere in Theorems 3, 4, or 5, it must be in
-the sign/envelope bundle. The identity bundles are certified by
+If RH-power is hiding anywhere in Theorems 3, 4, 5, or 6, it must be
+in the sign/envelope bundle. The identity bundles are certified by
 §§CCCLXVI–CCCLXVIII. This decomposition is what makes the conditional
-reduction *trustworthy*: a future inhabitation of the Hadamard,
-Γ-bridge, raw-ζ identity, or Stieltjes bundles cannot accidentally
-import an RH-equivalent assumption without violating one of the
-classification Props.
+reduction *trustworthy*: a future inhabitation of the Hadamard or
+Stieltjes bundles cannot accidentally import an RH-equivalent
+assumption without violating one of the classification Props.
 
 ## 11. Status
 
-The proof is *conditional* on three classical analytic obligations,
-plus a single Mathlib formula identity.
+The proof is *conditional* on three classical analytic obligations.
 
 **(P1) The Backlund/Turing envelopes.** The two log envelopes
 $h_{\text{Turing}}$ and $h_{\text{HighLog}}$ are the remaining hard
 analytic inputs from classical analytic number theory. Once any of
 `BacklundTuringProofIngredients`, `ProvenBacklundTuringBound`,
 `HalfLogPlusHalfSBound`, or `TuringStyleSBound` is inhabited, the
-slab-localized form follows mechanically.
+slab-localized form follows mechanically. The current file also
+exports the sourced classical proof packages directly into the generic
+`S`-bound interfaces, proves their fields reduce to `concreteS`,
+`lower = 140`, and `C = D = 1/2` by `rfl`, and provides the direct
+high-side allowance `|concreteS u| ≤ (1/2) log u + 49/20`.
 
 **(P2) The entire-ξ Hadamard product theorem.**
 `EntireXiClassicalHadamardTheorem ι` is the classical genus-1 Hadamard
@@ -1224,22 +1247,6 @@ distribution, LUC interchange, region compatibility, factorization
 identity, prefactor regularity) admit the same identity-only
 classification as the raw form, and exist as the natural target for
 the classical Hadamard product theorem from Mathlib.
-
-**(P2′) One Mathlib raw-ζ formula identity.** The original three-piece
-Γ-cancellation bridge of Theorem 4 has collapsed to a *single*
-hypothesis, `CompletedRiemannZetaRawOffPoleFormula` (§CDXXXVI),
-stating
-$$
-\zeta_{\text{completed}}(s) \;=\; \pi^{-s/2}\,\Gamma(s/2)\,\zeta(s)
-\qquad (s/2 \notin \{-n : n \in \mathbb{N}\}).
-$$
-The structural piece (`CompletedXiNonzeroExcludesGammaPole`, §CDXXXII),
-the topological piece (`gammaPoleAvoidingNeighborhoodSource`, §CDXX,
-itself derived from the unconditional `isClosed_gammaPoleSet`, §CDXIX),
-the $\zeta_0$ correction (`completedRiemannZetaZeroCorrectionFormula`,
-§CDXXXVII = Mathlib's `completedRiemannZeta_eq`), and the $\xi$
-formula source (`entireRiemannXiFormulaSource`, §CDXXXVIII, proved by
-`rfl`) are all discharged unconditionally.
 
 **(P3) The three Stieltjes equalities.**
 `Hmid` and `Hhigh` are the AFZ-guarded Tendsto identities expressing
@@ -1257,10 +1264,12 @@ basepoint root condition (`hN0_T0`), the xi-side IBP domination
 (`Hdom`), the model-side arithmetic certificate (`HlowArith`), the
 boundary-inclusive form of the low Stieltjes equality
 (`LowFiniteStieltjesFormulaOnFirstZeroGapAFZ`), the differentiability
-hypothesis on the raw `completedXiFunction`, the structural and
-topological pieces of the Γ-bridge (`Hnopole`, `Hnhds`), and the
-off-pole formula identity factored through Mathlib's $\zeta_0$
-correction are all now discharged unconditionally inside the file.
+hypothesis on the raw `completedXiFunction`, all three structural
+pieces of the Γ-bridge (`Hnopole`, `Hnhds`, `Hformula`), the
+$\zeta_0$ correction `completedRiemannZeta_eq`, the entire-ξ formula
+source, and the raw-ζ off-pole formula
+`CompletedRiemannZetaRawOffPoleFormula` are all now discharged
+unconditionally inside the file.
 
 A handful of residual chases remain on the architecture side — the
 two backward directions of the §5 equivalence and the identification
@@ -1270,13 +1279,24 @@ contributes new analytic content.
 ### How to discharge the remaining inputs
 
 For an analytic agent wanting to close Path B, the work splits along
-the four obligation lines, with concrete handoff targets in each case.
+the three obligation lines, with concrete handoff targets in each case.
 
 * **(P1) Backlund/Turing envelopes.** Inhabit *any one* of
   `BacklundTuringProofIngredients`, `ProvenBacklundTuringBound`,
   `HalfLogPlusHalfSBound`, or `TuringStyleSBound`. The
   argument-principle scaffolding in the Q–Z / AA–BO namespaces is the
-  in-file engine.
+  in-file engine. The sourced classical packages
+  `ClassicalBacklundTuringProofInputs` and
+  `ClassicalBacklundTuringVerifiedInputs` now export directly to
+  `ProvenBacklundTuringBound`, `HalfLogPlusHalfSBound`, and
+  `TuringStyleSBound`, so a verified Backlund/Turing proof can be
+  consumed by either the headline theorem or the generic residual-bound
+  interfaces without an extra adapter layer. The associated `_S`,
+  `_lower`, `_C`, `_D`, and `_bound` theorems make those exported
+  fields definitionally visible, and
+  `ClassicalBacklundTuringVerifiedInputs.concreteS_highLogEnvelope`
+  supplies the downstream high-log envelope with the larger `49/20`
+  allowance.
 
 * **(P2) Entire-ξ Hadamard bundle.** Inhabit
   `EntireXiClassicalHadamardTheorem ι` (§CCCLXXXVIII) — the per-field
@@ -1293,26 +1313,32 @@ the four obligation lines, with concrete handoff targets in each case.
   | `factorization` | The pointwise identity $\xi_{\text{entire}}(s) = \text{prefactor}(s)\,\prod_i E_1(s/\rho_i)$ — the classical Hadamard product theorem at genus 1. |
   | `prefactorData` | Differentiability and non-vanishing of `prefactor` on the AFZ region. |
 
-* **(P2′) One Mathlib raw-ζ identity.** Inhabit
-  `CompletedRiemannZetaRawOffPoleFormula` (§CDXXXVI) — a pointwise
-  identification of `completedRiemannZeta` with $\pi^{-s/2}\Gamma(s/2)\zeta(s)$
-  off the Γ-pole set. This is a one-Mathlib-identity obligation; the
-  classical proof unwinds Mathlib's `completedRiemannZeta` against its
-  Mellin-transform / Hurwitz lift. No analytic-number-theoretic
-  content beyond the $\Gamma$-Mellin identity is required.
-
 * **(P3) Three Stieltjes equalities.** Inhabit `Hmid`, `Hhigh`, and
   any concrete `finiteCloud, tail` together with an inhabitant of
-  `LowCloudTailSplitAFZ` (§CCCLXIX). The mid/high equalities are the
-  tail-limit form of the explicit formula at $\Xi(z) \neq 0$; the low
+  `LowCloudTailSplitAFZ` (§CCCLXIX), or equivalently provide the
+  reassembled `ClassicalPathBStieltjesInputsAFZ` bundle against
+  `Hhad.toCompletedXiSourceAFZ_canonical`. The canonical
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHigh_lowZeroSplit`
+  front door also accepts the low side directly as
+  `LowZeroContributionSplitAFZ`, deriving `DzeroStartsAfter Dzero 14`
+  from the atom-level `h_Z_ge_15` hypothesis. The mid/high equalities
+  can also be combined with a direct
+  `LowFiniteStieltjesIBPSourceAFZ` through
+  `ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource`. At the
+  publication surface,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_and_classicalStieltjes`
+  accepts `ClassicalStieltjesExplicitFormulaInputs` and performs the
+  canonical reassembly internally. The mid/high equalities are the
+  tail-limit form of the explicit formula at $\Xi(z) \neq 0`; the low
   split is the conceptual statement
   $\mathrm{ZC}(z) = P(z) + \text{tailZC}(z)$.
 
-Once each of (P1), (P2), (P2′), (P3) is inhabited for the *same* index
-$\iota$ and the *same* `Dzero`, Theorem 5 fires unconditionally. To
-translate the resulting `XiPullbackAntiHerglotzTarget` into a
-Mathlib-grade RH theorem, compose with `XiPullback_logDeriv_chain_rule`
-and the Mathlib-side capstone `EntireXiPullback_zeros_real_of_signTarget`.
+Once each of (P1), (P2), (P3) is inhabited for the *same* index
+$\iota$ and the *same* `Dzero`, the publication-level §CDXLIV front
+door fires unconditionally. To translate the resulting
+`XiPullbackAntiHerglotzTarget` into a Mathlib-grade RH theorem, compose
+with `XiPullback_logDeriv_chain_rule` and the Mathlib-side capstone
+`EntireXiPullback_zeros_real_of_signTarget`.
 
 ## 12. Architecture of the formalization
 
@@ -1351,6 +1377,14 @@ keystone `mellin_star_ofReal`, and the conditional capstone
 setup, kernel envelopes, slab algebra (`TuringIntervalCertificate`,
 listed Turing rows, two-row and three-row slab tables), and
 `smoothTailRationalLowerBoundAbs` with its numerical specializations.
+CW30 exports `ClassicalBacklundTuringProofInputs` and
+`ClassicalBacklundTuringVerifiedInputs` into the generic
+`ProvenBacklundTuringBound`, `HalfLogPlusHalfSBound`, and
+`TuringStyleSBound` interfaces, preserving the concrete threshold
+`140` and constants `C = D = 1/2`; the accompanying rfl-field and
+direct-bound theorems make the exported packages easy to rewrite, and
+the `concreteS_highLogEnvelope` theorems feed the high-side residual
+bound directly.
 
 **Argument-principle scaffolding** (Q–Z and AA–BO namespaces).
 Rectangle-contour geometry, edge integrability, residue-theorem chain,
@@ -1413,9 +1447,9 @@ through `LowFiniteStieltjesContributionIdentityAFZ`,
 `LowFirstZeroGapNoAtoms.of_startsAfter`,
 `LowFiniteStieltjesIBPSourceAFZ`, `LowZeroContributionSplitAFZ`,
 `LowTailStieltjesResidualFormulaAFZ.trivial`, and
-`LowFiniteStieltjesIBPSourceAFZ.of_zeroSplit`. The Theorem 3 headline
+`LowFiniteStieltjesIBPSourceAFZ.of_zeroSplit`. The Theorem 3 form
 `XiPullbackAntiHerglotzTarget_of_classicalPathBHadamard_midHigh_lowSplit`
-is at §CCCLXV.
+lives at §CCCLXV.
 
 **Audit layer** (§§CCCLXVI–CCCLXVIII). The three documentary Props
 `HadamardInputsAreClassical`, `StieltjesInputsArePureIdentities`, and
@@ -1472,8 +1506,9 @@ Hadamard infrastructure for `entireRiemannXi`:
   consuming the most decomposed form of the Γ-bridge: no-pole +
   avoiding-nhds + off-pole formula.
 
-**Γ-bridge discharge** (§§CDXV–CDXLII). The chain that unconditionally
-discharges all but one Mathlib formula identity:
+**Γ-bridge discharge** (§§CDXV–CDXLIV). The chain that unconditionally
+discharges every piece of the Γ-bridge, culminating in the headline
+theorem where Γ-cancellation no longer appears as a hypothesis:
 
 * §§CDXV–CDXVII — `gammaPoleSet` norm facts and the `IsClosed`
   target; closed-set bridge to `GammaPoleAvoidingNeighborhoodSource`.
@@ -1494,18 +1529,47 @@ discharges all but one Mathlib formula identity:
 * §CDXXXV — the `_rawFormulaPointwise_…` front door with both
   Γ-vanishing and topology discharged. Only the off-pole formula
   identity remains.
-* §§CDXXXVI–CDXL — three formula sources: the raw-ζ off-pole formula
-  `CompletedRiemannZetaRawOffPoleFormula`, Mathlib's $\zeta_0$
-  correction `completedRiemannZetaZeroCorrectionFormula`, and
-  `entireRiemannXiFormulaSource` (proved by `rfl`). The algebra lemma
+* §§CDXXXVI–CDXL — three formula sources, all unconditional: the raw-ζ
+  off-pole formula `completedRiemannZetaRawOffPoleFormula` (proved
+  from Mathlib's `Gammaℝ`/`riemannZeta_def_of_ne_zero` chain together
+  with `GammaReal_eq_exp_gamma`, `ne_zero_of_half_not_gammaPole`, and
+  `GammaReal_ne_zero_of_half_not_gammaPole`), Mathlib's $\zeta_0$
+  correction `completedRiemannZetaZeroCorrectionFormula`
+  (=`completedRiemannZeta_eq`), and `entireRiemannXiFormulaSource`
+  (proved by `rfl`). The algebra lemma
   `xi_completedZeta_correction_algebra` discharges the $+1/2$
   correction.
 * §CDXLI — `CompletedXiRawEntireXiOffPolePointwiseFormula.of_completedZetaIdentities`
   composes the three formula sources into the off-pole pointwise
-  formula via a calc chain.
-* §CDXLII — the **Theorem 5** headline,
+  formula; the unconditional inhabitant
+  `completedXiRawEntireXiOffPolePointwiseFormula` follows.
+* §CDXLII — **Theorem 5**,
   `XiPullbackAntiHerglotzTarget_of_completedZetaRaw_entireHadamard_midHigh_lowSplit`,
   consuming only one Mathlib identity in place of the full Γ-bridge.
+* §CDXLIII — **Theorem 6**,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_midHigh_lowSplit`,
+  with the Γ-cancellation fully discharged. Only (P1), (P2), (P3)
+  appear as hypotheses.
+* §CDXLIV — **canonical front doors**:
+  `rawCompletedXiCorrectness`,
+  `completedXiRawEntireXiLocalEqualitySource`,
+  `completedXiRawEqualsEntireXiOffGammaPoles`,
+  `entireXiToCompletedXiLogDerivBridge`, and
+  `EntireXiClassicalHadamardTheorem.toCompletedXiSourceAFZ_canonical`
+  name the completed-ξ source once; the theorem variants
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHigh_lowSplit`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHigh_lowZeroSplit`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesAFZ`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonicalStieltjesInputs`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_canonical_midHigh_lowIBPSource`,
+  and
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_and_classicalStieltjes`
+  expose the same Γ-discharged reduction with stable Stieltjes
+  hypothesis shapes, from direct low-zero/low-IBP sources up to the
+  publication-level classical Stieltjes bundle. The helper theorems
+  `ClassicalStieltjesExplicitFormulaInputs.toClassicalPathBStieltjesInputsAFZ`
+  and `ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource`
+  perform the canonical Stieltjes reassembly.
 
 ## 13. Companion Python pipeline
 
@@ -1543,7 +1607,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-50,733 lines and roughly 2,468 top-level declarations.
+51,874 lines and roughly 2,563 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
