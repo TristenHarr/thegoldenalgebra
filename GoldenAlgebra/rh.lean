@@ -7544,6 +7544,26 @@ theorem zetaWeightedZeroCountUpToHeight_mono
       (zetaZeroSetUpToHeight T₁ hT₁)
       (zetaZeroSetUpToHeight T₂ hT₂)
 
+/-- If the cumulative weighted zero count has the same value at the two
+endpoints of an interval, monotonicity forces it to have that value
+throughout the interval. -/
+theorem zetaWeightedZeroCountUpToHeight_eq_of_endpoint_eq
+    {A B T : ℝ} {count : ℕ}
+    (hA0 : 0 ≤ A) (hT0 : 0 ≤ T) (hB0 : 0 ≤ B)
+    (hAT : A ≤ T) (hTB : T ≤ B)
+    (hAcount : zetaWeightedZeroCountUpToHeight A hA0 = count)
+    (hBcount : zetaWeightedZeroCountUpToHeight B hB0 = count) :
+    zetaWeightedZeroCountUpToHeight T hT0 = count := by
+  have hA_le_T :
+      zetaWeightedZeroCountUpToHeight A hA0 ≤
+        zetaWeightedZeroCountUpToHeight T hT0 :=
+    zetaWeightedZeroCountUpToHeight_mono hA0 hT0 hAT
+  have hT_le_B :
+      zetaWeightedZeroCountUpToHeight T hT0 ≤
+        zetaWeightedZeroCountUpToHeight B hB0 :=
+    zetaWeightedZeroCountUpToHeight_mono hT0 hB0 hTB
+  omega
+
 /-- **E7.** Actual multiplicity-weighted zero count in the height slab
 `(A, B]`. -/
 noncomputable def zetaWeightedZeroCountInHeightSlab
@@ -19570,9 +19590,75 @@ noncomputable def BacklundEndpointCountMainSlabCertificate.toSlab
   count_minus_lower_le := S.count_minus_lower_le
   upper_minus_count_le := S.upper_minus_count_le
 
+/-- Endpoint-count version of a Backlund finite-band slab.  This is
+closer to the actual Turing table: it records the cumulative count at
+the two slab endpoints, and monotonicity of the zero count supplies the
+constant-count field for every interior height. -/
+structure BacklundEndpointCumulativeCountMainSlabCertificate where
+  A : ℝ
+  B : ℝ
+  count : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  hA_two_pi : 2 * Real.pi ≤ A
+  hAB : A ≤ B
+  left_count_eq :
+    zetaWeightedZeroCountUpToHeight A
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hA_two_pi) =
+      count
+  right_count_eq :
+    zetaWeightedZeroCountUpToHeight B
+      (le_trans
+        (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hA_two_pi)
+        hAB) =
+      count
+  mainLower_le_left :
+    mainLower ≤ smoothMainTerm A
+  right_le_mainUpper :
+    smoothMainTerm B ≤ mainUpper
+  count_minus_lower_le :
+    (count : ℝ) - mainLower ≤ (25167 / 10000 : ℝ)
+  upper_minus_count_le :
+    mainUpper - (count : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- Endpoint cumulative-count slabs lower to endpoint count/main slabs. -/
+noncomputable def
+    BacklundEndpointCumulativeCountMainSlabCertificate.toEndpointSlab
+    (S : BacklundEndpointCumulativeCountMainSlabCertificate) :
+    BacklundEndpointCountMainSlabCertificate where
+  A := S.A
+  B := S.B
+  count := S.count
+  mainLower := S.mainLower
+  mainUpper := S.mainUpper
+  hA_two_pi := S.hA_two_pi
+  count_eq := by
+    intro T hT0 hAT hTB
+    exact zetaWeightedZeroCountUpToHeight_eq_of_endpoint_eq
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) S.hA_two_pi)
+      hT0
+      (le_trans
+        (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) S.hA_two_pi)
+        S.hAB)
+      hAT hTB
+      S.left_count_eq
+      S.right_count_eq
+  mainLower_le_left := S.mainLower_le_left
+  right_le_mainUpper := S.right_le_mainUpper
+  count_minus_lower_le := S.count_minus_lower_le
+  upper_minus_count_le := S.upper_minus_count_le
+
 /-- A finite list of endpoint-style slabs covering `[140, 374]`. -/
 structure BacklundFiniteBandEndpointCountMainCertificate140_374 where
   slabs : List BacklundEndpointCountMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
+      ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-- A finite list of endpoint cumulative-count slabs covering
+`[140, 374]`. -/
+structure BacklundFiniteBandEndpointCumulativeCountMainCertificate140_374 where
+  slabs : List BacklundEndpointCumulativeCountMainSlabCertificate
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
@@ -19588,6 +19674,20 @@ noncomputable def
     intro T hT140 hT374
     obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT374
     refine ⟨S.toSlab, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
+/-- Endpoint cumulative-count slabs supply endpoint count/main slabs. -/
+noncomputable def
+    BacklundFiniteBandEndpointCumulativeCountMainCertificate140_374.toEndpoint
+    (C : BacklundFiniteBandEndpointCumulativeCountMainCertificate140_374) :
+    BacklundFiniteBandEndpointCountMainCertificate140_374 where
+  slabs := C.slabs.map
+    (fun S : BacklundEndpointCumulativeCountMainSlabCertificate =>
+      S.toEndpointSlab)
+  cover := by
+    intro T hT140 hT374
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT374
+    refine ⟨S.toEndpointSlab, ?_, hA, hB⟩
     exact List.mem_map.mpr ⟨S, hS, rfl⟩
 
 /-- Count/main-term slab certificates supply the narrow uniform finite
@@ -19609,6 +19709,14 @@ noncomputable def
     (C : BacklundFiniteBandEndpointCountMainCertificate140_374) :
     BacklundFiniteBandUniform25167Check140_374 :=
   C.toCountMain.toUniform25167Check
+
+/-- Endpoint cumulative-count slabs supply the narrow uniform finite-band
+certificate on `[140, 374]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCumulativeCountMainCertificate140_374.toUniform25167Check
+    (C : BacklundFiniteBandEndpointCumulativeCountMainCertificate140_374) :
+    BacklundFiniteBandUniform25167Check140_374 :=
+  C.toEndpoint.toUniform25167Check
 
 /-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
 concrete finite-band target `[140, 374]`. -/
@@ -19698,6 +19806,19 @@ theorem
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countMainFinite374
     Hglobal
     Hfinite.toCountMain
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and endpoint cumulative-count/main slabs on `[140, 374]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCumulativeCountMainFinite374
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandEndpointCumulativeCountMainCertificate140_374)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountMainFinite374
+    Hglobal
+    Hfinite.toEndpoint
     hT
 
 /-- The two sourced ingredients for the concrete Backlund/Turing `S(T)`
