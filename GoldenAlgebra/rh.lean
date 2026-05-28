@@ -53972,6 +53972,26 @@ theorem lowFiniteStieltjesIBPSourceAFZ_iff_lowZeroContributionSplitAFZ
   ⟨LowZeroContributionSplitAFZ.of_ibpSource,
     LowFiniteStieltjesIBPSourceAFZ.of_zeroSplit⟩
 
+/-- 🌟🌟 **PROVED — the low IBP/zero-split bridge round-trips back to the
+same IBP source.** -/
+@[simp] theorem LowFiniteStieltjesIBPSourceAFZ.of_zeroSplit_of_ibpSource
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ZC : ℂ → ℂ}
+    (H : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    LowFiniteStieltjesIBPSourceAFZ.of_zeroSplit
+      (LowZeroContributionSplitAFZ.of_ibpSource H) = H := by
+  apply Subsingleton.elim
+
+/-- 🌟🌟 **PROVED — the low zero-split/IBP bridge round-trips back to the
+same zero-split source.** -/
+@[simp] theorem LowZeroContributionSplitAFZ.of_ibpSource_of_zeroSplit
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ZC : ℂ → ℂ}
+    (H : LowZeroContributionSplitAFZ Dzero T0 ZC) :
+    LowZeroContributionSplitAFZ.of_ibpSource
+      (LowFiniteStieltjesIBPSourceAFZ.of_zeroSplit H) = H := by
+  apply Subsingleton.elim
+
 -- =====================================================================
 -- §CCCLXII. Cloud exactness package
 -- =====================================================================
@@ -57388,6 +57408,24 @@ def PathBNonTuringRawComponents.to_inputs
     PathBNonTuringInputs Dzero ι :=
   (pathBNonTuringInputsEquiv Dzero ι).symm H
 
+/-- 🌟🌟 **PROVED — raw-to-bundle-to-raw is judgmentally the same
+publication-level component package.** -/
+@[simp] theorem PathBNonTuringRawComponents.to_inputs_to_rawComponents
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {ι : Type}
+    (H : PathBNonTuringRawComponents Dzero ι) :
+    H.to_inputs.to_rawComponents = H := by
+  cases H
+  rfl
+
+/-- 🌟🌟 **PROVED — bundle-to-raw-to-bundle is judgmentally the same
+publication-level non-Turing bundle.** -/
+@[simp] theorem PathBNonTuringInputs.to_rawComponents_to_inputs
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {ι : Type}
+    (H : PathBNonTuringInputs Dzero ι) :
+    H.to_rawComponents.to_inputs = H := by
+  cases H
+  rfl
+
 /-- 🌟🌟🌟 **PROVED — split Stieltjes bundle from the unified AFZ
 Stieltjes equality source.** -/
 theorem ClassicalPathBStieltjesInputsAFZ.of_equalitySourceAFZ
@@ -58260,6 +58298,24 @@ def PathBNonTuringSourceRawComponents.to_sourceInputs
     PathBNonTuringSourceInputs Dzero :=
   (pathBNonTuringSourceInputsEquiv Dzero).symm H
 
+/-- 🌟🌟 **PROVED — raw-to-bundle-to-raw is judgmentally the same
+source-level component package.** -/
+@[simp] theorem PathBNonTuringSourceRawComponents.to_sourceInputs_to_rawComponents
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (H : PathBNonTuringSourceRawComponents Dzero) :
+    H.to_sourceInputs.to_rawComponents = H := by
+  cases H
+  rfl
+
+/-- 🌟🌟 **PROVED — bundle-to-raw-to-bundle is judgmentally the same
+source-level non-Turing bundle.** -/
+@[simp] theorem PathBNonTuringSourceInputs.to_rawComponents_to_sourceInputs
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (H : PathBNonTuringSourceInputs Dzero) :
+    H.to_rawComponents.to_sourceInputs = H := by
+  cases H
+  rfl
+
 /-- 🌟🌟 **PROVED — build the source-level non-Turing bundle from
 completed-ξ Hadamard product data.** -/
 noncomputable def PathBNonTuringSourceInputs.of_hadamardProductData
@@ -59024,6 +59080,24 @@ theorem canonicalXiPullbackSplitStieltjesInputsAFZ_iff_stieltjesSourceAFZ
   ⟨CanonicalXiPullbackSplitStieltjesInputsAFZ.to_stieltjesSource,
     CanonicalXiPullbackSplitStieltjesInputsAFZ.of_stieltjesSource⟩
 
+/-- 🌟🌟 **PROVED — split-to-source-to-split is judgmentally the same
+direct canonical Stieltjes input bundle.** -/
+@[simp] theorem CanonicalXiPullbackSplitStieltjesInputsAFZ.to_stieltjesSource_to_split
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (H : CanonicalXiPullbackSplitStieltjesInputsAFZ Dzero) :
+    H.to_stieltjesSource.to_split = H := by
+  cases H
+  rfl
+
+/-- 🌟🌟 **PROVED — source-to-split-to-source is judgmentally the same
+direct canonical Stieltjes source.** -/
+@[simp] theorem CanonicalXiPullbackStieltjesSourceAFZ.to_split_to_stieltjesSource
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (H : CanonicalXiPullbackStieltjesSourceAFZ Dzero) :
+    H.to_split.to_stieltjesSource = H := by
+  cases H
+  rfl
+
 /-- 🌟🌟 **PROVED — split direct canonical AFZ inputs from an older unguarded
 canonical Stieltjes source.** -/
 theorem CanonicalXiPullbackSplitStieltjesInputsAFZ.of_unguardedStieltjesSource
@@ -59106,6 +59180,22 @@ theorem canonicalXiPullbackIBPStieltjesInputsAFZ_iff_zeroSplitStieltjesInputsAFZ
       ↔ CanonicalXiPullbackZeroSplitStieltjesInputsAFZ Dzero :=
   ⟨CanonicalXiPullbackIBPStieltjesInputsAFZ.to_zeroSplit,
     CanonicalXiPullbackZeroSplitStieltjesInputsAFZ.to_ibp⟩
+
+/-- 🌟🌟 **PROVED — canonical IBP Stieltjes inputs round-trip through the
+zero-split presentation.** -/
+@[simp] theorem CanonicalXiPullbackIBPStieltjesInputsAFZ.to_zeroSplit_to_ibp
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (H : CanonicalXiPullbackIBPStieltjesInputsAFZ Dzero) :
+    H.to_zeroSplit.to_ibp = H := by
+  apply Subsingleton.elim
+
+/-- 🌟🌟 **PROVED — canonical zero-split Stieltjes inputs round-trip
+through the IBP presentation.** -/
+@[simp] theorem CanonicalXiPullbackZeroSplitStieltjesInputsAFZ.to_ibp_to_zeroSplit
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (H : CanonicalXiPullbackZeroSplitStieltjesInputsAFZ Dzero) :
+    H.to_ibp.to_zeroSplit = H := by
+  apply Subsingleton.elim
 
 /-- 📦 **`CanonicalXiPullbackCloudTailStieltjesInputsAFZ`** — direct
 canonical AFZ Stieltjes inputs with the low side exposed as the atomic
@@ -59194,6 +59284,27 @@ theorem pathBDirectNonTuringInputsAFZ_iff_hZ_and_stieltjesSource
   ⟨fun H => ⟨H.h_Z_ge_15, H.to_stieltjesSource⟩,
     fun H => PathBDirectNonTuringInputsAFZ.of_stieltjesSource
       Dzero H.1 H.2⟩
+
+/-- 🌟🌟 **PROVED — rebuilding direct non-Turing inputs from their split
+Stieltjes payload gives the original bundle.** -/
+@[simp] theorem PathBDirectNonTuringInputsAFZ.of_splitStieltjes_to_splitStieltjes
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (H : PathBDirectNonTuringInputsAFZ Dzero) :
+    PathBDirectNonTuringInputsAFZ.of_splitStieltjes
+      Dzero H.h_Z_ge_15 H.to_splitStieltjes = H := by
+  cases H
+  rfl
+
+/-- 🌟🌟 **PROVED — projecting the direct non-Turing bundle assembled from
+a unified canonical Stieltjes source returns that source.** -/
+@[simp] theorem PathBDirectNonTuringInputsAFZ.of_stieltjesSource_to_stieltjesSource
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hst : CanonicalXiPullbackStieltjesSourceAFZ Dzero) :
+    (PathBDirectNonTuringInputsAFZ.of_stieltjesSource
+      Dzero h_Z_ge_15 Hst).to_stieltjesSource = Hst := by
+  cases Hst
+  rfl
 
 /-- 🌟🌟🌟 **PROVED — direct canonical non-Turing inputs from any completed-ξ
 source-level AFZ Stieltjes source.** -/
@@ -59296,6 +59407,59 @@ theorem PathBDirectNonTuringInputsAFZ.of_cloudTailStieltjes
   ⟨h_Z_ge_15,
     CanonicalXiPullbackCloudTailStieltjesInputsAFZ.to_split
       h_Z_ge_15 Hst⟩
+
+/-- 🌟🌟🌟 **PROVED — method form: unified canonical Stieltjes source
+lowers to the direct non-Turing bundle.** -/
+theorem CanonicalXiPullbackStieltjesSourceAFZ.to_directNonTuringInputs
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (Hst : CanonicalXiPullbackStieltjesSourceAFZ Dzero)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i) :
+    PathBDirectNonTuringInputsAFZ Dzero :=
+  PathBDirectNonTuringInputsAFZ.of_stieltjesSource
+    Dzero h_Z_ge_15 Hst
+
+/-- 🌟🌟🌟 **PROVED — method form: split canonical Stieltjes inputs lower
+to the direct non-Turing bundle.** -/
+theorem CanonicalXiPullbackSplitStieltjesInputsAFZ.to_directNonTuringInputs
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (Hst : CanonicalXiPullbackSplitStieltjesInputsAFZ Dzero)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i) :
+    PathBDirectNonTuringInputsAFZ Dzero :=
+  PathBDirectNonTuringInputsAFZ.of_splitStieltjes
+    Dzero h_Z_ge_15 Hst
+
+/-- 🌟🌟🌟 **PROVED — method form: canonical low-IBP Stieltjes inputs lower
+to the direct non-Turing bundle.** -/
+theorem CanonicalXiPullbackIBPStieltjesInputsAFZ.to_directNonTuringInputs
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (Hst : CanonicalXiPullbackIBPStieltjesInputsAFZ Dzero)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i) :
+    PathBDirectNonTuringInputsAFZ Dzero :=
+  PathBDirectNonTuringInputsAFZ.of_ibpStieltjes
+    Dzero h_Z_ge_15 Hst
+
+/-- 🌟🌟🌟 **PROVED — method form: canonical zero-split Stieltjes inputs
+lower to the direct non-Turing bundle.** -/
+theorem CanonicalXiPullbackZeroSplitStieltjesInputsAFZ.to_directNonTuringInputs
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (Hst : CanonicalXiPullbackZeroSplitStieltjesInputsAFZ Dzero)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i) :
+    PathBDirectNonTuringInputsAFZ Dzero :=
+  PathBDirectNonTuringInputsAFZ.of_zeroSplitStieltjes
+    Dzero h_Z_ge_15 Hst
+
+/-- 🌟🌟🌟 **PROVED — method form: canonical cloud/tail Stieltjes inputs
+lower to the direct non-Turing bundle.** -/
+theorem CanonicalXiPullbackCloudTailStieltjesInputsAFZ.to_directNonTuringInputs
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {finiteCloud tail : ℂ → ℂ}
+    (Hst :
+      CanonicalXiPullbackCloudTailStieltjesInputsAFZ
+        Dzero finiteCloud tail)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i) :
+    PathBDirectNonTuringInputsAFZ Dzero :=
+  PathBDirectNonTuringInputsAFZ.of_cloudTailStieltjes
+    Dzero h_Z_ge_15 Hst
 
 /-- 🌟🌟🌟🌟🌟🌟 **PATH B DIRECT TWO-BUNDLE CAPSTONE.**
 
@@ -59618,6 +59782,187 @@ theorem PathBDirectNonTuringInputsAFZ.to_target_turingEnvelopes
   XiPullbackAntiHerglotzTarget_of_directNonTuringInputsAFZ_turingEnvelopes
     Dzero HnonTuring hTuring hHighLog
 
+/-- 🌟🌟🌟 **PROVED — method form: unified canonical Stieltjes source
+feeds the direct target with bundled Turing envelopes.** -/
+theorem CanonicalXiPullbackStieltjesSourceAFZ.to_target_turingBundle
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (Hst : CanonicalXiPullbackStieltjesSourceAFZ Dzero)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  (Hst.to_directNonTuringInputs h_Z_ge_15).to_target_turingBundle
+    Hturing
+
+/-- 🌟🌟🌟 **PROVED — method form: unified canonical Stieltjes source
+feeds the direct target with unbundled Turing envelopes.** -/
+theorem CanonicalXiPullbackStieltjesSourceAFZ.to_target_turingEnvelopes
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (Hst : CanonicalXiPullbackStieltjesSourceAFZ Dzero)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  (Hst.to_directNonTuringInputs h_Z_ge_15).to_target_turingEnvelopes
+    hTuring hHighLog
+
+/-- 🌟🌟🌟 **PROVED — method form: split canonical Stieltjes inputs feed
+the direct target with bundled Turing envelopes.** -/
+theorem CanonicalXiPullbackSplitStieltjesInputsAFZ.to_target_turingBundle
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (Hst : CanonicalXiPullbackSplitStieltjesInputsAFZ Dzero)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  (Hst.to_directNonTuringInputs h_Z_ge_15).to_target_turingBundle
+    Hturing
+
+/-- 🌟🌟🌟 **PROVED — method form: split canonical Stieltjes inputs feed
+the direct target with unbundled Turing envelopes.** -/
+theorem CanonicalXiPullbackSplitStieltjesInputsAFZ.to_target_turingEnvelopes
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (Hst : CanonicalXiPullbackSplitStieltjesInputsAFZ Dzero)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  (Hst.to_directNonTuringInputs h_Z_ge_15).to_target_turingEnvelopes
+    hTuring hHighLog
+
+/-- 🌟🌟🌟 **PROVED — method form: canonical low-IBP Stieltjes inputs feed
+the direct target with bundled Turing envelopes.** -/
+theorem CanonicalXiPullbackIBPStieltjesInputsAFZ.to_target_turingBundle
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (Hst : CanonicalXiPullbackIBPStieltjesInputsAFZ Dzero)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  (Hst.to_directNonTuringInputs h_Z_ge_15).to_target_turingBundle
+    Hturing
+
+/-- 🌟🌟🌟 **PROVED — method form: canonical low-IBP Stieltjes inputs feed
+the direct target with unbundled Turing envelopes.** -/
+theorem CanonicalXiPullbackIBPStieltjesInputsAFZ.to_target_turingEnvelopes
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (Hst : CanonicalXiPullbackIBPStieltjesInputsAFZ Dzero)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  (Hst.to_directNonTuringInputs h_Z_ge_15).to_target_turingEnvelopes
+    hTuring hHighLog
+
+/-- 🌟🌟🌟 **PROVED — method form: canonical zero-split Stieltjes inputs
+feed the direct target with bundled Turing envelopes.** -/
+theorem CanonicalXiPullbackZeroSplitStieltjesInputsAFZ.to_target_turingBundle
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (Hst : CanonicalXiPullbackZeroSplitStieltjesInputsAFZ Dzero)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  (Hst.to_directNonTuringInputs h_Z_ge_15).to_target_turingBundle
+    Hturing
+
+/-- 🌟🌟🌟 **PROVED — method form: canonical zero-split Stieltjes inputs
+feed the direct target with unbundled Turing envelopes.** -/
+theorem CanonicalXiPullbackZeroSplitStieltjesInputsAFZ.to_target_turingEnvelopes
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (Hst : CanonicalXiPullbackZeroSplitStieltjesInputsAFZ Dzero)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  (Hst.to_directNonTuringInputs h_Z_ge_15).to_target_turingEnvelopes
+    hTuring hHighLog
+
+/-- 🌟🌟🌟 **PROVED — method form: canonical cloud/tail Stieltjes inputs
+feed the direct target with bundled Turing envelopes.** -/
+theorem CanonicalXiPullbackCloudTailStieltjesInputsAFZ.to_target_turingBundle
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {finiteCloud tail : ℂ → ℂ}
+    (Hst :
+      CanonicalXiPullbackCloudTailStieltjesInputsAFZ
+        Dzero finiteCloud tail)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  (Hst.to_directNonTuringInputs h_Z_ge_15).to_target_turingBundle
+    Hturing
+
+/-- 🌟🌟🌟 **PROVED — method form: canonical cloud/tail Stieltjes inputs
+feed the direct target with unbundled Turing envelopes.** -/
+theorem CanonicalXiPullbackCloudTailStieltjesInputsAFZ.to_target_turingEnvelopes
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {finiteCloud tail : ℂ → ℂ}
+    (Hst :
+      CanonicalXiPullbackCloudTailStieltjesInputsAFZ
+        Dzero finiteCloud tail)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  (Hst.to_directNonTuringInputs h_Z_ge_15).to_target_turingEnvelopes
+    hTuring hHighLog
+
 /-- 🌟🌟🌟 **PROVED — method form of the source-bundle direct capstone.** -/
 theorem PathBNonTuringSourceInputs.to_target_direct_turingBundle
     {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
@@ -59749,6 +60094,134 @@ theorem PathBNonTuringRawComponents.to_target_direct_turingEnvelopes
     XiPullbackAntiHerglotzTarget :=
   HnonTuring.to_inputs.to_target_direct_turingEnvelopes
     hTuring hHighLog
+
+/-- 🌟🌟🌟🌟 **PATH B FRONT DOOR (source raw components + bundled Turing
+envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_pathBSourceRawComponents_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (HnonTuring : PathBNonTuringSourceRawComponents Dzero)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  HnonTuring.to_target_turingBundle Hturing
+
+/-- 🌟🌟🌟🌟 **PATH B FRONT DOOR (source raw components + unbundled Turing
+envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_pathBSourceRawComponents_turingEnvelopes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (HnonTuring : PathBNonTuringSourceRawComponents Dzero)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  HnonTuring.to_target_turingEnvelopes hTuring hHighLog
+
+/-- 🌟🌟🌟🌟 **PATH B FRONT DOOR (publication raw components + bundled
+Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_pathBRawComponents_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (HnonTuring : PathBNonTuringRawComponents Dzero ι)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  HnonTuring.to_target_turingBundle Hturing
+
+/-- 🌟🌟🌟🌟 **PATH B FRONT DOOR (publication raw components + unbundled
+Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_pathBRawComponents_turingEnvelopes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (HnonTuring : PathBNonTuringRawComponents Dzero ι)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  HnonTuring.to_target_turingEnvelopes hTuring hHighLog
+
+/-- 🌟🌟🌟🌟 **PATH B DIRECT FRONT DOOR (source raw components + bundled
+Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_pathBSourceRawComponents_direct_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (HnonTuring : PathBNonTuringSourceRawComponents Dzero)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  HnonTuring.to_target_direct_turingBundle Hturing
+
+/-- 🌟🌟🌟🌟 **PATH B DIRECT FRONT DOOR (source raw components + unbundled
+Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_pathBSourceRawComponents_direct_turingEnvelopes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (HnonTuring : PathBNonTuringSourceRawComponents Dzero)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  HnonTuring.to_target_direct_turingEnvelopes hTuring hHighLog
+
+/-- 🌟🌟🌟🌟 **PATH B DIRECT FRONT DOOR (publication raw components +
+bundled Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_pathBRawComponents_direct_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (HnonTuring : PathBNonTuringRawComponents Dzero ι)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  HnonTuring.to_target_direct_turingBundle Hturing
+
+/-- 🌟🌟🌟🌟 **PATH B DIRECT FRONT DOOR (publication raw components +
+unbundled Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_pathBRawComponents_direct_turingEnvelopes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (HnonTuring : PathBNonTuringRawComponents Dzero ι)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  HnonTuring.to_target_direct_turingEnvelopes hTuring hHighLog
 
 /-- 🌟🌟🌟🌟🌟🌟 **PATH B DIRECT CAPSTONE (completed-ξ source-level AFZ
 Stieltjes source).** -/
