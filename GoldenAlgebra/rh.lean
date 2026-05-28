@@ -24299,6 +24299,15 @@ structure ClassicalBacklundTuringVerifiedInputs : Prop where
   largeHeight : TrudgianBacklundLargeHeightInput
   finiteRange : PlattTrudgianFiniteRangeSBoundInput
 
+/-- The stronger Platt--Trudgian global estimate, together with the
+finite-range computation, supplies the existing verified-input bundle. -/
+noncomputable def ClassicalBacklundTuringVerifiedInputs.of_plattTrudgianGlobal
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput) :
+    ClassicalBacklundTuringVerifiedInputs where
+  largeHeight := Hglobal.toTrudgianLargeHeight
+  finiteRange := Hfinite
+
 /-- The sourced verified inputs supply the Backlund good-height argument
 bound. -/
 noncomputable def ClassicalBacklundTuringVerifiedInputs.toGoodHeightArgumentBound
