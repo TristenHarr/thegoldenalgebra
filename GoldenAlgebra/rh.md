@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-68,771 lines and roughly 3,581 top-level declarations. It contains no
+69,939 lines and roughly 3,637 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -521,6 +521,17 @@ hypothesis. The resulting capstone
 `entire_function_roots_real_of_analytic_factor_antiHerglotz_and_conjSymm`
 reduces RH to three inputs: analytic factorization, Schwarz reflection,
 and the anti-Herglotz sign law.
+
+The zero-side local logarithmic-derivative principal-part target is
+now proved directly as `hasLogDerivPrincipalPart_of_analytic_zero`:
+analytic order `m` at `s` gives `HasLogDerivPrincipalPart f s m` on
+the punctured neighborhood. The zeta specialization
+`zetaLogDeriv_principalPart_at_nontrivial_zero_direct` supplies the
+direct nat-valued principal part at every nontrivial zero, with
+`zetaLogDeriv_principalPart_at_nontrivial_zero_nat` retaining the
+factorization-route spelling; `zetaLogDeriv_integerPrincipalPart_at_nontrivial_zero`
+lifts this zero-side result to the integer-valued interface consumed
+by the later residue-free rectangle machinery.
 
 For the Mathlib-grounded pullback `EntireXiPullback`, the first two
 hold unconditionally:
@@ -1425,6 +1436,14 @@ the three obligation lines, with concrete handoff targets in each case.
   `BacklundGoodHeightArgumentBound.of_plattTrudgian_tail_and_finite`
   culminate in
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange`.
+  The Platt-Trudgian envelope now also lowers to the older Trudgian
+  global interface: `backlund_log_fifteen_le_three` supplies the
+  elementary comparison input,
+  `plattTrudgianBacklundEnvelope_le_trudgianBacklundEnvelope_of_ge_exp_one`
+  proves the pointwise envelope domination for `T ≥ exp 1`, and
+  `PlattTrudgianBacklundGlobalInput.toTrudgianGlobal` exports the
+  stronger global input through the older `TrudgianBacklundGlobalInput`
+  surface.
   The endpoint-specialized route through `[140, 374]` is exposed by
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite374`,
   with the broad finite-range source adapter
@@ -1824,6 +1843,12 @@ the three obligation lines, with concrete handoff targets in each case.
   `BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoRectEndpointCountCertificate140_370`
   lowers through `toNat` and `toUniform25167Check`, with headline theorem
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoRectEndpointCountFinite370`.
+  It can also forget the argument-principle theorem rows once endpoint
+  counts are present:
+  `BacklundArgumentPrincipleTheoremFixedPiExpAutoRectEndpointCountSlabCertificate.toEndpointCountRangeFixedPiExpSlab`
+  lowers each row to fixed-π exp endpoint count-range data, and
+  `BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoRectEndpointCountCertificate140_370.toEndpointCountRangeFixedPiExp`
+  performs the finite-list conversion.
   The source package
   `ClassicalBacklundTuringPlattAPFixedPiExpAutoRectInputs370` lowers
   through `toAutoBottomInputs370`, `toGoodHeightArgumentBound`, and
@@ -2138,6 +2163,12 @@ source full-bundle front doors too:
 `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackZeroSplitStieltjes_turingBundle`,
 and
 `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackCloudTailStieltjes_turingBundle`.
+Their raw-envelope siblings are
+`XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackSplitStieltjes_turingEnvelopes`,
+`XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackIBPStieltjes_turingEnvelopes`,
+`XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackZeroSplitStieltjes_turingEnvelopes`,
+and
+`XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackCloudTailStieltjes_turingEnvelopes`.
 The direct canonical layer then packages these Stieltjes shapes as
 `CanonicalXiPullbackSplitStieltjesInputsAFZ`,
 `CanonicalXiPullbackIBPStieltjesInputsAFZ`,
@@ -2168,6 +2199,10 @@ forms lowering directly to the non-Turing bundle:
 `CanonicalXiPullbackZeroSplitStieltjesInputsAFZ.to_directNonTuringInputs`,
 and
 `CanonicalXiPullbackCloudTailStieltjesInputsAFZ.to_directNonTuringInputs`.
+The older unguarded canonical Stieltjes inputs now have matching method
+forms too:
+`CanonicalXiPullbackStieltjesSource.to_directNonTuringInputs` and
+`CanonicalXiPullbackMidHighStieltjesEquality.to_directNonTuringInputs`.
 The unified and split canonical Stieltjes inputs now also expose direct
 target method forms:
 `CanonicalXiPullbackStieltjesSourceAFZ.to_target_turingBundle`,
@@ -2178,6 +2213,8 @@ and
 The source-level canonical Path B Stieltjes source now has the same
 method-form bridge:
 `CanonicalPathBStieltjesSource.to_directNonTuringInputs`,
+`CanonicalPathBStieltjesSource.to_directFullInputBundle`,
+`CanonicalPathBStieltjesSource.to_directFullInputBundle_envelopes`,
 `CanonicalPathBStieltjesSource.to_target_turingBundle`, and
 `CanonicalPathBStieltjesSource.to_target_turingEnvelopes`.
 The generic completed-ξ
@@ -2680,6 +2717,12 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackZeroSplitStieltjes_turingBundle`,
   and
   `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackCloudTailStieltjes_turingBundle`.
+  The raw-envelope source capstones mirror these bundled forms:
+  `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackSplitStieltjes_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackIBPStieltjes_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackZeroSplitStieltjes_turingEnvelopes`,
+  and
+  `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackCloudTailStieltjes_turingEnvelopes`.
   The constructor
   `PathBNonTuringSourceInputs.of_canonicalStieltjesSource` and theorem
   `XiPullbackAntiHerglotzTarget_of_canonicalStieltjesSource_turingBundle`
@@ -2760,10 +2803,34 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   `PathBDirectFullInputBundleAFZ.h_Z_ge_15`,
   `PathBDirectFullInputBundleAFZ.to_splitStieltjes`,
   `PathBDirectFullInputBundleAFZ.to_stieltjesSource`,
+  `PathBDirectFullInputBundleAFZ.of_completedXiSource`,
+  `PathBDirectFullInputBundleAFZ.of_hadamardProductData`,
+  `PathBDirectFullInputBundleAFZ.of_classicalPathBAnalyticInputs`,
+  `PathBDirectFullInputBundleAFZ.of_concreteCompletedXiHadamardInputs`,
+  `PathBDirectFullInputBundleAFZ.of_completedXiClassicalHadamard`,
+  `PathBDirectFullInputBundleAFZ.of_entireXiSource`,
+  `PathBDirectFullInputBundleAFZ.of_canonicalPathBStieltjesSource`,
   `PathBDirectFullInputBundleAFZ.of_splitStieltjes`,
   `PathBDirectFullInputBundleAFZ.of_stieltjesSource`,
+  `PathBDirectFullInputBundleAFZ.of_unguardedStieltjesSource`,
+  `PathBDirectFullInputBundleAFZ.of_unguardedMidHighLow`,
+  `PathBDirectFullInputBundleAFZ.of_ibpStieltjes`,
+  `PathBDirectFullInputBundleAFZ.of_zeroSplitStieltjes`,
+  `PathBDirectFullInputBundleAFZ.of_cloudTailStieltjes`,
+  `PathBDirectFullInputBundleAFZ.of_completedXiSource_envelopes`,
+  `PathBDirectFullInputBundleAFZ.of_hadamardProductData_envelopes`,
+  `PathBDirectFullInputBundleAFZ.of_classicalPathBAnalyticInputs_envelopes`,
+  `PathBDirectFullInputBundleAFZ.of_concreteCompletedXiHadamardInputs_envelopes`,
+  `PathBDirectFullInputBundleAFZ.of_completedXiClassicalHadamard_envelopes`,
+  `PathBDirectFullInputBundleAFZ.of_entireXiSource_envelopes`,
+  `PathBDirectFullInputBundleAFZ.of_canonicalPathBStieltjesSource_envelopes`,
   `PathBDirectFullInputBundleAFZ.of_splitStieltjes_envelopes`,
-  `PathBDirectFullInputBundleAFZ.of_stieltjesSource_envelopes`, and
+  `PathBDirectFullInputBundleAFZ.of_stieltjesSource_envelopes`,
+  `PathBDirectFullInputBundleAFZ.of_unguardedStieltjesSource_envelopes`,
+  `PathBDirectFullInputBundleAFZ.of_unguardedMidHighLow_envelopes`,
+  `PathBDirectFullInputBundleAFZ.of_ibpStieltjes_envelopes`,
+  `PathBDirectFullInputBundleAFZ.of_zeroSplitStieltjes_envelopes`, and
+  `PathBDirectFullInputBundleAFZ.of_cloudTailStieltjes_envelopes`, and
   the corresponding `[simp]` projection checks
   `PathBDirectFullInputBundleAFZ.of_splitStieltjes_to_splitStieltjes`,
   `PathBDirectFullInputBundleAFZ.of_stieltjesSource_to_stieltjesSource`,
@@ -2779,6 +2846,33 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_stieltjesSource_turingBundle`,
   and
   `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_stieltjesSource_turingEnvelopes`.
+  Source-level canonical Path B Stieltjes inputs now have parallel
+  direct-full capstones:
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_canonicalPathBStieltjesSource_turingBundle`
+  and
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_canonicalPathBStieltjesSource_turingEnvelopes`.
+  Older unguarded canonical Stieltjes inputs now have matching
+  direct-full capstones:
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_unguardedStieltjesSource_turingBundle`,
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_unguardedStieltjesSource_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_unguardedMidHighLow_turingBundle`,
+  and
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_unguardedMidHighLow_turingEnvelopes`.
+  Their method forms assemble direct full bundles from either bundled or
+  raw Turing envelopes:
+  `CanonicalXiPullbackStieltjesSource.to_directFullInputBundle`,
+  `CanonicalXiPullbackStieltjesSource.to_directFullInputBundle_envelopes`,
+  `CanonicalXiPullbackMidHighStieltjesEquality.to_directFullInputBundle`,
+  and
+  `CanonicalXiPullbackMidHighStieltjesEquality.to_directFullInputBundle_envelopes`.
+  The low-side direct-full variants are now equally exposed:
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_ibpStieltjes_turingBundle`,
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_ibpStieltjes_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_zeroSplitStieltjes_turingBundle`,
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_zeroSplitStieltjes_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_cloudTailStieltjes_turingBundle`,
+  and
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_cloudTailStieltjes_turingEnvelopes`.
   The source and publication full bundles lower through
   `PathBSourceFullInputBundle.to_directFull`,
   `PathBFullInputBundle.to_sourceFull`, and
@@ -2904,7 +2998,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-68,771 lines and roughly 3,581 top-level declarations.
+69,939 lines and roughly 3,637 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
