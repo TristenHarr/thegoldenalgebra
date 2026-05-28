@@ -19549,6 +19549,25 @@ theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_739_125
   unfold plattTrudgianBacklundEnvelope
   nlinarith
 
+/-- The Platt--Trudgian envelope is below the public target already at
+`log T ≥ 59113/10000 = 5.9113`.  This is the same tangent-at-`6`
+comparison as the `739/125` cutoff, with the arithmetic threshold
+tightened to the next useful decimal. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_59113_10000
+    {T : ℝ} (hL : (59113 / 10000 : ℝ) ≤ Real.log T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hLpos : 0 < Real.log T := by linarith
+  have hloglog :=
+    backlund_log_log_le_one_sixth_log_plus_ninety_nine_125 hLpos
+  have hmul :
+      (29 / 100 : ℝ) * Real.log (Real.log T)
+        ≤ (29 / 100 : ℝ)
+            * ((1 / 6 : ℝ) * Real.log T + 99 / 125) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  unfold plattTrudgianBacklundEnvelope
+  nlinarith
+
 /-- For `T ≥ exp (592/100)`, `log T ≥ 592/100`. -/
 theorem backlund_log_ge_592_100_of_ge_exp_592_100
     {T : ℝ} (hT : Real.exp (592 / 100 : ℝ) ≤ T) :
@@ -19574,6 +19593,14 @@ theorem backlund_log_ge_739_125_of_ge_exp_739_125
   have h := Real.log_le_log h_exp_pos hT
   rwa [Real.log_exp] at h
 
+/-- For `T ≥ exp (59113/10000)`, `log T ≥ 59113/10000`. -/
+theorem backlund_log_ge_59113_10000_of_ge_exp_59113_10000
+    {T : ℝ} (hT : Real.exp (59113 / 10000 : ℝ) ≤ T) :
+    (59113 / 10000 : ℝ) ≤ Real.log T := by
+  have h_exp_pos : 0 < Real.exp (59113 / 10000 : ℝ) := Real.exp_pos _
+  have h := Real.log_le_log h_exp_pos hT
+  rwa [Real.log_exp] at h
+
 /-- The Platt--Trudgian envelope is below the target for every
 `T ≥ exp (739/125)`. -/
 theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_739_125
@@ -19582,6 +19609,15 @@ theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_739_125
       ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
   plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_739_125
     (backlund_log_ge_739_125_of_ge_exp_739_125 hT)
+
+/-- The Platt--Trudgian envelope is below the target for every
+`T ≥ exp (59113/10000)`. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_59113_10000
+    {T : ℝ} (hT : Real.exp (59113 / 10000 : ℝ) ≤ T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_59113_10000
+    (backlund_log_ge_59113_10000_of_ge_exp_59113_10000 hT)
 
 /-- `exp (592/100) < 1200`, so the marginally tighter finite band sits
 inside the older `1200` infrastructure. -/
@@ -19618,6 +19654,13 @@ structure PlattTrudgianBacklundCut739_125TailInput : Prop where
     ∀ T : ℝ, Real.exp (739 / 125 : ℝ) ≤ T →
       |concreteS T| ≤ plattTrudgianBacklundEnvelope T
 
+/-- Platt--Trudgian tail estimate on the near-optimal tail certified by
+the tangent arithmetic, namely `T ≥ exp (59113/10000)`. -/
+structure PlattTrudgianBacklundCut59113_10000TailInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (59113 / 10000 : ℝ) ≤ T →
+      |concreteS T| ≤ plattTrudgianBacklundEnvelope T
+
 /-- A global Platt--Trudgian estimate supplies the `exp (739/125)`
 tail estimate. -/
 noncomputable def PlattTrudgianBacklundCut739_125TailInput.of_global
@@ -19627,6 +19670,18 @@ noncomputable def PlattTrudgianBacklundCut739_125TailInput.of_global
     intro T hT
     have h_exp_one_le_exp_cut :
         Real.exp (1 : ℝ) ≤ Real.exp (739 / 125 : ℝ) :=
+      Real.exp_le_exp.mpr (by norm_num)
+    exact H.bound T (le_trans h_exp_one_le_exp_cut hT)
+
+/-- A global Platt--Trudgian estimate supplies the
+`exp (59113/10000)` tail estimate. -/
+noncomputable def PlattTrudgianBacklundCut59113_10000TailInput.of_global
+    (H : PlattTrudgianBacklundGlobalInput) :
+    PlattTrudgianBacklundCut59113_10000TailInput where
+  bound := by
+    intro T hT
+    have h_exp_one_le_exp_cut :
+        Real.exp (1 : ℝ) ≤ Real.exp (59113 / 10000 : ℝ) :=
       Real.exp_le_exp.mpr (by norm_num)
     exact H.bound T (le_trans h_exp_one_le_exp_cut hT)
 
@@ -19644,6 +19699,14 @@ structure BacklundFiniteBandCheck140_exp739_125 : Prop where
   bound :
     ∀ T : ℝ, (140 : ℝ) ≤ T →
       T ≤ Real.exp (739 / 125 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- Finite-band check left after using the near-optimal
+Platt--Trudgian tail: `[140, exp (59113/10000)]`. -/
+structure BacklundFiniteBandCheck140_exp59113_10000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ Real.exp (59113 / 10000 : ℝ) →
         |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
 
 /-- The Platt/Trudgian finite-range `2.5167` bound supplies the tighter
@@ -19712,6 +19775,22 @@ noncomputable def
     · have hTle : T ≤ Real.exp (739 / 125 : ℝ) := le_of_not_ge hTail
       exact Hfinite.bound T hT hTle
 
+/-- Near-optimal Platt--Trudgian tail plus the corresponding finite-band
+check gives the good-height Backlund argument bound. -/
+noncomputable def
+    BacklundGoodHeightArgumentBound.of_plattTrudgian_59113_10000Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut59113_10000TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp59113_10000) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTail : Real.exp (59113 / 10000 : ℝ) ≤ T
+    · exact le_trans (Htail.bound T hTail)
+        (plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_59113_10000
+          hTail)
+    · have hTle : T ≤ Real.exp (59113 / 10000 : ℝ) := le_of_not_ge hTail
+      exact Hfinite.bound T hT hTle
+
 /-- Final headline theorem from the tighter Platt--Trudgian global tail
 and finite band `[140, exp (592/100)]`. -/
 theorem concreteS_halfLogPlusHalf_of_plattTrudgian_tighterTail_and_finite
@@ -19746,6 +19825,18 @@ theorem concreteS_halfLogPlusHalf_of_plattTrudgian_739_125Tail_and_finite
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
   concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
     (BacklundGoodHeightArgumentBound.of_plattTrudgian_739_125Tail_and_finite
+      Htail Hfinite)
+    hT
+
+/-- Final headline theorem from the near-optimal Platt--Trudgian global
+tail and finite band `[140, exp (59113/10000)]`. -/
+theorem concreteS_halfLogPlusHalf_of_plattTrudgian_59113_10000Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut59113_10000TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp59113_10000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_plattTrudgian_59113_10000Tail_and_finite
       Htail Hfinite)
     hT
 
@@ -19865,6 +19956,16 @@ theorem backlund_exp_739_125_lt_370 :
   exact
     (pow_lt_pow_iff_left₀ hexp_nn h370_nn
       (by norm_num : (125 : ℕ) ≠ 0)).mp h_exp_pow_lt
+
+/-- `exp (59113/10000) < 370`, so the near-optimal
+Platt--Trudgian tail split still needs only the concrete finite endpoint
+`370`. -/
+theorem backlund_exp_59113_10000_lt_370 :
+    Real.exp (59113 / 10000 : ℝ) < 370 := by
+  have hle :
+      Real.exp (59113 / 10000 : ℝ) ≤ Real.exp (739 / 125 : ℝ) :=
+    Real.exp_le_exp.mpr (by norm_num)
+  exact lt_of_le_of_lt hle backlund_exp_739_125_lt_370
 
 /-- Concrete finite-band check left after the Platt--Trudgian tail:
 `[140, 374]`. -/
@@ -21809,6 +21910,17 @@ noncomputable def BacklundFiniteBandCheck140_exp739_125.of_140_370
       le_trans hTexp (le_of_lt backlund_exp_739_125_lt_370)
     exact H.bound T hT140 hT370
 
+/-- A concrete `[140, 370]` finite-band check supplies the symbolic
+`[140, exp (59113/10000)]` check. -/
+noncomputable def BacklundFiniteBandCheck140_exp59113_10000.of_140_370
+    (H : BacklundFiniteBandCheck140_370) :
+    BacklundFiniteBandCheck140_exp59113_10000 where
+  bound := by
+    intro T hT140 hTexp
+    have hT370 : T ≤ (370 : ℝ) :=
+      le_trans hTexp (le_of_lt backlund_exp_59113_10000_lt_370)
+    exact H.bound T hT140 hT370
+
 /-- Final headline theorem from the global Platt--Trudgian argument
 estimate and the concrete finite-band check `[140, 374]`. -/
 theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite374
@@ -21843,6 +21955,19 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite370
   concreteS_halfLogPlusHalf_of_plattTrudgian_739_125Tail_and_finite
     (PlattTrudgianBacklundCut739_125TailInput.of_global Hglobal)
     (BacklundFiniteBandCheck140_exp739_125.of_140_370 Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the concrete finite-band check `[140, 370]`, routed through
+the near-optimal tail split `log T ≥ 59113/10000`. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite370_nearTail
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCheck140_370)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_59113_10000Tail_and_finite
+    (PlattTrudgianBacklundCut59113_10000TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp59113_10000.of_140_370 Hfinite)
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
