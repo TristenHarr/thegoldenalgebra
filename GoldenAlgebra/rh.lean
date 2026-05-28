@@ -20640,6 +20640,73 @@ noncomputable def TuringStyleSBound.of_globalPlattTrudgian_and_finiteRange_47548
   (ProvenBacklundTuringBound.of_globalPlattTrudgian_and_finiteRange_475481_80440
     Hglobal Hfinite).toTuringStyleSBound
 
+/-- Sharp Platt--Trudgian source package for the current Backlund/Turing
+frontier.
+
+The remaining sourced content is now exactly:
+* the global Platt--Trudgian argument estimate, and
+* the finite-range `|S(T)| ≤ 2.5167` computation.
+
+All cutoff arithmetic and all exports to the project Turing interfaces
+are discharged below. -/
+structure ClassicalBacklundTuringPlattGlobalFiniteRangeInputs : Prop where
+  global : PlattTrudgianBacklundGlobalInput
+  finiteRange : PlattTrudgianFiniteRangeSBoundInput
+
+/-- The sharp Platt global/finite-range package supplies the
+good-height Backlund argument bound. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.toGoodHeightArgumentBound
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs) :
+    BacklundGoodHeightArgumentBound :=
+  BacklundGoodHeightArgumentBound.of_plattTrudgian_475481_80440Tail_and_finite
+    (PlattTrudgianBacklundCut475481_80440TailInput.of_global I.global)
+    (BacklundFiniteBandCheck140_exp475481_80440.of_plattTrudgian
+      I.finiteRange)
+
+/-- The sharp Platt global/finite-range package supplies the final
+classical proof inputs at `ClassicalBacklundTuringProof.K`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.toProofInputs
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs) :
+    ClassicalBacklundTuringProofInputs :=
+  ClassicalBacklundTuringProofInputs.of_goodHeightArgumentBound
+    I.toGoodHeightArgumentBound
+
+/-- Final Backlund--Turing headline theorem from the sharp Platt
+global/finite-range package. -/
+theorem concreteS_halfLogPlusHalf_of_plattGlobalFiniteRangeBacklundTuringInputs
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_475481_80440
+    I.global I.finiteRange hT
+
+/-- The sharp Platt global/finite-range package supplies the generic
+proved Backlund/Turing package for `concreteS`, threshold `140`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.toProvenBacklundTuringBound
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs) :
+    ProvenBacklundTuringBound :=
+  ProvenBacklundTuringBound.of_globalPlattTrudgian_and_finiteRange_475481_80440
+    I.global I.finiteRange
+
+/-- The sharp Platt global/finite-range package supplies
+`HalfLogPlusHalfSBound`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.toHalfLogPlusHalfSBound
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBound.toHalfLogPlusHalfSBound
+
+/-- The sharp Platt global/finite-range package supplies
+`TuringStyleSBound`, with `C = D = 1/2`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.toTuringStyleSBound
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBound.toTuringStyleSBound
+
 /-! ### CW36: concrete finite endpoint for the Platt--Trudgian route -/
 
 /-- `exp (592/100) < 374`, giving the remaining finite-band certificate
