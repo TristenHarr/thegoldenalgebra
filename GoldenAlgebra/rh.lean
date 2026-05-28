@@ -21538,6 +21538,18 @@ noncomputable def
     exact le_trans (H.bound T hT140 hTendpoint)
       (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
 
+/-- A uniform `[140, 370]` finite-band certificate restricts directly to
+the near-exact concrete band `[140, 3690757803/10000000]`. -/
+noncomputable def
+    BacklundFiniteBandUniform25167Check140_3690757803_10000000.of_140_370
+    (H : BacklundFiniteBandUniform25167Check140_370) :
+    BacklundFiniteBandUniform25167Check140_3690757803_10000000 where
+  bound := by
+    intro T hT140 hTendpoint
+    have hT370 : T ≤ (370 : ℝ) := by
+      linarith
+    exact H.bound T hT140 hT370
+
 /-- A local count/main-term slab certificate for the remaining concrete
 finite band.  On one slab `[A, B]`, the weighted zero count is fixed at
 `count`, while the smooth Riemann--von Mangoldt main term is squeezed
@@ -24006,6 +24018,18 @@ noncomputable def
       linarith
     exact H.bound T hT140 hTprev
 
+/-- A concrete `[140, 370]` finite-band check restricts directly to the
+near-exact concrete band `[140, 3690757803/10000000]`. -/
+noncomputable def
+    BacklundFiniteBandCheck140_3690757803_10000000.of_140_370
+    (H : BacklundFiniteBandCheck140_370) :
+    BacklundFiniteBandCheck140_3690757803_10000000 where
+  bound := by
+    intro T hT140 hTendpoint
+    have hT370 : T ≤ (370 : ℝ) := by
+      linarith
+    exact H.bound T hT140 hT370
+
 /-- A concrete `[140, 374]` finite-band check supplies the symbolic
 `[140, exp (592/100)]` check. -/
 noncomputable def BacklundFiniteBandCheck140_exp592_100.of_140_374
@@ -24164,7 +24188,8 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite370
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
   concreteS_halfLogPlusHalf_of_plattTrudgian_475481_80440Tail_and_finite
     (PlattTrudgianBacklundCut475481_80440TailInput.of_global Hglobal)
-    (BacklundFiniteBandCheck140_exp475481_80440.of_140_370 Hfinite)
+    (BacklundFiniteBandCheck140_exp475481_80440.of_140_3690757803_10000000
+      (BacklundFiniteBandCheck140_3690757803_10000000.of_140_370 Hfinite))
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
@@ -24175,9 +24200,9 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite370_nearTail
     (Hfinite : BacklundFiniteBandCheck140_370)
     {T : ℝ} (hT : (140 : ℝ) ≤ T) :
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
-  concreteS_halfLogPlusHalf_of_plattTrudgian_475481_80440Tail_and_finite
-    (PlattTrudgianBacklundCut475481_80440TailInput.of_global Hglobal)
-    (BacklundFiniteBandCheck140_exp475481_80440.of_140_370 Hfinite)
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite370
+    Hglobal
+    Hfinite
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
