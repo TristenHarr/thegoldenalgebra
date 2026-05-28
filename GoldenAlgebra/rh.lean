@@ -70952,6 +70952,80 @@ structure StieltjesHighTailResidualIdentityAFZ
         - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
         = L
 
+/-- 📦 **`StieltjesMidHighTailResidualIdentityAFZ`** — combined bare
+residual form of the mid/high Stieltjes explicit formula. This is the
+natural single target for the explicit-formula proof before projecting
+to the separate mid and high AFZ interfaces. -/
+structure StieltjesMidHighTailResidualIdentityAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ)
+    (ZC : ℂ → ℂ) : Prop where
+  mid_residual_eq :
+    ∀ {z : ℂ} {L : ℂ},
+      0 < z.im →
+      XiPullback z ≠ 0 →
+      (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+        2 * (1 + |z.re| + z.im) ≤ T) →
+      XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L →
+      ZC z
+        - cloudModel zeros100ceil z
+        - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+        = L
+  high_residual_eq :
+    ∀ {z : ℂ} {T : ℝ} {L : ℂ},
+      140 ≤ T →
+      0 < z.im →
+      XiPullback z ≠ 0 →
+      2 * (1 + |z.re| + z.im) ≤ T →
+      XiFluctuationTailValue Dzero T0 T z L →
+      ZC z
+        - cloudModel zeros100ceil z
+        - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+        = L
+
+/-- 🌟🌟 **PROVED — combined mid/high residual identity gives the older
+combined mid/high tail equality interface.** -/
+theorem StieltjesMidHighTailEqualityAFZ.of_residualIdentity
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (H : StieltjesMidHighTailResidualIdentityAFZ Dzero T0 ZC) :
+    StieltjesMidHighTailEqualityAFZ Dzero T0 ZC := by
+  refine ⟨?_, ?_⟩
+  · intro z L hy hne hmid hL
+    have h := H.mid_residual_eq hy hne hmid hL
+    linear_combination h
+  · intro z T L hT hy hne hreg hL
+    have h := H.high_residual_eq hT hy hne hreg hL
+    linear_combination h
+
+/-- 🌟🌟 **PROVED — combined mid/high residual identity projects to the
+split mid residual target.** -/
+theorem StieltjesMidTailResidualIdentityAFZ.of_midHighResidualIdentity
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (H : StieltjesMidHighTailResidualIdentityAFZ Dzero T0 ZC) :
+    StieltjesMidTailResidualIdentityAFZ Dzero T0 ZC :=
+  ⟨H.mid_residual_eq⟩
+
+/-- 🌟🌟 **PROVED — combined mid/high residual identity projects to the
+split high residual target.** -/
+theorem StieltjesHighTailResidualIdentityAFZ.of_midHighResidualIdentity
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (H : StieltjesMidHighTailResidualIdentityAFZ Dzero T0 ZC) :
+    StieltjesHighTailResidualIdentityAFZ Dzero T0 ZC :=
+  ⟨H.high_residual_eq⟩
+
+/-- 🌟🌟 **PROVED — assemble the combined residual identity from the split
+mid and high residual targets.** -/
+theorem StieltjesMidHighTailResidualIdentityAFZ.of_mid_high
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (Hmid : StieltjesMidTailResidualIdentityAFZ Dzero T0 ZC)
+    (Hhigh : StieltjesHighTailResidualIdentityAFZ Dzero T0 ZC) :
+    StieltjesMidHighTailResidualIdentityAFZ Dzero T0 ZC :=
+  { mid_residual_eq := Hmid.residual_eq
+    high_residual_eq := Hhigh.residual_eq }
+
 /-- 🌟🌟 **PROVED — mid residual identity gives the usual mid Stieltjes
 tail equality.** -/
 theorem StieltjesMidTailEqualityAFZ.of_residualIdentity
@@ -71950,6 +72024,37 @@ theorem ClassicalPathBStieltjesInputsAFZ.of_midHighResidual_lowSplit_Z_ge_15
   ClassicalPathBStieltjesInputsAFZ.of_midHighResidual_lowSplit
     Hmid
     Hhigh
+    HlowSplit
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+
+/-- 🌟🌟🌟 **PROVED — `ClassicalPathBStieltjesInputsAFZ` from the
+combined mid/high residual identity plus the low zero split.** -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_midHighResidualIdentity_lowSplit
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (HmidHigh :
+      StieltjesMidHighTailResidualIdentityAFZ Dzero T0 ZC)
+    (HlowSplit : LowZeroContributionSplitAFZ Dzero T0 ZC)
+    (Hstarts : DzeroStartsAfter Dzero 14) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  ClassicalPathBStieltjesInputsAFZ.of_midHighResidual_lowSplit
+    (StieltjesMidTailResidualIdentityAFZ.of_midHighResidualIdentity HmidHigh)
+    (StieltjesHighTailResidualIdentityAFZ.of_midHighResidualIdentity HmidHigh)
+    HlowSplit
+    Hstarts
+
+/-- 🌟🌟🌟 **PROVED — standard `Z ≥ 15` version of the combined
+mid/high residual identity plus low zero split constructor.** -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_midHighResidualIdentity_lowSplit_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HmidHigh :
+      StieltjesMidHighTailResidualIdentityAFZ Dzero T0 ZC)
+    (HlowSplit : LowZeroContributionSplitAFZ Dzero T0 ZC) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  ClassicalPathBStieltjesInputsAFZ.of_midHighResidualIdentity_lowSplit
+    HmidHigh
     HlowSplit
     (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
 
@@ -74375,6 +74480,54 @@ noncomputable def
     HlucFinset
     Hfact
     (EntireXiHadamardPrefactor.exp_affine hC)
+
+/-- 🌟🌟🌟🌟🌟 **PROVED — canonical-zero exp-affine entire-ξ Hadamard
+theorem from locally-uniform product convergence and the classical
+off-zero quotient identity.**
+
+This is the sharpened Hadamard-side target: derivative/LUC passage is
+handled by the locally-uniform product data, the prefactor AFZ facts are
+handled by the exp-affine lemma, and the product factorization is
+reduced to the off-zero quotient identity plus product nonvanishing. -/
+noncomputable def
+    EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_offZeroQuotient_locallyUniformProductLimitData
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    {Hex : HadamardFiniteExhaustion concreteEntireXiZeroSystem.zeroLoc}
+    (HlucSeq :
+      HadamardProductLocallyUniformLimitData
+        concreteEntireXiZeroSystem.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ HlucSeq.region)
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset EntireXiNonzeroZeroIndex => fun s : ℂ =>
+          indexedFiniteHadamardProduct
+            concreteEntireXiZeroSystem.zeroLoc F s)
+        (infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc)
+        Filter.atTop
+        HlucSeq.region)
+    (hprod_ne :
+      ∀ s : ℂ,
+        (∀ i : EntireXiNonzeroZeroIndex,
+          s ≠ concreteEntireXiZeroSystem.zeroLoc i) →
+          infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc s ≠ 0)
+    (hquot :
+      ∀ s : ℂ,
+        (∀ i : EntireXiNonzeroZeroIndex,
+          s ≠ concreteEntireXiZeroSystem.zeroLoc i) →
+          entireRiemannXi s
+              / infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc s
+            = C * Complex.exp (a + b * s)) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_locallyUniformProductLimitData
+    hC
+    Hdist
+    HlucSeq
+    Hregion
+    HlucFinset
+    (EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient
+      concreteEntireXiZeroSystem hprod_ne hquot)
 
 /-- 🌟🌟🌟 **PROVED — `EntireXiLogDerivativeSourceAFZ` from the
 entire-ξ Hadamard theorem.** -/

@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-89,229 lines and roughly 4,252 top-level declarations. It contains no
+89,389 lines and roughly 4,258 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -2884,7 +2884,12 @@ Stieltjes bundle has
 `classicalPathBStieltjesInputsAFZ_iff_equalitySourceAFZ`. The mid/high
 Stieltjes equalities also have bare residual identity forms
 `StieltjesMidTailResidualIdentityAFZ` and
-`StieltjesHighTailResidualIdentityAFZ`, with conversions
+`StieltjesHighTailResidualIdentityAFZ`, plus the combined residual target
+`StieltjesMidHighTailResidualIdentityAFZ`, with conversions
+`StieltjesMidHighTailEqualityAFZ.of_residualIdentity`,
+`StieltjesMidTailResidualIdentityAFZ.of_midHighResidualIdentity`,
+`StieltjesHighTailResidualIdentityAFZ.of_midHighResidualIdentity`,
+`StieltjesMidHighTailResidualIdentityAFZ.of_mid_high`,
 `StieltjesMidTailEqualityAFZ.of_residualIdentity`,
 `StieltjesMidTailResidualIdentityAFZ.of_tailEquality`,
 `stieltjesMidTailEqualityAFZ_iff_residualIdentity`,
@@ -3190,6 +3195,7 @@ Hadamard infrastructure for `entireRiemannXi`:
 `EntireXiHadamardFactorization.of_offZeroQuotient`,
 `EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient`,
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_offZeroQuotient_lucOnEntireXiNonzero`,
+`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_offZeroQuotient_locallyUniformProductLimitData`,
 `EntireXiClassicalHadamardTheorem` (§CCCLXXXVIII), and
 `EntireXiLogDerivativeSourceAFZ`. The source-level front door
 `XiPullbackAntiHerglotzTarget_of_completedXiSource_midHigh_lowSplit`
@@ -3723,7 +3729,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-89,229 lines and roughly 4,252 top-level declarations.
+89,389 lines and roughly 4,258 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
