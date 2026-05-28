@@ -17346,6 +17346,15 @@ theorem backlundNumericalExtractionInput_iff_combination :
   ⟨BacklundNumericalExtractionInput.toCombination,
     BacklundNumericalExtractionInput.ofCombination⟩
 
+/-- Direct equivalence between the numerical-extraction API and the
+good-height Backlund argument bound.  This records that the remaining
+analytic content can be pursued under either name without changing the
+mathematical obligation. -/
+theorem backlundNumericalExtractionInput_iff_goodHeightArgumentBound :
+    BacklundNumericalExtractionInput ↔ BacklundGoodHeightArgumentBound :=
+  backlundNumericalExtractionInput_iff_combination.trans
+    backlundClassicalCombinationInput_iff_goodHeightArgumentBound
+
 /-- Final theorem from numerical extraction + count local-constancy. -/
 theorem concreteS_halfLogPlusHalf_of_numericalExtraction_and_countLC
     (E : BacklundNumericalExtractionInput)
