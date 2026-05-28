@@ -20877,6 +20877,97 @@ theorem BacklundArgumentPrincipleTheoremFixedPiExpAutoPosSlabCertificate.uniform
     |concreteS T| ≤ (25167 / 10000 : ℝ) :=
   S.toCountRangeMainSlab.uniform25167 hT0 hA hB
 
+/-- In the current Backlund finite band every slab bottom is at least
+`140`, hence automatically above `2π`. -/
+theorem backlund_two_pi_le_of_ge_140
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    2 * Real.pi ≤ T := by
+  have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+  nlinarith
+
+/-- Auto-bottom fixed-pi exp slab certificate.  This is the finite-table
+source shape for the `[140, 370]` route: instead of carrying the analytic
+side condition `2π ≤ R.bottom`, the row only proves `140 ≤ R.bottom`,
+and Lean derives `2π ≤ R.bottom` once and for all. -/
+structure BacklundArgumentPrincipleTheoremFixedPiExpAutoBottomSlabCertificate where
+  R : ZetaRectangle
+  hleft : R.left < 0
+  hright : 1 < R.right
+  hbottom_ge_140 : (140 : ℝ) ≤ R.bottom
+  hgood : GoodHeight R.top
+  theoremData :
+    R.ZetaRectangleArgumentPrincipleTheorem
+      hleft hright
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+        (backlund_two_pi_le_of_ge_140 hbottom_ge_140))
+      hgood
+  argumentIndex_nonneg :
+    0 ≤ theoremData.argumentIndex
+  leftCount : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  bottomRatioLower : ℝ
+  topRatioUpper : ℝ
+  bottomLogLower : ℝ
+  topLogUpper : ℝ
+  left_count_eq :
+    zetaWeightedZeroCountUpToHeight R.bottom
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+        (backlund_two_pi_le_of_ge_140 hbottom_ge_140)) =
+      leftCount
+  bottom_ratio_mul_arith :
+    2 * (3141593 / 1000000 : ℝ) * bottomRatioLower ≤ R.bottom
+  top_ratio_mul_arith :
+    R.top ≤ 2 * (3141592 / 1000000 : ℝ) * topRatioUpper
+  bottom_exp_log_lower :
+    Real.exp bottomLogLower ≤ bottomRatioLower
+  top_log_upper_exp :
+    topRatioUpper ≤ Real.exp topLogUpper
+  bottom_main_arith :
+    mainLower
+      ≤ (R.bottom / (2 * Real.pi)) * bottomLogLower
+        - R.bottom / (2 * Real.pi) + 7 / 8
+  top_main_arith :
+    (R.top / (2 * Real.pi)) * topLogUpper
+      - R.top / (2 * Real.pi) + 7 / 8
+        ≤ mainUpper
+  upperCount_minus_lowerMain_le :
+    ((leftCount
+        + theoremData.toActualNormalizedData.toCanonicalData.toFormula.argumentIndexNat
+          { argumentIndex_nonneg := argumentIndex_nonneg } : ℕ) : ℝ)
+      - mainLower ≤ (25167 / 10000 : ℝ)
+  upperMain_minus_lowerCount_le :
+    mainUpper - (leftCount : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- Auto-bottom fixed-pi exp slabs lower to auto-positivity slabs. -/
+noncomputable def
+    BacklundArgumentPrincipleTheoremFixedPiExpAutoBottomSlabCertificate.toAutoPosSlab
+    (S : BacklundArgumentPrincipleTheoremFixedPiExpAutoBottomSlabCertificate) :
+    BacklundArgumentPrincipleTheoremFixedPiExpAutoPosSlabCertificate where
+  R := S.R
+  hleft := S.hleft
+  hright := S.hright
+  hbottom_two_pi := backlund_two_pi_le_of_ge_140 S.hbottom_ge_140
+  hgood := S.hgood
+  theoremData := S.theoremData
+  argumentIndex_nonneg := S.argumentIndex_nonneg
+  leftCount := S.leftCount
+  mainLower := S.mainLower
+  mainUpper := S.mainUpper
+  bottomRatioLower := S.bottomRatioLower
+  topRatioUpper := S.topRatioUpper
+  bottomLogLower := S.bottomLogLower
+  topLogUpper := S.topLogUpper
+  left_count_eq := S.left_count_eq
+  bottom_ratio_mul_arith := S.bottom_ratio_mul_arith
+  top_ratio_mul_arith := S.top_ratio_mul_arith
+  bottom_exp_log_lower := S.bottom_exp_log_lower
+  top_log_upper_exp := S.top_log_upper_exp
+  bottom_main_arith := S.bottom_main_arith
+  top_main_arith := S.top_main_arith
+  upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
+  upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
+
 /-- A finite list of endpoint-style slabs covering `[140, 374]`. -/
 structure BacklundFiniteBandEndpointCountMainCertificate140_374 where
   slabs : List BacklundEndpointCountMainSlabCertificate
@@ -20984,6 +21075,17 @@ covering the sharpened interval `[140, 370]`. -/
 structure
     BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoPosCertificate140_370 where
   slabs : List BacklundArgumentPrincipleTheoremFixedPiExpAutoPosSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (370 : ℝ) →
+      ∃ S ∈ slabs, S.R.bottom ≤ T ∧ T ≤ S.R.top
+
+/-- A finite list of auto-bottom fixed-pi exp theorem-target slabs
+covering `[140, 370]`.  This is the current leanest finite-table source
+shape: rows prove `140 ≤ R.bottom`, and the `2π` side condition is
+derived. -/
+structure
+    BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoBottomCertificate140_370 where
+  slabs : List BacklundArgumentPrincipleTheoremFixedPiExpAutoBottomSlabCertificate
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (370 : ℝ) →
       ∃ S ∈ slabs, S.R.bottom ≤ T ∧ T ≤ S.R.top
@@ -21283,6 +21385,23 @@ noncomputable def
     have hT0 : 0 ≤ T := by linarith
     exact S.uniform25167 hT0 hA hB
 
+/-- Auto-bottom fixed-pi exp theorem-target slabs supply the
+auto-positivity fixed-pi exp certificate on `[140, 370]`. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoBottomCertificate140_370.toAutoPos
+    (C :
+      BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoBottomCertificate140_370) :
+    BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoPosCertificate140_370 where
+  slabs := C.slabs.map
+    (fun S :
+      BacklundArgumentPrincipleTheoremFixedPiExpAutoBottomSlabCertificate =>
+        S.toAutoPosSlab)
+  cover := by
+    intro T hT140 hT370
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT370
+    refine ⟨S.toAutoPosSlab, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
 /-- Auto-positivity fixed-pi exp theorem-target slabs supply the
 sharpened narrow uniform finite-band certificate on `[140, 370]`. -/
 noncomputable def
@@ -21295,6 +21414,15 @@ noncomputable def
     obtain ⟨S, _hS, hA, hB⟩ := C.cover T hT140 hT370
     have hT0 : 0 ≤ T := by linarith
     exact S.uniform25167 hT0 hA hB
+
+/-- Auto-bottom fixed-pi exp theorem-target slabs supply the sharpened
+narrow uniform finite-band certificate on `[140, 370]`. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoBottomCertificate140_370.toUniform25167Check
+    (C :
+      BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoBottomCertificate140_370) :
+    BacklundFiniteBandUniform25167Check140_370 :=
+  C.toAutoPos.toUniform25167Check
 
 /-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
 concrete finite-band target `[140, 374]`. -/
@@ -21507,6 +21635,21 @@ theorem
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite370
     Hglobal
     Hfinite.toUniform25167Check
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and auto-bottom fixed-pi exp theorem-target slabs on
+`[140, 370]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoBottomFinite370
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoBottomCertificate140_370)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoPosFinite370
+    Hglobal
+    Hfinite.toAutoPos
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
@@ -22264,6 +22407,72 @@ with `C = D = 1/2`. -/
 noncomputable def
     ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs370.toTuringStyleSBound
     (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs370) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBound.toTuringStyleSBound
+
+/-- Leanest current source package for the fixed-pi exp finite certificate
+route: the finite table proves bottom endpoints are at least `140`, and
+the `2π` side condition is derived globally. -/
+structure ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370 where
+  global : PlattTrudgianBacklundGlobalInput
+  finite370 :
+    BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoBottomCertificate140_370
+
+/-- Auto-bottom Platt/AP inputs lower to the auto-positivity package. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370.toAutoPosInputs370
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370) :
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs370 where
+  global := I.global
+  finite370 := I.finite370.toAutoPos
+
+/-- The auto-bottom package supplies the good-height Backlund argument
+bound. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370.toGoodHeightArgumentBound
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370) :
+    BacklundGoodHeightArgumentBound :=
+  I.toAutoPosInputs370.toGoodHeightArgumentBound
+
+/-- The auto-bottom package supplies the final classical proof inputs at
+`ClassicalBacklundTuringProof.K`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370.toProofInputs
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370) :
+    ClassicalBacklundTuringProofInputs :=
+  I.toAutoPosInputs370.toProofInputs
+
+/-- Final Backlund--Turing headline theorem from the auto-bottom
+fixed-pi exp Platt/AP source package. -/
+theorem concreteS_halfLogPlusHalf_of_plattAPFixedPiExpAutoBottomBacklundTuringInputs370
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoBottomFinite370
+    I.global
+    I.finite370
+    hT
+
+/-- The auto-bottom package supplies the generic proved Backlund/Turing
+package for `concreteS`, threshold `140`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370.toProvenBacklundTuringBound
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370) :
+    ProvenBacklundTuringBound :=
+  I.toAutoPosInputs370.toProvenBacklundTuringBound
+
+/-- The auto-bottom package supplies `HalfLogPlusHalfSBound`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370.toHalfLogPlusHalfSBound
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBound.toHalfLogPlusHalfSBound
+
+/-- The auto-bottom package supplies `TuringStyleSBound`, with
+`C = D = 1/2`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370.toTuringStyleSBound
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoBottomInputs370) :
     TuringStyleSBound :=
   I.toProvenBacklundTuringBound.toTuringStyleSBound
 
