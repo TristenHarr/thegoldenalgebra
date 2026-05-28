@@ -64742,6 +64742,100 @@ theorem CanonicalXiPullbackCloudTailStieltjesInputsAFZ.to_split
     CanonicalXiPullbackLowFirstZeroFormulaAFZ.of_lowCloudTailSplit
       h_Z_ge_15 H.lowCloudTail⟩
 
+/-- 🌟🌟 **PROVED — source-level full bundle from direct canonical split
+Stieltjes inputs and bundled Turing envelopes.** -/
+noncomputable def PathBSourceFullInputBundle.of_canonicalXiPullbackSplitStieltjes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hst : CanonicalXiPullbackSplitStieltjesInputsAFZ Dzero)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    PathBSourceFullInputBundle Dzero :=
+  PathBSourceFullInputBundle.of_canonicalXiPullbackStieltjesSource
+    Dzero h_Z_ge_15 Hst.to_stieltjesSource Hturing
+
+/-- 🌟🌟 **PROVED — source-level full bundle from direct canonical low-IBP
+Stieltjes inputs and bundled Turing envelopes.** -/
+noncomputable def PathBSourceFullInputBundle.of_canonicalXiPullbackIBPStieltjes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hst : CanonicalXiPullbackIBPStieltjesInputsAFZ Dzero)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    PathBSourceFullInputBundle Dzero :=
+  PathBSourceFullInputBundle.of_canonicalXiPullbackSplitStieltjes
+    Dzero h_Z_ge_15 (Hst.to_split h_Z_ge_15) Hturing
+
+/-- 🌟🌟 **PROVED — source-level full bundle from direct canonical low
+zero-split Stieltjes inputs and bundled Turing envelopes.** -/
+noncomputable def PathBSourceFullInputBundle.of_canonicalXiPullbackZeroSplitStieltjes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hst : CanonicalXiPullbackZeroSplitStieltjesInputsAFZ Dzero)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    PathBSourceFullInputBundle Dzero :=
+  PathBSourceFullInputBundle.of_canonicalXiPullbackSplitStieltjes
+    Dzero h_Z_ge_15 (Hst.to_split h_Z_ge_15) Hturing
+
+/-- 🌟🌟 **PROVED — source-level full bundle from direct canonical atomic
+cloud/tail Stieltjes inputs and bundled Turing envelopes.** -/
+noncomputable def PathBSourceFullInputBundle.of_canonicalXiPullbackCloudTailStieltjes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {finiteCloud tail : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hst :
+      CanonicalXiPullbackCloudTailStieltjesInputsAFZ
+        Dzero finiteCloud tail)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    PathBSourceFullInputBundle Dzero :=
+  PathBSourceFullInputBundle.of_canonicalXiPullbackSplitStieltjes
+    Dzero h_Z_ge_15 (Hst.to_split h_Z_ge_15) Hturing
+
+/-- 🌟🌟🌟🌟 **PATH B SOURCE CAPSTONE from direct canonical split Stieltjes
+inputs and bundled Turing envelopes.** -/
+theorem XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackSplitStieltjes_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hst : CanonicalXiPullbackSplitStieltjesInputsAFZ Dzero)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  (PathBSourceFullInputBundle.of_canonicalXiPullbackSplitStieltjes
+    Dzero h_Z_ge_15 Hst Hturing).to_target
+
+/-- 🌟🌟🌟🌟 **PATH B SOURCE CAPSTONE from direct canonical low-IBP
+Stieltjes inputs and bundled Turing envelopes.** -/
+theorem XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackIBPStieltjes_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hst : CanonicalXiPullbackIBPStieltjesInputsAFZ Dzero)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  (PathBSourceFullInputBundle.of_canonicalXiPullbackIBPStieltjes
+    Dzero h_Z_ge_15 Hst Hturing).to_target
+
+/-- 🌟🌟🌟🌟 **PATH B SOURCE CAPSTONE from direct canonical low zero-split
+Stieltjes inputs and bundled Turing envelopes.** -/
+theorem XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackZeroSplitStieltjes_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hst : CanonicalXiPullbackZeroSplitStieltjesInputsAFZ Dzero)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  (PathBSourceFullInputBundle.of_canonicalXiPullbackZeroSplitStieltjes
+    Dzero h_Z_ge_15 Hst Hturing).to_target
+
+/-- 🌟🌟🌟🌟 **PATH B SOURCE CAPSTONE from direct canonical atomic
+cloud/tail Stieltjes inputs and bundled Turing envelopes.** -/
+theorem XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackCloudTailStieltjes_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {finiteCloud tail : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hst :
+      CanonicalXiPullbackCloudTailStieltjesInputsAFZ
+        Dzero finiteCloud tail)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  (PathBSourceFullInputBundle.of_canonicalXiPullbackCloudTailStieltjes
+    Dzero h_Z_ge_15 Hst Hturing).to_target
+
 /-- 📦 **`PathBDirectNonTuringInputsAFZ`** — the direct canonical non-Turing
 payload for Path B. The completed-ξ bridge, Γ-cancellation, and Hadamard
 source are already discharged; this leaves exactly `Z ≥ 15` and the direct

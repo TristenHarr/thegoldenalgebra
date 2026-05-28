@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-68,677 lines and roughly 3,573 top-level declarations. It contains no
+68,771 lines and roughly 3,581 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -2127,6 +2127,17 @@ non-Turing/full-bundle layer through
 `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackStieltjesSource_turingBundle`,
 and
 `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackStieltjesSource_turingEnvelopes`.
+The split and low-side direct canonical Stieltjes inputs have bundled
+source full-bundle front doors too:
+`PathBSourceFullInputBundle.of_canonicalXiPullbackSplitStieltjes`,
+`PathBSourceFullInputBundle.of_canonicalXiPullbackIBPStieltjes`,
+`PathBSourceFullInputBundle.of_canonicalXiPullbackZeroSplitStieltjes`,
+`PathBSourceFullInputBundle.of_canonicalXiPullbackCloudTailStieltjes`,
+`XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackSplitStieltjes_turingBundle`,
+`XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackIBPStieltjes_turingBundle`,
+`XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackZeroSplitStieltjes_turingBundle`,
+and
+`XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackCloudTailStieltjes_turingBundle`.
 The direct canonical layer then packages these Stieltjes shapes as
 `CanonicalXiPullbackSplitStieltjesInputsAFZ`,
 `CanonicalXiPullbackIBPStieltjesInputsAFZ`,
@@ -2657,6 +2668,18 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackStieltjesSource_turingBundle`,
   and
   `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackStieltjesSource_turingEnvelopes`.
+  The split, low-IBP, low zero-split, and cloud/tail canonical
+  Stieltjes inputs now have bundled source full-bundle constructors
+  `PathBSourceFullInputBundle.of_canonicalXiPullbackSplitStieltjes`,
+  `PathBSourceFullInputBundle.of_canonicalXiPullbackIBPStieltjes`,
+  `PathBSourceFullInputBundle.of_canonicalXiPullbackZeroSplitStieltjes`,
+  `PathBSourceFullInputBundle.of_canonicalXiPullbackCloudTailStieltjes`,
+  with source capstones
+  `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackSplitStieltjes_turingBundle`,
+  `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackIBPStieltjes_turingBundle`,
+  `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackZeroSplitStieltjes_turingBundle`,
+  and
+  `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackCloudTailStieltjes_turingBundle`.
   The constructor
   `PathBNonTuringSourceInputs.of_canonicalStieltjesSource` and theorem
   `XiPullbackAntiHerglotzTarget_of_canonicalStieltjesSource_turingBundle`
@@ -2881,7 +2904,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-68,677 lines and roughly 3,573 top-level declarations.
+68,771 lines and roughly 3,581 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
