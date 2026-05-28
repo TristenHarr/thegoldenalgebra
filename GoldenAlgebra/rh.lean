@@ -20630,6 +20630,27 @@ noncomputable def
   upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
   upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
 
+/-- Auto-positivity fixed-pi exp slabs lower all the way to the
+count-range/main-term slab used by the uniform finite-band checker. -/
+noncomputable def
+    BacklundArgumentPrincipleTheoremFixedPiExpAutoPosSlabCertificate.toCountRangeMainSlab
+    (S : BacklundArgumentPrincipleTheoremFixedPiExpAutoPosSlabCertificate) :
+    BacklundCountRangeMainSlabCertificate :=
+  S.toFixedPiExpSlab.toPiExpSlab.toRatioBoundSlab.toLogBoundSlab
+    |>.toTheoremSlab
+    |>.toArgumentPrinciple
+    |>.toTuringCountRange
+    |>.toEndpointRangeSlab
+    |>.toRangeSlab
+
+/-- A single auto-positivity fixed-pi exp slab gives the uniform
+`2.5167` bound on its rectangle interval. -/
+theorem BacklundArgumentPrincipleTheoremFixedPiExpAutoPosSlabCertificate.uniform25167
+    (S : BacklundArgumentPrincipleTheoremFixedPiExpAutoPosSlabCertificate)
+    {T : ℝ} (hT0 : 0 ≤ T) (hA : S.R.bottom ≤ T) (hB : T ≤ S.R.top) :
+    |concreteS T| ≤ (25167 / 10000 : ℝ) :=
+  S.toCountRangeMainSlab.uniform25167 hT0 hA hB
+
 /-- A finite list of endpoint-style slabs covering `[140, 374]`. -/
 structure BacklundFiniteBandEndpointCountMainCertificate140_374 where
   slabs : List BacklundEndpointCountMainSlabCertificate
@@ -20721,6 +20742,15 @@ structure
   slabs : List BacklundArgumentPrincipleTheoremFixedPiExpAutoPosSlabCertificate
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
+      ∃ S ∈ slabs, S.R.bottom ≤ T ∧ T ≤ S.R.top
+
+/-- A finite list of auto-positivity fixed-pi exp theorem-target slabs
+covering the sharpened interval `[140, 373]`. -/
+structure
+    BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoPosCertificate140_373 where
+  slabs : List BacklundArgumentPrincipleTheoremFixedPiExpAutoPosSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (373 : ℝ) →
       ∃ S ∈ slabs, S.R.bottom ≤ T ∧ T ≤ S.R.top
 
 /-- Endpoint-style slabs supply the count/main finite-band certificate. -/
@@ -21005,6 +21035,19 @@ noncomputable def
     BacklundFiniteBandUniform25167Check140_374 :=
   C.toFixedPiExp.toUniform25167Check
 
+/-- Auto-positivity fixed-pi exp theorem-target slabs supply the
+sharpened narrow uniform finite-band certificate on `[140, 373]`. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoPosCertificate140_373.toUniform25167Check
+    (C :
+      BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoPosCertificate140_373) :
+    BacklundFiniteBandUniform25167Check140_373 where
+  bound := by
+    intro T hT140 hT373
+    obtain ⟨S, _hS, hA, hB⟩ := C.cover T hT140 hT373
+    have hT0 : 0 ≤ T := by linarith
+    exact S.uniform25167 hT0 hA hB
+
 /-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
 concrete finite-band target `[140, 374]`. -/
 noncomputable def BacklundFiniteBandCheck140_374.of_plattTrudgian
@@ -21125,6 +21168,21 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite373
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite373
     Hglobal
     Hfinite.toFiniteBandCheck
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and auto-positivity fixed-pi exp theorem-target slabs on the
+sharpened interval `[140, 373]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoPosFinite373
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoPosCertificate140_373)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite373
+    Hglobal
+    Hfinite.toUniform25167Check
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
@@ -21738,6 +21796,78 @@ noncomputable def
 noncomputable def
     ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs.toTuringStyleSBound
     (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBound.toTuringStyleSBound
+
+/-- Sharpened source package for the auto-positivity fixed-pi exp finite
+certificate route, using the smaller concrete band `[140, 373]`. -/
+structure ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs373 where
+  global : PlattTrudgianBacklundGlobalInput
+  finite373 :
+    BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoPosCertificate140_373
+
+/-- The sharpened auto-positivity package supplies the good-height
+Backlund argument bound. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs373.toGoodHeightArgumentBound
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs373) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    exact
+      concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoPosFinite373
+        I.global I.finite373 hT
+
+/-- The sharpened auto-positivity package supplies the final classical
+proof inputs at `ClassicalBacklundTuringProof.K`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs373.toProofInputs
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs373) :
+    ClassicalBacklundTuringProofInputs :=
+  ClassicalBacklundTuringProofInputs.of_goodHeightArgumentBound
+    I.toGoodHeightArgumentBound
+
+/-- Final Backlund--Turing headline theorem from the sharpened
+auto-positivity fixed-pi exp Platt/AP source package. -/
+theorem concreteS_halfLogPlusHalf_of_plattAPFixedPiExpAutoPosBacklundTuringInputs373
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs373)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoPosFinite373
+    I.global
+    I.finite373
+    hT
+
+/-- The sharpened auto-positivity package supplies the generic proved
+Backlund/Turing package for `concreteS`, threshold `140`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs373.toProvenBacklundTuringBound
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs373) :
+    ProvenBacklundTuringBound where
+  S := concreteS
+  lower := 140
+  lower_ge_two_pi := by
+    have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+    linarith
+  halfLogPlusHalf := by
+    intro u hu
+    exact
+      concreteS_halfLogPlusHalf_of_plattAPFixedPiExpAutoPosBacklundTuringInputs373
+        I hu
+
+/-- The sharpened auto-positivity package supplies
+`HalfLogPlusHalfSBound`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs373.toHalfLogPlusHalfSBound
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs373) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBound.toHalfLogPlusHalfSBound
+
+/-- The sharpened auto-positivity package supplies `TuringStyleSBound`,
+with `C = D = 1/2`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs373.toTuringStyleSBound
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs373) :
     TuringStyleSBound :=
   I.toProvenBacklundTuringBound.toTuringStyleSBound
 
