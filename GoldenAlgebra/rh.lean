@@ -25748,6 +25748,7188 @@ noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row10 :
         ≤ (58 : ℝ) + (25167 / 10000 : ℝ)
     norm_num
 
+
+/-- Concrete smooth-main row certificate, for row `11`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row11 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨11, by norm_num⟩) where
+  bottomRatioLower := 25783 / 1000
+  bottomRatioUpper := 3223 / 125
+  topRatioLower := 26101 / 1000
+  topRatioUpper := 13051 / 500
+  bottomLogLower := 649 / 200
+  topLogUpper := 653 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (49 / 200 : ℝ) ≤ (31940533 / 25000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (49 / 200 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (31940533 / 25000000 : ℝ) ≤ 25783 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (649 / 200 : ℝ) = (3 : ℝ) + 49 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (653 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (60 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (25783 / 1000 : ℝ) * (649 / 200 : ℝ)
+          - (3223 / 125 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (13051 / 500 : ℝ) * (653 / 200 : ℝ)
+          - (26101 / 1000 : ℝ) + 7 / 8
+        ≤ (59 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `12`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row12 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨12, by norm_num⟩) where
+  bottomRatioLower := 26101 / 1000
+  bottomRatioUpper := 13051 / 500
+  topRatioLower := 26419 / 1000
+  topRatioUpper := 1321 / 50
+  bottomLogLower := 163 / 50
+  topLogUpper := 131 / 40
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (13 / 50 : ℝ) ≤ (129693009 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (13 / 50 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (129693009 / 100000000 : ℝ) ≤ 26101 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (163 / 50 : ℝ) = (3 : ℝ) + 13 / 50 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (131 / 40 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (61 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (26101 / 1000 : ℝ) * (163 / 50 : ℝ)
+          - (13051 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (1321 / 50 : ℝ) * (131 / 40 : ℝ)
+          - (26419 / 1000 : ℝ) + 7 / 8
+        ≤ (60 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `13`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row13 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨13, by norm_num⟩) where
+  bottomRatioLower := 26419 / 1000
+  bottomRatioUpper := 1321 / 50
+  topRatioLower := 13369 / 500
+  topRatioUpper := 26739 / 1000
+  bottomLogLower := 327 / 100
+  topLogUpper := 329 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (27 / 100 : ℝ) ≤ (65498223 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (27 / 100 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (65498223 / 50000000 : ℝ) ≤ 26419 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (327 / 100 : ℝ) = (3 : ℝ) + 27 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (329 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (62 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (26419 / 1000 : ℝ) * (327 / 100 : ℝ)
+          - (1321 / 50 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (26739 / 1000 : ℝ) * (329 / 100 : ℝ)
+          - (13369 / 500 : ℝ) + 7 / 8
+        ≤ (61 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `14`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row14 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨14, by norm_num⟩) where
+  bottomRatioLower := 13369 / 500
+  bottomRatioUpper := 26739 / 1000
+  topRatioLower := 3382 / 125
+  topRatioUpper := 27057 / 1000
+  bottomLogLower := 657 / 200
+  topLogUpper := 33 / 10
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (57 / 200 : ℝ) ≤ (132976203 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (57 / 200 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (132976203 / 100000000 : ℝ) ≤ 13369 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (657 / 200 : ℝ) = (3 : ℝ) + 57 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (33 / 10 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (64 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (13369 / 500 : ℝ) * (657 / 200 : ℝ)
+          - (26739 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (27057 / 1000 : ℝ) * (33 / 10 : ℝ)
+          - (3382 / 125 : ℝ) + 7 / 8
+        ≤ (62 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `15`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row15 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨15, by norm_num⟩) where
+  bottomRatioLower := 3382 / 125
+  bottomRatioUpper := 27057 / 1000
+  topRatioLower := 13687 / 500
+  topRatioUpper := 219 / 8
+  bottomLogLower := 659 / 200
+  topLogUpper := 331 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (59 / 200 : ℝ) ≤ (33578159 / 25000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (59 / 200 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (33578159 / 25000000 : ℝ) ≤ 3382 / 125 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (659 / 200 : ℝ) = (3 : ℝ) + 59 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (331 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (64 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (3382 / 125 : ℝ) * (659 / 200 : ℝ)
+          - (27057 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (219 / 8 : ℝ) * (331 / 100 : ℝ)
+          - (13687 / 500 : ℝ) + 7 / 8
+        ≤ (64 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `16`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row16 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨16, by norm_num⟩) where
+  bottomRatioLower := 13687 / 500
+  bottomRatioUpper := 219 / 8
+  topRatioLower := 6923 / 250
+  topRatioUpper := 27693 / 1000
+  bottomLogLower := 661 / 200
+  topLogUpper := 133 / 40
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (61 / 200 : ℝ) ≤ (135662501 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (61 / 200 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (135662501 / 100000000 : ℝ) ≤ 13687 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (661 / 200 : ℝ) = (3 : ℝ) + 61 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (133 / 40 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (65 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (13687 / 500 : ℝ) * (661 / 200 : ℝ)
+          - (219 / 8 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (27693 / 1000 : ℝ) * (133 / 40 : ℝ)
+          - (6923 / 250 : ℝ) + 7 / 8
+        ≤ (64 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `17`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row17 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨17, by norm_num⟩) where
+  bottomRatioLower := 6923 / 250
+  bottomRatioUpper := 27693 / 1000
+  topRatioLower := 28011 / 1000
+  topRatioUpper := 7003 / 250
+  bottomLogLower := 83 / 25
+  topLogUpper := 667 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (8 / 25 : ℝ) ≤ (137712777 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (8 / 25 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (137712777 / 100000000 : ℝ) ≤ 6923 / 250 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (83 / 25 : ℝ) = (3 : ℝ) + 8 / 25 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (667 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (66 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (6923 / 250 : ℝ) * (83 / 25 : ℝ)
+          - (27693 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (7003 / 250 : ℝ) * (667 / 200 : ℝ)
+          - (28011 / 1000 : ℝ) + 7 / 8
+        ≤ (65 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `18`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row18 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨18, by norm_num⟩) where
+  bottomRatioLower := 28011 / 1000
+  bottomRatioUpper := 7003 / 250
+  topRatioLower := 28329 / 1000
+  topRatioUpper := 2833 / 100
+  bottomLogLower := 333 / 100
+  topLogUpper := 669 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (33 / 100 : ℝ) ≤ (139096813 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (33 / 100 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (139096813 / 100000000 : ℝ) ≤ 28011 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (333 / 100 : ℝ) = (3 : ℝ) + 33 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (669 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (67 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (28011 / 1000 : ℝ) * (333 / 100 : ℝ)
+          - (7003 / 250 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (2833 / 100 : ℝ) * (669 / 200 : ℝ)
+          - (28329 / 1000 : ℝ) + 7 / 8
+        ≤ (66 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `19`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row19 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨19, by norm_num⟩) where
+  bottomRatioLower := 28329 / 1000
+  bottomRatioUpper := 2833 / 100
+  topRatioLower := 28647 / 1000
+  topRatioUpper := 3581 / 125
+  bottomLogLower := 167 / 50
+  topLogUpper := 84 / 25
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (17 / 50 : ℝ) ≤ (3512369 / 2500000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (17 / 50 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (3512369 / 2500000 : ℝ) ≤ 28329 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (167 / 50 : ℝ) = (3 : ℝ) + 17 / 50 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (84 / 25 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (69 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (28329 / 1000 : ℝ) * (167 / 50 : ℝ)
+          - (2833 / 100 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (3581 / 125 : ℝ) * (84 / 25 : ℝ)
+          - (28647 / 1000 : ℝ) + 7 / 8
+        ≤ (67 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `20`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row20 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨20, by norm_num⟩) where
+  bottomRatioLower := 28647 / 1000
+  bottomRatioUpper := 3581 / 125
+  topRatioLower := 14483 / 500
+  topRatioUpper := 28967 / 1000
+  bottomLogLower := 671 / 200
+  topLogUpper := 337 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (71 / 200 : ℝ) ≤ (71309033 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (71 / 200 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (71309033 / 50000000 : ℝ) ≤ 28647 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (671 / 200 : ℝ) = (3 : ℝ) + 71 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (337 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (69 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (28647 / 1000 : ℝ) * (671 / 200 : ℝ)
+          - (3581 / 125 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (28967 / 1000 : ℝ) * (337 / 100 : ℝ)
+          - (14483 / 500 : ℝ) + 7 / 8
+        ≤ (69 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `21`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row21 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨21, by norm_num⟩) where
+  bottomRatioLower := 14483 / 500
+  bottomRatioUpper := 28967 / 1000
+  topRatioLower := 7321 / 250
+  topRatioUpper := 5857 / 200
+  bottomLogLower := 673 / 200
+  topLogUpper := 169 / 50
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (73 / 200 : ℝ) ≤ (144051401 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (73 / 200 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (144051401 / 100000000 : ℝ) ≤ 14483 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (673 / 200 : ℝ) = (3 : ℝ) + 73 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (169 / 50 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (70 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (14483 / 500 : ℝ) * (673 / 200 : ℝ)
+          - (28967 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (5857 / 200 : ℝ) * (169 / 50 : ℝ)
+          - (7321 / 250 : ℝ) + 7 / 8
+        ≤ (69 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `22`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row22 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨22, by norm_num⟩) where
+  bottomRatioLower := 7321 / 250
+  bottomRatioUpper := 5857 / 200
+  topRatioLower := 14801 / 500
+  topRatioUpper := 29603 / 1000
+  bottomLogLower := 27 / 8
+  topLogUpper := 339 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (3 / 8 : ℝ) ≤ (72749571 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (3 / 8 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (72749571 / 50000000 : ℝ) ≤ 7321 / 250 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (27 / 8 : ℝ) = (3 : ℝ) + 3 / 8 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (339 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (72 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (7321 / 250 : ℝ) * (27 / 8 : ℝ)
+          - (5857 / 200 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (29603 / 1000 : ℝ) * (339 / 100 : ℝ)
+          - (14801 / 500 : ℝ) + 7 / 8
+        ≤ (70 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `23`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row23 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨23, by norm_num⟩) where
+  bottomRatioLower := 14801 / 500
+  bottomRatioUpper := 29603 / 1000
+  topRatioLower := 29921 / 1000
+  topRatioUpper := 14961 / 500
+  bottomLogLower := 677 / 200
+  topLogUpper := 17 / 5
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (77 / 200 : ℝ) ≤ (146961433 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (77 / 200 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (146961433 / 100000000 : ℝ) ≤ 14801 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (677 / 200 : ℝ) = (3 : ℝ) + 77 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (17 / 5 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (73 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (14801 / 500 : ℝ) * (677 / 200 : ℝ)
+          - (29603 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (14961 / 500 : ℝ) * (17 / 5 : ℝ)
+          - (29921 / 1000 : ℝ) + 7 / 8
+        ≤ (72 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `24`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row24 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨24, by norm_num⟩) where
+  bottomRatioLower := 29921 / 1000
+  bottomRatioUpper := 14961 / 500
+  topRatioLower := 30239 / 1000
+  topRatioUpper := 756 / 25
+  bottomLogLower := 679 / 200
+  topLogUpper := 341 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (79 / 200 : ℝ) ≤ (7421921 / 5000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (79 / 200 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (7421921 / 5000000 : ℝ) ≤ 29921 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (679 / 200 : ℝ) = (3 : ℝ) + 79 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (341 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (74 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (29921 / 1000 : ℝ) * (679 / 200 : ℝ)
+          - (14961 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (756 / 25 : ℝ) * (341 / 100 : ℝ)
+          - (30239 / 1000 : ℝ) + 7 / 8
+        ≤ (73 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `25`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row25 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨25, by norm_num⟩) where
+  bottomRatioLower := 30239 / 1000
+  bottomRatioUpper := 756 / 25
+  topRatioLower := 30557 / 1000
+  topRatioUpper := 15279 / 500
+  bottomLogLower := 681 / 200
+  topLogUpper := 171 / 50
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (81 / 200 : ℝ) ≤ (149930251 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (81 / 200 : ℝ)) (n := 8)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (8 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (149930251 / 100000000 : ℝ) ≤ 30239 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (681 / 200 : ℝ) = (3 : ℝ) + 81 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (171 / 50 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (74 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (30239 / 1000 : ℝ) * (681 / 200 : ℝ)
+          - (756 / 25 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (15279 / 500 : ℝ) * (171 / 50 : ℝ)
+          - (30557 / 1000 : ℝ) + 7 / 8
+        ≤ (74 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `26`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row26 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨26, by norm_num⟩) where
+  bottomRatioLower := 30557 / 1000
+  bottomRatioUpper := 15279 / 500
+  topRatioLower := 7719 / 250
+  topRatioUpper := 30877 / 1000
+  bottomLogLower := 683 / 200
+  topLogUpper := 687 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (83 / 200 : ℝ) ≤ (6057483 / 4000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (83 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (6057483 / 4000000 : ℝ) ≤ 30557 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (683 / 200 : ℝ) = (3 : ℝ) + 83 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (687 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (76 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (30557 / 1000 : ℝ) * (683 / 200 : ℝ)
+          - (15279 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (30877 / 1000 : ℝ) * (687 / 200 : ℝ)
+          - (7719 / 250 : ℝ) + 7 / 8
+        ≤ (74 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `27`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row27 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨27, by norm_num⟩) where
+  bottomRatioLower := 7719 / 250
+  bottomRatioUpper := 30877 / 1000
+  topRatioLower := 15597 / 500
+  topRatioUpper := 6239 / 200
+  bottomLogLower := 137 / 40
+  topLogUpper := 689 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (17 / 40 : ℝ) ≤ (76479521 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (17 / 40 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (76479521 / 50000000 : ℝ) ≤ 7719 / 250 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (137 / 40 : ℝ) = (3 : ℝ) + 17 / 40 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (689 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (77 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (7719 / 250 : ℝ) * (137 / 40 : ℝ)
+          - (30877 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (6239 / 200 : ℝ) * (689 / 200 : ℝ)
+          - (15597 / 500 : ℝ) + 7 / 8
+        ≤ (76 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `28`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row28 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨28, by norm_num⟩) where
+  bottomRatioLower := 15597 / 500
+  bottomRatioUpper := 6239 / 200
+  topRatioLower := 3939 / 125
+  topRatioUpper := 31513 / 1000
+  bottomLogLower := 86 / 25
+  topLogUpper := 691 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (11 / 25 : ℝ) ≤ (77635361 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (11 / 25 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (77635361 / 50000000 : ℝ) ≤ 15597 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (86 / 25 : ℝ) = (3 : ℝ) + 11 / 25 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (691 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (78 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (15597 / 500 : ℝ) * (86 / 25 : ℝ)
+          - (6239 / 200 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (31513 / 1000 : ℝ) * (691 / 200 : ℝ)
+          - (3939 / 125 : ℝ) + 7 / 8
+        ≤ (77 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `29`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row29 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨29, by norm_num⟩) where
+  bottomRatioLower := 3939 / 125
+  bottomRatioUpper := 31513 / 1000
+  topRatioLower := 3183 / 100
+  topRatioUpper := 31831 / 1000
+  bottomLogLower := 69 / 20
+  topLogUpper := 693 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (9 / 20 : ℝ) ≤ (156831219 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (9 / 20 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (156831219 / 100000000 : ℝ) ≤ 3939 / 125 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (69 / 20 : ℝ) = (3 : ℝ) + 9 / 20 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (693 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (79 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (3939 / 125 : ℝ) * (69 / 20 : ℝ)
+          - (31513 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (31831 / 1000 : ℝ) * (693 / 200 : ℝ)
+          - (3183 / 100 : ℝ) + 7 / 8
+        ≤ (78 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `30`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row30 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨30, by norm_num⟩) where
+  bottomRatioLower := 3183 / 100
+  bottomRatioUpper := 31831 / 1000
+  topRatioLower := 32149 / 1000
+  topRatioUpper := 643 / 20
+  bottomLogLower := 173 / 50
+  topLogUpper := 139 / 40
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (23 / 50 : ℝ) ≤ (158407399 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (23 / 50 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (158407399 / 100000000 : ℝ) ≤ 3183 / 100 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (173 / 50 : ℝ) = (3 : ℝ) + 23 / 50 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (139 / 40 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (80 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (3183 / 100 : ℝ) * (173 / 50 : ℝ)
+          - (31831 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (643 / 20 : ℝ) * (139 / 40 : ℝ)
+          - (32149 / 1000 : ℝ) + 7 / 8
+        ≤ (79 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `31`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row31 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨31, by norm_num⟩) where
+  bottomRatioLower := 32149 / 1000
+  bottomRatioUpper := 643 / 20
+  topRatioLower := 32467 / 1000
+  topRatioUpper := 8117 / 250
+  bottomLogLower := 347 / 100
+  topLogUpper := 697 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (47 / 100 : ℝ) ≤ (7999971 / 5000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (47 / 100 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (7999971 / 5000000 : ℝ) ≤ 32149 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (347 / 100 : ℝ) = (3 : ℝ) + 47 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (697 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (81 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (32149 / 1000 : ℝ) * (347 / 100 : ℝ)
+          - (643 / 20 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (8117 / 250 : ℝ) * (697 / 200 : ℝ)
+          - (32467 / 1000 : ℝ) + 7 / 8
+        ≤ (80 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `32`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row32 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨32, by norm_num⟩) where
+  bottomRatioLower := 32467 / 1000
+  bottomRatioUpper := 8117 / 250
+  topRatioLower := 6557 / 200
+  topRatioUpper := 16393 / 500
+  bottomLogLower := 87 / 25
+  topLogUpper := 699 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (12 / 25 : ℝ) ≤ (161607441 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (12 / 25 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (161607441 / 100000000 : ℝ) ≤ 32467 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (87 / 25 : ℝ) = (3 : ℝ) + 12 / 25 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (699 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (83 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (32467 / 1000 : ℝ) * (87 / 25 : ℝ)
+          - (8117 / 250 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (16393 / 500 : ℝ) * (699 / 200 : ℝ)
+          - (6557 / 200 : ℝ) + 7 / 8
+        ≤ (81 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `33`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row33 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨33, by norm_num⟩) where
+  bottomRatioLower := 6557 / 200
+  bottomRatioUpper := 16393 / 500
+  topRatioLower := 4138 / 125
+  topRatioUpper := 6621 / 200
+  bottomLogLower := 697 / 200
+  topLogUpper := 7 / 2
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (97 / 200 : ℝ) ≤ (162417501 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (97 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (162417501 / 100000000 : ℝ) ≤ 6557 / 200 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (697 / 200 : ℝ) = (3 : ℝ) + 97 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (7 / 2 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (84 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (6557 / 200 : ℝ) * (697 / 200 : ℝ)
+          - (16393 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (6621 / 200 : ℝ) * (7 / 2 : ℝ)
+          - (4138 / 125 : ℝ) + 7 / 8
+        ≤ (83 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `34`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row34 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨34, by norm_num⟩) where
+  bottomRatioLower := 4138 / 125
+  bottomRatioUpper := 6621 / 200
+  topRatioLower := 16711 / 500
+  topRatioUpper := 33423 / 1000
+  bottomLogLower := 699 / 200
+  topLogUpper := 351 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (99 / 200 : ℝ) ≤ (5126557 / 3125000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (99 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (5126557 / 3125000 : ℝ) ≤ 4138 / 125 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (699 / 200 : ℝ) = (3 : ℝ) + 99 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (351 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (85 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (4138 / 125 : ℝ) * (699 / 200 : ℝ)
+          - (6621 / 200 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (33423 / 1000 : ℝ) * (351 / 100 : ℝ)
+          - (16711 / 500 : ℝ) + 7 / 8
+        ≤ (84 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `35`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row35 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨35, by norm_num⟩) where
+  bottomRatioLower := 16711 / 500
+  bottomRatioUpper := 33423 / 1000
+  topRatioLower := 1687 / 50
+  topRatioUpper := 33741 / 1000
+  bottomLogLower := 701 / 200
+  topLogUpper := 88 / 25
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (101 / 200 : ℝ) ≤ (165698553 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (101 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (165698553 / 100000000 : ℝ) ≤ 16711 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (701 / 200 : ℝ) = (3 : ℝ) + 101 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (88 / 25 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (86 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (16711 / 500 : ℝ) * (701 / 200 : ℝ)
+          - (33423 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (33741 / 1000 : ℝ) * (88 / 25 : ℝ)
+          - (1687 / 50 : ℝ) + 7 / 8
+        ≤ (85 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `36`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row36 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨36, by norm_num⟩) where
+  bottomRatioLower := 1687 / 50
+  bottomRatioUpper := 33741 / 1000
+  topRatioLower := 34059 / 1000
+  topRatioUpper := 1703 / 50
+  bottomLogLower := 703 / 200
+  topLogUpper := 353 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (103 / 200 : ℝ) ≤ (167363851 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (103 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (167363851 / 100000000 : ℝ) ≤ 1687 / 50 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (703 / 200 : ℝ) = (3 : ℝ) + 103 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (353 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (87 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (1687 / 50 : ℝ) * (703 / 200 : ℝ)
+          - (33741 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (1703 / 50 : ℝ) * (353 / 100 : ℝ)
+          - (34059 / 1000 : ℝ) + 7 / 8
+        ≤ (86 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `37`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row37 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨37, by norm_num⟩) where
+  bottomRatioLower := 34059 / 1000
+  bottomRatioUpper := 1703 / 50
+  topRatioLower := 34377 / 1000
+  topRatioUpper := 17189 / 500
+  bottomLogLower := 141 / 40
+  topLogUpper := 177 / 50
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (21 / 40 : ℝ) ≤ (33809177 / 20000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (21 / 40 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (33809177 / 20000000 : ℝ) ≤ 34059 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (141 / 40 : ℝ) = (3 : ℝ) + 21 / 40 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (177 / 50 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (88 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (34059 / 1000 : ℝ) * (141 / 40 : ℝ)
+          - (1703 / 50 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (17189 / 500 : ℝ) * (177 / 50 : ℝ)
+          - (34377 / 1000 : ℝ) + 7 / 8
+        ≤ (87 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `38`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row38 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨38, by norm_num⟩) where
+  bottomRatioLower := 34377 / 1000
+  bottomRatioUpper := 17189 / 500
+  topRatioLower := 6939 / 200
+  topRatioUpper := 4337 / 125
+  bottomLogLower := 707 / 200
+  topLogUpper := 71 / 20
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (107 / 200 : ℝ) ≤ (6829793 / 4000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (107 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (6829793 / 4000000 : ℝ) ≤ 34377 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (707 / 200 : ℝ) = (3 : ℝ) + 107 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (71 / 20 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (89 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (34377 / 1000 : ℝ) * (707 / 200 : ℝ)
+          - (17189 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (4337 / 125 : ℝ) * (71 / 20 : ℝ)
+          - (6939 / 200 : ℝ) + 7 / 8
+        ≤ (88 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `39`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row39 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨39, by norm_num⟩) where
+  bottomRatioLower := 6939 / 200
+  bottomRatioUpper := 4337 / 125
+  topRatioLower := 17507 / 500
+  topRatioUpper := 7003 / 200
+  bottomLogLower := 709 / 200
+  topLogUpper := 89 / 25
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (109 / 200 : ℝ) ≤ (172460839 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (109 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (172460839 / 100000000 : ℝ) ≤ 6939 / 200 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (709 / 200 : ℝ) = (3 : ℝ) + 109 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (89 / 25 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (90 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (6939 / 200 : ℝ) * (709 / 200 : ℝ)
+          - (4337 / 125 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (7003 / 200 : ℝ) * (89 / 25 : ℝ)
+          - (17507 / 500 : ℝ) + 7 / 8
+        ≤ (89 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `40`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row40 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨40, by norm_num⟩) where
+  bottomRatioLower := 17507 / 500
+  bottomRatioUpper := 7003 / 200
+  topRatioLower := 8833 / 250
+  topRatioUpper := 35333 / 1000
+  bottomLogLower := 711 / 200
+  topLogUpper := 713 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (111 / 200 : ℝ) ≤ (174194099 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (111 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (174194099 / 100000000 : ℝ) ≤ 17507 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (711 / 200 : ℝ) = (3 : ℝ) + 111 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (713 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (92 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (17507 / 500 : ℝ) * (711 / 200 : ℝ)
+          - (7003 / 200 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (35333 / 1000 : ℝ) * (713 / 200 : ℝ)
+          - (8833 / 250 : ℝ) + 7 / 8
+        ≤ (90 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `41`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row41 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨41, by norm_num⟩) where
+  bottomRatioLower := 8833 / 250
+  bottomRatioUpper := 35333 / 1000
+  topRatioLower := 713 / 20
+  topRatioUpper := 35651 / 1000
+  bottomLogLower := 89 / 25
+  topLogUpper := 143 / 40
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (14 / 25 : ℝ) ≤ (175067251 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (14 / 25 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (175067251 / 100000000 : ℝ) ≤ 8833 / 250 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (89 / 25 : ℝ) = (3 : ℝ) + 14 / 25 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (143 / 40 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (92 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (8833 / 250 : ℝ) * (89 / 25 : ℝ)
+          - (35333 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (35651 / 1000 : ℝ) * (143 / 40 : ℝ)
+          - (713 / 20 : ℝ) + 7 / 8
+        ≤ (92 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `42`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row42 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨42, by norm_num⟩) where
+  bottomRatioLower := 713 / 20
+  bottomRatioUpper := 35651 / 1000
+  topRatioLower := 35969 / 1000
+  topRatioUpper := 3597 / 100
+  bottomLogLower := 357 / 100
+  topLogUpper := 717 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (57 / 100 : ℝ) ≤ (88413353 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (57 / 100 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (88413353 / 50000000 : ℝ) ≤ 713 / 20 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (357 / 100 : ℝ) = (3 : ℝ) + 57 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (717 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (94 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (713 / 20 : ℝ) * (357 / 100 : ℝ)
+          - (35651 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (3597 / 100 : ℝ) * (717 / 200 : ℝ)
+          - (35969 / 1000 : ℝ) + 7 / 8
+        ≤ (92 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `43`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row43 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨43, by norm_num⟩) where
+  bottomRatioLower := 35969 / 1000
+  bottomRatioUpper := 3597 / 100
+  topRatioLower := 36287 / 1000
+  topRatioUpper := 4536 / 125
+  bottomLogLower := 179 / 50
+  topLogUpper := 719 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (29 / 50 : ℝ) ≤ (44650961 / 25000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (29 / 50 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (44650961 / 25000000 : ℝ) ≤ 35969 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (179 / 50 : ℝ) = (3 : ℝ) + 29 / 50 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (719 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (95 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (35969 / 1000 : ℝ) * (179 / 50 : ℝ)
+          - (3597 / 100 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (4536 / 125 : ℝ) * (719 / 200 : ℝ)
+          - (36287 / 1000 : ℝ) + 7 / 8
+        ≤ (94 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `44`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row44 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨44, by norm_num⟩) where
+  bottomRatioLower := 36287 / 1000
+  bottomRatioUpper := 4536 / 125
+  topRatioLower := 7321 / 200
+  topRatioUpper := 18303 / 500
+  bottomLogLower := 359 / 100
+  topLogUpper := 721 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (59 / 100 : ℝ) ≤ (90199421 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (59 / 100 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (90199421 / 50000000 : ℝ) ≤ 36287 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (359 / 100 : ℝ) = (3 : ℝ) + 59 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (721 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (96 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (36287 / 1000 : ℝ) * (359 / 100 : ℝ)
+          - (4536 / 125 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (18303 / 500 : ℝ) * (721 / 200 : ℝ)
+          - (7321 / 200 : ℝ) + 7 / 8
+        ≤ (95 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `45`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row45 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨45, by norm_num⟩) where
+  bottomRatioLower := 7321 / 200
+  bottomRatioUpper := 18303 / 500
+  topRatioLower := 36923 / 1000
+  topRatioUpper := 9231 / 250
+  bottomLogLower := 18 / 5
+  topLogUpper := 361 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (3 / 5 : ℝ) ≤ (182211881 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (3 / 5 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (182211881 / 100000000 : ℝ) ≤ 7321 / 200 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (18 / 5 : ℝ) = (3 : ℝ) + 3 / 5 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (361 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (98 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (7321 / 200 : ℝ) * (18 / 5 : ℝ)
+          - (18303 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (9231 / 250 : ℝ) * (361 / 100 : ℝ)
+          - (36923 / 1000 : ℝ) + 7 / 8
+        ≤ (96 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `46`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row46 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨46, by norm_num⟩) where
+  bottomRatioLower := 36923 / 1000
+  bottomRatioUpper := 9231 / 250
+  topRatioLower := 18621 / 500
+  topRatioUpper := 37243 / 1000
+  bottomLogLower := 721 / 200
+  topLogUpper := 181 / 50
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (121 / 200 : ℝ) ≤ (183125221 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (121 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (183125221 / 100000000 : ℝ) ≤ 36923 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (721 / 200 : ℝ) = (3 : ℝ) + 121 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (181 / 50 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (99 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (36923 / 1000 : ℝ) * (721 / 200 : ℝ)
+          - (9231 / 250 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (37243 / 1000 : ℝ) * (181 / 50 : ℝ)
+          - (18621 / 500 : ℝ) + 7 / 8
+        ≤ (98 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `47`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row47 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨47, by norm_num⟩) where
+  bottomRatioLower := 18621 / 500
+  bottomRatioUpper := 37243 / 1000
+  topRatioLower := 939 / 25
+  topRatioUpper := 37561 / 1000
+  bottomLogLower := 723 / 200
+  topLogUpper := 363 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (123 / 200 : ℝ) ≤ (9248283 / 5000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (123 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (9248283 / 5000000 : ℝ) ≤ 18621 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (723 / 200 : ℝ) = (3 : ℝ) + 123 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (363 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (99 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (18621 / 500 : ℝ) * (723 / 200 : ℝ)
+          - (37243 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (37561 / 1000 : ℝ) * (363 / 100 : ℝ)
+          - (939 / 25 : ℝ) + 7 / 8
+        ≤ (99 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `48`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row48 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨48, by norm_num⟩) where
+  bottomRatioLower := 939 / 25
+  bottomRatioUpper := 37561 / 1000
+  topRatioLower := 18939 / 500
+  topRatioUpper := 37879 / 1000
+  bottomLogLower := 29 / 8
+  topLogUpper := 727 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (5 / 8 : ℝ) ≤ (46706149 / 25000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (5 / 8 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (46706149 / 25000000 : ℝ) ≤ 939 / 25 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (29 / 8 : ℝ) = (3 : ℝ) + 5 / 8 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (727 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (101 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (939 / 25 : ℝ) * (29 / 8 : ℝ)
+          - (37561 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (37879 / 1000 : ℝ) * (727 / 200 : ℝ)
+          - (18939 / 500 : ℝ) + 7 / 8
+        ≤ (99 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `49`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row49 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨49, by norm_num⟩) where
+  bottomRatioLower := 18939 / 500
+  bottomRatioUpper := 37879 / 1000
+  topRatioLower := 38197 / 1000
+  topRatioUpper := 19099 / 500
+  bottomLogLower := 363 / 100
+  topLogUpper := 729 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (63 / 100 : ℝ) ≤ (93880529 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (63 / 100 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (93880529 / 50000000 : ℝ) ≤ 18939 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (363 / 100 : ℝ) = (3 : ℝ) + 63 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (729 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (102 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (18939 / 500 : ℝ) * (363 / 100 : ℝ)
+          - (37879 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (19099 / 500 : ℝ) * (729 / 200 : ℝ)
+          - (38197 / 1000 : ℝ) + 7 / 8
+        ≤ (101 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `50`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row50 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨50, by norm_num⟩) where
+  bottomRatioLower := 38197 / 1000
+  bottomRatioUpper := 19099 / 500
+  topRatioLower := 7703 / 200
+  topRatioUpper := 9629 / 250
+  bottomLogLower := 91 / 25
+  topLogUpper := 731 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (16 / 25 : ℝ) ≤ (23706011 / 12500000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (16 / 25 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (23706011 / 12500000 : ℝ) ≤ 38197 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (91 / 25 : ℝ) = (3 : ℝ) + 16 / 25 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (731 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (103 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (38197 / 1000 : ℝ) * (91 / 25 : ℝ)
+          - (19099 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (9629 / 250 : ℝ) * (731 / 200 : ℝ)
+          - (7703 / 200 : ℝ) + 7 / 8
+        ≤ (102 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `51`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row51 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨51, by norm_num⟩) where
+  bottomRatioLower := 7703 / 200
+  bottomRatioUpper := 9629 / 250
+  topRatioLower := 38833 / 1000
+  topRatioUpper := 19417 / 500
+  bottomLogLower := 73 / 20
+  topLogUpper := 183 / 50
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (13 / 20 : ℝ) ≤ (191554083 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (13 / 20 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (191554083 / 100000000 : ℝ) ≤ 7703 / 200 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (73 / 20 : ℝ) = (3 : ℝ) + 13 / 20 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (183 / 50 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (104 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (7703 / 200 : ℝ) * (73 / 20 : ℝ)
+          - (9629 / 250 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (19417 / 500 : ℝ) * (183 / 50 : ℝ)
+          - (38833 / 1000 : ℝ) + 7 / 8
+        ≤ (103 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `52`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row52 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨52, by norm_num⟩) where
+  bottomRatioLower := 38833 / 1000
+  bottomRatioUpper := 19417 / 500
+  topRatioLower := 4894 / 125
+  topRatioUpper := 39153 / 1000
+  bottomLogLower := 731 / 200
+  topLogUpper := 367 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (131 / 200 : ℝ) ≤ (48128563 / 25000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (131 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (48128563 / 25000000 : ℝ) ≤ 38833 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (731 / 200 : ℝ) = (3 : ℝ) + 131 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (367 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (105 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (38833 / 1000 : ℝ) * (731 / 200 : ℝ)
+          - (19417 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (39153 / 1000 : ℝ) * (367 / 100 : ℝ)
+          - (4894 / 125 : ℝ) + 7 / 8
+        ≤ (104 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `53`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row53 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨53, by norm_num⟩) where
+  bottomRatioLower := 4894 / 125
+  bottomRatioUpper := 39153 / 1000
+  topRatioLower := 3947 / 100
+  topRatioUpper := 39471 / 1000
+  bottomLogLower := 733 / 200
+  topLogUpper := 92 / 25
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (133 / 200 : ℝ) ≤ (194449053 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (133 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (194449053 / 100000000 : ℝ) ≤ 4894 / 125 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (733 / 200 : ℝ) = (3 : ℝ) + 133 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (92 / 25 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (106 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (4894 / 125 : ℝ) * (733 / 200 : ℝ)
+          - (39153 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (39471 / 1000 : ℝ) * (92 / 25 : ℝ)
+          - (3947 / 100 : ℝ) + 7 / 8
+        ≤ (105 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `54`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row54 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨54, by norm_num⟩) where
+  bottomRatioLower := 3947 / 100
+  bottomRatioUpper := 39471 / 1000
+  topRatioLower := 9947 / 250
+  topRatioUpper := 39789 / 1000
+  bottomLogLower := 147 / 40
+  topLogUpper := 737 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (27 / 40 : ℝ) ≤ (98201649 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (27 / 40 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (98201649 / 50000000 : ℝ) ≤ 3947 / 100 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (147 / 40 : ℝ) = (3 : ℝ) + 27 / 40 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (737 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (108 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (3947 / 100 : ℝ) * (147 / 40 : ℝ)
+          - (39471 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (39789 / 1000 : ℝ) * (737 / 200 : ℝ)
+          - (9947 / 250 : ℝ) + 7 / 8
+        ≤ (106 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `55`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row55 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨55, by norm_num⟩) where
+  bottomRatioLower := 9947 / 250
+  bottomRatioUpper := 39789 / 1000
+  topRatioLower := 40107 / 1000
+  topRatioUpper := 10027 / 250
+  bottomLogLower := 92 / 25
+  topLogUpper := 739 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (17 / 25 : ℝ) ≤ (98693887 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (17 / 25 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (98693887 / 50000000 : ℝ) ≤ 9947 / 250 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (92 / 25 : ℝ) = (3 : ℝ) + 17 / 25 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (739 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (109 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (9947 / 250 : ℝ) * (92 / 25 : ℝ)
+          - (39789 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (10027 / 250 : ℝ) * (739 / 200 : ℝ)
+          - (40107 / 1000 : ℝ) + 7 / 8
+        ≤ (108 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `56`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row56 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨56, by norm_num⟩) where
+  bottomRatioLower := 40107 / 1000
+  bottomRatioUpper := 10027 / 250
+  topRatioLower := 1617 / 40
+  topRatioUpper := 20213 / 500
+  bottomLogLower := 369 / 100
+  topLogUpper := 37 / 10
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (69 / 100 : ℝ) ≤ (99685777 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (69 / 100 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (99685777 / 50000000 : ℝ) ≤ 40107 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (369 / 100 : ℝ) = (3 : ℝ) + 69 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (37 / 10 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (110 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (40107 / 1000 : ℝ) * (369 / 100 : ℝ)
+          - (10027 / 250 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (20213 / 500 : ℝ) * (37 / 10 : ℝ)
+          - (1617 / 40 : ℝ) + 7 / 8
+        ≤ (109 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `57`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row57 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨57, by norm_num⟩) where
+  bottomRatioLower := 1617 / 40
+  bottomRatioUpper := 20213 / 500
+  topRatioLower := 40743 / 1000
+  topRatioUpper := 5093 / 125
+  bottomLogLower := 739 / 200
+  topLogUpper := 371 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (139 / 200 : ℝ) ≤ (50092727 / 25000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (139 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (50092727 / 25000000 : ℝ) ≤ 1617 / 40 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (739 / 200 : ℝ) = (3 : ℝ) + 139 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (371 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (111 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (1617 / 40 : ℝ) * (739 / 200 : ℝ)
+          - (20213 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (5093 / 125 : ℝ) * (371 / 100 : ℝ)
+          - (40743 / 1000 : ℝ) + 7 / 8
+        ≤ (110 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `58`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row58 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨58, by norm_num⟩) where
+  bottomRatioLower := 40743 / 1000
+  bottomRatioUpper := 5093 / 125
+  topRatioLower := 41061 / 1000
+  topRatioUpper := 20531 / 500
+  bottomLogLower := 741 / 200
+  topLogUpper := 93 / 25
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (141 / 200 : ℝ) ≤ (202384669 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (141 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (202384669 / 100000000 : ℝ) ≤ 40743 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (741 / 200 : ℝ) = (3 : ℝ) + 141 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (93 / 25 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (112 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (40743 / 1000 : ℝ) * (741 / 200 : ℝ)
+          - (5093 / 125 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (20531 / 500 : ℝ) * (93 / 25 : ℝ)
+          - (41061 / 1000 : ℝ) + 7 / 8
+        ≤ (111 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `59`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row59 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨59, by norm_num⟩) where
+  bottomRatioLower := 41061 / 1000
+  bottomRatioUpper := 20531 / 500
+  topRatioLower := 2069 / 50
+  topRatioUpper := 41381 / 1000
+  bottomLogLower := 743 / 200
+  topLogUpper := 149 / 40
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (143 / 200 : ℝ) ≤ (204418669 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (143 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (204418669 / 100000000 : ℝ) ≤ 41061 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (743 / 200 : ℝ) = (3 : ℝ) + 143 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (149 / 40 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (114 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (41061 / 1000 : ℝ) * (743 / 200 : ℝ)
+          - (20531 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (41381 / 1000 : ℝ) * (149 / 40 : ℝ)
+          - (2069 / 50 : ℝ) + 7 / 8
+        ≤ (112 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `60`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row60 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨60, by norm_num⟩) where
+  bottomRatioLower := 2069 / 50
+  bottomRatioUpper := 41381 / 1000
+  topRatioLower := 20849 / 500
+  topRatioUpper := 41699 / 1000
+  bottomLogLower := 93 / 25
+  topLogUpper := 747 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (18 / 25 : ℝ) ≤ (102721661 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (18 / 25 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (102721661 / 50000000 : ℝ) ≤ 2069 / 50 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (93 / 25 : ℝ) = (3 : ℝ) + 18 / 25 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (747 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (115 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (2069 / 50 : ℝ) * (93 / 25 : ℝ)
+          - (41381 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (41699 / 1000 : ℝ) * (747 / 200 : ℝ)
+          - (20849 / 500 : ℝ) + 7 / 8
+        ≤ (114 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+
+/-- Concrete smooth-main row certificate, for row `61`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row61 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨61, by norm_num⟩) where
+  bottomRatioLower := 20849 / 500
+  bottomRatioUpper := 41699 / 1000
+  topRatioLower := 5252 / 125
+  topRatioUpper := 42017 / 1000
+  bottomLogLower := 373 / 100
+  topLogUpper := 187 / 50
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (73 / 100 : ℝ) ≤ (207508061 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (73 / 100 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (207508061 / 100000000 : ℝ) ≤ 20849 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (373 / 100 : ℝ) = (3 : ℝ) + 73 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (187 / 50 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (116 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (20849 / 500 : ℝ) * (373 / 100 : ℝ)
+          - (41699 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (42017 / 1000 : ℝ) * (187 / 50 : ℝ)
+          - (5252 / 125 : ℝ) + 7 / 8
+        ≤ (115 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `62`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row62 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨62, by norm_num⟩) where
+  bottomRatioLower := 5252 / 125
+  bottomRatioUpper := 42017 / 1000
+  topRatioLower := 8467 / 200
+  topRatioUpper := 5292 / 125
+  bottomLogLower := 747 / 200
+  topLogUpper := 15 / 4
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (147 / 200 : ℝ) ≤ (1042741 / 500000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (147 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (1042741 / 500000 : ℝ) ≤ 5252 / 125 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (747 / 200 : ℝ) = (3 : ℝ) + 147 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (15 / 4 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (117 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (5252 / 125 : ℝ) * (747 / 200 : ℝ)
+          - (42017 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (5292 / 125 : ℝ) * (15 / 4 : ℝ)
+          - (8467 / 200 : ℝ) + 7 / 8
+        ≤ (116 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `63`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row63 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨63, by norm_num⟩) where
+  bottomRatioLower := 8467 / 200
+  bottomRatioUpper := 5292 / 125
+  topRatioLower := 42653 / 1000
+  topRatioUpper := 21327 / 500
+  bottomLogLower := 749 / 200
+  topLogUpper := 751 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (149 / 200 : ℝ) ≤ (13165259 / 6250000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (149 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (13165259 / 6250000 : ℝ) ≤ 8467 / 200 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (749 / 200 : ℝ) = (3 : ℝ) + 149 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (751 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (119 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (8467 / 200 : ℝ) * (749 / 200 : ℝ)
+          - (5292 / 125 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (21327 / 500 : ℝ) * (751 / 200 : ℝ)
+          - (42653 / 1000 : ℝ) + 7 / 8
+        ≤ (117 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `64`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row64 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨64, by norm_num⟩) where
+  bottomRatioLower := 42653 / 1000
+  bottomRatioUpper := 21327 / 500
+  topRatioLower := 42971 / 1000
+  topRatioUpper := 10743 / 250
+  bottomLogLower := 15 / 4
+  topLogUpper := 753 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (3 / 4 : ℝ) ≤ (105850001 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (3 / 4 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (105850001 / 50000000 : ℝ) ≤ 42653 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (15 / 4 : ℝ) = (3 : ℝ) + 3 / 4 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (753 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (120 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (42653 / 1000 : ℝ) * (15 / 4 : ℝ)
+          - (21327 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (10743 / 250 : ℝ) * (753 / 200 : ℝ)
+          - (42971 / 1000 : ℝ) + 7 / 8
+        ≤ (119 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `65`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row65 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨65, by norm_num⟩) where
+  bottomRatioLower := 42971 / 1000
+  bottomRatioUpper := 10743 / 250
+  topRatioLower := 4329 / 100
+  topRatioUpper := 43291 / 1000
+  bottomLogLower := 94 / 25
+  topLogUpper := 377 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (19 / 25 : ℝ) ≤ (213827623 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (19 / 25 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (213827623 / 100000000 : ℝ) ≤ 42971 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (94 / 25 : ℝ) = (3 : ℝ) + 19 / 25 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (377 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (121 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (42971 / 1000 : ℝ) * (94 / 25 : ℝ)
+          - (10743 / 250 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (43291 / 1000 : ℝ) * (377 / 100 : ℝ)
+          - (4329 / 100 : ℝ) + 7 / 8
+        ≤ (120 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `66`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row66 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨66, by norm_num⟩) where
+  bottomRatioLower := 4329 / 100
+  bottomRatioUpper := 43291 / 1000
+  topRatioLower := 5451 / 125
+  topRatioUpper := 43609 / 1000
+  bottomLogLower := 753 / 200
+  topLogUpper := 189 / 50
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (153 / 200 : ℝ) ≤ (107449719 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (153 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (107449719 / 50000000 : ℝ) ≤ 4329 / 100 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (753 / 200 : ℝ) = (3 : ℝ) + 153 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (189 / 50 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (122 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (4329 / 100 : ℝ) * (753 / 200 : ℝ)
+          - (43291 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (43609 / 1000 : ℝ) * (189 / 50 : ℝ)
+          - (5451 / 125 : ℝ) + 7 / 8
+        ≤ (121 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `67`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row67 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨67, by norm_num⟩) where
+  bottomRatioLower := 5451 / 125
+  bottomRatioUpper := 43609 / 1000
+  topRatioLower := 21963 / 500
+  topRatioUpper := 43927 / 1000
+  bottomLogLower := 151 / 40
+  topLogUpper := 757 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (31 / 40 : ℝ) ≤ (217059213 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (31 / 40 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (217059213 / 100000000 : ℝ) ≤ 5451 / 125 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (151 / 40 : ℝ) = (3 : ℝ) + 31 / 40 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (757 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (123 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (5451 / 125 : ℝ) * (151 / 40 : ℝ)
+          - (43609 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (43927 / 1000 : ℝ) * (757 / 200 : ℝ)
+          - (21963 / 500 : ℝ) + 7 / 8
+        ≤ (122 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `68`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row68 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨68, by norm_num⟩) where
+  bottomRatioLower := 21963 / 500
+  bottomRatioUpper := 43927 / 1000
+  topRatioLower := 8849 / 200
+  topRatioUpper := 22123 / 500
+  bottomLogLower := 189 / 50
+  topLogUpper := 379 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (39 / 50 : ℝ) ≤ (218147227 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (39 / 50 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (218147227 / 100000000 : ℝ) ≤ 21963 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (189 / 50 : ℝ) = (3 : ℝ) + 39 / 50 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (379 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (124 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (21963 / 500 : ℝ) * (189 / 50 : ℝ)
+          - (43927 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (22123 / 500 : ℝ) * (379 / 100 : ℝ)
+          - (8849 / 200 : ℝ) + 7 / 8
+        ≤ (123 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `69`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row69 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨69, by norm_num⟩) where
+  bottomRatioLower := 8849 / 200
+  bottomRatioUpper := 22123 / 500
+  topRatioLower := 44563 / 1000
+  topRatioUpper := 11141 / 250
+  bottomLogLower := 757 / 200
+  topLogUpper := 19 / 5
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (157 / 200 : ℝ) ≤ (43848139 / 20000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (157 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (43848139 / 20000000 : ℝ) ≤ 8849 / 200 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (757 / 200 : ℝ) = (3 : ℝ) + 157 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (19 / 5 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (126 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (8849 / 200 : ℝ) * (757 / 200 : ℝ)
+          - (22123 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (11141 / 250 : ℝ) * (19 / 5 : ℝ)
+          - (44563 / 1000 : ℝ) + 7 / 8
+        ≤ (124 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `70`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row70 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨70, by norm_num⟩) where
+  bottomRatioLower := 44563 / 1000
+  bottomRatioUpper := 11141 / 250
+  topRatioLower := 44881 / 1000
+  topRatioUpper := 22441 / 500
+  bottomLogLower := 759 / 200
+  topLogUpper := 761 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (159 / 200 : ℝ) ≤ (2214441 / 1000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (159 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (2214441 / 1000000 : ℝ) ≤ 44563 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (759 / 200 : ℝ) = (3 : ℝ) + 159 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (761 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (126 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (44563 / 1000 : ℝ) * (759 / 200 : ℝ)
+          - (11141 / 250 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (22441 / 500 : ℝ) * (761 / 200 : ℝ)
+          - (44881 / 1000 : ℝ) + 7 / 8
+        ≤ (126 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+
+/-- Concrete smooth-main row certificate, for row `71`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row71 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨71, by norm_num⟩) where
+  bottomRatioLower := 44881 / 1000
+  bottomRatioUpper := 22441 / 500
+  topRatioLower := 45199 / 1000
+  topRatioUpper := 45201 / 1000
+  bottomLogLower := 19 / 5
+  topLogUpper := 763 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (4 / 5 : ℝ) ≤ (222554093 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (4 / 5 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (222554093 / 100000000 : ℝ) ≤ 44881 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (19 / 5 : ℝ) = (3 : ℝ) + 4 / 5 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (763 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (128 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (44881 / 1000 : ℝ) * (19 / 5 : ℝ)
+          - (22441 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (45201 / 1000 : ℝ) * (763 / 200 : ℝ)
+          - (45199 / 1000 : ℝ) + 7 / 8
+        ≤ (126 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `72`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row72 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨72, by norm_num⟩) where
+  bottomRatioLower := 45199 / 1000
+  bottomRatioUpper := 45201 / 1000
+  topRatioLower := 22759 / 500
+  topRatioUpper := 45519 / 1000
+  bottomLogLower := 381 / 100
+  topLogUpper := 191 / 50
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (81 / 100 : ℝ) ≤ (224790799 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (81 / 100 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (224790799 / 100000000 : ℝ) ≤ 45199 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (381 / 100 : ℝ) = (3 : ℝ) + 81 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (191 / 50 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (129 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (45199 / 1000 : ℝ) * (381 / 100 : ℝ)
+          - (45201 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (45519 / 1000 : ℝ) * (191 / 50 : ℝ)
+          - (22759 / 500 : ℝ) + 7 / 8
+        ≤ (128 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `73`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row73 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨73, by norm_num⟩) where
+  bottomRatioLower := 22759 / 500
+  bottomRatioUpper := 45519 / 1000
+  topRatioLower := 11459 / 250
+  topRatioUpper := 45837 / 1000
+  bottomLogLower := 763 / 200
+  topLogUpper := 383 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (163 / 200 : ℝ) ≤ (1764981 / 781250 : ℝ) := by
+      have hb := Real.exp_bound' (x := (163 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (1764981 / 781250 : ℝ) ≤ 22759 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (763 / 200 : ℝ) = (3 : ℝ) + 163 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (383 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (131 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (22759 / 500 : ℝ) * (763 / 200 : ℝ)
+          - (45519 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (45837 / 1000 : ℝ) * (383 / 100 : ℝ)
+          - (11459 / 250 : ℝ) + 7 / 8
+        ≤ (129 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `74`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row74 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨74, by norm_num⟩) where
+  bottomRatioLower := 11459 / 250
+  bottomRatioUpper := 45837 / 1000
+  topRatioLower := 23077 / 500
+  topRatioUpper := 9231 / 200
+  bottomLogLower := 153 / 40
+  topLogUpper := 767 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (33 / 40 : ℝ) ≤ (228188077 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (33 / 40 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (228188077 / 100000000 : ℝ) ≤ 11459 / 250 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (153 / 40 : ℝ) = (3 : ℝ) + 33 / 40 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (767 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (132 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (11459 / 250 : ℝ) * (153 / 40 : ℝ)
+          - (45837 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (9231 / 200 : ℝ) * (767 / 200 : ℝ)
+          - (23077 / 500 : ℝ) + 7 / 8
+        ≤ (131 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `75`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row75 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨75, by norm_num⟩) where
+  bottomRatioLower := 23077 / 500
+  bottomRatioUpper := 9231 / 200
+  topRatioLower := 46473 / 1000
+  topRatioUpper := 23237 / 500
+  bottomLogLower := 383 / 100
+  topLogUpper := 96 / 25
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (83 / 100 : ℝ) ≤ (366931 / 160000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (83 / 100 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (366931 / 160000 : ℝ) ≤ 23077 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (383 / 100 : ℝ) = (3 : ℝ) + 83 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (96 / 25 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (133 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (23077 / 500 : ℝ) * (383 / 100 : ℝ)
+          - (9231 / 200 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (23237 / 500 : ℝ) * (96 / 25 : ℝ)
+          - (46473 / 1000 : ℝ) + 7 / 8
+        ≤ (132 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `76`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row76 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨76, by norm_num⟩) where
+  bottomRatioLower := 46473 / 1000
+  bottomRatioUpper := 23237 / 500
+  topRatioLower := 46791 / 1000
+  topRatioUpper := 5849 / 125
+  bottomLogLower := 767 / 200
+  topLogUpper := 77 / 20
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (167 / 200 : ℝ) ≤ (46096281 / 20000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (167 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (46096281 / 20000000 : ℝ) ≤ 46473 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (767 / 200 : ℝ) = (3 : ℝ) + 167 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (77 / 20 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (134 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (46473 / 1000 : ℝ) * (767 / 200 : ℝ)
+          - (23237 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (5849 / 125 : ℝ) * (77 / 20 : ℝ)
+          - (46791 / 1000 : ℝ) + 7 / 8
+        ≤ (133 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `77`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row77 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨77, by norm_num⟩) where
+  bottomRatioLower := 46791 / 1000
+  bottomRatioUpper := 5849 / 125
+  topRatioLower := 47109 / 1000
+  topRatioUpper := 4711 / 100
+  bottomLogLower := 769 / 200
+  topLogUpper := 771 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (169 / 200 : ℝ) ≤ (116398891 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (169 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (116398891 / 50000000 : ℝ) ≤ 46791 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (769 / 200 : ℝ) = (3 : ℝ) + 169 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (771 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (136 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (46791 / 1000 : ℝ) * (769 / 200 : ℝ)
+          - (5849 / 125 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (4711 / 100 : ℝ) * (771 / 200 : ℝ)
+          - (47109 / 1000 : ℝ) + 7 / 8
+        ≤ (134 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `78`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row78 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨78, by norm_num⟩) where
+  bottomRatioLower := 47109 / 1000
+  bottomRatioUpper := 4711 / 100
+  topRatioLower := 11857 / 250
+  topRatioUpper := 47429 / 1000
+  bottomLogLower := 77 / 20
+  topLogUpper := 193 / 50
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (17 / 20 : ℝ) ≤ (116982343 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (17 / 20 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (116982343 / 50000000 : ℝ) ≤ 47109 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (77 / 20 : ℝ) = (3 : ℝ) + 17 / 20 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (193 / 50 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (137 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (47109 / 1000 : ℝ) * (77 / 20 : ℝ)
+          - (4711 / 100 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (47429 / 1000 : ℝ) * (193 / 50 : ℝ)
+          - (11857 / 250 : ℝ) + 7 / 8
+        ≤ (136 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `79`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row79 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨79, by norm_num⟩) where
+  bottomRatioLower := 11857 / 250
+  bottomRatioUpper := 47429 / 1000
+  topRatioLower := 23873 / 500
+  topRatioUpper := 47747 / 1000
+  bottomLogLower := 771 / 200
+  topLogUpper := 387 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (171 / 200 : ℝ) ≤ (235137439 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (171 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (235137439 / 100000000 : ℝ) ≤ 11857 / 250 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (771 / 200 : ℝ) = (3 : ℝ) + 171 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (387 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (138 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (11857 / 250 : ℝ) * (771 / 200 : ℝ)
+          - (47429 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (47747 / 1000 : ℝ) * (387 / 100 : ℝ)
+          - (23873 / 500 : ℝ) + 7 / 8
+        ≤ (137 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `80`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row80 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨80, by norm_num⟩) where
+  bottomRatioLower := 23873 / 500
+  bottomRatioUpper := 47747 / 1000
+  topRatioLower := 6008 / 125
+  topRatioUpper := 9613 / 200
+  bottomLogLower := 773 / 200
+  topLogUpper := 31 / 8
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (173 / 200 : ℝ) ≤ (237500609 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (173 / 200 : ℝ)) (n := 10)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (10 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (237500609 / 100000000 : ℝ) ≤ 23873 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (773 / 200 : ℝ) = (3 : ℝ) + 173 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (31 / 8 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (139 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (23873 / 500 : ℝ) * (773 / 200 : ℝ)
+          - (47747 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (9613 / 200 : ℝ) * (31 / 8 : ℝ)
+          - (6008 / 125 : ℝ) + 7 / 8
+        ≤ (138 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+
+/-- Concrete smooth-main row certificate, for row `81`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row81 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨81, by norm_num⟩) where
+  bottomRatioLower := 6008 / 125
+  bottomRatioUpper := 9613 / 200
+  topRatioLower := 48383 / 1000
+  topRatioUpper := 6048 / 125
+  bottomLogLower := 387 / 100
+  topLogUpper := 97 / 25
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (87 / 100 : ℝ) ≤ (119345543 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (87 / 100 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (119345543 / 50000000 : ℝ) ≤ 6008 / 125 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (387 / 100 : ℝ) = (3 : ℝ) + 87 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (97 / 25 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (140 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (6008 / 125 : ℝ) * (387 / 100 : ℝ)
+          - (9613 / 200 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (6048 / 125 : ℝ) * (97 / 25 : ℝ)
+          - (48383 / 1000 : ℝ) + 7 / 8
+        ≤ (139 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `82`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row82 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨82, by norm_num⟩) where
+  bottomRatioLower := 48383 / 1000
+  bottomRatioUpper := 6048 / 125
+  topRatioLower := 48701 / 1000
+  topRatioUpper := 24351 / 500
+  bottomLogLower := 31 / 8
+  topLogUpper := 389 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (7 / 8 : ℝ) ≤ (23988753 / 10000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (7 / 8 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (23988753 / 10000000 : ℝ) ≤ 48383 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (31 / 8 : ℝ) = (3 : ℝ) + 7 / 8 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (389 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (142 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (48383 / 1000 : ℝ) * (31 / 8 : ℝ)
+          - (6048 / 125 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (24351 / 500 : ℝ) * (389 / 100 : ℝ)
+          - (48701 / 1000 : ℝ) + 7 / 8
+        ≤ (140 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `83`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row83 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨83, by norm_num⟩) where
+  bottomRatioLower := 48701 / 1000
+  bottomRatioUpper := 24351 / 500
+  topRatioLower := 49019 / 1000
+  topRatioUpper := 2451 / 50
+  bottomLogLower := 777 / 200
+  topLogUpper := 779 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (177 / 200 : ℝ) ≤ (6057461 / 2500000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (177 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (6057461 / 2500000 : ℝ) ≤ 48701 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (777 / 200 : ℝ) = (3 : ℝ) + 177 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (779 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (143 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (48701 / 1000 : ℝ) * (777 / 200 : ℝ)
+          - (24351 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (2451 / 50 : ℝ) * (779 / 200 : ℝ)
+          - (49019 / 1000 : ℝ) + 7 / 8
+        ≤ (142 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `84`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row84 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨84, by norm_num⟩) where
+  bottomRatioLower := 49019 / 1000
+  bottomRatioUpper := 2451 / 50
+  topRatioLower := 24669 / 500
+  topRatioUpper := 49339 / 1000
+  bottomLogLower := 389 / 100
+  topLogUpper := 39 / 10
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (89 / 100 : ℝ) ≤ (121756483 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (89 / 100 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (121756483 / 50000000 : ℝ) ≤ 49019 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (389 / 100 : ℝ) = (3 : ℝ) + 89 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (39 / 10 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (143 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (49019 / 1000 : ℝ) * (389 / 100 : ℝ)
+          - (2451 / 50 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (49339 / 1000 : ℝ) * (39 / 10 : ℝ)
+          - (24669 / 500 : ℝ) + 7 / 8
+        ≤ (143 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `85`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row85 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨85, by norm_num⟩) where
+  bottomRatioLower := 24669 / 500
+  bottomRatioUpper := 49339 / 1000
+  topRatioLower := 6207 / 125
+  topRatioUpper := 49657 / 1000
+  bottomLogLower := 779 / 200
+  topLogUpper := 391 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (179 / 200 : ℝ) ≤ (244733579 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (179 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (244733579 / 100000000 : ℝ) ≤ 24669 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (779 / 200 : ℝ) = (3 : ℝ) + 179 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (391 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (145 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (24669 / 500 : ℝ) * (779 / 200 : ℝ)
+          - (49339 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (49657 / 1000 : ℝ) * (391 / 100 : ℝ)
+          - (6207 / 125 : ℝ) + 7 / 8
+        ≤ (143 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `86`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row86 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨86, by norm_num⟩) where
+  bottomRatioLower := 6207 / 125
+  bottomRatioUpper := 49657 / 1000
+  topRatioLower := 24987 / 500
+  topRatioUpper := 1999 / 40
+  bottomLogLower := 781 / 200
+  topLogUpper := 783 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (181 / 200 : ℝ) ≤ (247193193 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (181 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (247193193 / 100000000 : ℝ) ≤ 6207 / 125 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (781 / 200 : ℝ) = (3 : ℝ) + 181 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (783 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (147 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (6207 / 125 : ℝ) * (781 / 200 : ℝ)
+          - (49657 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (1999 / 40 : ℝ) * (783 / 200 : ℝ)
+          - (24987 / 500 : ℝ) + 7 / 8
+        ≤ (145 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `87`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row87 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨87, by norm_num⟩) where
+  bottomRatioLower := 24987 / 500
+  bottomRatioUpper := 1999 / 40
+  topRatioLower := 12573 / 250
+  topRatioUpper := 50293 / 1000
+  bottomLogLower := 391 / 100
+  topLogUpper := 98 / 25
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (91 / 100 : ℝ) ≤ (124216127 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (91 / 100 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (124216127 / 50000000 : ℝ) ≤ 24987 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (391 / 100 : ℝ) = (3 : ℝ) + 91 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (98 / 25 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (148 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (24987 / 500 : ℝ) * (391 / 100 : ℝ)
+          - (1999 / 40 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (50293 / 1000 : ℝ) * (98 / 25 : ℝ)
+          - (12573 / 250 : ℝ) + 7 / 8
+        ≤ (147 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `88`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row88 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨88, by norm_num⟩) where
+  bottomRatioLower := 12573 / 250
+  bottomRatioUpper := 50293 / 1000
+  topRatioLower := 50611 / 1000
+  topRatioUpper := 12653 / 250
+  bottomLogLower := 783 / 200
+  topLogUpper := 157 / 40
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (183 / 200 : ℝ) ≤ (124838763 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (183 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (124838763 / 50000000 : ℝ) ≤ 12573 / 250 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (783 / 200 : ℝ) = (3 : ℝ) + 183 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (157 / 40 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (149 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (12573 / 250 : ℝ) * (783 / 200 : ℝ)
+          - (50293 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (12653 / 250 : ℝ) * (157 / 40 : ℝ)
+          - (50611 / 1000 : ℝ) + 7 / 8
+        ≤ (148 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `89`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row89 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨89, by norm_num⟩) where
+  bottomRatioLower := 50611 / 1000
+  bottomRatioUpper := 12653 / 250
+  topRatioLower := 50929 / 1000
+  topRatioUpper := 5093 / 100
+  bottomLogLower := 98 / 25
+  topLogUpper := 787 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (23 / 25 : ℝ) ≤ (250929039 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (23 / 25 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (250929039 / 100000000 : ℝ) ≤ 50611 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (98 / 25 : ℝ) = (3 : ℝ) + 23 / 25 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (787 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (150 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (50611 / 1000 : ℝ) * (98 / 25 : ℝ)
+          - (12653 / 250 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (5093 / 100 : ℝ) * (787 / 200 : ℝ)
+          - (50929 / 1000 : ℝ) + 7 / 8
+        ≤ (149 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `90`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row90 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨90, by norm_num⟩) where
+  bottomRatioLower := 50929 / 1000
+  bottomRatioUpper := 5093 / 100
+  topRatioLower := 51247 / 1000
+  topRatioUpper := 6406 / 125
+  bottomLogLower := 393 / 100
+  topLogUpper := 197 / 50
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (93 / 100 : ℝ) ≤ (126725459 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (93 / 100 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (126725459 / 50000000 : ℝ) ≤ 50929 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (393 / 100 : ℝ) = (3 : ℝ) + 93 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (197 / 50 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (151 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (50929 / 1000 : ℝ) * (393 / 100 : ℝ)
+          - (5093 / 100 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (6406 / 125 : ℝ) * (197 / 50 : ℝ)
+          - (51247 / 1000 : ℝ) + 7 / 8
+        ≤ (150 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+
+/-- Concrete smooth-main row certificate, for row `91`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row91 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨91, by norm_num⟩) where
+  bottomRatioLower := 51247 / 1000
+  bottomRatioUpper := 6406 / 125
+  topRatioLower := 25783 / 500
+  topRatioUpper := 51567 / 1000
+  bottomLogLower := 787 / 200
+  topLogUpper := 789 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (187 / 200 : ℝ) ≤ (127360673 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (187 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (127360673 / 50000000 : ℝ) ≤ 51247 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (787 / 200 : ℝ) = (3 : ℝ) + 187 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (789 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (153 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (51247 / 1000 : ℝ) * (787 / 200 : ℝ)
+          - (6406 / 125 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (51567 / 1000 : ℝ) * (789 / 200 : ℝ)
+          - (25783 / 500 : ℝ) + 7 / 8
+        ≤ (151 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `92`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row92 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨92, by norm_num⟩) where
+  bottomRatioLower := 25783 / 500
+  bottomRatioUpper := 51567 / 1000
+  topRatioLower := 12971 / 250
+  topRatioUpper := 10377 / 200
+  bottomLogLower := 197 / 50
+  topLogUpper := 79 / 20
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (47 / 50 : ℝ) ≤ (127999071 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (47 / 50 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (127999071 / 50000000 : ℝ) ≤ 25783 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (197 / 50 : ℝ) = (3 : ℝ) + 47 / 50 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (79 / 20 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (154 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (25783 / 500 : ℝ) * (197 / 50 : ℝ)
+          - (51567 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (10377 / 200 : ℝ) * (79 / 20 : ℝ)
+          - (12971 / 250 : ℝ) + 7 / 8
+        ≤ (153 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `93`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row93 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨93, by norm_num⟩) where
+  bottomRatioLower := 12971 / 250
+  bottomRatioUpper := 10377 / 200
+  topRatioLower := 26101 / 500
+  topRatioUpper := 52203 / 1000
+  bottomLogLower := 789 / 200
+  topLogUpper := 99 / 25
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (189 / 200 : ℝ) ≤ (128640669 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (189 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (128640669 / 50000000 : ℝ) ≤ 12971 / 250 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (789 / 200 : ℝ) = (3 : ℝ) + 189 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (99 / 25 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (155 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (12971 / 250 : ℝ) * (789 / 200 : ℝ)
+          - (10377 / 200 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (52203 / 1000 : ℝ) * (99 / 25 : ℝ)
+          - (26101 / 500 : ℝ) + 7 / 8
+        ≤ (154 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `94`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row94 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨94, by norm_num⟩) where
+  bottomRatioLower := 26101 / 500
+  bottomRatioUpper := 52203 / 1000
+  topRatioLower := 52521 / 1000
+  topRatioUpper := 26261 / 500
+  bottomLogLower := 791 / 200
+  topLogUpper := 793 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (191 / 200 : ℝ) ≤ (259867059 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (191 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (259867059 / 100000000 : ℝ) ≤ 26101 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (791 / 200 : ℝ) = (3 : ℝ) + 191 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (793 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (157 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (26101 / 500 : ℝ) * (791 / 200 : ℝ)
+          - (52203 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (26261 / 500 : ℝ) * (793 / 200 : ℝ)
+          - (52521 / 1000 : ℝ) + 7 / 8
+        ≤ (155 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `95`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row95 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨95, by norm_num⟩) where
+  bottomRatioLower := 52521 / 1000
+  bottomRatioUpper := 26261 / 500
+  topRatioLower := 52839 / 1000
+  topRatioUpper := 1321 / 25
+  bottomLogLower := 99 / 25
+  topLogUpper := 397 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (24 / 25 : ℝ) ≤ (16323103 / 6250000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (24 / 25 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (16323103 / 6250000 : ℝ) ≤ 52521 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (99 / 25 : ℝ) = (3 : ℝ) + 24 / 25 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (397 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (158 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (52521 / 1000 : ℝ) * (99 / 25 : ℝ)
+          - (26261 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (1321 / 25 : ℝ) * (397 / 100 : ℝ)
+          - (52839 / 1000 : ℝ) + 7 / 8
+        ≤ (157 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `96`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row96 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨96, by norm_num⟩) where
+  bottomRatioLower := 52839 / 1000
+  bottomRatioUpper := 1321 / 25
+  topRatioLower := 53157 / 1000
+  topRatioUpper := 26579 / 500
+  bottomLogLower := 793 / 200
+  topLogUpper := 159 / 40
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (193 / 200 : ℝ) ≤ (131239383 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (193 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (131239383 / 50000000 : ℝ) ≤ 52839 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (793 / 200 : ℝ) = (3 : ℝ) + 193 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (159 / 40 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (159 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (52839 / 1000 : ℝ) * (793 / 200 : ℝ)
+          - (1321 / 25 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (26579 / 500 : ℝ) * (159 / 40 : ℝ)
+          - (53157 / 1000 : ℝ) + 7 / 8
+        ≤ (158 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `97`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row97 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨97, by norm_num⟩) where
+  bottomRatioLower := 53157 / 1000
+  bottomRatioUpper := 26579 / 500
+  topRatioLower := 13369 / 250
+  topRatioUpper := 53477 / 1000
+  bottomLogLower := 397 / 100
+  topLogUpper := 199 / 50
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (97 / 100 : ℝ) ≤ (131897223 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (97 / 100 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (131897223 / 50000000 : ℝ) ≤ 53157 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (397 / 100 : ℝ) = (3 : ℝ) + 97 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (199 / 50 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (160 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (53157 / 1000 : ℝ) * (397 / 100 : ℝ)
+          - (26579 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (53477 / 1000 : ℝ) * (199 / 50 : ℝ)
+          - (13369 / 250 : ℝ) + 7 / 8
+        ≤ (159 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `98`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row98 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨98, by norm_num⟩) where
+  bottomRatioLower := 13369 / 250
+  bottomRatioUpper := 53477 / 1000
+  topRatioLower := 26897 / 500
+  topRatioUpper := 10759 / 200
+  bottomLogLower := 159 / 40
+  topLogUpper := 399 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (39 / 40 : ℝ) ≤ (132558361 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (39 / 40 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (132558361 / 50000000 : ℝ) ≤ 13369 / 250 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (159 / 40 : ℝ) = (3 : ℝ) + 39 / 40 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (399 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (161 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (13369 / 250 : ℝ) * (159 / 40 : ℝ)
+          - (53477 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (10759 / 200 : ℝ) * (399 / 100 : ℝ)
+          - (26897 / 500 : ℝ) + 7 / 8
+        ≤ (160 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `99`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row99 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨99, by norm_num⟩) where
+  bottomRatioLower := 26897 / 500
+  bottomRatioUpper := 10759 / 200
+  topRatioLower := 6764 / 125
+  topRatioUpper := 54113 / 1000
+  bottomLogLower := 797 / 200
+  topLogUpper := 799 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (197 / 200 : ℝ) ≤ (267781189 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (197 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (267781189 / 100000000 : ℝ) ≤ 26897 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (797 / 200 : ℝ) = (3 : ℝ) + 197 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (799 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (163 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (26897 / 500 : ℝ) * (797 / 200 : ℝ)
+          - (10759 / 200 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (54113 / 1000 : ℝ) * (799 / 200 : ℝ)
+          - (6764 / 125 : ℝ) + 7 / 8
+        ≤ (161 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `100`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row100 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨100, by norm_num⟩) where
+  bottomRatioLower := 6764 / 125
+  bottomRatioUpper := 54113 / 1000
+  topRatioLower := 5443 / 100
+  topRatioUpper := 6804 / 125
+  bottomLogLower := 399 / 100
+  topLogUpper := 4
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (99 / 100 : ℝ) ≤ (33640431 / 12500000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (99 / 100 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (33640431 / 12500000 : ℝ) ≤ 6764 / 125 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (399 / 100 : ℝ) = (3 : ℝ) + 99 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (4 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (164 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (6764 / 125 : ℝ) * (399 / 100 : ℝ)
+          - (54113 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (6804 / 125 : ℝ) * (4 : ℝ)
+          - (5443 / 100 : ℝ) + 7 / 8
+        ≤ (163 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+
+/-- Concrete smooth-main row certificate, for row `101`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row101 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨101, by norm_num⟩) where
+  bottomRatioLower := 5443 / 100
+  bottomRatioUpper := 6804 / 125
+  topRatioLower := 54749 / 1000
+  topRatioUpper := 219 / 4
+  bottomLogLower := 799 / 200
+  topLogUpper := 801 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (199 / 200 : ℝ) ≤ (54094487 / 20000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (199 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 3
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 3
+            * (54094487 / 20000000 : ℝ) ≤ 5443 / 100 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (799 / 200 : ℝ) = (3 : ℝ) + 199 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (801 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (165 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (5443 / 100 : ℝ) * (799 / 200 : ℝ)
+          - (6804 / 125 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (219 / 4 : ℝ) * (801 / 200 : ℝ)
+          - (54749 / 1000 : ℝ) + 7 / 8
+        ≤ (164 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `102`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row102 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨102, by norm_num⟩) where
+  bottomRatioLower := 54749 / 1000
+  bottomRatioUpper := 219 / 4
+  topRatioLower := 55067 / 1000
+  topRatioUpper := 13767 / 250
+  bottomLogLower := 4
+  topLogUpper := 401 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (0 : ℝ) ≤ (1 : ℝ) := by
+      have hb := Real.exp_bound' (x := (0 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 4
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 4
+            * (1 : ℝ) ≤ 54749 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (4 : ℝ) = (4 : ℝ) + 0 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (401 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (166 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (54749 / 1000 : ℝ) * (4 : ℝ)
+          - (219 / 4 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (13767 / 250 : ℝ) * (401 / 100 : ℝ)
+          - (55067 / 1000 : ℝ) + 7 / 8
+        ≤ (165 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `103`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row103 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨103, by norm_num⟩) where
+  bottomRatioLower := 55067 / 1000
+  bottomRatioUpper := 13767 / 250
+  topRatioLower := 11077 / 200
+  topRatioUpper := 27693 / 500
+  bottomLogLower := 801 / 200
+  topLogUpper := 803 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (1 / 200 : ℝ) ≤ (100501253 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (1 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 4
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 4
+            * (100501253 / 100000000 : ℝ) ≤ 55067 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (801 / 200 : ℝ) = (4 : ℝ) + 1 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (803 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (168 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (55067 / 1000 : ℝ) * (801 / 200 : ℝ)
+          - (13767 / 250 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (27693 / 500 : ℝ) * (803 / 200 : ℝ)
+          - (11077 / 200 : ℝ) + 7 / 8
+        ≤ (166 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `104`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row104 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨104, by norm_num⟩) where
+  bottomRatioLower := 11077 / 200
+  bottomRatioUpper := 27693 / 500
+  topRatioLower := 6963 / 125
+  topRatioUpper := 11141 / 200
+  bottomLogLower := 401 / 100
+  topLogUpper := 161 / 40
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (1 / 100 : ℝ) ≤ (101005017 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (1 / 100 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 4
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 4
+            * (101005017 / 100000000 : ℝ) ≤ 11077 / 200 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (401 / 100 : ℝ) = (4 : ℝ) + 1 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (161 / 40 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (169 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (11077 / 200 : ℝ) * (401 / 100 : ℝ)
+          - (27693 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (11141 / 200 : ℝ) * (161 / 40 : ℝ)
+          - (6963 / 125 : ℝ) + 7 / 8
+        ≤ (168 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `105`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row105 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨105, by norm_num⟩) where
+  bottomRatioLower := 6963 / 125
+  bottomRatioUpper := 11141 / 200
+  topRatioLower := 28011 / 500
+  topRatioUpper := 56023 / 1000
+  bottomLogLower := 201 / 50
+  topLogUpper := 403 / 100
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (1 / 50 : ℝ) ≤ (20404027 / 20000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (1 / 50 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 4
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 4
+            * (20404027 / 20000000 : ℝ) ≤ 6963 / 125 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (201 / 50 : ℝ) = (4 : ℝ) + 1 / 50 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (403 / 100 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (171 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (6963 / 125 : ℝ) * (201 / 50 : ℝ)
+          - (11141 / 200 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (56023 / 1000 : ℝ) * (403 / 100 : ℝ)
+          - (28011 / 500 : ℝ) + 7 / 8
+        ≤ (169 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `106`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row106 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨106, by norm_num⟩) where
+  bottomRatioLower := 28011 / 500
+  bottomRatioUpper := 56023 / 1000
+  topRatioLower := 2817 / 50
+  topRatioUpper := 56341 / 1000
+  bottomLogLower := 161 / 40
+  topLogUpper := 807 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (1 / 40 : ℝ) ≤ (102531513 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (1 / 40 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 4
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 4
+            * (102531513 / 100000000 : ℝ) ≤ 28011 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (161 / 40 : ℝ) = (4 : ℝ) + 1 / 40 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (807 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (172 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (28011 / 500 : ℝ) * (161 / 40 : ℝ)
+          - (56023 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (56341 / 1000 : ℝ) * (807 / 200 : ℝ)
+          - (2817 / 50 : ℝ) + 7 / 8
+        ≤ (171 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `107`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row107 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨107, by norm_num⟩) where
+  bottomRatioLower := 2817 / 50
+  bottomRatioUpper := 56341 / 1000
+  topRatioLower := 56659 / 1000
+  topRatioUpper := 2833 / 50
+  bottomLogLower := 403 / 100
+  topLogUpper := 101 / 25
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (3 / 100 : ℝ) ≤ (51522727 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (3 / 100 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 4
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 4
+            * (51522727 / 50000000 : ℝ) ≤ 2817 / 50 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (403 / 100 : ℝ) = (4 : ℝ) + 3 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (101 / 25 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (172 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (2817 / 50 : ℝ) * (403 / 100 : ℝ)
+          - (56341 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (2833 / 50 : ℝ) * (101 / 25 : ℝ)
+          - (56659 / 1000 : ℝ) + 7 / 8
+        ≤ (172 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `108`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row108 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨108, by norm_num⟩) where
+  bottomRatioLower := 56659 / 1000
+  bottomRatioUpper := 2833 / 50
+  topRatioLower := 56977 / 1000
+  topRatioUpper := 28489 / 500
+  bottomLogLower := 807 / 200
+  topLogUpper := 809 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (7 / 200 : ℝ) ≤ (103561971 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (7 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 4
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 4
+            * (103561971 / 100000000 : ℝ) ≤ 56659 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (807 / 200 : ℝ) = (4 : ℝ) + 7 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (809 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (175 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (56659 / 1000 : ℝ) * (807 / 200 : ℝ)
+          - (2833 / 50 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (28489 / 500 : ℝ) * (809 / 200 : ℝ)
+          - (56977 / 1000 : ℝ) + 7 / 8
+        ≤ (172 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `109`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row109 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨109, by norm_num⟩) where
+  bottomRatioLower := 56977 / 1000
+  bottomRatioUpper := 28489 / 500
+  topRatioLower := 11459 / 200
+  topRatioUpper := 7162 / 125
+  bottomLogLower := 101 / 25
+  topLogUpper := 81 / 20
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (1 / 25 : ℝ) ≤ (52040539 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (1 / 25 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 4
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 4
+            * (52040539 / 50000000 : ℝ) ≤ 56977 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (101 / 25 : ℝ) = (4 : ℝ) + 1 / 25 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (81 / 20 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (176 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (56977 / 1000 : ℝ) * (101 / 25 : ℝ)
+          - (28489 / 500 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (7162 / 125 : ℝ) * (81 / 20 : ℝ)
+          - (11459 / 200 : ℝ) + 7 / 8
+        ≤ (175 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `110`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row110 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨110, by norm_num⟩) where
+  bottomRatioLower := 11459 / 200
+  bottomRatioUpper := 7162 / 125
+  topRatioLower := 28807 / 500
+  topRatioUpper := 11523 / 200
+  bottomLogLower := 809 / 200
+  topLogUpper := 811 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (9 / 200 : ℝ) ≤ (52301393 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (9 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 4
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 4
+            * (52301393 / 50000000 : ℝ) ≤ 11459 / 200 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (809 / 200 : ℝ) = (4 : ℝ) + 9 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (811 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (177 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (11459 / 200 : ℝ) * (809 / 200 : ℝ)
+          - (7162 / 125 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (11523 / 200 : ℝ) * (811 / 200 : ℝ)
+          - (28807 / 500 : ℝ) + 7 / 8
+        ≤ (176 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `111`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row111 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨111, by norm_num⟩) where
+  bottomRatioLower := 28807 / 500
+  bottomRatioUpper := 11523 / 200
+  topRatioLower := 14483 / 250
+  topRatioUpper := 57933 / 1000
+  bottomLogLower := 81 / 20
+  topLogUpper := 203 / 50
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (1 / 20 : ℝ) ≤ (10512711 / 10000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (1 / 20 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 4
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 4
+            * (10512711 / 10000000 : ℝ) ≤ 28807 / 500 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (81 / 20 : ℝ) = (4 : ℝ) + 1 / 20 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (203 / 50 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (178 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (28807 / 500 : ℝ) * (81 / 20 : ℝ)
+          - (11523 / 200 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (57933 / 1000 : ℝ) * (203 / 50 : ℝ)
+          - (14483 / 250 : ℝ) + 7 / 8
+        ≤ (177 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `112`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row112 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨112, by norm_num⟩) where
+  bottomRatioLower := 14483 / 250
+  bottomRatioUpper := 57933 / 1000
+  topRatioLower := 233 / 4
+  topRatioUpper := 58251 / 1000
+  bottomLogLower := 811 / 200
+  topLogUpper := 813 / 200
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (11 / 200 : ℝ) ≤ (52827031 / 50000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (11 / 200 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 4
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 4
+            * (52827031 / 50000000 : ℝ) ≤ 14483 / 250 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (811 / 200 : ℝ) = (4 : ℝ) + 11 / 200 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (813 / 200 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (179 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (14483 / 250 : ℝ) * (811 / 200 : ℝ)
+          - (57933 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (58251 / 1000 : ℝ) * (813 / 200 : ℝ)
+          - (233 / 4 : ℝ) + 7 / 8
+        ≤ (178 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `113`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row113 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨113, by norm_num⟩) where
+  bottomRatioLower := 233 / 4
+  bottomRatioUpper := 58251 / 1000
+  topRatioLower := 58569 / 1000
+  topRatioUpper := 5857 / 100
+  bottomLogLower := 203 / 50
+  topLogUpper := 163 / 40
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (3 / 50 : ℝ) ≤ (21236731 / 20000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (3 / 50 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 4
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 4
+            * (21236731 / 20000000 : ℝ) ≤ 233 / 4 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (203 / 50 : ℝ) = (4 : ℝ) + 3 / 50 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (163 / 40 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (181 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (233 / 4 : ℝ) * (203 / 50 : ℝ)
+          - (58251 / 1000 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (5857 / 100 : ℝ) * (163 / 40 : ℝ)
+          - (58569 / 1000 : ℝ) + 7 / 8
+        ≤ (179 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
+/-- Concrete smooth-main row certificate, for row `114`. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_row114 :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000
+        ⟨114, by norm_num⟩) where
+  bottomRatioLower := 58569 / 1000
+  bottomRatioUpper := 5857 / 100
+  topRatioLower := 2937 / 50
+  topRatioUpper := 58741 / 1000
+  bottomLogLower := 407 / 100
+  topLogUpper := 163 / 40
+  bottomRatioLower_nonneg := by norm_num
+  bottomRatioUpper_nonneg := by norm_num
+  topRatioLower_nonneg := by norm_num
+  topRatioUpper_pos := by norm_num
+  bottomLogLower_nonneg := by norm_num
+  topLogUpper_nonneg := by norm_num
+  bottom_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_lower_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  top_ratio_upper_mul_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000]
+    norm_num
+  bottom_exp_log_lower := by
+    have hsmall :
+        Real.exp (7 / 100 : ℝ) ≤ (107250819 / 100000000 : ℝ) := by
+      have hb := Real.exp_bound' (x := (7 / 100 : ℝ)) (n := 12)
+        (by norm_num) (by norm_num) (by norm_num : 0 < (12 : ℕ))
+      refine hb.trans ?_
+      norm_num [Finset.sum, Nat.factorial]
+    have h :=
+      backlund_exp_nat_add_le 4
+        backlund_exp_one_le_271828182846_100000000000
+        hsmall
+    have hnum :
+        (271828182846 / 100000000000 : ℝ) ^ 4
+            * (107250819 / 100000000 : ℝ) ≤ 58569 / 1000 := by
+      set_option maxHeartbeats 800000 in
+      norm_num
+    rw [show (407 / 100 : ℝ) = (4 : ℝ) + 7 / 100 by norm_num]
+    exact le_trans h hnum
+  top_log_upper_exp := by
+    apply backlund_le_exp_of_taylor_lower (x := (163 / 40 : ℝ)) (n := 20)
+    · norm_num
+    · set_option maxHeartbeats 800000 in
+      norm_num [Finset.sum, Nat.factorial]
+  bottom_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (182 : ℝ) - (25167 / 10000 : ℝ)
+        ≤ (58569 / 1000 : ℝ) * (407 / 100 : ℝ)
+          - (5857 / 100 : ℝ) + 7 / 8
+    norm_num
+  top_main_arith := by
+    dsimp [backlundGrid2EndpointRow140_369075049_1000000,
+      backlundGrid2EndpointCount140_369075049_1000000]
+    change
+      (58741 / 1000 : ℝ) * (163 / 40 : ℝ)
+          - (2937 / 50 : ℝ) + 7 / 8
+        ≤ (181 : ℝ) + (25167 / 10000 : ℝ)
+    norm_num
+
 /-- The concrete two-unit grid covers the improved Backlund finite
 interval `[140, 369075049/1000000]`. -/
 theorem backlundGrid2EndpointRows140_369075049_1000000_cover
@@ -64338,6 +71520,61 @@ noncomputable def expAffineHadamardPullbackFiniteContribution
             (1 / (((1 / 2 : ℂ) + Complex.I * z) - zeroLoc i)
               + 1 / zeroLoc i)
 
+/-- **Finite mid/high residual tail for the exp-affine Hadamard
+truncation.**
+
+This subtracts the explicit finite cloud and the smooth density model
+from the finite Hadamard zero contribution. The remaining analytic
+Stieltjes content is convergence of this residual to the fluctuation
+tail value. -/
+noncomputable def expAffineHadamardFiniteResidualTail
+    {ι : Type} (zeroLoc : ι → ℂ) (b : ℂ) (F : Finset ι) : ℂ → ℂ :=
+  fun z =>
+    expAffineHadamardPullbackFiniteContribution zeroLoc b F z
+      - cloudModel zeros100ceil z
+      - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+
+/-- **Finite low residual tail for the exp-affine Hadamard truncation.**
+
+On the low band the smooth term is already part of
+`lowTailZeroContribution`, so the finite residual tail is obtained by
+subtracting only the finite cloud from the finite Hadamard zero
+contribution. -/
+noncomputable def expAffineHadamardFiniteLowTail
+    {ι : Type} (zeroLoc : ι → ℂ) (b : ℂ) (F : Finset ι) : ℂ → ℂ :=
+  fun z =>
+    expAffineHadamardPullbackFiniteContribution zeroLoc b F z
+      - cloudModel zeros100ceil z
+
+/-- **Finite mid/high residual tail written directly using the
+finite genus-one product log derivative.**
+
+This is the most concrete finite Hadamard object feeding the Stieltjes
+formula: the exp-affine prefactor contribution plus the finite product
+log-derivative, after subtracting the cloud and smooth density models. -/
+noncomputable def expAffineHadamardFiniteProductResidualTail
+    {ι : Type} (zeroLoc : ι → ℂ) (b : ℂ) (F : Finset ι) : ℂ → ℂ :=
+  fun z =>
+    Complex.I * b
+      + Complex.I *
+        logDerivativeResponse
+          (fun s' : ℂ => indexedFiniteHadamardProduct zeroLoc F s')
+          ((1 / 2 : ℂ) + Complex.I * z)
+      - cloudModel zeros100ceil z
+      - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+
+/-- **Finite low tail written directly using the finite genus-one
+product log derivative.** -/
+noncomputable def expAffineHadamardFiniteProductLowTail
+    {ι : Type} (zeroLoc : ι → ℂ) (b : ℂ) (F : Finset ι) : ℂ → ℂ :=
+  fun z =>
+    Complex.I * b
+      + Complex.I *
+        logDerivativeResponse
+          (fun s' : ℂ => indexedFiniteHadamardProduct zeroLoc F s')
+          ((1 / 2 : ℂ) + Complex.I * z)
+      - cloudModel zeros100ceil z
+
 /-- 🌟🌟 **PROVED — finite expanded pullback contribution in terms of
 the existing finite regularized Hadamard sum.** -/
 theorem expAffineHadamardPullbackFiniteContribution_eq_prefactor_plus_finiteRegularizedSum
@@ -64351,6 +71588,120 @@ theorem expAffineHadamardPullbackFiniteContribution_eq_prefactor_plus_finiteRegu
   unfold expAffineHadamardPullbackFiniteContribution
     finiteHadamardRegularizedSum
   rw [Finset.mul_sum]
+
+/-- 🌟🌟 **PROVED — finite mid/high residual tail recomposes the finite
+Hadamard truncation.** -/
+theorem expAffineHadamardPullbackFiniteContribution_eq_cloud_smooth_residualTail
+    {ι : Type} (zeroLoc : ι → ℂ) (b : ℂ) (F : Finset ι) (z : ℂ) :
+    expAffineHadamardPullbackFiniteContribution zeroLoc b F z
+      =
+    cloudModel zeros100ceil z
+      + zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+      + expAffineHadamardFiniteResidualTail zeroLoc b F z := by
+  unfold expAffineHadamardFiniteResidualTail
+  ring
+
+/-- 🌟🌟 **PROVED — finite low residual tail recomposes the finite
+Hadamard truncation.** -/
+theorem expAffineHadamardPullbackFiniteContribution_eq_cloud_lowTail
+    {ι : Type} (zeroLoc : ι → ℂ) (b : ℂ) (F : Finset ι) (z : ℂ) :
+    expAffineHadamardPullbackFiniteContribution zeroLoc b F z
+      =
+    cloudModel zeros100ceil z
+      + expAffineHadamardFiniteLowTail zeroLoc b F z := by
+  unfold expAffineHadamardFiniteLowTail
+  ring
+
+/-- 🌟🌟🌟 **PROVED — finite expanded pullback contribution as the
+log-derivative of the finite genus-one Hadamard product.**
+
+This is the finite-product version of the exp-affine Hadamard
+log-derivative formula on the pullback line:
+`finiteContribution = I*b + I*Λ[∏_{ρ∈F} E₁(s/ρ)]`, `s = 1/2 + I z`.
+-/
+theorem EntireXiClassicalHadamardTheorem.expAffineHadamardPullbackFiniteContribution_eq_prefactor_plus_finiteProductLogDeriv
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {b z : ℂ} (F : Finset ι)
+    (hne : XiPullback z ≠ 0) :
+    expAffineHadamardPullbackFiniteContribution
+        H.zeroSystem.zeroLoc b F z
+      =
+    Complex.I * b
+      + Complex.I *
+          logDerivativeResponse
+            (fun s' : ℂ =>
+              indexedFiniteHadamardProduct H.zeroSystem.zeroLoc F s')
+            ((1 / 2 : ℂ) + Complex.I * z) := by
+  rw [expAffineHadamardPullbackFiniteContribution_eq_prefactor_plus_finiteRegularizedSum]
+  have hs_completed :
+      completedXiFunction ((1 / 2 : ℂ) + Complex.I * z) ≠ 0 := by
+    unfold XiPullback at hne
+    exact hne
+  have hs_entire :
+      entireRiemannXi ((1 / 2 : ℂ) + Complex.I * z) ≠ 0 :=
+    Hbridge.entire_nonzero_of_completed_nonzero _ hs_completed
+  have hρ :
+      ∀ i ∈ F, H.zeroSystem.zeroLoc i ≠ 0 := by
+    intro i _hi
+    exact H.zeroSystem.zeroLoc_ne_zero i
+  have hs :
+      ∀ i ∈ F, ((1 / 2 : ℂ) + Complex.I * z) ≠ H.zeroSystem.zeroLoc i := by
+    intro i _hi
+    exact H.zeroSystem.nonzero_no_collision hs_entire i
+  have hlog :
+      logDerivativeResponse
+          (fun s' : ℂ =>
+            indexedFiniteHadamardProduct H.zeroSystem.zeroLoc F s')
+          ((1 / 2 : ℂ) + Complex.I * z)
+        =
+      finiteHadamardRegularizedSum H.zeroSystem.zeroLoc F
+        ((1 / 2 : ℂ) + Complex.I * z) :=
+    logDerivativeResponse_indexedFiniteHadamardProduct
+      (zeroLoc := H.zeroSystem.zeroLoc) (F := F)
+      (s := ((1 / 2 : ℂ) + Complex.I * z)) hρ hs
+  rw [hlog]
+
+/-- 🌟🌟🌟 **PROVED — product-log-derivative residual tail equals the
+finite Hadamard residual tail.** -/
+theorem EntireXiClassicalHadamardTheorem.expAffineHadamardFiniteProductResidualTail_eq_finiteResidualTail
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {b z : ℂ} (F : Finset ι)
+    (hne : XiPullback z ≠ 0) :
+    expAffineHadamardFiniteProductResidualTail
+        H.zeroSystem.zeroLoc b F z
+      =
+    expAffineHadamardFiniteResidualTail
+        H.zeroSystem.zeroLoc b F z := by
+  have h :=
+    H.expAffineHadamardPullbackFiniteContribution_eq_prefactor_plus_finiteProductLogDeriv
+      Hbridge (b := b) F hne
+  unfold expAffineHadamardFiniteProductResidualTail
+    expAffineHadamardFiniteResidualTail
+  rw [h]
+
+/-- 🌟🌟🌟 **PROVED — product-log-derivative low tail equals the finite
+Hadamard low tail.** -/
+theorem EntireXiClassicalHadamardTheorem.expAffineHadamardFiniteProductLowTail_eq_finiteLowTail
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {b z : ℂ} (F : Finset ι)
+    (hne : XiPullback z ≠ 0) :
+    expAffineHadamardFiniteProductLowTail
+        H.zeroSystem.zeroLoc b F z
+      =
+    expAffineHadamardFiniteLowTail
+        H.zeroSystem.zeroLoc b F z := by
+  have h :=
+    H.expAffineHadamardPullbackFiniteContribution_eq_prefactor_plus_finiteProductLogDeriv
+      Hbridge (b := b) F hne
+  unfold expAffineHadamardFiniteProductLowTail
+    expAffineHadamardFiniteLowTail
+  rw [h]
 
 /-- 🌟🌟🌟 **PROVED — compact and expanded exp-affine Hadamard pullback
 contributions agree pointwise.** -/
@@ -64409,6 +71760,137 @@ theorem EntireXiClassicalHadamardTheorem.pullback_regularized_hasSum_at_XiPullba
             + 1 / H.zeroSystem.zeroLoc i)) :=
   (H.pullback_regularized_summable_at_XiPullback_nonzero Hbridge hne).hasSum
 
+/-- 🌟🌟🌟 **PROVED — finite regularized Hadamard sums converge on the
+pullback line away from zeros.**
+
+This is the raw finite-zero convergence behind the exp-affine
+Hadamard/Stieltjes interface, before the chain-rule factor `I` and
+prefactor term are added. -/
+theorem EntireXiClassicalHadamardTheorem.tendsto_finiteHadamardRegularizedSum_at_XiPullback_nonzero
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {z : ℂ}
+    (hne : XiPullback z ≠ 0) :
+    Tendsto
+      (fun F : Finset ι =>
+        finiteHadamardRegularizedSum H.zeroSystem.zeroLoc F
+          ((1 / 2 : ℂ) + Complex.I * z))
+      Filter.atTop
+      (𝓝 (hadamardRegularizedLogDerivSeries H.zeroSystem.zeroLoc
+        ((1 / 2 : ℂ) + Complex.I * z))) := by
+  have hs_completed :
+      completedXiFunction ((1 / 2 : ℂ) + Complex.I * z) ≠ 0 := by
+    unfold XiPullback at hne
+    exact hne
+  have hs_entire :
+      entireRiemannXi ((1 / 2 : ℂ) + Complex.I * z) ≠ 0 :=
+    Hbridge.entire_nonzero_of_completed_nonzero _ hs_completed
+  have hsum :=
+    (H.regularized_summable_at_nonzero hs_entire).hasSum
+  simpa [HasSum, finiteHadamardRegularizedSum,
+    hadamardRegularizedLogDerivSeries] using hsum
+
+/-- 🌟🌟🌟 **PROVED — finite genus-one product log derivatives converge
+to the regularized Hadamard zero series on the pullback line.**
+
+This is the finite-product log-derivative interchange in the exact
+shape used by the Stieltjes residual tails. -/
+theorem EntireXiClassicalHadamardTheorem.tendsto_finiteProductLogDeriv_at_XiPullback_nonzero
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {z : ℂ}
+    (hne : XiPullback z ≠ 0) :
+    Tendsto
+      (fun F : Finset ι =>
+        logDerivativeResponse
+          (fun s' : ℂ =>
+            indexedFiniteHadamardProduct H.zeroSystem.zeroLoc F s')
+          ((1 / 2 : ℂ) + Complex.I * z))
+      Filter.atTop
+      (𝓝 (hadamardRegularizedLogDerivSeries H.zeroSystem.zeroLoc
+        ((1 / 2 : ℂ) + Complex.I * z))) := by
+  have hsum :=
+    H.tendsto_finiteHadamardRegularizedSum_at_XiPullback_nonzero
+      Hbridge hne
+  have hs_completed :
+      completedXiFunction ((1 / 2 : ℂ) + Complex.I * z) ≠ 0 := by
+    unfold XiPullback at hne
+    exact hne
+  have hs_entire :
+      entireRiemannXi ((1 / 2 : ℂ) + Complex.I * z) ≠ 0 :=
+    Hbridge.entire_nonzero_of_completed_nonzero _ hs_completed
+  refine hsum.congr' (Filter.Eventually.of_forall ?_)
+  intro F
+  exact
+    (logDerivativeResponse_indexedFiniteHadamardProduct
+      (zeroLoc := H.zeroSystem.zeroLoc) (F := F)
+      (s := ((1 / 2 : ℂ) + Complex.I * z))
+      (by
+        intro i _hi
+        exact H.zeroSystem.zeroLoc_ne_zero i)
+      (by
+        intro i _hi
+        exact H.zeroSystem.nonzero_no_collision hs_entire i)).symm
+
+/-- 🌟🌟🌟 **PROVED — finite exp-affine genus-one product
+log-derivatives converge to the actual pullback log derivative.**
+
+This is the clean finite-product Hadamard approximation:
+`I*b + I*Λ[∏_{ρ∈F} E₁(s/ρ)]` tends to `Λ[Ξ](z)` away from zeros of
+`XiPullback`, with `s = 1/2 + I*z`. -/
+theorem EntireXiClassicalHadamardTheorem.tendsto_expAffine_finiteProductLogDeriv_to_XiPullback_logDerivativeResponse
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b z : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (hy : 0 < z.im)
+    (hne : XiPullback z ≠ 0) :
+    Tendsto
+      (fun F : Finset ι =>
+        Complex.I * b
+          + Complex.I *
+            logDerivativeResponse
+              (fun s' : ℂ =>
+                indexedFiniteHadamardProduct H.zeroSystem.zeroLoc F s')
+              ((1 / 2 : ℂ) + Complex.I * z))
+      Filter.atTop
+      (𝓝 (logDerivativeResponse XiPullback z)) := by
+  have hprod :=
+    H.tendsto_finiteProductLogDeriv_at_XiPullback_nonzero
+      Hbridge hne
+  have htotal :
+      Tendsto
+        (fun F : Finset ι =>
+          Complex.I * b
+            + Complex.I *
+              logDerivativeResponse
+                (fun s' : ℂ =>
+                  indexedFiniteHadamardProduct H.zeroSystem.zeroLoc F s')
+                ((1 / 2 : ℂ) + Complex.I * z))
+        Filter.atTop
+        (𝓝 (Complex.I * b
+          + Complex.I *
+            hadamardRegularizedLogDerivSeries H.zeroSystem.zeroLoc
+              ((1 / 2 : ℂ) + Complex.I * z))) :=
+    tendsto_const_nhds.add (hprod.const_mul Complex.I)
+  have hlog :=
+    H.XiPullback_logDerivativeResponse_eq_expAffine_series
+      Hbridge hC hpref hy hne
+  have htarget :
+      Complex.I * b
+          + Complex.I *
+            hadamardRegularizedLogDerivSeries H.zeroSystem.zeroLoc
+              ((1 / 2 : ℂ) + Complex.I * z)
+        =
+      logDerivativeResponse XiPullback z := by
+    rw [hlog]
+    unfold expAffineHadamardPullbackZeroContribution
+    ring
+  exact htarget ▸ htotal
+
 /-- 🌟🌟🌟 **PROVED — finite expanded Hadamard pullback contributions
 converge to the expanded infinite contribution.**
 
@@ -64460,6 +71942,1181 @@ theorem EntireXiClassicalHadamardTheorem.tendsto_expAffineHadamardPullbackFinite
     H.tendsto_expAffineHadamardPullbackFiniteContribution
       Hbridge (b := b) hne
   simpa [expAffineHadamardPullbackZeroContribution_eq_expanded] using h
+
+/-- 🌟🌟🌟🌟 **PROVED — finite expanded Hadamard pullback contributions
+converge to the actual pullback log derivative.**
+
+This is the finite-to-infinite Hadamard approximation statement in the
+form needed by the Stieltjes explicit formula: finite genus-one
+zero-product log-derivatives, with the exp-affine prefactor term, tend
+to `Λ[Ξ](z)` away from zeros. -/
+theorem EntireXiClassicalHadamardTheorem.tendsto_expAffineHadamardPullbackFiniteContribution_to_XiPullback_logDerivativeResponse
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b z : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (hy : 0 < z.im)
+    (hne : XiPullback z ≠ 0) :
+    Tendsto
+      (fun F : Finset ι =>
+        expAffineHadamardPullbackFiniteContribution
+          H.zeroSystem.zeroLoc b F z)
+      Filter.atTop
+      (𝓝 (logDerivativeResponse XiPullback z)) := by
+  have h :=
+    H.tendsto_expAffineHadamardPullbackFiniteContribution_compact
+      Hbridge (b := b) hne
+  have hlog :=
+    H.XiPullback_logDerivativeResponse_eq_expAffine_series
+      Hbridge hC hpref hy hne
+  simpa [← hlog] using h
+
+/-- 🌟🌟🌟 **PROVED — finite Stieltjes decompositions pass to the
+limit.**
+
+This is the abstract limit step behind the Stieltjes explicit formula:
+if finite Hadamard/zero contributions `A F` converge to `Z`, finite
+tails `Tail F` converge to `L`, and each finite stage decomposes as
+`A F = M + Tail F`, then the limiting contribution decomposes as
+`Z = M + L`. -/
+theorem stieltjes_limit_identity_of_finite_decompositions
+    {ι : Type} {A Tail : Finset ι → ℂ} {Z M L : ℂ}
+    (hA : Tendsto A Filter.atTop (𝓝 Z))
+    (hTail : Tendsto Tail Filter.atTop (𝓝 L))
+    (hEq : ∀ F : Finset ι, A F = M + Tail F) :
+    Z = M + L := by
+  have hA_model :
+      Tendsto (fun F : Finset ι => M + Tail F) Filter.atTop (𝓝 Z) :=
+    hA.congr' (Filter.Eventually.of_forall fun F => hEq F)
+  have hModel :
+      Tendsto (fun F : Finset ι => M + Tail F) Filter.atTop (𝓝 (M + L)) :=
+    tendsto_const_nhds.add hTail
+  exact tendsto_nhds_unique hA_model hModel
+
+/-- 📦 **Finite-truncation mid Stieltjes source for the expanded
+exp-affine Hadamard contribution.**
+
+For each mid-band tail value `L`, it supplies finite tails converging to
+`L`, and a finite explicit-formula decomposition at every finite
+Hadamard truncation. -/
+structure ExpAffineHadamardFiniteStieltjesMidSourceAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ)
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge) (b : ℂ) : Prop where
+  finite_mid :
+    ∀ {z L : ℂ},
+      0 < z.im →
+      XiPullback z ≠ 0 →
+      (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+        2 * (1 + |z.re| + z.im) ≤ T) →
+      XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L →
+      ∃ Tail : Finset ι → ℂ,
+        Tendsto Tail Filter.atTop (𝓝 L) ∧
+        ∀ F : Finset ι,
+          expAffineHadamardPullbackFiniteContribution
+              H.zeroSystem.zeroLoc b F z
+            =
+          cloudModel zeros100ceil z
+            + zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+            + Tail F
+
+/-- 📦 **Finite-truncation high Stieltjes source for the expanded
+exp-affine Hadamard contribution.** -/
+structure ExpAffineHadamardFiniteStieltjesHighSourceAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ)
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge) (b : ℂ) : Prop where
+  finite_high :
+    ∀ {z L : ℂ} {T : ℝ},
+      140 ≤ T →
+      0 < z.im →
+      XiPullback z ≠ 0 →
+      2 * (1 + |z.re| + z.im) ≤ T →
+      XiFluctuationTailValue Dzero T0 T z L →
+      ∃ Tail : Finset ι → ℂ,
+        Tendsto Tail Filter.atTop (𝓝 L) ∧
+        ∀ F : Finset ι,
+          expAffineHadamardPullbackFiniteContribution
+              H.zeroSystem.zeroLoc b F z
+            =
+          cloudModel zeros100ceil z
+            + zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+            + Tail F
+
+/-- 📦 **Finite-truncation low Stieltjes source for the expanded
+exp-affine Hadamard contribution.**
+
+This is the low-band analogue of the mid/high finite sources: every
+finite Hadamard truncation splits into the finite zero cloud plus a
+finite low tail, and those finite low tails converge to the explicit
+low residual tail. -/
+structure ExpAffineHadamardFiniteStieltjesLowSourceAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ)
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge) (b : ℂ) : Prop where
+  finite_low :
+    ∀ {z : ℂ},
+      lowCompactRegion z →
+      XiPullback z ≠ 0 →
+      LowFirstZeroGapNoAtoms Dzero →
+      ∃ Tail : Finset ι → ℂ,
+        Tendsto Tail Filter.atTop
+          (𝓝 (lowTailZeroContribution Dzero T0 z)) ∧
+        ∀ F : Finset ι,
+          expAffineHadamardPullbackFiniteContribution
+              H.zeroSystem.zeroLoc b F z
+            =
+          cloudModel zeros100ceil z + Tail F
+
+/-- 📦 **Mid-band residual-tail convergence source.**
+
+This is the sharper finite Stieltjes input: the finite decomposition is
+now definitional, so the analytic obligation is only convergence of the
+named residual tail. -/
+structure ExpAffineHadamardResidualTailConvergenceMidAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ)
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι)
+    (b : ℂ) : Prop where
+  tendsto_mid_tail :
+    ∀ {z L : ℂ},
+      0 < z.im →
+      XiPullback z ≠ 0 →
+      (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+        2 * (1 + |z.re| + z.im) ≤ T) →
+      XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L →
+      Tendsto
+        (fun F : Finset ι =>
+          expAffineHadamardFiniteResidualTail
+            H.zeroSystem.zeroLoc b F z)
+        Filter.atTop
+        (𝓝 L)
+
+/-- 📦 **High-band residual-tail convergence source.** -/
+structure ExpAffineHadamardResidualTailConvergenceHighAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ)
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι)
+    (b : ℂ) : Prop where
+  tendsto_high_tail :
+    ∀ {z L : ℂ} {T : ℝ},
+      140 ≤ T →
+      0 < z.im →
+      XiPullback z ≠ 0 →
+      2 * (1 + |z.re| + z.im) ≤ T →
+      XiFluctuationTailValue Dzero T0 T z L →
+      Tendsto
+        (fun F : Finset ι =>
+          expAffineHadamardFiniteResidualTail
+            H.zeroSystem.zeroLoc b F z)
+        Filter.atTop
+        (𝓝 L)
+
+/-- 📦 **Low-band residual-tail convergence source.** -/
+structure ExpAffineHadamardResidualTailConvergenceLowAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ)
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι)
+    (b : ℂ) : Prop where
+  tendsto_low_tail :
+    ∀ {z : ℂ},
+      lowCompactRegion z →
+      XiPullback z ≠ 0 →
+      LowFirstZeroGapNoAtoms Dzero →
+      Tendsto
+        (fun F : Finset ι =>
+          expAffineHadamardFiniteLowTail
+            H.zeroSystem.zeroLoc b F z)
+        Filter.atTop
+        (𝓝 (lowTailZeroContribution Dzero T0 z))
+
+/-- 🌟🌟🌟 **PROVED — mid residual-tail convergence from convergence of
+the concrete finite product-log-derivative residual tails.** -/
+theorem ExpAffineHadamardResidualTailConvergenceMidAFZ.of_finiteProductResidualTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hconv :
+      ∀ {z L : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L)) :
+    ExpAffineHadamardResidualTailConvergenceMidAFZ
+      Dzero T0 H b :=
+  ⟨by
+    intro z L hy hne hmid hL
+    have hprod := Hconv hy hne hmid hL
+    refine hprod.congr' (Filter.Eventually.of_forall ?_)
+    intro F
+    exact
+      H.expAffineHadamardFiniteProductResidualTail_eq_finiteResidualTail
+        Hbridge F hne⟩
+
+/-- 🌟🌟🌟 **PROVED — high residual-tail convergence from convergence of
+the concrete finite product-log-derivative residual tails.** -/
+theorem ExpAffineHadamardResidualTailConvergenceHighAFZ.of_finiteProductResidualTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hconv :
+      ∀ {z L : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        XiFluctuationTailValue Dzero T0 T z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L)) :
+    ExpAffineHadamardResidualTailConvergenceHighAFZ
+      Dzero T0 H b :=
+  ⟨by
+    intro z L T hT hy hne hreg hL
+    have hprod := Hconv hT hy hne hreg hL
+    refine hprod.congr' (Filter.Eventually.of_forall ?_)
+    intro F
+    exact
+      H.expAffineHadamardFiniteProductResidualTail_eq_finiteResidualTail
+        Hbridge F hne⟩
+
+/-- 🌟🌟🌟 **PROVED — low residual-tail convergence from convergence of
+the concrete finite product-log-derivative low tails.** -/
+theorem ExpAffineHadamardResidualTailConvergenceLowAFZ.of_finiteProductLowTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hconv :
+      ∀ {z : ℂ},
+        lowCompactRegion z →
+        XiPullback z ≠ 0 →
+        LowFirstZeroGapNoAtoms Dzero →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductLowTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 (lowTailZeroContribution Dzero T0 z))) :
+    ExpAffineHadamardResidualTailConvergenceLowAFZ
+      Dzero T0 H b :=
+  ⟨by
+    intro z hz hne Hno
+    have hprod := Hconv hz hne Hno
+    refine hprod.congr' (Filter.Eventually.of_forall ?_)
+    intro F
+    exact
+      H.expAffineHadamardFiniteProductLowTail_eq_finiteLowTail
+        Hbridge F hne⟩
+
+/-- 🌟🌟🌟 **PROVED — finite product-log-derivative mid residual
+convergence from residual-tail convergence.** -/
+theorem ExpAffineHadamardResidualTailConvergenceMidAFZ.to_finiteProductResidualTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hconv :
+      ExpAffineHadamardResidualTailConvergenceMidAFZ
+        Dzero T0 H b) :
+      ∀ {z L : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L) := by
+  intro z L hy hne hmid hL
+  have hres := Hconv.tendsto_mid_tail hy hne hmid hL
+  refine hres.congr' (Filter.Eventually.of_forall ?_)
+  intro F
+  exact
+    (H.expAffineHadamardFiniteProductResidualTail_eq_finiteResidualTail
+      Hbridge F hne).symm
+
+/-- 🌟🌟🌟 **PROVED — finite product-log-derivative high residual
+convergence from residual-tail convergence.** -/
+theorem ExpAffineHadamardResidualTailConvergenceHighAFZ.to_finiteProductResidualTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hconv :
+      ExpAffineHadamardResidualTailConvergenceHighAFZ
+        Dzero T0 H b) :
+      ∀ {z L : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        XiFluctuationTailValue Dzero T0 T z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L) := by
+  intro z L T hT hy hne hreg hL
+  have hres := Hconv.tendsto_high_tail hT hy hne hreg hL
+  refine hres.congr' (Filter.Eventually.of_forall ?_)
+  intro F
+  exact
+    (H.expAffineHadamardFiniteProductResidualTail_eq_finiteResidualTail
+      Hbridge F hne).symm
+
+/-- 🌟🌟🌟 **PROVED — finite product-log-derivative low-tail convergence
+from residual-tail convergence.** -/
+theorem ExpAffineHadamardResidualTailConvergenceLowAFZ.to_finiteProductLowTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hconv :
+      ExpAffineHadamardResidualTailConvergenceLowAFZ
+        Dzero T0 H b) :
+      ∀ {z : ℂ},
+        lowCompactRegion z →
+        XiPullback z ≠ 0 →
+        LowFirstZeroGapNoAtoms Dzero →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductLowTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 (lowTailZeroContribution Dzero T0 z)) := by
+  intro z hz hne Hno
+  have hres := Hconv.tendsto_low_tail hz hne Hno
+  refine hres.congr' (Filter.Eventually.of_forall ?_)
+  intro F
+  exact
+    (H.expAffineHadamardFiniteProductLowTail_eq_finiteLowTail
+      Hbridge F hne).symm
+
+/-- 🌟🌟🌟 **PROVED — finite product-log-derivative mid residual
+convergence is equivalent to residual-tail convergence.** -/
+theorem expAffineHadamardFiniteProductResidualTailConvergenceMid_iff_residualTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ} :
+    (∀ {z L : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L))
+      ↔
+    ExpAffineHadamardResidualTailConvergenceMidAFZ
+      Dzero T0 H b :=
+  ⟨fun Hprod =>
+      ExpAffineHadamardResidualTailConvergenceMidAFZ.of_finiteProductResidualTailConvergence
+        (Hbridge := Hbridge) Hprod,
+    fun Hres =>
+      Hres.to_finiteProductResidualTailConvergence
+        (Hbridge := Hbridge)⟩
+
+/-- 🌟🌟🌟 **PROVED — finite product-log-derivative high residual
+convergence is equivalent to residual-tail convergence.** -/
+theorem expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_residualTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ} :
+    (∀ {z L : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        XiFluctuationTailValue Dzero T0 T z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L))
+      ↔
+    ExpAffineHadamardResidualTailConvergenceHighAFZ
+      Dzero T0 H b :=
+  ⟨fun Hprod =>
+      ExpAffineHadamardResidualTailConvergenceHighAFZ.of_finiteProductResidualTailConvergence
+        (Hbridge := Hbridge) Hprod,
+    fun Hres =>
+      Hres.to_finiteProductResidualTailConvergence
+        (Hbridge := Hbridge)⟩
+
+/-- 🌟🌟🌟 **PROVED — finite product-log-derivative low-tail convergence
+is equivalent to residual-tail convergence.** -/
+theorem expAffineHadamardFiniteProductLowTailConvergence_iff_residualTailConvergenceLow
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ} :
+    (∀ {z : ℂ},
+        lowCompactRegion z →
+        XiPullback z ≠ 0 →
+        LowFirstZeroGapNoAtoms Dzero →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductLowTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 (lowTailZeroContribution Dzero T0 z)))
+      ↔
+    ExpAffineHadamardResidualTailConvergenceLowAFZ
+      Dzero T0 H b :=
+  ⟨fun Hprod =>
+      ExpAffineHadamardResidualTailConvergenceLowAFZ.of_finiteProductLowTailConvergence
+        (Hbridge := Hbridge) Hprod,
+    fun Hres =>
+      Hres.to_finiteProductLowTailConvergence
+        (Hbridge := Hbridge)⟩
+
+/-- 🌟🌟🌟 **PROVED — mid finite source from residual-tail convergence.** -/
+theorem ExpAffineHadamardFiniteStieltjesMidSourceAFZ.of_residualTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hconv :
+      ExpAffineHadamardResidualTailConvergenceMidAFZ
+        Dzero T0 H b) :
+    ExpAffineHadamardFiniteStieltjesMidSourceAFZ
+      Dzero T0 H Hbridge b :=
+  ⟨by
+    intro z L hy hne hmid hL
+    refine ⟨fun F : Finset ι =>
+        expAffineHadamardFiniteResidualTail
+          H.zeroSystem.zeroLoc b F z, ?_, ?_⟩
+    · exact Hconv.tendsto_mid_tail hy hne hmid hL
+    · intro F
+      exact
+        expAffineHadamardPullbackFiniteContribution_eq_cloud_smooth_residualTail
+          H.zeroSystem.zeroLoc b F z⟩
+
+/-- 🌟🌟🌟 **PROVED — high finite source from residual-tail convergence.** -/
+theorem ExpAffineHadamardFiniteStieltjesHighSourceAFZ.of_residualTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hconv :
+      ExpAffineHadamardResidualTailConvergenceHighAFZ
+        Dzero T0 H b) :
+    ExpAffineHadamardFiniteStieltjesHighSourceAFZ
+      Dzero T0 H Hbridge b :=
+  ⟨by
+    intro z L T hT hy hne hreg hL
+    refine ⟨fun F : Finset ι =>
+        expAffineHadamardFiniteResidualTail
+          H.zeroSystem.zeroLoc b F z, ?_, ?_⟩
+    · exact Hconv.tendsto_high_tail hT hy hne hreg hL
+    · intro F
+      exact
+        expAffineHadamardPullbackFiniteContribution_eq_cloud_smooth_residualTail
+          H.zeroSystem.zeroLoc b F z⟩
+
+/-- 🌟🌟🌟 **PROVED — low finite source from residual-tail convergence.** -/
+theorem ExpAffineHadamardFiniteStieltjesLowSourceAFZ.of_residualTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hconv :
+      ExpAffineHadamardResidualTailConvergenceLowAFZ
+        Dzero T0 H b) :
+    ExpAffineHadamardFiniteStieltjesLowSourceAFZ
+      Dzero T0 H Hbridge b :=
+  ⟨by
+    intro z hz hne Hno
+    refine ⟨fun F : Finset ι =>
+        expAffineHadamardFiniteLowTail
+          H.zeroSystem.zeroLoc b F z, ?_, ?_⟩
+    · exact Hconv.tendsto_low_tail hz hne Hno
+    · intro F
+      exact
+        expAffineHadamardPullbackFiniteContribution_eq_cloud_lowTail
+          H.zeroSystem.zeroLoc b F z⟩
+
+/-- 🌟🌟🌟 **PROVED — mid residual-tail convergence from the limiting
+Stieltjes equality.**
+
+Together with
+`StieltjesMidTailEqualityAFZ.of_expAffineHadamardResidualTailConvergence`,
+this identifies the mid-band residual convergence target with the
+existing limiting Stieltjes equality, modulo the Hadamard finite
+convergence theorem. -/
+theorem ExpAffineHadamardResidualTailConvergenceMidAFZ.of_stieltjesEquality
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero T0
+        (expAffineHadamardPullbackZeroContribution
+          H.zeroSystem.zeroLoc b)) :
+    ExpAffineHadamardResidualTailConvergenceMidAFZ
+      Dzero T0 H b :=
+  ⟨by
+    intro z L hy hne hmid hL
+    have hA :=
+      H.tendsto_expAffineHadamardPullbackFiniteContribution_compact
+        Hbridge (b := b) hne
+    have hTail :
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardPullbackFiniteContribution
+              H.zeroSystem.zeroLoc b F z
+              - cloudModel zeros100ceil z
+              - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z)
+          Filter.atTop
+          (𝓝 (expAffineHadamardPullbackZeroContribution
+                H.zeroSystem.zeroLoc b z
+              - cloudModel zeros100ceil z
+              - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z)) :=
+      (hA.sub tendsto_const_nhds).sub tendsto_const_nhds
+    have hlim :
+        expAffineHadamardPullbackZeroContribution H.zeroSystem.zeroLoc b z
+          - cloudModel zeros100ceil z
+          - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+        = L := by
+      have h := Hmid.mid_eq hy hne hmid hL
+      linear_combination h
+    simpa [expAffineHadamardFiniteResidualTail, hlim] using hTail⟩
+
+/-- 🌟🌟🌟 **PROVED — high residual-tail convergence from the limiting
+Stieltjes equality.** -/
+theorem ExpAffineHadamardResidualTailConvergenceHighAFZ.of_stieltjesEquality
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero T0
+        (expAffineHadamardPullbackZeroContribution
+          H.zeroSystem.zeroLoc b)) :
+    ExpAffineHadamardResidualTailConvergenceHighAFZ
+      Dzero T0 H b :=
+  ⟨by
+    intro z L T hT hy hne hreg hL
+    have hA :=
+      H.tendsto_expAffineHadamardPullbackFiniteContribution_compact
+        Hbridge (b := b) hne
+    have hTail :
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardPullbackFiniteContribution
+              H.zeroSystem.zeroLoc b F z
+              - cloudModel zeros100ceil z
+              - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z)
+          Filter.atTop
+          (𝓝 (expAffineHadamardPullbackZeroContribution
+                H.zeroSystem.zeroLoc b z
+              - cloudModel zeros100ceil z
+              - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z)) :=
+      (hA.sub tendsto_const_nhds).sub tendsto_const_nhds
+    have hlim :
+        expAffineHadamardPullbackZeroContribution H.zeroSystem.zeroLoc b z
+          - cloudModel zeros100ceil z
+          - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+        = L := by
+      have h := Hhigh.high_eq hT hy hne hreg hL
+      linear_combination h
+    simpa [expAffineHadamardFiniteResidualTail, hlim] using hTail⟩
+
+/-- 🌟🌟🌟 **PROVED — low residual-tail convergence from the low zero
+split.** -/
+theorem ExpAffineHadamardResidualTailConvergenceLowAFZ.of_lowZeroSplit
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hlow :
+      LowZeroContributionSplitAFZ
+        Dzero T0
+        (expAffineHadamardPullbackZeroContribution
+          H.zeroSystem.zeroLoc b)) :
+    ExpAffineHadamardResidualTailConvergenceLowAFZ
+      Dzero T0 H b :=
+  ⟨by
+    intro z hz hne Hno
+    have hA :=
+      H.tendsto_expAffineHadamardPullbackFiniteContribution_compact
+        Hbridge (b := b) hne
+    have hTail :
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardPullbackFiniteContribution
+              H.zeroSystem.zeroLoc b F z
+              - cloudModel zeros100ceil z)
+          Filter.atTop
+          (𝓝 (expAffineHadamardPullbackZeroContribution
+                H.zeroSystem.zeroLoc b z
+              - cloudModel zeros100ceil z)) :=
+      hA.sub tendsto_const_nhds
+    have hlim :
+        expAffineHadamardPullbackZeroContribution H.zeroSystem.zeroLoc b z
+          - cloudModel zeros100ceil z
+        = lowTailZeroContribution Dzero T0 z := by
+      have h := Hlow.split z hz hne Hno
+      linear_combination h
+    simpa [expAffineHadamardFiniteLowTail, hlim] using hTail⟩
+
+/-- 🌟🌟🌟 **PROVED — mid Stieltjes equality from finite Hadamard
+truncation decompositions.** -/
+theorem StieltjesMidTailEqualityAFZ.of_expAffineHadamardFiniteSource
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hfinite :
+      ExpAffineHadamardFiniteStieltjesMidSourceAFZ
+        Dzero T0 H Hbridge b) :
+    StieltjesMidTailEqualityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  ⟨by
+    intro z L hy hne hmid hL
+    obtain ⟨Tail, hTail, hEq⟩ :=
+      Hfinite.finite_mid hy hne hmid hL
+    exact
+      stieltjes_limit_identity_of_finite_decompositions
+        (H.tendsto_expAffineHadamardPullbackFiniteContribution_compact
+          Hbridge (b := b) hne)
+        hTail
+        hEq⟩
+
+/-- 🌟🌟🌟 **PROVED — mid Stieltjes equality from residual-tail
+convergence.** -/
+theorem StieltjesMidTailEqualityAFZ.of_expAffineHadamardResidualTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hconv :
+      ExpAffineHadamardResidualTailConvergenceMidAFZ
+        Dzero T0 H b) :
+    StieltjesMidTailEqualityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  StieltjesMidTailEqualityAFZ.of_expAffineHadamardFiniteSource
+    (Hbridge := Hbridge)
+    (ExpAffineHadamardFiniteStieltjesMidSourceAFZ.of_residualTailConvergence
+      (Hbridge := Hbridge) Hconv)
+
+/-- 🌟🌟🌟 **PROVED — high Stieltjes equality from finite Hadamard
+truncation decompositions.** -/
+theorem StieltjesHighTailEqualityAFZ.of_expAffineHadamardFiniteSource
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hfinite :
+      ExpAffineHadamardFiniteStieltjesHighSourceAFZ
+        Dzero T0 H Hbridge b) :
+    StieltjesHighTailEqualityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  ⟨by
+    intro z T L hT hy hne hreg hL
+    obtain ⟨Tail, hTail, hEq⟩ :=
+      Hfinite.finite_high hT hy hne hreg hL
+    exact
+      stieltjes_limit_identity_of_finite_decompositions
+        (H.tendsto_expAffineHadamardPullbackFiniteContribution_compact
+          Hbridge (b := b) hne)
+        hTail
+        hEq⟩
+
+/-- 🌟🌟🌟 **PROVED — high Stieltjes equality from residual-tail
+convergence.** -/
+theorem StieltjesHighTailEqualityAFZ.of_expAffineHadamardResidualTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hconv :
+      ExpAffineHadamardResidualTailConvergenceHighAFZ
+        Dzero T0 H b) :
+    StieltjesHighTailEqualityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  StieltjesHighTailEqualityAFZ.of_expAffineHadamardFiniteSource
+    (Hbridge := Hbridge)
+    (ExpAffineHadamardFiniteStieltjesHighSourceAFZ.of_residualTailConvergence
+      (Hbridge := Hbridge) Hconv)
+
+/-- 🌟🌟🌟 **PROVED — combined mid/high Stieltjes equality from finite
+Hadamard truncation decompositions.** -/
+theorem StieltjesMidHighTailEqualityAFZ.of_expAffineHadamardFiniteSources
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hmid :
+      ExpAffineHadamardFiniteStieltjesMidSourceAFZ
+        Dzero T0 H Hbridge b)
+    (Hhigh :
+      ExpAffineHadamardFiniteStieltjesHighSourceAFZ
+        Dzero T0 H Hbridge b) :
+    StieltjesMidHighTailEqualityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  { mid_eq :=
+      (StieltjesMidTailEqualityAFZ.of_expAffineHadamardFiniteSource
+        Hmid).mid_eq
+    high_eq :=
+      (StieltjesHighTailEqualityAFZ.of_expAffineHadamardFiniteSource
+        Hhigh).high_eq }
+
+/-- 🌟🌟🌟 **PROVED — low zero split from finite Hadamard truncation
+decompositions.**
+
+This is the low-band finite-to-infinite Stieltjes step: finite
+exp-affine Hadamard zero sums split into the low cloud plus finite low
+tails, and the finite tails converge to the explicit low tail. -/
+theorem LowZeroContributionSplitAFZ.of_expAffineHadamardFiniteSource
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hfinite :
+      ExpAffineHadamardFiniteStieltjesLowSourceAFZ
+        Dzero T0 H Hbridge b) :
+    LowZeroContributionSplitAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  ⟨by
+    intro z hz hne Hno
+    obtain ⟨Tail, hTail, hEq⟩ :=
+      Hfinite.finite_low hz hne Hno
+    exact
+      stieltjes_limit_identity_of_finite_decompositions
+        (H.tendsto_expAffineHadamardPullbackFiniteContribution_compact
+          Hbridge (b := b) hne)
+        hTail
+        hEq⟩
+
+/-- 🌟🌟🌟 **PROVED — low zero split from residual-tail convergence.** -/
+theorem LowZeroContributionSplitAFZ.of_expAffineHadamardResidualTailConvergence
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hconv :
+      ExpAffineHadamardResidualTailConvergenceLowAFZ
+        Dzero T0 H b) :
+    LowZeroContributionSplitAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  LowZeroContributionSplitAFZ.of_expAffineHadamardFiniteSource
+    (Hbridge := Hbridge)
+    (ExpAffineHadamardFiniteStieltjesLowSourceAFZ.of_residualTailConvergence
+      (Hbridge := Hbridge) Hconv)
+
+/-- 🌟🌟🌟 **PROVED — low Stieltjes equality from finite Hadamard
+truncation decompositions and the first-zero start condition.** -/
+theorem StieltjesLowEqualityAFZ.of_expAffineHadamardFiniteSource
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (Hstarts : DzeroStartsAfter Dzero 14)
+    (Hfinite :
+      ExpAffineHadamardFiniteStieltjesLowSourceAFZ
+        Dzero T0 H Hbridge b) :
+    StieltjesLowEqualityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  StieltjesLowEqualityAFZ.of_lowZeroContributionSplit
+    (LowZeroContributionSplitAFZ.of_expAffineHadamardFiniteSource
+      Hfinite)
+    Hstarts
+
+/-- 🌟🌟🌟 **PROVED — low Stieltjes equality from finite Hadamard
+truncation decompositions and `Z ≥ 15`.** -/
+theorem StieltjesLowEqualityAFZ.of_expAffineHadamardFiniteSource_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hfinite :
+      ExpAffineHadamardFiniteStieltjesLowSourceAFZ
+        Dzero T0 H Hbridge b) :
+    StieltjesLowEqualityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  StieltjesLowEqualityAFZ.of_expAffineHadamardFiniteSource
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+    Hfinite
+
+/-- 🌟🌟🌟 **PROVED — low Stieltjes equality from residual-tail
+convergence and `Z ≥ 15`.** -/
+theorem StieltjesLowEqualityAFZ.of_expAffineHadamardResidualTailConvergence_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hconv :
+      ExpAffineHadamardResidualTailConvergenceLowAFZ
+        Dzero T0 H b) :
+    StieltjesLowEqualityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  StieltjesLowEqualityAFZ.of_expAffineHadamardFiniteSource_Z_ge_15
+    (Hbridge := Hbridge)
+    h_Z_ge_15
+    (ExpAffineHadamardFiniteStieltjesLowSourceAFZ.of_residualTailConvergence
+      (Hbridge := Hbridge) Hconv)
+
+/-- 🌟🌟🌟 **PROVED — mid residual-tail convergence is equivalent to the
+mid Stieltjes equality for the exp-affine Hadamard contribution.** -/
+theorem expAffineHadamardResidualTailConvergenceMid_iff_stieltjesMidTailEqualityAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ} :
+    ExpAffineHadamardResidualTailConvergenceMidAFZ Dzero T0 H b
+      ↔
+    StieltjesMidTailEqualityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  ⟨fun Hconv =>
+      StieltjesMidTailEqualityAFZ.of_expAffineHadamardResidualTailConvergence
+        (Hbridge := Hbridge) Hconv,
+    fun Hmid =>
+      ExpAffineHadamardResidualTailConvergenceMidAFZ.of_stieltjesEquality
+        (Hbridge := Hbridge) Hmid⟩
+
+/-- 🌟🌟🌟 **PROVED — high residual-tail convergence is equivalent to the
+high Stieltjes equality for the exp-affine Hadamard contribution.** -/
+theorem expAffineHadamardResidualTailConvergenceHigh_iff_stieltjesHighTailEqualityAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ} :
+    ExpAffineHadamardResidualTailConvergenceHighAFZ Dzero T0 H b
+      ↔
+    StieltjesHighTailEqualityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  ⟨fun Hconv =>
+      StieltjesHighTailEqualityAFZ.of_expAffineHadamardResidualTailConvergence
+        (Hbridge := Hbridge) Hconv,
+    fun Hhigh =>
+      ExpAffineHadamardResidualTailConvergenceHighAFZ.of_stieltjesEquality
+        (Hbridge := Hbridge) Hhigh⟩
+
+/-- 🌟🌟🌟 **PROVED — low residual-tail convergence is equivalent to the
+low zero split for the exp-affine Hadamard contribution.** -/
+theorem expAffineHadamardResidualTailConvergenceLow_iff_lowZeroContributionSplitAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ} :
+    ExpAffineHadamardResidualTailConvergenceLowAFZ Dzero T0 H b
+      ↔
+    LowZeroContributionSplitAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  ⟨fun Hconv =>
+      LowZeroContributionSplitAFZ.of_expAffineHadamardResidualTailConvergence
+        (Hbridge := Hbridge) Hconv,
+    fun Hlow =>
+      ExpAffineHadamardResidualTailConvergenceLowAFZ.of_lowZeroSplit
+        (Hbridge := Hbridge) Hlow⟩
+
+/-- 🌟🌟🌟🌟 **PATH B FRONT DOOR — finite Hadamard Stieltjes sources +
+low split.**
+
+This version consumes the actual finite-truncation Stieltjes work for
+mid/high, instead of assuming the limiting mid/high equalities directly.
+The low side remains the explicit cloud/tail split. -/
+theorem XiPullbackAntiHerglotzTarget_of_expAffineHadamardFiniteSources_lowSplit
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (hpref : Hhad.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (HmidFinite :
+      ExpAffineHadamardFiniteStieltjesMidSourceAFZ
+        Dzero 10 Hhad Hbridge b)
+    (HhighFinite :
+      ExpAffineHadamardFiniteStieltjesHighSourceAFZ
+        Dzero 10 Hhad Hbridge b)
+    {finiteCloud tail : ℂ → ℂ}
+    (Hlow :
+      LowCloudTailSplitAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          Hhad.zeroSystem.zeroLoc b)
+        finiteCloud tail) :
+    XiPullbackAntiHerglotzTarget := by
+  have Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          Hhad.zeroSystem.zeroLoc b) :=
+    StieltjesMidTailEqualityAFZ.of_expAffineHadamardFiniteSource
+      HmidFinite
+  have Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          Hhad.zeroSystem.zeroLoc b) :=
+    StieltjesHighTailEqualityAFZ.of_expAffineHadamardFiniteSource
+      HhighFinite
+  have HlowSplit :
+      LowZeroContributionSplitAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          Hhad.zeroSystem.zeroLoc b) :=
+    LowZeroContributionSplitAFZ.of_cloudTailSplit Hlow
+  have Hst :
+      ClassicalPathBStieltjesInputsAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          Hhad.zeroSystem.zeroLoc b) :=
+    ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit_Z_ge_15
+      h_Z_ge_15 Hmid Hhigh HlowSplit
+  exact
+    XiPullbackAntiHerglotzTarget_of_twoPiModel_hadamardAFZAndStieltjesAFZ
+      Dzero h_Z_ge_15 hTuring hHighLog
+      (Hhad.toExpAffinePullbackHadamardSourceAFZ Hbridge hC hpref)
+      Hst.toEqualitySource
+
+/-- 🌟🌟🌟🌟 **PATH B FRONT DOOR — all three Stieltjes bands from finite
+Hadamard truncation sources.**
+
+This is the fully finite Stieltjes-facing version of the exp-affine
+Hadamard route: mid, high, and low are all obtained by passing finite
+Hadamard truncation decompositions to the infinite zero contribution. -/
+theorem XiPullbackAntiHerglotzTarget_of_expAffineHadamardFiniteStieltjesSources
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (hpref : Hhad.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (HmidFinite :
+      ExpAffineHadamardFiniteStieltjesMidSourceAFZ
+        Dzero 10 Hhad Hbridge b)
+    (HhighFinite :
+      ExpAffineHadamardFiniteStieltjesHighSourceAFZ
+        Dzero 10 Hhad Hbridge b)
+    (HlowFinite :
+      ExpAffineHadamardFiniteStieltjesLowSourceAFZ
+        Dzero 10 Hhad Hbridge b) :
+    XiPullbackAntiHerglotzTarget := by
+  have Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          Hhad.zeroSystem.zeroLoc b) :=
+    StieltjesMidTailEqualityAFZ.of_expAffineHadamardFiniteSource
+      HmidFinite
+  have Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          Hhad.zeroSystem.zeroLoc b) :=
+    StieltjesHighTailEqualityAFZ.of_expAffineHadamardFiniteSource
+      HhighFinite
+  have HlowSplit :
+      LowZeroContributionSplitAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          Hhad.zeroSystem.zeroLoc b) :=
+    LowZeroContributionSplitAFZ.of_expAffineHadamardFiniteSource
+      HlowFinite
+  have Hst :
+      ClassicalPathBStieltjesInputsAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          Hhad.zeroSystem.zeroLoc b) :=
+    ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit_Z_ge_15
+      h_Z_ge_15 Hmid Hhigh HlowSplit
+  exact
+    XiPullbackAntiHerglotzTarget_of_twoPiModel_hadamardAFZAndStieltjesAFZ
+      Dzero h_Z_ge_15 hTuring hHighLog
+      (Hhad.toExpAffinePullbackHadamardSourceAFZ Hbridge hC hpref)
+      Hst.toEqualitySource
+
+/-- 🌟🌟🌟🌟 **PATH B FRONT DOOR — residual-tail convergence sources.**
+
+The finite algebraic decompositions have been discharged by the named
+residual-tail definitions, so this theorem asks only for the actual
+Stieltjes convergence content in the mid, high, and low bands. -/
+theorem XiPullbackAntiHerglotzTarget_of_expAffineHadamardResidualTailConvergence
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (hpref : Hhad.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (HmidConv :
+      ExpAffineHadamardResidualTailConvergenceMidAFZ
+        Dzero 10 Hhad b)
+    (HhighConv :
+      ExpAffineHadamardResidualTailConvergenceHighAFZ
+        Dzero 10 Hhad b)
+    (HlowConv :
+      ExpAffineHadamardResidualTailConvergenceLowAFZ
+        Dzero 10 Hhad b) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_expAffineHadamardFiniteStieltjesSources
+    Dzero
+    h_Z_ge_15
+    hTuring
+    hHighLog
+    Hbridge
+    Hhad
+    hC
+    hpref
+    (ExpAffineHadamardFiniteStieltjesMidSourceAFZ.of_residualTailConvergence
+      (Hbridge := Hbridge) HmidConv)
+    (ExpAffineHadamardFiniteStieltjesHighSourceAFZ.of_residualTailConvergence
+      (Hbridge := Hbridge) HhighConv)
+    (ExpAffineHadamardFiniteStieltjesLowSourceAFZ.of_residualTailConvergence
+      (Hbridge := Hbridge) HlowConv)
+
+/-- 🌟🌟🌟🌟 **PATH B FRONT DOOR — finite product-log-derivative
+residual convergence sources.**
+
+This is the Stieltjes-facing theorem in terms of the concrete finite
+genus-one product log derivatives themselves. The conversion from these
+product-log-derivative residual tails to the existing residual-tail
+sources is purely pointwise Hadamard algebra. -/
+theorem XiPullbackAntiHerglotzTarget_of_expAffineHadamardFiniteProductResidualConvergence
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (hpref : Hhad.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (HmidProductConv :
+      ∀ {z L : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        XiFluctuationTailValue Dzero 10 (canonicalAdaptiveT z) z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              Hhad.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L))
+    (HhighProductConv :
+      ∀ {z L : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        XiFluctuationTailValue Dzero 10 T z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              Hhad.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L))
+    (HlowProductConv :
+      ∀ {z : ℂ},
+        lowCompactRegion z →
+        XiPullback z ≠ 0 →
+        LowFirstZeroGapNoAtoms Dzero →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductLowTail
+              Hhad.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 (lowTailZeroContribution Dzero 10 z))) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_expAffineHadamardResidualTailConvergence
+    Dzero
+    h_Z_ge_15
+    hTuring
+    hHighLog
+    Hbridge
+    Hhad
+    hC
+    hpref
+    (ExpAffineHadamardResidualTailConvergenceMidAFZ.of_finiteProductResidualTailConvergence
+      (Hbridge := Hbridge) HmidProductConv)
+    (ExpAffineHadamardResidualTailConvergenceHighAFZ.of_finiteProductResidualTailConvergence
+      (Hbridge := Hbridge) HhighProductConv)
+    (ExpAffineHadamardResidualTailConvergenceLowAFZ.of_finiteProductLowTailConvergence
+      (Hbridge := Hbridge) HlowProductConv)
 
 /-- 🌟🌟 **PROVED — transport AFZ mid-Stieltjes equality across an
 AFZ pointwise equality of zero contributions.** -/
