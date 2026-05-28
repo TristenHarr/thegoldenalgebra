@@ -17300,6 +17300,34 @@ noncomputable def BacklundNumericalExtractionInput.toCombination
       E.extract T hgood hT hJ hR hH
     exact le_trans hcontrol htotal
 
+/-- Conversely, the classical combination lemma supplies numerical
+extraction by placing the full public budget in the Jensen slot.  Thus
+the remaining `BacklundClassicalCombinationInput` and
+`BacklundNumericalExtractionInput` frontiers are equivalent under the
+current APIs. -/
+noncomputable def BacklundNumericalExtractionInput.ofCombination
+    (C : BacklundClassicalCombinationInput) :
+    BacklundNumericalExtractionInput where
+  extract := by
+    intro T hgood hT hJ hR hH
+    refine ⟨(1 / 2 : ℝ) * Real.log T + 1 / 2, 0, 0, ?_, ?_, ?_, ?_, ?_⟩
+    · have hT_one : (1 : ℝ) ≤ T := by linarith
+      have hlog : 0 ≤ Real.log T := Real.log_nonneg hT_one
+      nlinarith
+    · norm_num
+    · norm_num
+    · linarith
+    · simpa [BacklundNumericalCombinationEstimate]
+        using C.combine T hgood hT hJ hR hH
+
+/-- The two remaining Backlund numerical frontiers are equivalent:
+existential numerical extraction is exactly the same usable content as
+the classical combination lemma. -/
+theorem backlundNumericalExtractionInput_iff_combination :
+    BacklundNumericalExtractionInput ↔ BacklundClassicalCombinationInput :=
+  ⟨BacklundNumericalExtractionInput.toCombination,
+    BacklundNumericalExtractionInput.ofCombination⟩
+
 /-- Final theorem from numerical extraction + count local-constancy. -/
 theorem concreteS_halfLogPlusHalf_of_numericalExtraction_and_countLC
     (E : BacklundNumericalExtractionInput)
