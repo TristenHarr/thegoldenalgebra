@@ -20991,6 +20991,26 @@ theorem backlundFixedSideRectangle_one_lt_right
     1 < (backlundFixedSideRectangle bottom top hbottom_lt_top).right := by
   norm_num [backlundFixedSideRectangle]
 
+/-- If a canonical argument index is certified equal to a natural number,
+then Lean's nonnegative-index conversion returns that same natural
+number. -/
+theorem backlund_argumentIndexNat_eq_of_eq_nat
+    {R : ZetaRectangle}
+    {hleft : R.left < 0}
+    {hright : 1 < R.right}
+    {hbottom_nonneg : 0 ≤ R.bottom}
+    {hgood : GoodHeight R.top}
+    (F : R.CanonicalZetaArgumentPrincipleFormula
+      hleft hright hbottom_nonneg hgood)
+    (HN :
+      @ZetaRectangle.CanonicalZetaArgumentPrincipleNatFormula
+        R hleft hright hbottom_nonneg hgood F)
+    {n : ℕ} (h : F.argumentIndex = (n : ℤ)) :
+    F.argumentIndexNat HN = n := by
+  have hcast := F.argumentIndexNat_cast HN
+  rw [h] at hcast
+  exact Int.ofNat.inj hcast
+
 /-- Auto-rectangle fixed-pi exp slab certificate.  This is the row shape
 closest to a finite table: it fixes the rectangle sides to `-1` and `2`,
 derives the `2π` bottom condition from `140 ≤ bottom`, and derives
@@ -21073,6 +21093,114 @@ noncomputable def
   bottom_main_arith := S.bottom_main_arith
   top_main_arith := S.top_main_arith
   upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
+  upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
+
+/-- Natural-index auto-rectangle slab certificate.  Compared with
+`BacklundArgumentPrincipleTheoremFixedPiExpAutoRectSlabCertificate`, this
+lets a finite table provide the contour index as a natural number together
+with the equality to the integer argument index; nonnegativity and the
+old conversion are derived. -/
+structure BacklundArgumentPrincipleTheoremFixedPiExpAutoRectNatSlabCertificate where
+  bottom : ℝ
+  top : ℝ
+  hbottom_lt_top : bottom < top
+  hbottom_ge_140 : (140 : ℝ) ≤ bottom
+  hgood : GoodHeight top
+  theoremData :
+    (backlundFixedSideRectangle bottom top hbottom_lt_top).ZetaRectangleArgumentPrincipleTheorem
+      backlundFixedSideRectangle_left_lt_zero
+      backlundFixedSideRectangle_one_lt_right
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+        (backlund_two_pi_le_of_ge_140 hbottom_ge_140))
+      hgood
+  argumentIndexNat : ℕ
+  argumentIndex_eq_nat :
+    theoremData.toActualNormalizedData.toCanonicalData.toFormula.argumentIndex =
+      (argumentIndexNat : ℤ)
+  leftCount : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  bottomRatioLower : ℝ
+  topRatioUpper : ℝ
+  bottomLogLower : ℝ
+  topLogUpper : ℝ
+  left_count_eq :
+    zetaWeightedZeroCountUpToHeight bottom
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+        (backlund_two_pi_le_of_ge_140 hbottom_ge_140)) =
+      leftCount
+  bottom_ratio_mul_arith :
+    2 * (3141593 / 1000000 : ℝ) * bottomRatioLower ≤ bottom
+  top_ratio_mul_arith :
+    top ≤ 2 * (3141592 / 1000000 : ℝ) * topRatioUpper
+  bottom_exp_log_lower :
+    Real.exp bottomLogLower ≤ bottomRatioLower
+  top_log_upper_exp :
+    topRatioUpper ≤ Real.exp topLogUpper
+  bottom_main_arith :
+    mainLower
+      ≤ (bottom / (2 * Real.pi)) * bottomLogLower
+        - bottom / (2 * Real.pi) + 7 / 8
+  top_main_arith :
+    (top / (2 * Real.pi)) * topLogUpper
+      - top / (2 * Real.pi) + 7 / 8
+        ≤ mainUpper
+  upperCount_minus_lowerMain_le :
+    ((leftCount + argumentIndexNat : ℕ) : ℝ) - mainLower
+      ≤ (25167 / 10000 : ℝ)
+  upperMain_minus_lowerCount_le :
+    mainUpper - (leftCount : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- Natural-index auto-rectangle slabs lower to auto-rectangle slabs. -/
+noncomputable def
+    BacklundArgumentPrincipleTheoremFixedPiExpAutoRectNatSlabCertificate.toAutoRectSlab
+    (S : BacklundArgumentPrincipleTheoremFixedPiExpAutoRectNatSlabCertificate) :
+    BacklundArgumentPrincipleTheoremFixedPiExpAutoRectSlabCertificate where
+  bottom := S.bottom
+  top := S.top
+  hbottom_lt_top := S.hbottom_lt_top
+  hbottom_ge_140 := S.hbottom_ge_140
+  hgood := S.hgood
+  theoremData := S.theoremData
+  argumentIndex_nonneg := by
+    have hidx :
+        S.theoremData.argumentIndex = (S.argumentIndexNat : ℤ) := by
+      simpa using S.argumentIndex_eq_nat
+    rw [hidx]
+    exact Int.natCast_nonneg S.argumentIndexNat
+  leftCount := S.leftCount
+  mainLower := S.mainLower
+  mainUpper := S.mainUpper
+  bottomRatioLower := S.bottomRatioLower
+  topRatioUpper := S.topRatioUpper
+  bottomLogLower := S.bottomLogLower
+  topLogUpper := S.topLogUpper
+  left_count_eq := S.left_count_eq
+  bottom_ratio_mul_arith := S.bottom_ratio_mul_arith
+  top_ratio_mul_arith := S.top_ratio_mul_arith
+  bottom_exp_log_lower := S.bottom_exp_log_lower
+  top_log_upper_exp := S.top_log_upper_exp
+  bottom_main_arith := S.bottom_main_arith
+  top_main_arith := S.top_main_arith
+  upperCount_minus_lowerMain_le := by
+    let F := S.theoremData.toActualNormalizedData.toCanonicalData.toFormula
+    have hidx : F.argumentIndex = (S.argumentIndexNat : ℤ) := by
+      simpa [F] using S.argumentIndex_eq_nat
+    let HN :
+        @ZetaRectangle.CanonicalZetaArgumentPrincipleNatFormula
+          (backlundFixedSideRectangle S.bottom S.top S.hbottom_lt_top)
+          backlundFixedSideRectangle_left_lt_zero
+          backlundFixedSideRectangle_one_lt_right
+          (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+            (backlund_two_pi_le_of_ge_140 S.hbottom_ge_140))
+          S.hgood
+          F :=
+      { argumentIndex_nonneg := by
+          rw [hidx]
+          exact Int.natCast_nonneg S.argumentIndexNat }
+    have hnat : F.argumentIndexNat HN = S.argumentIndexNat :=
+      backlund_argumentIndexNat_eq_of_eq_nat F HN hidx
+    simpa [F, HN, hnat] using S.upperCount_minus_lowerMain_le
   upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
 
 /-- A finite list of endpoint-style slabs covering `[140, 374]`. -/
@@ -21203,6 +21331,17 @@ sides once and for all. -/
 structure
     BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoRectCertificate140_370 where
   slabs : List BacklundArgumentPrincipleTheoremFixedPiExpAutoRectSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (370 : ℝ) →
+      ∃ S ∈ slabs, S.bottom ≤ T ∧ T ≤ S.top
+
+/-- A finite list of natural-index auto-rectangle fixed-pi exp
+theorem-target slabs covering `[140, 370]`.  This is a finite-table
+source shape: rows may record the contour index as a natural number,
+together with the equality to the integer index. -/
+structure
+    BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoRectNatCertificate140_370 where
+  slabs : List BacklundArgumentPrincipleTheoremFixedPiExpAutoRectNatSlabCertificate
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (370 : ℝ) →
       ∃ S ∈ slabs, S.bottom ≤ T ∧ T ≤ S.top
@@ -21539,6 +21678,27 @@ noncomputable def
     · simpa [BacklundArgumentPrincipleTheoremFixedPiExpAutoRectSlabCertificate.toAutoBottomSlab,
         backlundFixedSideRectangle] using hB
 
+/-- Natural-index auto-rectangle fixed-pi exp theorem-target slabs
+supply the auto-rectangle fixed-pi exp certificate on `[140, 370]`. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoRectNatCertificate140_370.toAutoRect
+    (C :
+      BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoRectNatCertificate140_370) :
+    BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoRectCertificate140_370 where
+  slabs := C.slabs.map
+    (fun S :
+      BacklundArgumentPrincipleTheoremFixedPiExpAutoRectNatSlabCertificate =>
+        S.toAutoRectSlab)
+  cover := by
+    intro T hT140 hT370
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT370
+    refine ⟨S.toAutoRectSlab, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨S, hS, rfl⟩
+    · simpa [BacklundArgumentPrincipleTheoremFixedPiExpAutoRectNatSlabCertificate.toAutoRectSlab]
+        using hA
+    · simpa [BacklundArgumentPrincipleTheoremFixedPiExpAutoRectNatSlabCertificate.toAutoRectSlab]
+        using hB
+
 /-- Auto-positivity fixed-pi exp theorem-target slabs supply the
 sharpened narrow uniform finite-band certificate on `[140, 370]`. -/
 noncomputable def
@@ -21569,6 +21729,16 @@ noncomputable def
       BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoRectCertificate140_370) :
     BacklundFiniteBandUniform25167Check140_370 :=
   C.toAutoBottom.toUniform25167Check
+
+/-- Natural-index auto-rectangle fixed-pi exp theorem-target slabs
+supply the sharpened narrow uniform finite-band certificate on
+`[140, 370]`. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoRectNatCertificate140_370.toUniform25167Check
+    (C :
+      BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoRectNatCertificate140_370) :
+    BacklundFiniteBandUniform25167Check140_370 :=
+  C.toAutoRect.toUniform25167Check
 
 /-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
 concrete finite-band target `[140, 374]`. -/
@@ -21811,6 +21981,21 @@ theorem
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoBottomFinite370
     Hglobal
     Hfinite.toAutoBottom
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and natural-index auto-rectangle fixed-pi exp theorem-target
+slabs on `[140, 370]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoRectNatFinite370
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoRectNatCertificate140_370)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoRectFinite370
+    Hglobal
+    Hfinite.toAutoRect
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
@@ -22700,6 +22885,75 @@ noncomputable def
 noncomputable def
     ClassicalBacklundTuringPlattAPFixedPiExpAutoRectInputs370.toTuringStyleSBound
     (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoRectInputs370) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBound.toTuringStyleSBound
+
+/-- Natural-index finite-table source package for the Backlund
+rectangle with fixed sides `-1` and `2`.  Compared with the auto-rectangle
+package, the finite rows provide the argument index as a natural number
+and an equality to the integer contour index. -/
+structure ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370 where
+  global : PlattTrudgianBacklundGlobalInput
+  finite370 :
+    BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoRectNatCertificate140_370
+
+/-- Natural-index auto-rectangle Platt/AP inputs lower to the
+auto-rectangle package. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370.toAutoRectInputs370
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370) :
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoRectInputs370 where
+  global := I.global
+  finite370 := I.finite370.toAutoRect
+
+/-- The natural-index auto-rectangle package supplies the good-height
+Backlund argument bound. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370.toGoodHeightArgumentBound
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370) :
+    BacklundGoodHeightArgumentBound :=
+  I.toAutoRectInputs370.toGoodHeightArgumentBound
+
+/-- The natural-index auto-rectangle package supplies the final
+classical proof inputs at `ClassicalBacklundTuringProof.K`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370.toProofInputs
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370) :
+    ClassicalBacklundTuringProofInputs :=
+  I.toAutoRectInputs370.toProofInputs
+
+/-- Final Backlund--Turing headline theorem from the natural-index
+auto-rectangle fixed-pi exp Platt/AP source package. -/
+theorem concreteS_halfLogPlusHalf_of_plattAPFixedPiExpAutoRectNatBacklundTuringInputs370
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoRectNatFinite370
+    I.global
+    I.finite370
+    hT
+
+/-- The natural-index auto-rectangle package supplies the generic proved
+Backlund/Turing package for `concreteS`, threshold `140`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370.toProvenBacklundTuringBound
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370) :
+    ProvenBacklundTuringBound :=
+  I.toAutoRectInputs370.toProvenBacklundTuringBound
+
+/-- The natural-index auto-rectangle package supplies
+`HalfLogPlusHalfSBound`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370.toHalfLogPlusHalfSBound
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBound.toHalfLogPlusHalfSBound
+
+/-- The natural-index auto-rectangle package supplies `TuringStyleSBound`,
+with `C = D = 1/2`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370.toTuringStyleSBound
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoRectNatInputs370) :
     TuringStyleSBound :=
   I.toProvenBacklundTuringBound.toTuringStyleSBound
 
