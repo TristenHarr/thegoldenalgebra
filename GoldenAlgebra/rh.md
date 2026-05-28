@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-63,168 lines and roughly 3,264 top-level declarations. It contains no
+63,415 lines and roughly 3,285 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -1344,7 +1344,20 @@ the three obligation lines, with concrete handoff targets in each case.
   `BacklundNumericalExtractionInput` API via
   `ClassicalBacklundTuringVerifiedInputs.toNumericalExtraction`, so the
   Trudgian/Platt route can feed both the modern `S`-bound interfaces
-  and the earlier numerical-extraction frontier. A second sourced route
+  and the earlier numerical-extraction frontier. The right-side
+  rectangle input has also been simplified:
+  `backlund_right_side_zeta_ne_zero` proves nonvanishing of `ζ(s)` on
+  the line `Re s = 2` from Mathlib's Euler-product nonvanishing theorem,
+  and
+  `BacklundRightSideArgumentVariationEstimate.of_logDeriv_bound_on_re_two`
+  leaves only the right-side log-derivative bound to be supplied.
+  The line `Re s = 2` also has a von Mangoldt-series bridge:
+  `backlund_right_side_vonMangoldt_eq_neg_logDeriv` specializes
+  Mathlib's Euler-product identity, and
+  `BacklundRightSideArgumentVariationEstimate.of_vonMangoldt_bound_on_re_two`
+  turns a von Mangoldt L-series bound directly into the right-side
+  argument-variation estimate.
+  A second sourced route
   now records the modern Hasanalizade--Shen--Wong large-height envelope
   `hasanalizadeShenWongBacklundEnvelope` together with the
   Platt/Trudgian finite-range computation:
@@ -2251,12 +2264,22 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   `PathBTuringEnvelopeInputs.of_envelopes` as the raw-estimate
   constructor. `XiPullbackAntiHerglotzTarget_of_pathBInputBundles`
   proves the final local capstone from exactly two bundles:
-  `PathBNonTuringInputs` and `PathBTuringEnvelopeInputs`. The new
+  `PathBNonTuringInputs` and `PathBTuringEnvelopeInputs`. The
+  one-object publication frontier `PathBFullInputBundle` packages those
+  together; `PathBFullInputBundle.of_envelopes` builds it from raw
+  Turing envelopes, with `PathBFullInputBundle.to_target` and
+  `XiPullbackAntiHerglotzTarget_of_pathBFullInputBundle` as capstones.
+  The new
   `PathBNonTuringSourceInputs` lowers the non-Turing side further to a
   completed-ξ log-derivative source plus its matched AFZ Stieltjes
   equality source, and
   `XiPullbackAntiHerglotzTarget_of_pathBSourceInputBundles` is the
-  minimal source-level two-bundle capstone. The source constructors
+  minimal source-level two-bundle capstone. The one-object source
+  frontier `PathBSourceFullInputBundle` has the raw-envelope constructor
+  `PathBSourceFullInputBundle.of_envelopes` and exposes
+  `PathBSourceFullInputBundle.to_target` and
+  `XiPullbackAntiHerglotzTarget_of_pathBSourceFullInputBundle`. The
+  source constructors
   `PathBNonTuringSourceInputs.of_completedXiSource`,
   `PathBNonTuringSourceInputs.of_hadamardProductData`,
   `PathBNonTuringSourceInputs.of_classicalPathBAnalyticInputs`,
@@ -2360,7 +2383,17 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   canonical Stieltjes bundles; their `to_split`/`to_stieltjesSource`
   adapters feed the final `PathBDirectNonTuringInputsAFZ` bundle.
   `XiPullbackAntiHerglotzTarget_of_directNonTuringInputsAFZ_turingBundle`
-  is the direct two-bundle capstone. The unified source constructor
+  is the direct two-bundle capstone. The one-object direct frontier
+  `PathBDirectFullInputBundleAFZ` packages direct non-Turing data plus
+  Turing envelopes; `PathBDirectFullInputBundleAFZ.of_envelopes` builds
+  it from raw Turing envelopes, with `PathBDirectFullInputBundleAFZ.to_target` and
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFullInputBundleAFZ` as
+  capstones. The source and publication full bundles lower through
+  `PathBSourceFullInputBundle.to_directFull`,
+  `PathBFullInputBundle.to_sourceFull`, and
+  `PathBFullInputBundle.to_directFull`, with direct-route capstones
+  `PathBSourceFullInputBundle.to_target_direct` and
+  `PathBFullInputBundle.to_target_direct`. The unified source constructor
   `PathBDirectNonTuringInputsAFZ.of_stieltjesSource` feeds
   `XiPullbackAntiHerglotzTarget_of_directStieltjesSourceAFZ_turingBundle`;
   the generic completed-ξ source constructor
@@ -2478,7 +2511,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-63,168 lines and roughly 3,264 top-level declarations.
+63,415 lines and roughly 3,285 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
