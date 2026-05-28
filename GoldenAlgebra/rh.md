@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-64,716 lines and roughly 3,344 top-level declarations. It contains no
+66,223 lines and roughly 3,425 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -1344,7 +1344,10 @@ the three obligation lines, with concrete handoff targets in each case.
   `BacklundNumericalExtractionInput` API via
   `ClassicalBacklundTuringVerifiedInputs.toNumericalExtraction`, so the
   Trudgian/Platt route can feed both the modern `S`-bound interfaces
-  and the earlier numerical-extraction frontier. The right-side
+  and the earlier numerical-extraction frontier. It can now be built
+  directly from the stronger global Platt-Trudgian estimate and the
+  finite-range computation via
+  `ClassicalBacklundTuringVerifiedInputs.of_plattTrudgianGlobal`. The right-side
   rectangle input has also been simplified:
   `backlund_right_side_zeta_ne_zero` proves nonvanishing of `ζ(s)` on
   the line `Re s = 2` from Mathlib's Euler-product nonvanishing theorem,
@@ -1476,6 +1479,57 @@ the three obligation lines, with concrete handoff targets in each case.
   `BacklundGoodHeightArgumentBound.of_plattTrudgian_151476_25625Tail_and_finite`,
   and the headline
   `concreteS_halfLogPlusHalf_of_plattTrudgian_151476_25625Tail_and_finite`.
+  The exact global/finite-range route now exports directly to the
+  generic interfaces as
+  `ProvenBacklundTuringBound.of_globalPlattTrudgian_and_finiteRange_151476_25625`,
+  `HalfLogPlusHalfSBound.of_globalPlattTrudgian_and_finiteRange_151476_25625`,
+  and
+  `TuringStyleSBound.of_globalPlattTrudgian_and_finiteRange_151476_25625`.
+  The symbolic tangent split was then sharpened at `59/10`, with
+  `backlund_log_59_10_le_71_40`,
+  `backlund_log_log_le_tangent_59_10`,
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_475481_80440`,
+  `backlund_log_ge_475481_80440_of_ge_exp_475481_80440`, and
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_475481_80440`
+  recording the improved cutoff. The full `475481/80440` route now has
+  its own tail input, finite-band check, good-height adapter, headline
+  theorem, global/finite-range theorem, and generic S-bound exports:
+  `PlattTrudgianBacklundCut475481_80440TailInput`,
+  `BacklundFiniteBandCheck140_exp475481_80440`,
+  `BacklundGoodHeightArgumentBound.of_plattTrudgian_475481_80440Tail_and_finite`,
+  `concreteS_halfLogPlusHalf_of_plattTrudgian_475481_80440Tail_and_finite`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_475481_80440`,
+  `ProvenBacklundTuringBound.of_globalPlattTrudgian_and_finiteRange_475481_80440`,
+  `HalfLogPlusHalfSBound.of_globalPlattTrudgian_and_finiteRange_475481_80440`,
+  and
+  `TuringStyleSBound.of_globalPlattTrudgian_and_finiteRange_475481_80440`.
+  The sharp sourced pair is also packaged as
+  `ClassicalBacklundTuringPlattGlobalFiniteRangeInputs`, with exports
+  `toGoodHeightArgumentBound`, `toProofInputs`,
+  `toProvenBacklundTuringBound`, `toHalfLogPlusHalfSBound`, and
+  `toTuringStyleSBound`, plus headline theorem
+  `concreteS_halfLogPlusHalf_of_plattGlobalFiniteRangeBacklundTuringInputs`.
+  The concrete endpoint for this sharp route first pushed to
+  `1846/5`: `backlund_exp_5_lt_74207_500`,
+  `backlund_exp_9_10_lt_24597_10000`,
+  `backlund_exp_59111_10000_lt_1846_5`, and
+  `backlund_exp_475481_80440_lt_1846_5` support
+  `BacklundFiniteBandCheck140_1846_5`,
+  `BacklundFiniteBandUniform25167Check140_1846_5`, and
+  `BacklundFiniteBandUniform25167Check140_1846_5.toFiniteBandCheck`.
+  It is now shaved again to `3691/10` via
+  `backlund_exp_177_16088_le_25277_25000`,
+  `backlund_exp_475481_80440_lt_3691_10`,
+  `BacklundFiniteBandCheck140_3691_10`,
+  `BacklundFiniteBandUniform25167Check140_3691_10`,
+  `BacklundFiniteBandUniform25167Check140_3691_10.toFiniteBandCheck`,
+  `BacklundFiniteBandCheck140_3691_10.of_plattTrudgian`,
+  `BacklundFiniteBandCheck140_3691_10.of_140_1846_5`,
+  `BacklundFiniteBandCheck140_exp475481_80440.of_140_3691_10`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite3691_10`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete3691_10`,
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite3691_10`.
   The narrow computational-certificate interface
   `BacklundFiniteBandUniform25167Check140_374` packages the uniform
   `|S(T)| ≤ 2.5167` check on `[140, 374]`, converts through
@@ -2170,7 +2224,13 @@ side now has
 `StieltjesMidHighTailEqualityAFZ.of_mid_high` and
 `stieltjesMidHighTailEqualityAFZ_iff_mid_and_high`, and the assembled
 Stieltjes bundle has
-`classicalPathBStieltjesInputsAFZ_iff_equalitySourceAFZ`. The Theorem 3 form
+`classicalPathBStieltjesInputsAFZ_iff_equalitySourceAFZ`. The standard
+`Z ≥ 15` hypothesis now bypasses explicit `DzeroStartsAfter` plumbing via
+`LowFirstZeroGapNoAtoms.of_Z_ge_15`,
+`LowFiniteStieltjesResidualSourceAFZ.of_ibpSource_and_Z_ge_15`,
+`StieltjesLowEqualityAFZ.of_lowZeroContributionSplit_Z_ge_15`, and
+`ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit_Z_ge_15`.
+The Theorem 3 form
 `XiPullbackAntiHerglotzTarget_of_classicalPathBHadamard_midHigh_lowSplit`
 lives at §CCCLXV.
 
@@ -2191,11 +2251,41 @@ and the concrete-input front door
 `XiPullbackAntiHerglotzTarget_of_concreteHadamard_midHigh_cloudTailLow`.
 The Hadamard LUC/log-derivative handoff can now be stated directly on
 the ξ-nonzero region through `HadamardProductLUCOnXiNonzeroData`; its
-`toLUCLogDerivData` adapter feeds
+`toLUCLogDerivData` adapter and inverse-direction restriction
+`HadamardProductLUCOnXiNonzeroData.of_LUCLogDerivData` feed
 `ClassicalPathBAnalyticInputs.of_hadamard_packages_onXiNonzero`,
-`ConcreteCompletedXiHadamardInputs.of_lucOnXiNonzero`, and the
-publication constructor
-`CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero`.
+`ConcreteCompletedXiHadamardInputs.of_lucOnXiNonzero`,
+`ConcreteCompletedXiHadamardInputs.of_lucLogDerivData`, and the
+publication constructors
+`CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero` and
+`CompletedXiClassicalHadamardTheorem.of_lucLogDerivData`. It also has a
+direct completed-ξ source constructor
+`CompletedXiLogDerivativeSourceAFZ.of_lucOnXiNonzeroHadamard` and its
+arbitrary-region sibling
+`CompletedXiLogDerivativeSourceAFZ.of_lucLogDerivDataHadamard`, feeding
+`XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamardSource_and_stieltjesAFZ`
+and
+`XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamardSource_and_stieltjesAFZ_turingBundle`.
+The same direct source now builds the source-level non-Turing Path B
+bundle through `PathBNonTuringSourceInputs.of_lucOnXiNonzeroHadamard`.
+The arbitrary-region LUC version feeds
+`PathBNonTuringSourceInputs.of_lucLogDerivDataHadamard`.
+It also lowers directly into the canonical direct AFZ non-Turing bundle
+through `PathBDirectNonTuringInputsAFZ.of_lucOnXiNonzeroHadamard` and
+`PathBDirectNonTuringInputsAFZ.of_lucLogDerivDataHadamard`.
+This
+ξ-nonzero-region package now also has publication front doors
+`XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamardSource_and_stieltjesAFZ`,
+`XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamard_and_classicalStieltjes`,
+`XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamard_and_stieltjesAFZ`,
+`XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamard_and_classicalStieltjes`,
+`XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamard_and_stieltjesAFZ`,
+`XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamardSource_and_stieltjesAFZ_turingBundle`,
+`XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamard_and_classicalStieltjes_turingBundle`,
+`XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamard_and_stieltjesAFZ_turingBundle`,
+`XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamard_and_classicalStieltjes_turingBundle`,
+and
+`XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamard_and_stieltjesAFZ_turingBundle`.
 
 **Publication-level bundles** (§§CCCLXXVII–CCCLXXIX). Public-name
 renames: `CompletedXiClassicalHadamardTheorem` (the publication name
@@ -2610,7 +2700,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-64,716 lines and roughly 3,344 top-level declarations.
+66,223 lines and roughly 3,425 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.

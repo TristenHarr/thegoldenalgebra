@@ -55866,6 +55866,15 @@ theorem LowFirstZeroGapNoAtoms.of_startsAfter
   have h_gt := H.z_gt_gamma i
   exact absurd hmem.2 (not_le.mpr h_gt)
 
+/-- ⭐ **PROVED — `LowFirstZeroGapNoAtoms` directly from the standard
+`Z ≥ 15` hypothesis.** -/
+theorem LowFirstZeroGapNoAtoms.of_Z_ge_15
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i) :
+    LowFirstZeroGapNoAtoms Dzero :=
+  LowFirstZeroGapNoAtoms.of_startsAfter
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+
 -- =====================================================================
 -- §CCCLIX. Finite Stieltjes IBP source theorem (genuine analytic target)
 -- =====================================================================
@@ -55896,6 +55905,19 @@ theorem LowFiniteStieltjesResidualSourceAFZ.of_ibpSource_and_startsAfter
   refine ⟨?_⟩
   intro z hz hne _Hgap
   exact H.ibp z hz hne (LowFirstZeroGapNoAtoms.of_startsAfter Hstarts)
+
+/-- 🌟🌟🌟 **PROVED — bridge: IBP source + standard `Z ≥ 15`
+→ residual source.** This removes the explicit `DzeroStartsAfter`
+intermediate from low-side Stieltjes call sites. -/
+theorem LowFiniteStieltjesResidualSourceAFZ.of_ibpSource_and_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ZC : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (H : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    LowFiniteStieltjesResidualSourceAFZ Dzero T0 ZC :=
+  LowFiniteStieltjesResidualSourceAFZ.of_ibpSource_and_startsAfter
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+    H
 
 -- =====================================================================
 -- §CCCLX. Low tail zero contribution + zero-contribution split
@@ -56044,6 +56066,18 @@ theorem StieltjesLowEqualityAFZ.of_lowZeroContributionSplit
             Hstarts
             (LowFiniteStieltjesIBPSourceAFZ.of_zeroSplit Hsplit)))))
 
+/-- 🌟🌟🌟 **PROVED — low capstone directly from low zero split plus the
+standard `Z ≥ 15` first-zero-gap hypothesis.** -/
+theorem StieltjesLowEqualityAFZ.of_lowZeroContributionSplit_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hsplit : LowZeroContributionSplitAFZ Dzero T0 ZC) :
+    StieltjesLowEqualityAFZ Dzero T0 ZC :=
+  StieltjesLowEqualityAFZ.of_lowZeroContributionSplit
+    Hsplit
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+
 -- =====================================================================
 -- §CCCLXIV. Stieltjes bundle from mid/high/low-split
 -- =====================================================================
@@ -56062,6 +56096,22 @@ theorem ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit
     high := Hhigh
     low :=
       StieltjesLowEqualityAFZ.of_lowZeroContributionSplit HlowSplit Hstarts }
+
+/-- 🌟🌟🌟 **PROVED — `ClassicalPathBStieltjesInputsAFZ` from
+mid/high/low-split plus the standard `Z ≥ 15` hypothesis.** -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hmid : StieltjesMidTailEqualityAFZ Dzero T0 ZC)
+    (Hhigh : StieltjesHighTailEqualityAFZ Dzero T0 ZC)
+    (HlowSplit : LowZeroContributionSplitAFZ Dzero T0 ZC) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit
+    Hmid
+    Hhigh
+    HlowSplit
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
 
 -- =====================================================================
 -- §CCCLXV. Final Path B front door using low split directly
@@ -56641,6 +56691,27 @@ noncomputable def HadamardProductLUCOnXiNonzeroData.toLUCLogDerivData
       intro s hs
       exact H.logDeriv_eq_tsum s hs }
 
+/-- 🌟🌟 **PROVED — restrict arbitrary-region Hadamard LUC/log-derivative
+data to the ξ-nonzero region.** This is the inverse-direction bridge to
+`HadamardProductLUCOnXiNonzeroData.toLUCLogDerivData` when the chosen
+region covers all nonzero points of `completedXiFunction`. -/
+noncomputable def HadamardProductLUCOnXiNonzeroData.of_LUCLogDerivData
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (Hluc : HadamardProductLUCLogDerivData zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region) :
+    HadamardProductLUCOnXiNonzeroData zeroLoc :=
+  { locally_uniform_product :=
+      Hluc.locally_uniform_product.mono (by
+        intro s hs
+        exact h_region s hs)
+    infinite_differentiable_at := by
+      intro s hs
+      exact Hluc.infinite_differentiable_at s (h_region s hs)
+    logDeriv_eq_tsum := by
+      intro s hs
+      exact Hluc.logDeriv_eq_tsum s (h_region s hs) }
+
 /-- 🌟🌟🌟 **PROVED — assemble `ClassicalPathBAnalyticInputs` from
 Hadamard data stated on the ξ-nonzero region.** The no-collision
 condition is derived from the zero-system equation
@@ -56695,6 +56766,29 @@ noncomputable def ConcreteCompletedXiHadamardInputs.of_lucOnXiNonzero
     factorization := Hfact
     prefactorData := Hpref }
 
+/-- 🌟🌟🌟 **PROVED — concrete completed-ξ Hadamard inputs from
+arbitrary-region LUC data whose region covers `{ξ ≠ 0}`.** The
+no-collision condition is discharged from the concrete zero system. -/
+noncomputable def ConcreteCompletedXiHadamardInputs.of_lucLogDerivData
+    {ι : Type}
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor) :
+    ConcreteCompletedXiHadamardInputs ι :=
+  ConcreteCompletedXiHadamardInputs.of_lucOnXiNonzero
+    HZ
+    prefactor
+    Hdist
+    (HadamardProductLUCOnXiNonzeroData.of_LUCLogDerivData
+      Hluc h_region)
+    Hfact
+    Hpref
+
 /-- 🌟🌟🌟 **PROVED — publication-level completed-ξ Hadamard theorem from
 LUC data on the ξ-nonzero region.** -/
 noncomputable def CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero
@@ -56720,6 +56814,146 @@ noncomputable def CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero
       exact HZ.zeroLoc_is_zero i
     factorization := Hfact
     prefactorData := Hpref }
+
+/-- 🌟🌟🌟 **PROVED — publication-level completed-ξ Hadamard theorem from
+arbitrary-region LUC data whose region covers `{ξ ≠ 0}`.** -/
+noncomputable def CompletedXiClassicalHadamardTheorem.of_lucLogDerivData
+    {ι : Type}
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor) :
+    CompletedXiClassicalHadamardTheorem ι :=
+  CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero
+    HZ
+    prefactor
+    Hdist
+    (HadamardProductLUCOnXiNonzeroData.of_LUCLogDerivData
+      Hluc h_region)
+    Hfact
+    Hpref
+
+/-- 🌟🌟🌟 **PROVED — direct completed-ξ log-derivative source from the
+Hadamard package stated on `{ξ ≠ 0}`.** This is the shortest source
+term for Stieltjes inputs keyed to the Hadamard-side construction. -/
+noncomputable def CompletedXiLogDerivativeSourceAFZ.of_lucOnXiNonzeroHadamard
+    {ι : Type}
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnXiNonzeroData HZ.zeroLoc)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor) :
+    CompletedXiLogDerivativeSourceAFZ :=
+  (ConcreteCompletedXiHadamardInputs.of_lucOnXiNonzero
+    HZ prefactor Hdist Hluc Hfact Hpref).toCompletedXiSourceAFZ
+
+/-- 🌟🌟🌟 **PROVED — direct completed-ξ log-derivative source from
+arbitrary-region LUC Hadamard data covering `{ξ ≠ 0}`.** -/
+noncomputable def CompletedXiLogDerivativeSourceAFZ.of_lucLogDerivDataHadamard
+    {ι : Type}
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor) :
+    CompletedXiLogDerivativeSourceAFZ :=
+  (ConcreteCompletedXiHadamardInputs.of_lucLogDerivData
+    HZ prefactor Hdist Hluc h_region Hfact Hpref).toCompletedXiSourceAFZ
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B FRONT DOOR (direct Hadamard source from
+`{ξ ≠ 0}` LUC data + assembled AFZ Stieltjes source).** -/
+theorem XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamardSource_and_stieltjesAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnXiNonzeroData HZ.zeroLoc)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiLogDerivativeSourceAFZ.of_lucOnXiNonzeroHadamard
+            HZ prefactor Hdist Hluc Hfact Hpref))) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_completedXiHadamardAndStieltjesAFZ
+    Dzero
+    h_Z_ge_15
+    hTuring
+    hHighLog
+    (CompletedXiLogDerivativeSourceAFZ.of_lucOnXiNonzeroHadamard
+      HZ prefactor Hdist Hluc Hfact Hpref)
+    Hst
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B FRONT DOOR (direct Hadamard source from
+arbitrary-region LUC data covering `{ξ ≠ 0}` + assembled AFZ
+Stieltjes source).** -/
+theorem XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamardSource_and_stieltjesAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiLogDerivativeSourceAFZ.of_lucLogDerivDataHadamard
+            HZ prefactor Hdist Hluc h_region Hfact Hpref))) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_completedXiHadamardAndStieltjesAFZ
+    Dzero
+    h_Z_ge_15
+    hTuring
+    hHighLog
+    (CompletedXiLogDerivativeSourceAFZ.of_lucLogDerivDataHadamard
+      HZ prefactor Hdist Hluc h_region Hfact Hpref)
+    Hst
 
 -- =====================================================================
 -- §CCCLXXVIII. Publication-level Stieltjes inputs bundle
@@ -56779,6 +57013,186 @@ theorem XiPullbackAntiHerglotzTarget_of_classicalHadamard_and_classicalStieltjes
     Dzero h_Z_ge_15 hTuring hHighLog
     Hhad.toConcreteInputs
     Hst.mid Hst.high Hst.low
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B PUBLICATION THEOREM (Hadamard LUC on
+`ξ ≠ 0` + classical Stieltjes).**
+
+This is the tighter Hadamard-side front door: LUC/log-derivative
+interchange is stated directly on the nonzero set of `completedXiFunction`,
+so the region-cover and no-collision fields are discharged here. -/
+theorem XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamard_and_classicalStieltjes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnXiNonzeroData HZ.zeroLoc)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    {finiteCloud tail : ℂ → ℂ}
+    (Hst :
+      ClassicalStieltjesExplicitFormulaInputs
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero
+            HZ prefactor Hdist Hluc Hfact Hpref).toConcreteInputs.toCompletedXiSourceAFZ)
+        finiteCloud tail) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_classicalHadamard_and_classicalStieltjes
+    Dzero
+    h_Z_ge_15
+    hTuring
+    hHighLog
+    (CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero
+      HZ prefactor Hdist Hluc Hfact Hpref)
+    Hst
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B PUBLICATION THEOREM (Hadamard LUC on
+`ξ ≠ 0` + assembled AFZ Stieltjes source).** -/
+theorem XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamard_and_stieltjesAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnXiNonzeroData HZ.zeroLoc)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero
+            HZ prefactor Hdist Hluc Hfact Hpref).toConcreteInputs.toCompletedXiSourceAFZ)) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_completedXiHadamardAndStieltjesAFZ
+    Dzero
+    h_Z_ge_15
+    hTuring
+    hHighLog
+    (CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero
+      HZ prefactor Hdist Hluc Hfact Hpref).toConcreteInputs.toCompletedXiSourceAFZ
+    Hst
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B PUBLICATION THEOREM (arbitrary-region
+Hadamard LUC covering `{ξ ≠ 0}` + classical Stieltjes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamard_and_classicalStieltjes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    {finiteCloud tail : ℂ → ℂ}
+    (Hst :
+      ClassicalStieltjesExplicitFormulaInputs
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiClassicalHadamardTheorem.of_lucLogDerivData
+            HZ prefactor Hdist Hluc h_region Hfact Hpref).toConcreteInputs.toCompletedXiSourceAFZ)
+        finiteCloud tail) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_classicalHadamard_and_classicalStieltjes
+    Dzero
+    h_Z_ge_15
+    hTuring
+    hHighLog
+    (CompletedXiClassicalHadamardTheorem.of_lucLogDerivData
+      HZ prefactor Hdist Hluc h_region Hfact Hpref)
+    Hst
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B PUBLICATION THEOREM (arbitrary-region
+Hadamard LUC covering `{ξ ≠ 0}` + assembled AFZ Stieltjes source).** -/
+theorem XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamard_and_stieltjesAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiClassicalHadamardTheorem.of_lucLogDerivData
+            HZ prefactor Hdist Hluc h_region Hfact Hpref).toConcreteInputs.toCompletedXiSourceAFZ)) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_completedXiHadamardAndStieltjesAFZ
+    Dzero
+    h_Z_ge_15
+    hTuring
+    hHighLog
+    (CompletedXiClassicalHadamardTheorem.of_lucLogDerivData
+      HZ prefactor Hdist Hluc h_region Hfact Hpref).toConcreteInputs.toCompletedXiSourceAFZ
+    Hst
 
 -- =====================================================================
 -- §CCCLXXX. Subtype zero index candidate + zero-at-origin hazard audit
@@ -59013,8 +59427,25 @@ theorem ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource
         (LowFiniteZeroSumStieltjesFormulaAFZ.of_decomposition
           (LowZeroContributionDecompositionAFZ.of_residualEquality
             (LowStieltjesResidualEqualityAFZ.of_residualSource
-              (LowFiniteStieltjesResidualSourceAFZ.of_ibpSource_and_startsAfter
+        (LowFiniteStieltjesResidualSourceAFZ.of_ibpSource_and_startsAfter
                 Hstarts Hlow)))) }
+
+/-- 🌟🌟🌟 **PROVED — split Stieltjes bundle from mid/high plus the
+direct low finite Stieltjes IBP source and the standard `Z ≥ 15`
+hypothesis.** -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hmid : StieltjesMidTailEqualityAFZ Dzero T0 ZC)
+    (Hhigh : StieltjesHighTailEqualityAFZ Dzero T0 ZC)
+    (Hlow : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource
+    Hmid
+    Hhigh
+    Hlow
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
 
 /-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
 **PATH B FRONT DOOR (canonical source + low finite IBP source)**.
@@ -59125,6 +59556,20 @@ theorem ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowIBPSource
     Hlow
     Hstarts
 
+/-- 🌟🌟🌟 **PROVED — split Stieltjes bundle from combined AFZ mid/high
+plus direct low finite IBP source and the standard `Z ≥ 15` hypothesis.** -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowIBPSource_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HmidHigh : StieltjesMidHighTailEqualityAFZ Dzero T0 ZC)
+    (Hlow : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowIBPSource
+    HmidHigh
+    Hlow
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+
 /-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
 **PATH B FRONT DOOR (canonical source + combined mid/high + low IBP)**.
 
@@ -59188,6 +59633,21 @@ theorem ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowZeroSplit
     HlowSplit
     Hstarts
 
+/-- 🌟🌟🌟 **PROVED — split Stieltjes bundle from combined AFZ mid/high
+plus direct low zero-contribution split and the standard `Z ≥ 15`
+hypothesis.** -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowZeroSplit_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HmidHigh : StieltjesMidHighTailEqualityAFZ Dzero T0 ZC)
+    (HlowSplit : LowZeroContributionSplitAFZ Dzero T0 ZC) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowZeroSplit
+    HmidHigh
+    HlowSplit
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+
 /-- 🌟🌟🌟 **PROVED — split Stieltjes bundle from the combined AFZ
 mid/high equality plus the atomic low cloud/tail split.** -/
 theorem ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowCloudTailSplit
@@ -59201,6 +59661,20 @@ theorem ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowCloudTailSplit
     HmidHigh
     (LowZeroContributionSplitAFZ.of_cloudTailSplit Hlow)
     Hstarts
+
+/-- 🌟🌟🌟 **PROVED — split Stieltjes bundle from combined AFZ mid/high
+plus atomic low cloud/tail split and the standard `Z ≥ 15` hypothesis.** -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowCloudTailSplit_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC finiteCloud tail : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HmidHigh : StieltjesMidHighTailEqualityAFZ Dzero T0 ZC)
+    (Hlow : LowCloudTailSplitAFZ Dzero T0 ZC finiteCloud tail) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowCloudTailSplit
+    HmidHigh
+    Hlow
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
 
 /-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
 **PATH B FRONT DOOR (canonical source + combined mid/high + low zero split)**.
@@ -60640,6 +61114,58 @@ noncomputable def PathBNonTuringSourceInputs.of_concreteCompletedXiHadamardInput
     Hst
 
 /-- 🌟🌟 **PROVED — build the source-level non-Turing bundle from the
+Hadamard package stated directly on `{s | completedXiFunction s ≠ 0}`.** -/
+noncomputable def PathBNonTuringSourceInputs.of_lucOnXiNonzeroHadamard
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnXiNonzeroData HZ.zeroLoc)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiLogDerivativeSourceAFZ.of_lucOnXiNonzeroHadamard
+            HZ prefactor Hdist Hluc Hfact Hpref))) :
+    PathBNonTuringSourceInputs Dzero :=
+  PathBNonTuringSourceInputs.mk
+    h_Z_ge_15
+    (CompletedXiLogDerivativeSourceAFZ.of_lucOnXiNonzeroHadamard
+      HZ prefactor Hdist Hluc Hfact Hpref)
+    Hst
+
+/-- 🌟🌟 **PROVED — build the source-level non-Turing bundle from
+arbitrary-region Hadamard LUC data covering `{ξ ≠ 0}`.** -/
+noncomputable def PathBNonTuringSourceInputs.of_lucLogDerivDataHadamard
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiLogDerivativeSourceAFZ.of_lucLogDerivDataHadamard
+            HZ prefactor Hdist Hluc h_region Hfact Hpref))) :
+    PathBNonTuringSourceInputs Dzero :=
+  PathBNonTuringSourceInputs.mk
+    h_Z_ge_15
+    (CompletedXiLogDerivativeSourceAFZ.of_lucLogDerivDataHadamard
+      HZ prefactor Hdist Hluc h_region Hfact Hpref)
+    Hst
+
+/-- 🌟🌟 **PROVED — build the source-level non-Turing bundle from the
 publication-level completed-ξ Hadamard theorem.** -/
 noncomputable def PathBNonTuringSourceInputs.of_completedXiClassicalHadamard
     (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
@@ -62058,6 +62584,54 @@ theorem PathBDirectNonTuringInputsAFZ.of_sourceInputs
     PathBDirectNonTuringInputsAFZ Dzero :=
   PathBDirectNonTuringInputsAFZ.of_completedXiSource
     Dzero H.h_Z_ge_15 H.Hsrc H.Hst
+
+/-- 🌟🌟🌟 **PROVED — direct canonical non-Turing inputs from the
+Hadamard package stated on `{s | completedXiFunction s ≠ 0}`.** -/
+theorem PathBDirectNonTuringInputsAFZ.of_lucOnXiNonzeroHadamard
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnXiNonzeroData HZ.zeroLoc)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiLogDerivativeSourceAFZ.of_lucOnXiNonzeroHadamard
+            HZ prefactor Hdist Hluc Hfact Hpref))) :
+    PathBDirectNonTuringInputsAFZ Dzero :=
+  PathBDirectNonTuringInputsAFZ.of_sourceInputs
+    (PathBNonTuringSourceInputs.of_lucOnXiNonzeroHadamard
+      Dzero h_Z_ge_15 HZ prefactor Hdist Hluc Hfact Hpref Hst)
+
+/-- 🌟🌟🌟 **PROVED — direct canonical non-Turing inputs from arbitrary-region
+Hadamard LUC data covering `{ξ ≠ 0}`.** -/
+theorem PathBDirectNonTuringInputsAFZ.of_lucLogDerivDataHadamard
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiLogDerivativeSourceAFZ.of_lucLogDerivDataHadamard
+            HZ prefactor Hdist Hluc h_region Hfact Hpref))) :
+    PathBDirectNonTuringInputsAFZ Dzero :=
+  PathBDirectNonTuringInputsAFZ.of_sourceInputs
+    (PathBNonTuringSourceInputs.of_lucLogDerivDataHadamard
+      Dzero h_Z_ge_15 HZ prefactor Hdist Hluc h_region Hfact Hpref Hst)
 
 /-- 🌟🌟🌟 **PROVED — lower the entire-ξ non-Turing bundle to the direct
 canonical non-Turing bundle.** -/
@@ -65458,6 +66032,217 @@ theorem XiPullbackAntiHerglotzTarget_of_entireHadamard_unguardedStieltjesSource_
       Dzero h_Z_ge_15 Hhad Hst)
     hTuring
     hHighLog
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B PUBLICATION THEOREM (Hadamard LUC on
+`ξ ≠ 0` + classical Stieltjes + bundled Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamard_and_classicalStieltjes_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnXiNonzeroData HZ.zeroLoc)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    {finiteCloud tail : ℂ → ℂ}
+    (Hst :
+      ClassicalStieltjesExplicitFormulaInputs
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero
+            HZ prefactor Hdist Hluc Hfact Hpref).toConcreteInputs.toCompletedXiSourceAFZ)
+        finiteCloud tail)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamard_and_classicalStieltjes
+    Dzero
+    h_Z_ge_15
+    Hturing.turing_envelope
+    Hturing.high_log_envelope
+    HZ
+    prefactor
+    Hdist
+    Hluc
+    Hfact
+    Hpref
+    Hst
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B PUBLICATION THEOREM (Hadamard LUC on
+`ξ ≠ 0` + assembled AFZ Stieltjes + bundled Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamard_and_stieltjesAFZ_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnXiNonzeroData HZ.zeroLoc)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero
+            HZ prefactor Hdist Hluc Hfact Hpref).toConcreteInputs.toCompletedXiSourceAFZ))
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamard_and_stieltjesAFZ
+    Dzero
+    h_Z_ge_15
+    Hturing.turing_envelope
+    Hturing.high_log_envelope
+    HZ
+    prefactor
+    Hdist
+    Hluc
+    Hfact
+    Hpref
+    Hst
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B FRONT DOOR (direct `{ξ ≠ 0}` Hadamard source
++ assembled AFZ Stieltjes + bundled Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamardSource_and_stieltjesAFZ_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnXiNonzeroData HZ.zeroLoc)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiLogDerivativeSourceAFZ.of_lucOnXiNonzeroHadamard
+            HZ prefactor Hdist Hluc Hfact Hpref)))
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_lucOnXiNonzeroHadamardSource_and_stieltjesAFZ
+    Dzero
+    h_Z_ge_15
+    Hturing.turing_envelope
+    Hturing.high_log_envelope
+    HZ
+    prefactor
+    Hdist
+    Hluc
+    Hfact
+    Hpref
+    Hst
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B FRONT DOOR (direct arbitrary-region Hadamard
+source + assembled AFZ Stieltjes + bundled Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamardSource_and_stieltjesAFZ_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiLogDerivativeSourceAFZ.of_lucLogDerivDataHadamard
+            HZ prefactor Hdist Hluc h_region Hfact Hpref)))
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamardSource_and_stieltjesAFZ
+    Dzero
+    h_Z_ge_15
+    Hturing.turing_envelope
+    Hturing.high_log_envelope
+    HZ
+    prefactor
+    Hdist
+    Hluc
+    h_region
+    Hfact
+    Hpref
+    Hst
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B PUBLICATION THEOREM (arbitrary-region
+Hadamard LUC + classical Stieltjes + bundled Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamard_and_classicalStieltjes_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    {finiteCloud tail : ℂ → ℂ}
+    (Hst :
+      ClassicalStieltjesExplicitFormulaInputs
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiClassicalHadamardTheorem.of_lucLogDerivData
+            HZ prefactor Hdist Hluc h_region Hfact Hpref).toConcreteInputs.toCompletedXiSourceAFZ)
+        finiteCloud tail)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamard_and_classicalStieltjes
+    Dzero
+    h_Z_ge_15
+    Hturing.turing_envelope
+    Hturing.high_log_envelope
+    HZ
+    prefactor
+    Hdist
+    Hluc
+    h_region
+    Hfact
+    Hpref
+    Hst
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B PUBLICATION THEOREM (arbitrary-region
+Hadamard LUC + assembled AFZ Stieltjes + bundled Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamard_and_stieltjesAFZ_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiClassicalHadamardTheorem.of_lucLogDerivData
+            HZ prefactor Hdist Hluc h_region Hfact Hpref).toConcreteInputs.toCompletedXiSourceAFZ))
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamard_and_stieltjesAFZ
+    Dzero
+    h_Z_ge_15
+    Hturing.turing_envelope
+    Hturing.high_log_envelope
+    HZ
+    prefactor
+    Hdist
+    Hluc
+    h_region
+    Hfact
+    Hpref
+    Hst
 
 /-- 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
 **PATH B PUBLICATION THEOREM (entire-ξ Hadamard, canonical Γ bridge)**.
