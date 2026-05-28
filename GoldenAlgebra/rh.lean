@@ -18325,6 +18325,30 @@ noncomputable def ClassicalBacklundTuringProofInputs.of_goodHeightArgumentBound
   K_extraction :=
     ClassicalBacklundTuringProof.K_extraction_of_goodHeightArgumentBound B
 
+/-- Project the fixed-`K` classical proof input back to the exact
+good-height Backlund argument bound.  The current Jensen, right-side,
+and horizontal estimate inputs are all discharged in this file, and
+`ClassicalBacklundTuringProof.K` has total allowance exactly
+`(1/2) * log T + 1/2`. -/
+noncomputable def ClassicalBacklundTuringProofInputs.toGoodHeightArgumentBound
+    (I : ClassicalBacklundTuringProofInputs) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T hgood hT
+    have hcontrol := I.K_extraction.controls T hgood hT
+      (backlundJensenRectangleInput.bound T hgood hT)
+      (backlundRightSideArgumentVariationInput.bound T hgood hT)
+      (backlundHorizontalZetaBoundInput.bound T hgood hT)
+    simpa [ClassicalBacklundTuringProof.totalAllowanceOf_K T]
+      using hcontrol
+
+/-- The fixed-`K` classical proof input is equivalent to the single
+remaining good-height Backlund argument bound. -/
+theorem classicalBacklundTuringProofInputs_iff_goodHeightArgumentBound :
+    ClassicalBacklundTuringProofInputs ↔ BacklundGoodHeightArgumentBound :=
+  ⟨ClassicalBacklundTuringProofInputs.toGoodHeightArgumentBound,
+    ClassicalBacklundTuringProofInputs.of_goodHeightArgumentBound⟩
+
 /-- **CW27 — final theorem from classical proof inputs at fixed `K`.**
 The arithmetic admissibility of the chosen headline-budget `K` is now
 proved in `ClassicalBacklundTuringProof.K_admissible`; the remaining
