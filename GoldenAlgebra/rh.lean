@@ -19630,11 +19630,52 @@ theorem backlund_exp_592_100_lt_374 :
     (pow_lt_pow_iff_left₀ hexp_nn h374_nn
       (by norm_num : (25 : ℕ) ≠ 0)).mp h_exp_pow_lt
 
+/-- `exp (592/100) < 373`, shaving the concrete finite endpoint used by
+the Platt--Trudgian route. -/
+theorem backlund_exp_592_100_lt_373 :
+    Real.exp (592 / 100 : ℝ) < 373 := by
+  have h_e_lt : Real.exp 1 < (2.7182818286 : ℝ) := Real.exp_one_lt_d9
+  have h_e_pos : 0 < Real.exp 1 := Real.exp_pos 1
+  have h_pow_lt :
+      (Real.exp 1)^148 < (2.7182818286 : ℝ)^148 :=
+    pow_lt_pow_left₀ h_e_lt (le_of_lt h_e_pos) (by norm_num)
+  have h_exp148_eq : Real.exp (148 : ℝ) = (Real.exp 1)^148 := by
+    have h := Real.exp_one_pow 148
+    have h_cast : ((148 : ℕ) : ℝ) = (148 : ℝ) := by norm_num
+    rw [← h_cast]
+    exact h.symm
+  have h_exp_592_pow :
+      (Real.exp (592 / 100 : ℝ))^25 = Real.exp 148 := by
+    have h := Real.exp_nat_mul (592 / 100 : ℝ) 25
+    have h_eq : ((25 : ℕ) : ℝ) * (592 / 100 : ℝ) = 148 := by
+      norm_num
+    rw [h_eq] at h
+    exact h.symm
+  have h_pow_num : (2.7182818286 : ℝ)^148 < (373 : ℝ)^25 := by
+    norm_num
+  have h_exp_pow_lt :
+      (Real.exp (592 / 100 : ℝ))^25 < (373 : ℝ)^25 := by
+    rw [h_exp_592_pow, h_exp148_eq]
+    linarith
+  have hexp_nn : 0 ≤ Real.exp (592 / 100 : ℝ) :=
+    le_of_lt (Real.exp_pos _)
+  have h373_nn : (0 : ℝ) ≤ 373 := by norm_num
+  exact
+    (pow_lt_pow_iff_left₀ hexp_nn h373_nn
+      (by norm_num : (25 : ℕ) ≠ 0)).mp h_exp_pow_lt
+
 /-- Concrete finite-band check left after the Platt--Trudgian tail:
 `[140, 374]`. -/
 structure BacklundFiniteBandCheck140_374 : Prop where
   bound :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
+      |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- Sharpened concrete finite-band check left after the Platt--Trudgian
+tail: `[140, 373]`. -/
+structure BacklundFiniteBandCheck140_373 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (373 : ℝ) →
       |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
 
 /-- Uniform computational `S(T)` certificate on the concrete finite band
@@ -19646,6 +19687,13 @@ structure BacklundFiniteBandUniform25167Check140_374 : Prop where
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       |concreteS T| ≤ (25167 / 10000 : ℝ)
 
+/-- Uniform computational `S(T)` certificate on the sharpened concrete
+finite band `[140, 373]`. -/
+structure BacklundFiniteBandUniform25167Check140_373 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (373 : ℝ) →
+      |concreteS T| ≤ (25167 / 10000 : ℝ)
+
 /-- The uniform finite-band `2.5167` certificate on `[140, 374]` supplies
 the concrete half-log-plus-half finite-band check. -/
 noncomputable def BacklundFiniteBandUniform25167Check140_374.toFiniteBandCheck
@@ -19654,6 +19702,16 @@ noncomputable def BacklundFiniteBandUniform25167Check140_374.toFiniteBandCheck
   bound := by
     intro T hT140 hT374
     exact le_trans (H.bound T hT140 hT374)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- The uniform finite-band `2.5167` certificate on `[140, 373]` supplies
+the sharpened half-log-plus-half finite-band check. -/
+noncomputable def BacklundFiniteBandUniform25167Check140_373.toFiniteBandCheck
+    (H : BacklundFiniteBandUniform25167Check140_373) :
+    BacklundFiniteBandCheck140_373 where
+  bound := by
+    intro T hT140 hT373
+    exact le_trans (H.bound T hT140 hT373)
       (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
 
 /-- A local count/main-term slab certificate for the remaining concrete
@@ -20959,6 +21017,18 @@ noncomputable def BacklundFiniteBandCheck140_374.of_plattTrudgian
     exact le_trans (H.bound T hT0 hTbig)
       (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
 
+/-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
+sharpened concrete finite-band target `[140, 373]`. -/
+noncomputable def BacklundFiniteBandCheck140_373.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_373 where
+  bound := by
+    intro T hT140 hT373
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) := by linarith
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
 /-- A concrete `[140, 374]` finite-band check supplies the symbolic
 `[140, exp (592/100)]` check. -/
 noncomputable def BacklundFiniteBandCheck140_exp592_100.of_140_374
@@ -20970,6 +21040,17 @@ noncomputable def BacklundFiniteBandCheck140_exp592_100.of_140_374
       le_trans hTexp (le_of_lt backlund_exp_592_100_lt_374)
     exact H.bound T hT140 hT374
 
+/-- A concrete `[140, 373]` finite-band check supplies the symbolic
+`[140, exp (592/100)]` check. -/
+noncomputable def BacklundFiniteBandCheck140_exp592_100.of_140_373
+    (H : BacklundFiniteBandCheck140_373) :
+    BacklundFiniteBandCheck140_exp592_100 where
+  bound := by
+    intro T hT140 hTexp
+    have hT373 : T ≤ (373 : ℝ) :=
+      le_trans hTexp (le_of_lt backlund_exp_592_100_lt_373)
+    exact H.bound T hT140 hT373
+
 /-- Final headline theorem from the global Platt--Trudgian argument
 estimate and the concrete finite-band check `[140, 374]`. -/
 theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite374
@@ -20980,6 +21061,18 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite374
   concreteS_halfLogPlusHalf_of_plattTrudgian_tighterTail_and_finite
     (PlattTrudgianBacklundTighterTailInput.of_global Hglobal)
     (BacklundFiniteBandCheck140_exp592_100.of_140_374 Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the sharpened concrete finite-band check `[140, 373]`. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite373
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCheck140_373)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_tighterTail_and_finite
+    (PlattTrudgianBacklundTighterTailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp592_100.of_140_373 Hfinite)
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
@@ -20996,6 +21089,19 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the broad Platt/Trudgian finite-range source, routed through
+the sharpened concrete finite endpoint `[140, 373]`. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete373
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite373
+    Hglobal
+    (BacklundFiniteBandCheck140_373.of_plattTrudgian Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
 estimate and the narrow uniform finite-band computational certificate
 `|S(T)| ≤ 2.5167` on `[140, 374]`. -/
 theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite374
@@ -21004,6 +21110,19 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite374
     {T : ℝ} (hT : (140 : ℝ) ≤ T) :
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite374
+    Hglobal
+    Hfinite.toFiniteBandCheck
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the sharpened narrow uniform finite-band computational
+certificate `|S(T)| ≤ 2.5167` on `[140, 373]`. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite373
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandUniform25167Check140_373)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite373
     Hglobal
     Hfinite.toFiniteBandCheck
     hT
