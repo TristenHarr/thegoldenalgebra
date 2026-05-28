@@ -20397,6 +20397,44 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_151476_
     (BacklundFiniteBandCheck140_exp151476_25625.of_plattTrudgian Hfinite)
     hT
 
+/-- The exact Platt--Trudgian global/finite-range route supplies the
+generic proved Backlund/Turing package for `concreteS`, threshold `140`.
+
+This is the direct downstream export: it avoids routing the stronger
+Platt source pair through the older Trudgian verified-input bundle. -/
+noncomputable def ProvenBacklundTuringBound.of_globalPlattTrudgian_and_finiteRange_151476_25625
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput) :
+    ProvenBacklundTuringBound where
+  S := concreteS
+  lower := 140
+  lower_ge_two_pi := by
+    have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+    nlinarith
+  halfLogPlusHalf := by
+    intro T hT
+    exact
+      concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_151476_25625
+        Hglobal Hfinite hT
+
+/-- The exact Platt--Trudgian global/finite-range route supplies
+`HalfLogPlusHalfSBound`. -/
+noncomputable def HalfLogPlusHalfSBound.of_globalPlattTrudgian_and_finiteRange_151476_25625
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput) :
+    HalfLogPlusHalfSBound :=
+  (ProvenBacklundTuringBound.of_globalPlattTrudgian_and_finiteRange_151476_25625
+    Hglobal Hfinite).toHalfLogPlusHalfSBound
+
+/-- The exact Platt--Trudgian global/finite-range route supplies
+`TuringStyleSBound`, with `C = D = 1/2`. -/
+noncomputable def TuringStyleSBound.of_globalPlattTrudgian_and_finiteRange_151476_25625
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput) :
+    TuringStyleSBound :=
+  (ProvenBacklundTuringBound.of_globalPlattTrudgian_and_finiteRange_151476_25625
+    Hglobal Hfinite).toTuringStyleSBound
+
 /-! ### CW36: concrete finite endpoint for the Platt--Trudgian route -/
 
 /-- `exp (592/100) < 374`, giving the remaining finite-band certificate
