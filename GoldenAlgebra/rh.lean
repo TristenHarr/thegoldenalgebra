@@ -16945,6 +16945,19 @@ theorem backlundHorizontalZetaBoundInput :
     intro σ hσ₁ hσ₂
     exact hσ₀max ⟨hσ₁, hσ₂⟩
 
+/-- The classical combination lemma alone supplies the good-height
+Backlund argument bound, because the current Jensen, right-side, and
+horizontal estimate inputs are all discharged in this file. -/
+noncomputable def BacklundClassicalCombinationInput.toGoodHeightArgumentBound
+    (C : BacklundClassicalCombinationInput) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T hgood hT
+    exact C.combine T hgood hT
+      (backlundJensenRectangleInput.bound T hgood hT)
+      (backlundRightSideArgumentVariationInput.bound T hgood hT)
+      (backlundHorizontalZetaBoundInput.bound T hgood hT)
+
 /-! ### CW14: big reduction pass over the remaining analytic obligations -/
 
 /-- Nonvanishing of `ζ` along Backlund's right vertical side `Re s = 2`,
