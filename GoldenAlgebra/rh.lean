@@ -17527,6 +17527,49 @@ theorem zetaZeroPosImagPosRe : ZetaZeroPosImagPosRe :=
   ZetaZeroPosImagPosRe.of_noZerosLeftHalfPlaneUpper
     zetaNoZerosLeftHalfPlaneUpper
 
+/-- **CW19a — strip right-gap DISCHARGED.**  The functional-equation
+classification puts every positive-height zeta zero in the critical
+strip, and the already-proved finite zero-set theorem gives local
+finiteness in every Backlund strip window.  Hence every `T ≥ 140` has a
+zero-free interval immediately to its right inside the Backlund strip. -/
+noncomputable def zetaZeroHeightRightGapInBacklundStripInput :
+    ZetaZeroHeightRightGapInBacklundStripInput :=
+  (ZetaZerosLocallyFiniteInBacklundStripInput.of_posRe
+    zetaZeroPosImagPosRe).toRightGapInStrip
+
+/-- **CW19a — global right-gap DISCHARGED.**  For `T ≥ 140`, any zero
+with imaginary part in `(T, T + ε]` has positive imaginary part, hence
+lies in the critical strip by `zetaZeroPosImagPosRe` and
+`zetaZero_re_lt_one`.  The strip gap therefore excludes it. -/
+noncomputable def zetaZeroHeightRightGapInput :
+    ZetaZeroHeightRightGapInput where
+  exists_gap := by
+    intro T hT
+    rcases zetaZeroHeightRightGapInBacklundStripInput.exists_gap T hT with
+      ⟨ε, hεpos, hgap⟩
+    refine ⟨ε, hεpos, ?_⟩
+    intro ρ hzero him him_upper
+    have him_pos : (0 : ℝ) < ρ.im := by
+      linarith [show (0 : ℝ) < 140 by norm_num, hT, him]
+    have hre_pos : 0 < ρ.re :=
+      zetaZeroPosImagPosRe ρ him_pos hzero
+    have hre_lt_one : ρ.re < 1 := zetaZero_re_lt_one hzero
+    exact hgap ρ hzero (by linarith) (by linarith) him him_upper
+
+/-- **CW19a — nontrivial-zero right-gap DISCHARGED.**  This is the
+older `IsNontrivialZetaZero`-based formulation, obtained from the global
+zeta-zero right gap by projecting the zero equation out of the
+nontrivial-zero predicate. -/
+noncomputable def zetaNoZerosImmediatelyRightInput :
+    ZetaNoZerosImmediatelyRightInput where
+  exists_gap_right := by
+    intro T hT
+    rcases zetaZeroHeightRightGapInput.exists_gap T hT with
+      ⟨ε, hεpos, hgap⟩
+    refine ⟨ε, hεpos, ?_⟩
+    intro ρ hnontriv him him_upper
+    exact hgap ρ hnontriv.1 him him_upper
+
 /-- **CW19 — final theorem from numerical extraction + strip-gap → LC
 bridge.**  The functional-equation classification is now supplied
 unconditionally inside this theorem, leaving only the two genuinely
