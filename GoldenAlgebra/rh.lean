@@ -20435,6 +20435,211 @@ noncomputable def TuringStyleSBound.of_globalPlattTrudgian_and_finiteRange_15147
   (ProvenBacklundTuringBound.of_globalPlattTrudgian_and_finiteRange_151476_25625
     Hglobal Hfinite).toTuringStyleSBound
 
+/-! ### CW39: sharper symbolic Platt--Trudgian tangent split -/
+
+/-- Certified local bound for the tangent-at-`59/10` comparison:
+`log (59/10) ≤ 71/40`. -/
+theorem backlund_log_59_10_le_71_40 :
+    Real.log (59 / 10 : ℝ) ≤ 71 / 40 := by
+  have h_e_gt : (2.7182818283 : ℝ) < Real.exp 1 := Real.exp_one_gt_d9
+  have h_pow_lt : (2.7182818283 : ℝ)^71 < (Real.exp 1)^71 :=
+    pow_lt_pow_left₀ h_e_gt (by norm_num) (by norm_num)
+  have h_59_10_pow : (59 / 10 : ℝ)^40 < (2.7182818283 : ℝ)^71 := by
+    norm_num
+  have h_59_10_pow_lt_exp71 : (59 / 10 : ℝ)^40 < (Real.exp 1)^71 := by
+    linarith
+  have h_exp71_eq : Real.exp (71 : ℝ) = (Real.exp 1)^71 := by
+    have h := Real.exp_one_pow 71
+    have h_cast : ((71 : ℕ) : ℝ) = (71 : ℝ) := by norm_num
+    rw [← h_cast]
+    exact h.symm
+  have h_exp_71_40_pow :
+      (Real.exp (71 / 40 : ℝ))^40 = Real.exp 71 := by
+    have h := Real.exp_nat_mul (71 / 40 : ℝ) 40
+    have h_eq : ((40 : ℕ) : ℝ) * (71 / 40 : ℝ) = 71 := by
+      norm_num
+    rw [h_eq] at h
+    exact h.symm
+  have hbase_nonneg : (0 : ℝ) ≤ 59 / 10 := by norm_num
+  have hexp_nonneg : 0 ≤ Real.exp (71 / 40 : ℝ) :=
+    le_of_lt (Real.exp_pos _)
+  have hbase_le_exp : (59 / 10 : ℝ) ≤ Real.exp (71 / 40 : ℝ) := by
+    apply
+      (pow_le_pow_iff_left₀ hbase_nonneg hexp_nonneg
+        (by norm_num : (40 : ℕ) ≠ 0)).mp
+    rw [h_exp_71_40_pow, h_exp71_eq]
+    exact le_of_lt h_59_10_pow_lt_exp71
+  have h := Real.log_le_log (by norm_num : (0 : ℝ) < 59 / 10) hbase_le_exp
+  rwa [Real.log_exp] at h
+
+/-- Tangent comparison at `59/10`, using `log (59/10) ≤ 71/40`. -/
+theorem backlund_log_log_le_tangent_59_10
+    {T : ℝ} (hLpos : 0 < Real.log T) :
+    Real.log (Real.log T)
+      ≤ (10 / 59 : ℝ) * Real.log T + 31 / 40 := by
+  have htangent :=
+    backlund_log_le_tangent
+      (T := Real.log T) (T₀ := (59 / 10 : ℝ)) hLpos
+      (by norm_num)
+  have hlog := backlund_log_59_10_le_71_40
+  linarith
+
+/-- Sharper symbolic Platt--Trudgian cutoff from the tangent-at-`59/10`
+arithmetic. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_475481_80440
+    {T : ℝ} (hL : (475481 / 80440 : ℝ) ≤ Real.log T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hLpos : 0 < Real.log T := by linarith
+  have hloglog := backlund_log_log_le_tangent_59_10 hLpos
+  have hmul :
+      (29 / 100 : ℝ) * Real.log (Real.log T)
+        ≤ (29 / 100 : ℝ)
+            * ((10 / 59 : ℝ) * Real.log T + 31 / 40) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  unfold plattTrudgianBacklundEnvelope
+  nlinarith
+
+/-- For `T ≥ exp (475481/80440)`, `log T ≥ 475481/80440`. -/
+theorem backlund_log_ge_475481_80440_of_ge_exp_475481_80440
+    {T : ℝ} (hT : Real.exp (475481 / 80440 : ℝ) ≤ T) :
+    (475481 / 80440 : ℝ) ≤ Real.log T := by
+  have h_exp_pos : 0 < Real.exp (475481 / 80440 : ℝ) := Real.exp_pos _
+  have h := Real.log_le_log h_exp_pos hT
+  rwa [Real.log_exp] at h
+
+/-- The Platt--Trudgian envelope is below the target for every
+`T ≥ exp (475481/80440)`. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_475481_80440
+    {T : ℝ} (hT : Real.exp (475481 / 80440 : ℝ) ≤ T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_475481_80440
+    (backlund_log_ge_475481_80440_of_ge_exp_475481_80440 hT)
+
+/-- Platt--Trudgian tail estimate on the sharper symbolic tail obtained
+from the tangent-at-`59/10` arithmetic. -/
+structure PlattTrudgianBacklundCut475481_80440TailInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (475481 / 80440 : ℝ) ≤ T →
+      |concreteS T| ≤ plattTrudgianBacklundEnvelope T
+
+/-- A global Platt--Trudgian estimate supplies the
+`exp (475481/80440)` tail estimate. -/
+noncomputable def PlattTrudgianBacklundCut475481_80440TailInput.of_global
+    (H : PlattTrudgianBacklundGlobalInput) :
+    PlattTrudgianBacklundCut475481_80440TailInput where
+  bound := by
+    intro T hT
+    have h_exp_one_le_exp_cut :
+        Real.exp (1 : ℝ) ≤ Real.exp (475481 / 80440 : ℝ) :=
+      Real.exp_le_exp.mpr (by norm_num)
+    exact H.bound T (le_trans h_exp_one_le_exp_cut hT)
+
+/-- Finite-band check left after using the sharper symbolic
+Platt--Trudgian tail: `[140, exp (475481/80440)]`. -/
+structure BacklundFiniteBandCheck140_exp475481_80440 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ Real.exp (475481 / 80440 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- The Platt/Trudgian finite-range `2.5167` bound supplies the sharper
+symbolic finite band `[140, exp (475481/80440)]`. -/
+noncomputable def BacklundFiniteBandCheck140_exp475481_80440.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_exp475481_80440 where
+  bound := by
+    intro T hT140 hTexp
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) := by
+      have hT1200 : T ≤ (1200 : ℝ) := by
+        have hExp_le :
+            Real.exp (475481 / 80440 : ℝ) ≤ Real.exp (592 / 100 : ℝ) :=
+          Real.exp_le_exp.mpr (by norm_num)
+        exact le_trans (le_trans hTexp hExp_le)
+          (le_of_lt backlund_exp_592_100_lt_1200)
+      linarith
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- Sharper symbolic Platt--Trudgian tail plus the corresponding
+finite-band check gives the good-height Backlund argument bound. -/
+noncomputable def
+    BacklundGoodHeightArgumentBound.of_plattTrudgian_475481_80440Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut475481_80440TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp475481_80440) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTail : Real.exp (475481 / 80440 : ℝ) ≤ T
+    · exact le_trans (Htail.bound T hTail)
+        (plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_475481_80440
+          hTail)
+    · have hTle : T ≤ Real.exp (475481 / 80440 : ℝ) := le_of_not_ge hTail
+      exact Hfinite.bound T hT hTle
+
+/-- Final headline theorem from the sharper symbolic Platt--Trudgian
+tail and finite band `[140, exp (475481/80440)]`. -/
+theorem concreteS_halfLogPlusHalf_of_plattTrudgian_475481_80440Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut475481_80440TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp475481_80440)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_plattTrudgian_475481_80440Tail_and_finite
+      Htail Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the finite-range `2.5167` input, using the sharper symbolic
+finite band `[140, exp (475481/80440)]`. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_475481_80440
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_475481_80440Tail_and_finite
+    (PlattTrudgianBacklundCut475481_80440TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp475481_80440.of_plattTrudgian Hfinite)
+    hT
+
+/-- The sharper symbolic Platt--Trudgian global/finite-range route
+supplies the generic proved Backlund/Turing package for `concreteS`,
+threshold `140`. -/
+noncomputable def ProvenBacklundTuringBound.of_globalPlattTrudgian_and_finiteRange_475481_80440
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput) :
+    ProvenBacklundTuringBound where
+  S := concreteS
+  lower := 140
+  lower_ge_two_pi := by
+    have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+    nlinarith
+  halfLogPlusHalf := by
+    intro T hT
+    exact
+      concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_475481_80440
+        Hglobal Hfinite hT
+
+/-- The sharper symbolic Platt--Trudgian global/finite-range route
+supplies `HalfLogPlusHalfSBound`. -/
+noncomputable def HalfLogPlusHalfSBound.of_globalPlattTrudgian_and_finiteRange_475481_80440
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput) :
+    HalfLogPlusHalfSBound :=
+  (ProvenBacklundTuringBound.of_globalPlattTrudgian_and_finiteRange_475481_80440
+    Hglobal Hfinite).toHalfLogPlusHalfSBound
+
+/-- The sharper symbolic Platt--Trudgian global/finite-range route
+supplies `TuringStyleSBound`, with `C = D = 1/2`. -/
+noncomputable def TuringStyleSBound.of_globalPlattTrudgian_and_finiteRange_475481_80440
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput) :
+    TuringStyleSBound :=
+  (ProvenBacklundTuringBound.of_globalPlattTrudgian_and_finiteRange_475481_80440
+    Hglobal Hfinite).toTuringStyleSBound
+
 /-! ### CW36: concrete finite endpoint for the Platt--Trudgian route -/
 
 /-- `exp (592/100) < 374`, giving the remaining finite-band certificate
