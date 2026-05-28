@@ -20773,6 +20773,99 @@ noncomputable def ClassicalBacklundTuringPlattAPInputs.toTuringStyleSBound
     TuringStyleSBound :=
   I.toProvenBacklundTuringBound.toTuringStyleSBound
 
+/-- The sharpest finite-table source package, with endpoint arithmetic
+reduced to ratio/log certificates:
+
+* the global Platt--Trudgian explicit argument bound;
+* the concrete finite band `[140, 374]`, discharged by rectangle
+  argument-principle theorem targets plus rational ratio bounds for
+  the smooth-main endpoint logs.
+
+This is the source shape a finite certificate generator should emit. -/
+structure ClassicalBacklundTuringPlattAPRatioInputs where
+  global : PlattTrudgianBacklundGlobalInput
+  finite374 :
+    BacklundFiniteBandArgumentPrincipleTheoremRatioBoundCertificate140_374
+
+/-- Ratio-bound Platt/AP inputs lower to the previous theorem-target
+Platt/AP package. -/
+noncomputable def ClassicalBacklundTuringPlattAPRatioInputs.toPlattAPInputs
+    (I : ClassicalBacklundTuringPlattAPRatioInputs) :
+    ClassicalBacklundTuringPlattAPInputs where
+  global := I.global
+  finite374 := I.finite374.toLogBound.toTheoremCountRange
+
+/-- The ratio-bound Platt/AP package supplies the concrete `[140, 374]`
+finite check. -/
+noncomputable def ClassicalBacklundTuringPlattAPRatioInputs.toFinite374
+    (I : ClassicalBacklundTuringPlattAPRatioInputs) :
+    BacklundFiniteBandCheck140_374 :=
+  I.toPlattAPInputs.toFinite374
+
+/-- The ratio-bound Platt/AP package supplies the good-height Backlund
+argument bound. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPRatioInputs.toGoodHeightArgumentBound
+    (I : ClassicalBacklundTuringPlattAPRatioInputs) :
+    BacklundGoodHeightArgumentBound :=
+  I.toPlattAPInputs.toGoodHeightArgumentBound
+
+/-- The ratio-bound Platt/AP package supplies the final classical proof
+inputs at `ClassicalBacklundTuringProof.K`. -/
+noncomputable def ClassicalBacklundTuringPlattAPRatioInputs.toProofInputs
+    (I : ClassicalBacklundTuringPlattAPRatioInputs) :
+    ClassicalBacklundTuringProofInputs :=
+  I.toPlattAPInputs.toProofInputs
+
+/-- The ratio-bound Platt/AP package builds the packaged
+`ClassicalBacklundTuringTheorem`. -/
+noncomputable def ClassicalBacklundTuringPlattAPRatioInputs.toTheoremPackage
+    (I : ClassicalBacklundTuringPlattAPRatioInputs) :
+    ClassicalBacklundTuringTheorem :=
+  I.toPlattAPInputs.toTheoremPackage
+
+/-- Final Backlund--Turing headline theorem from the ratio-bound
+Platt/AP source package. -/
+theorem concreteS_halfLogPlusHalf_of_plattAPRatioBacklundTuringInputs
+    (I : ClassicalBacklundTuringPlattAPRatioInputs)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremRatioBoundFinite374
+    I.global
+    I.finite374
+    hT
+
+/-- The ratio-bound Platt/AP package supplies the generic proved
+Backlund/Turing package for `concreteS`, with threshold `140`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPRatioInputs.toProvenBacklundTuringBound
+    (I : ClassicalBacklundTuringPlattAPRatioInputs) :
+    ProvenBacklundTuringBound where
+  S := concreteS
+  lower := 140
+  lower_ge_two_pi := by
+    have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+    linarith
+  halfLogPlusHalf := by
+    intro u hu
+    exact concreteS_halfLogPlusHalf_of_plattAPRatioBacklundTuringInputs I hu
+
+/-- The ratio-bound Platt/AP package supplies the existing
+`HalfLogPlusHalfSBound` interface. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPRatioInputs.toHalfLogPlusHalfSBound
+    (I : ClassicalBacklundTuringPlattAPRatioInputs) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBound.toHalfLogPlusHalfSBound
+
+/-- The ratio-bound Platt/AP package supplies the existing general
+`TuringStyleSBound` interface, with `C = D = 1/2`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPRatioInputs.toTuringStyleSBound
+    (I : ClassicalBacklundTuringPlattAPRatioInputs) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBound.toTuringStyleSBound
+
 /-- The two sourced ingredients for the concrete Backlund/Turing `S(T)`
 bound:
 
