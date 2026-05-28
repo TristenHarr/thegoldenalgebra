@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-55,615 lines and roughly 2,806 top-level declarations. It contains no
+59,449 lines and roughly 3,035 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -1395,6 +1395,137 @@ the three obligation lines, with concrete handoff targets in each case.
   `BacklundFiniteBandUniform25167Check140_374.toFiniteBandCheck`, and
   yields the headline
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite374`.
+  The next executable certificate target is
+  `BacklundFiniteBandCountMainCertificate140_374`: a finite list of
+  `BacklundCountMainSlabCertificate` slabs covering `[140, 374]`, where
+  each slab supplies the weighted zero-count identity and
+  smooth-main-term interval bounds. The adapter
+  `BacklundFiniteBandCountMainCertificate140_374.toUniform25167Check`
+  feeds the uniform certificate, and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countMainFinite374`
+  is the resulting count/main-term finite-band front door. The smooth
+  main-term side now has its own endpoint infrastructure:
+  `hasDerivAt_smoothMainTerm`, `smoothMainTerm_monotoneOn_Ici_two_pi`,
+  and `smoothMainTerm_bounds_of_endpoint_bounds` reduce slabwise
+  main-term bounds to endpoint estimates once the slab begins above
+  `2π`. The endpoint-table interface
+  `BacklundFiniteBandEndpointCountMainCertificate140_374`, built from
+  `BacklundEndpointCountMainSlabCertificate`, lowers through
+  `BacklundFiniteBandEndpointCountMainCertificate140_374.toCountMain`
+  and `toUniform25167Check`; the headline theorem
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountMainFinite374`
+  is the endpoint-style computational front door. The even closer
+  table-facing interface
+  `BacklundFiniteBandEndpointCumulativeCountMainCertificate140_374`
+  records cumulative zero counts only at slab endpoints; the monotonicity
+  lemma `zetaWeightedZeroCountUpToHeight_eq_of_endpoint_eq` makes the
+  count constant on the slab. Its adapters `toEndpoint` and
+  `toUniform25167Check` culminate in
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCumulativeCountMainFinite374`.
+  A more robust count-range interface,
+  `BacklundFiniteBandCountRangeMainCertificate140_374`, allows slabs
+  containing zero ordinates by bounding the cumulative count between
+  endpoint values. Its endpoint-table version
+  `BacklundFiniteBandEndpointCountRangeMainCertificate140_374` lowers
+  through `toCountRange` and `toUniform25167Check`, with headline
+  theorems
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countRangeMainFinite374`
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite374`.
+  The argument-principle finite-band interface,
+  `BacklundFiniteBandArgumentPrincipleCountRangeMainCertificate140_374`,
+  packages each slab as a rectangle argument-principle certificate
+  `BacklundArgumentPrincipleCountRangeMainSlabCertificate`, whose
+  natural argument index is proved to be the actual zeta slab count.
+  The adapters `toTuringCountRange` and `toUniform25167Check` lower
+  this argument-principle data to the existing count-range certificate,
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleCountRangeMainFinite374`
+  is the corresponding headline finite-band theorem. The front-most
+  theorem-target interface,
+  `BacklundFiniteBandArgumentPrincipleTheoremCountRangeMainCertificate140_374`,
+  accepts slabs
+  `BacklundArgumentPrincipleTheoremCountRangeMainSlabCertificate`
+  carrying `ZetaRectangleArgumentPrincipleTheorem` data directly.
+  Its `toArgumentPrinciple` and `toUniform25167Check` adapters lower
+  through the canonical argument-principle layer, yielding
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremCountRangeMainFinite374`.
+  The sharpest packaged source interface is now
+  `ClassicalBacklundTuringPlattAPInputs`: it pairs the global
+  Platt--Trudgian input with the theorem-target finite-band certificate.
+  Its adapters `toFinite374`, `toGoodHeightArgumentBound`,
+  `toProofInputs`, `toTheoremPackage`,
+  `toProvenBacklundTuringBound`, `toHalfLogPlusHalfSBound`, and
+  `toTuringStyleSBound` feed the existing Backlund/Turing APIs, while
+  `concreteS_halfLogPlusHalf_of_plattAPBacklundTuringInputs` is the
+  compact final S-bound front door for this package.
+  The newest table-facing variant pushes endpoint arithmetic one layer
+  closer to emitted data:
+  `smoothMainTerm_lower_bound_of_log_ratio_lower` and
+  `smoothMainTerm_upper_bound_of_log_ratio_upper` turn endpoint
+  log-ratio bounds into `smoothMainTerm` bounds, while
+  `BacklundArgumentPrincipleTheoremLogBoundSlabCertificate` and
+  `BacklundFiniteBandArgumentPrincipleTheoremLogBoundCertificate140_374`
+  package those log bounds for the finite `[140, 374]` table. Their
+  adapters `toTheoremSlab`, `toTheoremCountRange`, and
+  `toUniform25167Check` feed the theorem-target layer, yielding
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremLogBoundFinite374`.
+  One layer closer to rational interval arithmetic,
+  `log_ratio_lower_of_ratio_lower` and
+  `log_ratio_upper_of_ratio_upper` turn certified ratio bounds for
+  `T / (2π)` into log-ratio bounds. The corresponding table shape
+  `BacklundArgumentPrincipleTheoremRatioBoundSlabCertificate`, finite
+  certificate
+  `BacklundFiniteBandArgumentPrincipleTheoremRatioBoundCertificate140_374`,
+  and adapters `toLogBound`, `toLogBoundSlab`, and
+  `toUniform25167Check` lower the ratio-bound table into the log-bound
+  finite-band route. The ratio arithmetic now also has table-friendly
+  multiplicative and rational-π helpers:
+  `ratio_lower_of_two_pi_mul_le`, `ratio_upper_of_le_two_pi_mul`,
+  `ratio_lower_of_pi_upper_bound`, and
+  `ratio_upper_of_pi_lower_bound`; the exponential log-certificate
+  helpers `log_lower_of_exp_le` and `log_upper_of_le_exp` let a table
+  prove logarithm bounds through exponential inequalities instead. The
+  concrete six-decimal bounds
+  `backlund_pi_lower_3141592_1000000` and
+  `backlund_pi_upper_3141593_1000000` are exposed for finite-table
+  arithmetic, and `top_ratio_pos_of_fixed_pi_lower_mul` derives the
+  positivity of a fixed-π upper ratio endpoint from the fixed lower
+  π-bound certificate. The
+  corresponding Pi/exp certificate layer is
+  `BacklundArgumentPrincipleTheoremPiExpSlabCertificate` and
+  `BacklundFiniteBandArgumentPrincipleTheoremPiExpCertificate140_374`,
+  with `toRatioBound`, `toUniform25167Check`, and the headline
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremPiExpFinite374`.
+  The exported source package
+  `ClassicalBacklundTuringPlattAPPiExpInputs` lowers through
+  `toRatioInputs` and `toPlattAPInputs`, exports the usual
+  `toFinite374`, `toGoodHeightArgumentBound`, `toProofInputs`,
+  `toTheoremPackage`, `toProvenBacklundTuringBound`,
+  `toHalfLogPlusHalfSBound`, and `toTuringStyleSBound` adapters, and
+  culminates in
+  `concreteS_halfLogPlusHalf_of_plattAPPiExpBacklundTuringInputs`.
+  The fixed-π Pi/exp layer,
+  `BacklundArgumentPrincipleTheoremFixedPiExpSlabCertificate` and
+  `BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpCertificate140_374`,
+  removes per-row π bounds from the table; its `toPiExp`,
+  `toUniform25167Check`, and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpFinite374`
+  lower back into the Pi/exp route. The current smallest finite-table
+  surface is the auto-positivity fixed-π exp layer:
+  `BacklundArgumentPrincipleTheoremFixedPiExpAutoPosSlabCertificate`
+  and
+  `BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoPosCertificate140_374`
+  drop the explicit top-ratio positivity field and derive it from the
+  endpoint inequality. Their `toFixedPiExp` and `toUniform25167Check`
+  adapters feed the fixed-π route, with headline theorem
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoPosFinite374`.
+  The matching source package
+  `ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs` lowers through
+  `toFixedPiExpInputs` and `toProofInputs`, exports
+  `toProvenBacklundTuringBound`, `toHalfLogPlusHalfSBound`, and
+  `toTuringStyleSBound`, and culminates in
+  `concreteS_halfLogPlusHalf_of_plattAPFixedPiExpAutoPosBacklundTuringInputs`.
 
 * **(P2) Entire-ξ Hadamard bundle.** Inhabit
   `EntireXiClassicalHadamardTheorem ι` (§CCCLXXXVIII) — the per-field
@@ -1522,6 +1653,22 @@ and
 `XiPullbackAntiHerglotzTarget_of_canonicalXiPullback_midHighAFZ_lowZeroSplit_turingBundle`,
 plus the low cloud/tail variant
 `XiPullbackAntiHerglotzTarget_of_canonicalXiPullback_midHighAFZ_lowCloudTail_turingBundle`.
+The bridge
+`pullbackZeroContribution_eq_canonicalXiPullbackZeroContribution`
+is the generic completed-ξ source-to-direct pullback bridge: any
+`CompletedXiLogDerivativeSourceAFZ` identifies its pulled-back zero
+contribution with `canonicalXiPullbackZeroContribution` away from zeros.
+The canonical special case
+`canonicalPathBZeroContribution_eq_canonicalXiPullbackZeroContribution`
+identifies the source-level canonical Path B zero contribution with
+the direct pullback log-derivative away from zeros, yielding direct
+canonical AFZ imports
+`CanonicalXiPullbackMidHighStieltjesEqualityAFZ.of_completedXiSource`,
+`CanonicalXiPullbackLowFirstZeroFormulaAFZ.of_completedXiSource`,
+`CanonicalXiPullbackStieltjesSourceAFZ.of_completedXiSource`,
+`CanonicalXiPullbackMidHighStieltjesEqualityAFZ.of_canonicalPathB`,
+`CanonicalXiPullbackLowFirstZeroFormulaAFZ.of_canonicalPathB`, and
+`CanonicalXiPullbackStieltjesSourceAFZ.of_canonicalPathB`.
 The direct canonical layer then packages these Stieltjes shapes as
 `CanonicalXiPullbackSplitStieltjesInputsAFZ`,
 `CanonicalXiPullbackIBPStieltjesInputsAFZ`,
@@ -1532,9 +1679,38 @@ The direct canonical layer then packages these Stieltjes shapes as
 consumes only `PathBDirectNonTuringInputsAFZ` and
 `PathBTuringEnvelopeInputs`; the unified source constructor
 `PathBDirectNonTuringInputsAFZ.of_stieltjesSource` gives direct access
-from `CanonicalXiPullbackStieltjesSourceAFZ`. The unified-source,
-split, low-IBP, low-zero-split, and low-cloud/tail front doors each
-have bundled-Turing and unbundled Turing-envelope variants.
+from `CanonicalXiPullbackStieltjesSourceAFZ`. The generic completed-ξ
+source constructor `PathBDirectNonTuringInputsAFZ.of_completedXiSource`
+feeds direct completed-source front doors
+`XiPullbackAntiHerglotzTarget_of_directCompletedXiSourceStieltjesAFZ_turingBundle`
+and its unbundled-envelope sibling. The source-bundle constructor
+`PathBDirectNonTuringInputsAFZ.of_sourceInputs` lowers any
+`PathBNonTuringSourceInputs` directly, yielding
+`XiPullbackAntiHerglotzTarget_of_pathBSourceInputBundles_direct`
+and the unbundled-envelope sibling
+`XiPullbackAntiHerglotzTarget_of_pathBSourceInputBundles_direct_turingEnvelopes`.
+The entire-ξ non-Turing bundle also lowers directly through
+`PathBDirectNonTuringInputsAFZ.of_entireHadamardInputs`, giving
+`XiPullbackAntiHerglotzTarget_of_pathBInputBundles_direct` and
+`XiPullbackAntiHerglotzTarget_of_pathBInputBundles_direct_turingEnvelopes`.
+Specialized direct capstones now cover the main completed-ξ source
+shapes: `XiPullbackAntiHerglotzTarget_of_directHadamardProductData_stieltjesAFZ_turingBundle`,
+`XiPullbackAntiHerglotzTarget_of_directClassicalPathBAnalyticInputs_stieltjesAFZ_turingBundle`,
+`XiPullbackAntiHerglotzTarget_of_directConcreteCompletedXiHadamard_stieltjesAFZ_turingBundle`,
+`XiPullbackAntiHerglotzTarget_of_directCompletedXiClassicalHadamard_stieltjesAFZ_turingBundle`,
+and
+`XiPullbackAntiHerglotzTarget_of_directEntireXiSource_stieltjesAFZ_turingBundle`;
+each also has a matching `_turingEnvelopes` sibling.
+The older unguarded canonical sources are weakened by
+`CanonicalXiPullbackSplitStieltjesInputsAFZ.of_unguardedStieltjesSource`
+and
+`CanonicalXiPullbackSplitStieltjesInputsAFZ.of_unguarded_midHigh_low`,
+then packaged by
+`PathBDirectNonTuringInputsAFZ.of_unguardedStieltjesSource` and
+`PathBDirectNonTuringInputsAFZ.of_unguardedMidHighLow`. The
+unified-source, unguarded-source, unguarded-mid/high-low, split,
+low-IBP, low-zero-split, and low-cloud/tail front doors each have
+bundled-Turing and unbundled Turing-envelope variants.
 The §CDXLV
 theorem
 `XiPullbackAntiHerglotzTarget_of_nonTuringInputs_and_turingEnvelopes`
@@ -1662,7 +1838,20 @@ through `LowFiniteStieltjesContributionIdentityAFZ`,
 `LowFirstZeroGapNoAtoms.of_startsAfter`,
 `LowFiniteStieltjesIBPSourceAFZ`, `LowZeroContributionSplitAFZ`,
 `LowTailStieltjesResidualFormulaAFZ.trivial`, and
-`LowFiniteStieltjesIBPSourceAFZ.of_zeroSplit`. The Theorem 3 form
+`LowFiniteStieltjesIBPSourceAFZ.of_zeroSplit`. The low-side wrappers now
+also have reverse/equivalence bridges:
+`StieltjesLowEqualityAFZ.to_lowFiniteFormula`,
+`stieltjesLowEqualityAFZ_iff_lowFiniteFormula`,
+`LowFiniteStieltjesContributionIdentityAFZ.of_lowFiniteFormula`,
+`lowFiniteStieltjesFormulaOnFirstZeroGapAFZ_iff_contributionIdentity`,
+`stieltjesLowEqualityAFZ_iff_contributionIdentity`,
+`LowFiniteStieltjesIBPIdentityAFZ.of_contributionIdentity`,
+`lowFiniteStieltjesContributionIdentityAFZ_iff_ibpIdentity`, and
+`stieltjesLowEqualityAFZ_iff_ibpIdentity`. The mid/high side now has
+`StieltjesMidHighTailEqualityAFZ.of_mid_high` and
+`stieltjesMidHighTailEqualityAFZ_iff_mid_and_high`, and the assembled
+Stieltjes bundle has
+`classicalPathBStieltjesInputsAFZ_iff_equalitySourceAFZ`. The Theorem 3 form
 `XiPullbackAntiHerglotzTarget_of_classicalPathBHadamard_midHigh_lowSplit`
 lives at §CCCLXV.
 
@@ -1843,7 +2032,9 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   completed-ξ Hadamard inputs, publication completed-ξ Hadamard inputs,
   entire-ξ sources, canonical Stieltjes inputs, unified AFZ Stieltjes
   equality sources, publication Stieltjes inputs, combined AFZ
-  mid/high plus low IBP, and combined AFZ mid/high plus low cloud/tail.
+  mid/high plus low IBP, zero split, and cloud/tail, split mid/high
+  plus low IBP/zero/cloud-tail inputs, and older unguarded split or
+  unified Stieltjes inputs.
 * §CDXLVII — **canonical completed-ξ source front door**:
   `canonicalEntireXiLogDerivativeSourceAFZ`,
   `canonicalCompletedXiLogDerivativeSourceAFZ`,
@@ -1868,7 +2059,19 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   unified sources; `CanonicalXiPullbackLowFirstZeroFormulaAFZ.of_lowIBPSource`
   `CanonicalXiPullbackLowFirstZeroFormulaAFZ.of_lowZeroSplit`, and
   `CanonicalXiPullbackLowFirstZeroFormulaAFZ.of_lowCloudTailSplit`
-  adapt the compact low inputs. The front doors
+  adapt the compact low inputs. The low-IBP and low-zero-split canonical
+  inputs now convert both ways through
+  `CanonicalXiPullbackLowZeroSplitAFZ.of_lowIBPSource`,
+  `CanonicalXiPullbackLowIBPSourceAFZ.of_lowZeroSplit`, and
+  `canonicalXiPullbackLowIBPSourceAFZ_iff_lowZeroSplitAFZ`; unified
+  and split canonical AFZ Stieltjes sources are likewise related by
+  `CanonicalXiPullbackStieltjesSourceAFZ.to_split` and
+  `canonicalXiPullbackSplitStieltjesInputsAFZ_iff_stieltjesSourceAFZ`.
+  At the bundle level, `CanonicalXiPullbackIBPStieltjesInputsAFZ.to_zeroSplit`,
+  `CanonicalXiPullbackZeroSplitStieltjesInputsAFZ.to_ibp`, and
+  `canonicalXiPullbackIBPStieltjesInputsAFZ_iff_zeroSplitStieltjesInputsAFZ`
+  move between low-IBP and low-zero-split Stieltjes inputs.
+  The front doors
   `XiPullbackAntiHerglotzTarget_of_canonicalXiPullbackStieltjesSource_turingBundle`,
   `XiPullbackAntiHerglotzTarget_of_canonicalXiPullback_midHigh_low_turingBundle`,
   `XiPullbackAntiHerglotzTarget_of_canonicalXiPullbackStieltjesSourceAFZ_turingBundle`,
@@ -1890,6 +2093,62 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   is the direct two-bundle capstone. The unified source constructor
   `PathBDirectNonTuringInputsAFZ.of_stieltjesSource` feeds
   `XiPullbackAntiHerglotzTarget_of_directStieltjesSourceAFZ_turingBundle`;
+  the generic completed-ξ source constructor
+  `PathBDirectNonTuringInputsAFZ.of_completedXiSource` feeds
+  `XiPullbackAntiHerglotzTarget_of_directCompletedXiSourceStieltjesAFZ_turingBundle`;
+  specialized wrappers expose the Hadamard-product, classical analytic,
+  concrete Hadamard, publication Hadamard, and entire-ξ-source cases as
+  `XiPullbackAntiHerglotzTarget_of_directHadamardProductData_stieltjesAFZ_turingBundle`,
+  `XiPullbackAntiHerglotzTarget_of_directClassicalPathBAnalyticInputs_stieltjesAFZ_turingBundle`,
+  `XiPullbackAntiHerglotzTarget_of_directConcreteCompletedXiHadamard_stieltjesAFZ_turingBundle`,
+  `XiPullbackAntiHerglotzTarget_of_directCompletedXiClassicalHadamard_stieltjesAFZ_turingBundle`,
+  and
+  `XiPullbackAntiHerglotzTarget_of_directEntireXiSource_stieltjesAFZ_turingBundle`;
+  each of those wrappers also has the corresponding
+  `_turingEnvelopes` variant;
+  the full source-bundle constructor
+  `PathBDirectNonTuringInputsAFZ.of_sourceInputs` feeds
+  `XiPullbackAntiHerglotzTarget_of_pathBSourceInputBundles_direct`
+  and
+  `XiPullbackAntiHerglotzTarget_of_pathBSourceInputBundles_direct_turingEnvelopes`;
+  the entire-ξ non-Turing bundle lowers through
+  `PathBDirectNonTuringInputsAFZ.of_entireHadamardInputs`, feeding
+  `XiPullbackAntiHerglotzTarget_of_pathBInputBundles_direct` and
+  `XiPullbackAntiHerglotzTarget_of_pathBInputBundles_direct_turingEnvelopes`;
+  method-form adapters
+  `PathBNonTuringSourceInputs.to_directAFZ`,
+  `PathBNonTuringInputs.to_directAFZ`,
+  `PathBDirectNonTuringInputsAFZ.to_target_turingBundle`,
+  `PathBDirectNonTuringInputsAFZ.to_target_turingEnvelopes`,
+  `PathBNonTuringSourceInputs.to_target_direct_turingBundle`,
+  `PathBNonTuringSourceInputs.to_target_direct_turingEnvelopes`,
+  `PathBNonTuringInputs.to_target_direct_turingBundle`, and
+  `PathBNonTuringInputs.to_target_direct_turingEnvelopes` expose the
+  same lowering/capstone chain in dot-notation style;
+  direct unbundled front doors are also exposed for the assembled
+  entire-Hadamard Stieltjes shapes:
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_stieltjesInputs_direct_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_classicalStieltjes_direct_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_stieltjesEqualitySourceAFZ_direct_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_mid_high_lowIBP_direct_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_mid_high_lowZeroSplit_direct_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_mid_high_lowCloudTail_direct_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_midHighAFZ_lowIBP_direct_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_midHighAFZ_lowZeroSplit_direct_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_midHighAFZ_lowCloudTail_direct_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_unguardedMidHigh_lowFirstZero_direct_turingEnvelopes`,
+  and
+  `XiPullbackAntiHerglotzTarget_of_entireHadamard_unguardedStieltjesSource_direct_turingEnvelopes`;
+  the source-level canonical Path B constructor
+  `PathBDirectNonTuringInputsAFZ.of_canonicalPathBStieltjesSource`
+  feeds
+  `XiPullbackAntiHerglotzTarget_of_directCanonicalPathBStieltjesSource_turingBundle`;
+  the older unguarded constructors
+  `PathBDirectNonTuringInputsAFZ.of_unguardedStieltjesSource` and
+  `PathBDirectNonTuringInputsAFZ.of_unguardedMidHighLow` feed
+  `XiPullbackAntiHerglotzTarget_of_directUnguardedStieltjesSource_turingBundle`
+  and
+  `XiPullbackAntiHerglotzTarget_of_directUnguardedMidHighLow_turingBundle`;
   sibling front doors include
   `XiPullbackAntiHerglotzTarget_of_directSplitStieltjesInputsAFZ_turingBundle`,
   `XiPullbackAntiHerglotzTarget_of_directIBPStieltjesInputsAFZ_turingBundle`,
@@ -1934,7 +2193,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-55,615 lines and roughly 2,806 top-level declarations.
+59,449 lines and roughly 3,035 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
