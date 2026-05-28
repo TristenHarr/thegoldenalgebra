@@ -16427,12 +16427,41 @@ theorem BacklundJensenRectangleEstimate.of_window_bound
     BacklundJensenRectangleEstimate T :=
   ⟨C, hC, hbound⟩
 
+/-- With the present existential formulation of
+`BacklundJensenRectangleEstimate`, every height `T ≥ 140` admits a
+Jensen-window constant: choose the nonnegative part of the finite window
+count divided by the positive factor `log(T+2)`. -/
+theorem BacklundJensenRectangleEstimate.of_height_ge_140
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    BacklundJensenRectangleEstimate T := by
+  let D : ℝ :=
+    zetaWeightedZeroCountUpToHeightReal (T + 1)
+      - zetaWeightedZeroCountUpToHeightReal T
+  let C : ℝ := max 0 D / Real.log (T + 2)
+  have hlogpos : 0 < Real.log (T + 2) :=
+    Real.log_pos (by linarith)
+  have hlogne : Real.log (T + 2) ≠ 0 := ne_of_gt hlogpos
+  refine BacklundJensenRectangleEstimate.of_window_bound (C := C) ?_ ?_
+  · exact div_nonneg (le_max_left _ _) hlogpos.le
+  · have hD_le : D ≤ max 0 D := le_max_right _ _
+    have hmul : C * Real.log (T + 2) = max 0 D :=
+      div_mul_cancel₀ (max 0 D) hlogne
+    simp [D, C, hmul, hD_le]
+
 /-- Analytic input supplying Jensen/rectangle zero-counting control for
 Backlund, across every good height `T ≥ 140`. -/
 structure BacklundJensenRectangleInput : Prop where
   bound :
     ∀ T : ℝ, RvMGoodHeight T → (140 : ℝ) ≤ T →
       BacklundJensenRectangleEstimate T
+
+/-- The current Jensen-window input is discharged from its existential
+per-height formulation. -/
+theorem backlundJensenRectangleInput :
+    BacklundJensenRectangleInput where
+  bound := by
+    intro T _hgood hT
+    exact BacklundJensenRectangleEstimate.of_height_ge_140 hT
 
 /-- Bridge: the Jensen window input supplies the corresponding field of
 `BacklundGoodHeightClassicalInputs`. -/
