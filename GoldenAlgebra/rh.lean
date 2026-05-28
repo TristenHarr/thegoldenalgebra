@@ -4491,6 +4491,52 @@ theorem log_ratio_upper_of_ratio_upper
     Real.log (T / (2 * Real.pi)) ≤ logUpper := by
   exact le_trans (Real.log_le_log hT_ratio_pos hratio) hlog
 
+/-- Multiplicative form of a lower ratio certificate.  Finite-table
+rows often prove `2π * r ≤ T` by rational interval arithmetic; this
+turns it into `r ≤ T / (2π)`. -/
+theorem ratio_lower_of_two_pi_mul_le
+    {T ratioLower : ℝ}
+    (h : 2 * Real.pi * ratioLower ≤ T) :
+    ratioLower ≤ T / (2 * Real.pi) := by
+  have hden : 0 < 2 * Real.pi := by positivity
+  rw [le_div_iff₀ hden]
+  simpa [mul_comm, mul_left_comm, mul_assoc] using h
+
+/-- Multiplicative form of an upper ratio certificate. -/
+theorem ratio_upper_of_le_two_pi_mul
+    {T ratioUpper : ℝ}
+    (h : T ≤ 2 * Real.pi * ratioUpper) :
+    T / (2 * Real.pi) ≤ ratioUpper := by
+  have hden : 0 < 2 * Real.pi := by positivity
+  rw [div_le_iff₀ hden]
+  simpa [mul_comm, mul_left_comm, mul_assoc] using h
+
+/-- A rational upper bound for `π` lets a finite table prove lower ratio
+certificates without mentioning division by `2π`. -/
+theorem ratio_lower_of_pi_upper_bound
+    {T ratioLower piUpper : ℝ}
+    (hratio_nonneg : 0 ≤ ratioLower)
+    (hpi : Real.pi ≤ piUpper)
+    (h : 2 * piUpper * ratioLower ≤ T) :
+    ratioLower ≤ T / (2 * Real.pi) := by
+  apply ratio_lower_of_two_pi_mul_le
+  have hscale : 2 * Real.pi * ratioLower ≤ 2 * piUpper * ratioLower := by
+    nlinarith
+  exact le_trans hscale h
+
+/-- A rational lower bound for `π` lets a finite table prove upper ratio
+certificates without mentioning division by `2π`. -/
+theorem ratio_upper_of_pi_lower_bound
+    {T ratioUpper piLower : ℝ}
+    (hratio_nonneg : 0 ≤ ratioUpper)
+    (hpi : piLower ≤ Real.pi)
+    (h : T ≤ 2 * piLower * ratioUpper) :
+    T / (2 * Real.pi) ≤ ratioUpper := by
+  apply ratio_upper_of_le_two_pi_mul
+  have hscale : 2 * piLower * ratioUpper ≤ 2 * Real.pi * ratioUpper := by
+    nlinarith
+  exact le_trans h hscale
+
 /-! ### Zero-set predicates
 
 We define the predicates needed to talk about nontrivial zeta zeros up to
