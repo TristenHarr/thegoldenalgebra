@@ -16497,6 +16497,43 @@ theorem BacklundRightSideArgumentVariationEstimate.of_logDeriv_bound_on_re_two
     hC
     hbound
 
+open scoped LSeries.notation ArithmeticFunction in
+/-- On `Re s = 2`, the zeta logarithmic derivative is the negative
+von Mangoldt L-series.  This is mathlib's Euler-product identity
+specialized to Backlund's right vertical side. -/
+theorem backlund_right_side_vonMangoldt_eq_neg_logDeriv (y : ℝ) :
+    L ↗Λ ((2 : ℂ) + (y : ℂ) * Complex.I)
+      = - deriv riemannZeta ((2 : ℂ) + (y : ℂ) * Complex.I) /
+          riemannZeta ((2 : ℂ) + (y : ℂ) * Complex.I) := by
+  apply ArithmeticFunction.LSeries_vonMangoldt_eq_deriv_riemannZeta_div
+  norm_num [Complex.add_re, Complex.mul_re]
+
+open scoped LSeries.notation ArithmeticFunction in
+/-- Constructor for the right-side argument-variation estimate from a
+von Mangoldt L-series bound on `Re s = 2`. -/
+theorem BacklundRightSideArgumentVariationEstimate.of_vonMangoldt_bound_on_re_two
+    {T C : ℝ}
+    (hC : 0 ≤ C)
+    (hbound :
+      ∀ y : ℝ, T ≤ y → y ≤ T + 1 →
+        ‖L ↗Λ ((2 : ℂ) + (y : ℂ) * Complex.I)‖ ≤
+          C * Real.log (T + 2)) :
+    BacklundRightSideArgumentVariationEstimate T := by
+  apply BacklundRightSideArgumentVariationEstimate.of_logDeriv_bound_on_re_two hC
+  intro y hyT hyTop
+  let s : ℂ := (2 : ℂ) + (y : ℂ) * Complex.I
+  have hident :
+      L ↗Λ s = - deriv riemannZeta s / riemannZeta s := by
+    simpa [s] using backlund_right_side_vonMangoldt_eq_neg_logDeriv y
+  have hident' :
+      L ↗Λ s = -(deriv riemannZeta s / riemannZeta s) := by
+    simpa [neg_div] using hident
+  have hquot :
+      deriv riemannZeta s / riemannZeta s = - L ↗Λ s := by
+    rw [hident']
+    simp
+  simpa [s, hquot] using hbound y hyT hyTop
+
 /-- Analytic input supplying right-side argument-variation control on
 Backlund's rectangle, across every good height `T ≥ 140`. -/
 structure BacklundRightSideArgumentVariationInput : Prop where
