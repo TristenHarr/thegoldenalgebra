@@ -19657,6 +19657,66 @@ structure PlattTrudgianBacklundGlobalInput : Prop where
     ∀ T : ℝ, Real.exp (1 : ℝ) ≤ T →
       |concreteS T| ≤ plattTrudgianBacklundEnvelope T
 
+/-- On the large-height range, the Platt--Trudgian envelope is dominated
+by the older Trudgian envelope.  This is a pure arithmetic comparison of
+the two published explicit formulae. -/
+theorem plattTrudgianBacklundEnvelope_le_trudgianBacklundEnvelope_of_ge_1200
+    {T : ℝ} (hT : (1200 : ℝ) ≤ T) :
+    plattTrudgianBacklundEnvelope T ≤ trudgianBacklundEnvelope T := by
+  have hLpos : 0 < Real.log T := by
+    have hL := backlund_log_ge_seven_of_ge_1200 hT
+    linarith
+  have hloglog_tangent :
+      Real.log (Real.log T)
+        ≤ Real.log (15 : ℝ) + (Real.log T - 15) / 15 :=
+    backlund_log_le_tangent hLpos (by norm_num)
+  have hlog15_le : Real.log (15 : ℝ) ≤ (3 : ℝ) := by
+    have h_e_gt : (2.71 : ℝ) < Real.exp 1 :=
+      lt_trans (by norm_num : (2.71 : ℝ) < 2.7182818283)
+        Real.exp_one_gt_d9
+    have h_pow_lt : (2.71 : ℝ)^3 < (Real.exp 1)^3 :=
+      pow_lt_pow_left₀ h_e_gt (by norm_num) (by norm_num)
+    have h_15_lt_pow : (15 : ℝ) < (2.71 : ℝ)^3 := by norm_num
+    have h_exp3_eq : Real.exp (3 : ℝ) = (Real.exp 1)^3 := by
+      have h := Real.exp_one_pow 3
+      have h_cast : ((3 : ℕ) : ℝ) = (3 : ℝ) := by norm_num
+      rw [← h_cast]
+      exact h.symm
+    have h15_lt_exp3 : (15 : ℝ) < Real.exp (3 : ℝ) := by
+      rw [h_exp3_eq]
+      linarith
+    have hlog :=
+      Real.log_le_log (by norm_num : (0 : ℝ) < 15)
+        (le_of_lt h15_lt_exp3)
+    rwa [Real.log_exp] at hlog
+  have hloglog_linear :
+      Real.log (Real.log T) ≤ (1 / 15 : ℝ) * Real.log T + 32 / 3 := by
+    nlinarith
+  have hmul :
+      (3 / 200 : ℝ) * Real.log (Real.log T)
+        ≤ (3 / 200 : ℝ) *
+            ((1 / 15 : ℝ) * Real.log T + 32 / 3) :=
+    mul_le_mul_of_nonneg_left hloglog_linear (by norm_num)
+  unfold plattTrudgianBacklundEnvelope trudgianBacklundEnvelope
+  nlinarith
+
+/-- The stronger Platt--Trudgian global estimate supplies the older
+large-height Trudgian input used by the verified-input bundle. -/
+noncomputable def PlattTrudgianBacklundGlobalInput.toTrudgianLargeHeight
+    (H : PlattTrudgianBacklundGlobalInput) :
+    TrudgianBacklundLargeHeightInput where
+  bound := by
+    intro T hT
+    have hExp_one_le_1200 : Real.exp (1 : ℝ) ≤ (1200 : ℝ) := by
+      have hExp_one_le_seven :
+          Real.exp (1 : ℝ) ≤ Real.exp (7 : ℝ) :=
+        Real.exp_le_exp.mpr (by norm_num)
+      exact le_trans hExp_one_le_seven
+        (le_of_lt backlund_exp_seven_lt_1200)
+    exact le_trans (H.bound T (le_trans hExp_one_le_1200 hT))
+      (plattTrudgianBacklundEnvelope_le_trudgianBacklundEnvelope_of_ge_1200
+        hT)
+
 /-- The Platt--Trudgian envelope is below the public
 half-log-plus-half target already at `log T ≥ 593/100`. -/
 theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_593_100
