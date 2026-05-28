@@ -20268,6 +20268,114 @@ noncomputable def
   upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
   upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
 
+/-- Pi/exp version of a Backlund finite-band slab.  This is the most
+table-friendly form so far:
+
+* ratio bounds are certified using rational lower/upper bounds for `π`;
+* logarithm bounds are certified by exponential comparisons.
+
+The remaining fields are the argument-principle theorem target, the left
+endpoint count, and pure arithmetic for the smooth main term and `2.5167`
+budget. -/
+structure BacklundArgumentPrincipleTheoremPiExpSlabCertificate where
+  R : ZetaRectangle
+  hleft : R.left < 0
+  hright : 1 < R.right
+  hbottom_two_pi : 2 * Real.pi ≤ R.bottom
+  hgood : GoodHeight R.top
+  theoremData :
+    R.ZetaRectangleArgumentPrincipleTheorem
+      hleft hright
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hbottom_two_pi)
+      hgood
+  argumentIndex_nonneg :
+    0 ≤ theoremData.argumentIndex
+  leftCount : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  bottomRatioLower : ℝ
+  topRatioUpper : ℝ
+  bottomLogLower : ℝ
+  topLogUpper : ℝ
+  piLower : ℝ
+  piUpper : ℝ
+  left_count_eq :
+    zetaWeightedZeroCountUpToHeight R.bottom
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hbottom_two_pi) =
+      leftCount
+  pi_lower_le :
+    piLower ≤ Real.pi
+  pi_le_upper :
+    Real.pi ≤ piUpper
+  bottom_ratio_mul_arith :
+    2 * piUpper * bottomRatioLower ≤ R.bottom
+  top_ratio_mul_arith :
+    R.top ≤ 2 * piLower * topRatioUpper
+  bottom_exp_log_lower :
+    Real.exp bottomLogLower ≤ bottomRatioLower
+  top_ratio_pos :
+    0 < topRatioUpper
+  top_log_upper_exp :
+    topRatioUpper ≤ Real.exp topLogUpper
+  bottom_main_arith :
+    mainLower
+      ≤ (R.bottom / (2 * Real.pi)) * bottomLogLower
+        - R.bottom / (2 * Real.pi) + 7 / 8
+  top_main_arith :
+    (R.top / (2 * Real.pi)) * topLogUpper
+      - R.top / (2 * Real.pi) + 7 / 8
+        ≤ mainUpper
+  upperCount_minus_lowerMain_le :
+    ((leftCount
+        + theoremData.toActualNormalizedData.toCanonicalData.toFormula.argumentIndexNat
+          { argumentIndex_nonneg := argumentIndex_nonneg } : ℕ) : ℝ)
+      - mainLower ≤ (25167 / 10000 : ℝ)
+  upperMain_minus_lowerCount_le :
+    mainUpper - (leftCount : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- Pi/exp theorem-target slabs lower to ratio-bound theorem-target
+slabs. -/
+noncomputable def
+    BacklundArgumentPrincipleTheoremPiExpSlabCertificate.toRatioBoundSlab
+    (S : BacklundArgumentPrincipleTheoremPiExpSlabCertificate) :
+    BacklundArgumentPrincipleTheoremRatioBoundSlabCertificate where
+  R := S.R
+  hleft := S.hleft
+  hright := S.hright
+  hbottom_two_pi := S.hbottom_two_pi
+  hgood := S.hgood
+  theoremData := S.theoremData
+  argumentIndex_nonneg := S.argumentIndex_nonneg
+  leftCount := S.leftCount
+  mainLower := S.mainLower
+  mainUpper := S.mainUpper
+  bottomRatioLower := S.bottomRatioLower
+  topRatioUpper := S.topRatioUpper
+  bottomLogLower := S.bottomLogLower
+  topLogUpper := S.topLogUpper
+  left_count_eq := S.left_count_eq
+  bottom_ratio_pos :=
+    lt_of_lt_of_le (Real.exp_pos S.bottomLogLower) S.bottom_exp_log_lower
+  bottom_ratio_lower :=
+    ratio_lower_of_pi_upper_bound
+      (le_of_lt
+        (lt_of_lt_of_le (Real.exp_pos S.bottomLogLower)
+          S.bottom_exp_log_lower))
+      S.pi_le_upper
+      S.bottom_ratio_mul_arith
+  bottom_log_lower := log_lower_of_exp_le S.bottom_exp_log_lower
+  top_ratio_upper :=
+    ratio_upper_of_pi_lower_bound
+      (le_of_lt S.top_ratio_pos)
+      S.pi_lower_le
+      S.top_ratio_mul_arith
+  top_log_upper :=
+    log_upper_of_le_exp S.top_ratio_pos S.top_log_upper_exp
+  bottom_main_arith := S.bottom_main_arith
+  top_main_arith := S.top_main_arith
+  upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
+  upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
+
 /-- A finite list of endpoint-style slabs covering `[140, 374]`. -/
 structure BacklundFiniteBandEndpointCountMainCertificate140_374 where
   slabs : List BacklundEndpointCountMainSlabCertificate
@@ -20330,6 +20438,15 @@ structure
 structure
     BacklundFiniteBandArgumentPrincipleTheoremRatioBoundCertificate140_374 where
   slabs : List BacklundArgumentPrincipleTheoremRatioBoundSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
+      ∃ S ∈ slabs, S.R.bottom ≤ T ∧ T ≤ S.R.top
+
+/-- A finite list of pi/exp theorem-target slabs covering
+`[140, 374]`. -/
+structure
+    BacklundFiniteBandArgumentPrincipleTheoremPiExpCertificate140_374 where
+  slabs : List BacklundArgumentPrincipleTheoremPiExpSlabCertificate
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       ∃ S ∈ slabs, S.R.bottom ≤ T ∧ T ≤ S.R.top
@@ -20449,6 +20566,21 @@ noncomputable def
     refine ⟨S.toLogBoundSlab, ?_, hA, hB⟩
     exact List.mem_map.mpr ⟨S, hS, rfl⟩
 
+/-- Pi/exp theorem-target slabs supply ratio-bound theorem-target slabs. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleTheoremPiExpCertificate140_374.toRatioBound
+    (C :
+      BacklundFiniteBandArgumentPrincipleTheoremPiExpCertificate140_374) :
+    BacklundFiniteBandArgumentPrincipleTheoremRatioBoundCertificate140_374 where
+  slabs := C.slabs.map
+    (fun S : BacklundArgumentPrincipleTheoremPiExpSlabCertificate =>
+      S.toRatioBoundSlab)
+  cover := by
+    intro T hT140 hT374
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT374
+    refine ⟨S.toRatioBoundSlab, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
 /-- Count/main-term slab certificates supply the narrow uniform finite
 band certificate on `[140, 374]`. -/
 noncomputable def
@@ -20539,6 +20671,15 @@ noncomputable def
       BacklundFiniteBandArgumentPrincipleTheoremRatioBoundCertificate140_374) :
     BacklundFiniteBandUniform25167Check140_374 :=
   C.toLogBound.toUniform25167Check
+
+/-- Pi/exp theorem-target slabs supply the narrow uniform finite-band
+certificate on `[140, 374]`. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleTheoremPiExpCertificate140_374.toUniform25167Check
+    (C :
+      BacklundFiniteBandArgumentPrincipleTheoremPiExpCertificate140_374) :
+    BacklundFiniteBandUniform25167Check140_374 :=
+  C.toRatioBound.toUniform25167Check
 
 /-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
 concrete finite-band target `[140, 374]`. -/
@@ -20726,6 +20867,23 @@ theorem
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremLogBoundFinite374
     Hglobal
     Hfinite.toLogBound
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and pi/exp theorem-target slabs on `[140, 374]`.  This is the
+current most arithmetic-friendly finite-band route: rational `π`
+intervals plus exponential log comparisons feed the ratio-bound table,
+which feeds the Backlund/Turing theorem. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremPiExpFinite374
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandArgumentPrincipleTheoremPiExpCertificate140_374)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremRatioBoundFinite374
+    Hglobal
+    Hfinite.toRatioBound
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
@@ -20927,6 +21085,105 @@ noncomputable def
 noncomputable def
     ClassicalBacklundTuringPlattAPRatioInputs.toTuringStyleSBound
     (I : ClassicalBacklundTuringPlattAPRatioInputs) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBound.toTuringStyleSBound
+
+/-- Source package for the pi/exp finite certificate route:
+
+* the global Platt--Trudgian explicit argument bound;
+* the concrete finite band `[140, 374]`, discharged by rectangle
+  argument-principle theorem targets whose endpoint ratio/log arithmetic
+  is expressed with rational `π` bounds and exponential comparisons.
+
+This is currently the most table-emitter-friendly Backlund/Turing source
+shape in `rh.lean`. -/
+structure ClassicalBacklundTuringPlattAPPiExpInputs where
+  global : PlattTrudgianBacklundGlobalInput
+  finite374 :
+    BacklundFiniteBandArgumentPrincipleTheoremPiExpCertificate140_374
+
+/-- Pi/exp Platt/AP inputs lower to ratio-bound Platt/AP inputs. -/
+noncomputable def ClassicalBacklundTuringPlattAPPiExpInputs.toRatioInputs
+    (I : ClassicalBacklundTuringPlattAPPiExpInputs) :
+    ClassicalBacklundTuringPlattAPRatioInputs where
+  global := I.global
+  finite374 := I.finite374.toRatioBound
+
+/-- Pi/exp Platt/AP inputs lower to the previous theorem-target Platt/AP
+package. -/
+noncomputable def ClassicalBacklundTuringPlattAPPiExpInputs.toPlattAPInputs
+    (I : ClassicalBacklundTuringPlattAPPiExpInputs) :
+    ClassicalBacklundTuringPlattAPInputs :=
+  I.toRatioInputs.toPlattAPInputs
+
+/-- The pi/exp Platt/AP package supplies the concrete `[140, 374]`
+finite check. -/
+noncomputable def ClassicalBacklundTuringPlattAPPiExpInputs.toFinite374
+    (I : ClassicalBacklundTuringPlattAPPiExpInputs) :
+    BacklundFiniteBandCheck140_374 :=
+  I.toRatioInputs.toFinite374
+
+/-- The pi/exp Platt/AP package supplies the good-height Backlund
+argument bound. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPPiExpInputs.toGoodHeightArgumentBound
+    (I : ClassicalBacklundTuringPlattAPPiExpInputs) :
+    BacklundGoodHeightArgumentBound :=
+  I.toRatioInputs.toGoodHeightArgumentBound
+
+/-- The pi/exp Platt/AP package supplies the final classical proof inputs
+at `ClassicalBacklundTuringProof.K`. -/
+noncomputable def ClassicalBacklundTuringPlattAPPiExpInputs.toProofInputs
+    (I : ClassicalBacklundTuringPlattAPPiExpInputs) :
+    ClassicalBacklundTuringProofInputs :=
+  I.toRatioInputs.toProofInputs
+
+/-- The pi/exp Platt/AP package builds the packaged
+`ClassicalBacklundTuringTheorem`. -/
+noncomputable def ClassicalBacklundTuringPlattAPPiExpInputs.toTheoremPackage
+    (I : ClassicalBacklundTuringPlattAPPiExpInputs) :
+    ClassicalBacklundTuringTheorem :=
+  I.toRatioInputs.toTheoremPackage
+
+/-- Final Backlund--Turing headline theorem from the pi/exp
+Platt/AP source package. -/
+theorem concreteS_halfLogPlusHalf_of_plattAPPiExpBacklundTuringInputs
+    (I : ClassicalBacklundTuringPlattAPPiExpInputs)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremPiExpFinite374
+    I.global
+    I.finite374
+    hT
+
+/-- The pi/exp Platt/AP package supplies the generic proved
+Backlund/Turing package for `concreteS`, with threshold `140`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPPiExpInputs.toProvenBacklundTuringBound
+    (I : ClassicalBacklundTuringPlattAPPiExpInputs) :
+    ProvenBacklundTuringBound where
+  S := concreteS
+  lower := 140
+  lower_ge_two_pi := by
+    have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+    linarith
+  halfLogPlusHalf := by
+    intro u hu
+    exact concreteS_halfLogPlusHalf_of_plattAPPiExpBacklundTuringInputs I hu
+
+/-- The pi/exp Platt/AP package supplies the existing
+`HalfLogPlusHalfSBound` interface. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPPiExpInputs.toHalfLogPlusHalfSBound
+    (I : ClassicalBacklundTuringPlattAPPiExpInputs) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBound.toHalfLogPlusHalfSBound
+
+/-- The pi/exp Platt/AP package supplies the existing general
+`TuringStyleSBound` interface, with `C = D = 1/2`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPPiExpInputs.toTuringStyleSBound
+    (I : ClassicalBacklundTuringPlattAPPiExpInputs) :
     TuringStyleSBound :=
   I.toProvenBacklundTuringBound.toTuringStyleSBound
 
