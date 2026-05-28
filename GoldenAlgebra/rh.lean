@@ -17778,6 +17778,52 @@ theorem zetaWeightedCountExtensionalityInput :
       · push_neg at hU_nn
         rw [dif_neg hU_nn.not_ge]
 
+/-- **CW22a — global zero-height gap → local constancy DISCHARGED.**
+The global gap gives set equality for zero sets just to the right of
+`T`; the already-proved weighted-count extensionality turns that set
+equality into equality of the real-valued weighted counts. -/
+noncomputable def zetaZeroHeightRightGapToLocalConstancyInput :
+    ZetaZeroHeightRightGapToLocalConstancyInput where
+  bridge := by
+    intro G
+    refine ⟨?_⟩
+    intro T hT
+    rcases G.exists_gap T hT with ⟨ε, hεpos, hgap⟩
+    have hIoi :
+        ∀ᶠ u in nhdsWithin T (Set.Ioi T), T < u :=
+      self_mem_nhdsWithin
+    have hIio :
+        ∀ᶠ u in nhdsWithin T (Set.Ioi T), u < T + ε :=
+      nhdsWithin_le_nhds (Iio_mem_nhds (by linarith : T < T + ε))
+    have hEventually :
+        ∀ᶠ u in nhdsWithin T (Set.Ioi T), T < u ∧ u ≤ T + ε := by
+      filter_upwards [hIoi, hIio] with u h1 h2
+      exact ⟨h1, le_of_lt h2⟩
+    filter_upwards [hEventually] with u hu
+    exact zetaWeightedCountExtensionalityInput.count_eq_of_set_eq u T
+      (zetaZerosUpToHeightSet_eq_of_strip_gap hT hu.1 hu.2 hεpos
+        (fun ρ hzero _hre_low _hre_high him him_upper =>
+          hgap ρ hzero him him_upper))
+
+/-- **CW22a — count right-local-constancy DISCHARGED.**  Combines the
+unconditional global right-gap theorem with the proved gap→local-
+constancy bridge. -/
+noncomputable def zetaWeightedZeroCountRightLocalConstancyInput :
+    ZetaWeightedZeroCountRightLocalConstancyInput :=
+  zetaZeroHeightRightGapToLocalConstancyInput.bridge
+    zetaZeroHeightRightGapInput
+
+/-- **CW22a — final theorem from the Backlund good-height argument
+bound alone.**  The count/right-continuity extension side is now
+constructed unconditionally inside `rh.lean`; the only remaining
+mathematical input here is the genuine Backlund good-height bound. -/
+theorem concreteS_halfLogPlusHalf_of_backlundArgument
+    (B : BacklundGoodHeightArgumentBound)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_backlundArgument_and_countLC
+    B zetaWeightedZeroCountRightLocalConstancyInput hT
+
 /-- **CW22 — strongest 1-input final theorem.**  After CW22, the entire
 extension / count / continuity / compactness / classification side is
 discharged.  The headline bound is reduced to the single classical
