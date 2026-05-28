@@ -25818,6 +25818,76 @@ noncomputable def
     TuringStyleSBound :=
   I.toProvenBacklundTuringBound.toTuringStyleSBound
 
+/-! ### Near-endpoint exports for the sharp Platt global/finite package -/
+
+/-- The sharp Platt global/finite-range package supplies the
+good-height Backlund argument bound through the near-exact finite
+endpoint `[140, 3690757803/10000000]`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.toGoodHeightArgumentBoundNearEndpoint
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs) :
+    BacklundGoodHeightArgumentBound :=
+  BacklundGoodHeightArgumentBound.of_plattTrudgian_475481_80440Tail_and_finite
+    (PlattTrudgianBacklundCut475481_80440TailInput.of_global I.global)
+    (BacklundFiniteBandCheck140_exp475481_80440.of_140_3690757803_10000000
+      (BacklundFiniteBandCheck140_3690757803_10000000.of_plattTrudgian
+        I.finiteRange))
+
+/-- The near-endpoint Platt global/finite-range route supplies the final
+classical proof inputs at `ClassicalBacklundTuringProof.K`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.toProofInputsNearEndpoint
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs) :
+    ClassicalBacklundTuringProofInputs :=
+  ClassicalBacklundTuringProofInputs.of_goodHeightArgumentBound
+    I.toGoodHeightArgumentBoundNearEndpoint
+
+/-- Final Backlund--Turing headline theorem from the sharp Platt
+global/finite-range package, routed through the near-exact finite
+endpoint. -/
+theorem concreteS_halfLogPlusHalf_of_plattGlobalFiniteRangeBacklundTuringInputs_nearEndpoint
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite3690757803_10000000
+    I.global
+    (BacklundFiniteBandCheck140_3690757803_10000000.of_plattTrudgian
+      I.finiteRange)
+    hT
+
+/-- The near-endpoint Platt global/finite-range route supplies the
+generic proved Backlund/Turing package for `concreteS`, threshold `140`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.toProvenBacklundTuringBoundNearEndpoint
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs) :
+    ProvenBacklundTuringBound where
+  S := concreteS
+  lower := 140
+  lower_ge_two_pi := by
+    have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+    linarith
+  halfLogPlusHalf := by
+    intro u hu
+    exact
+      concreteS_halfLogPlusHalf_of_plattGlobalFiniteRangeBacklundTuringInputs_nearEndpoint
+        I hu
+
+/-- The near-endpoint Platt global/finite-range route supplies
+`HalfLogPlusHalfSBound`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.toHalfLogPlusHalfSBoundNearEndpoint
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBoundNearEndpoint.toHalfLogPlusHalfSBound
+
+/-- The near-endpoint Platt global/finite-range route supplies
+`TuringStyleSBound`, with `C = D = 1/2`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.toTuringStyleSBoundNearEndpoint
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBoundNearEndpoint.toTuringStyleSBound
+
 /-- The two sourced ingredients for the concrete Backlund/Turing `S(T)`
 bound:
 
