@@ -20158,6 +20158,13 @@ structure BacklundFiniteBandCountRangeMainCertificate140_374 where
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
 
+/-- A finite list of count-range/main-term slabs covering `[140, 370]`. -/
+structure BacklundFiniteBandCountRangeMainCertificate140_370 where
+  slabs : List BacklundCountRangeMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (370 : ℝ) →
+      ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
 /-- Endpoint-style version of a count/main slab.  Since the smooth main
 term is monotone on this range, the table only has to bound it at the
 two slab endpoints. -/
@@ -21453,6 +21460,16 @@ structure BacklundFiniteBandEndpointCountRangeMainCertificate140_374 where
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
 
+/-- A finite list of endpoint count-range/main-term slabs covering
+`[140, 370]`.  This finite source shape needs only endpoint cumulative
+zero counts and endpoint main-term bounds on the exact interval left by
+the current Platt--Trudgian tail split. -/
+structure BacklundFiniteBandEndpointCountRangeMainCertificate140_370 where
+  slabs : List BacklundEndpointCountRangeMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (370 : ℝ) →
+      ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
 /-- A finite list of Turing-count/range-main slabs covering
 `[140, 374]`. -/
 structure BacklundFiniteBandTuringCountRangeMainCertificate140_374 where
@@ -21625,6 +21642,20 @@ noncomputable def
     refine ⟨S.toRangeSlab, ?_, hA, hB⟩
     exact List.mem_map.mpr ⟨S, hS, rfl⟩
 
+/-- Endpoint count-range slabs supply count-range/main slabs on
+`[140, 370]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_370.toCountRange
+    (C : BacklundFiniteBandEndpointCountRangeMainCertificate140_370) :
+    BacklundFiniteBandCountRangeMainCertificate140_370 where
+  slabs := C.slabs.map
+    (fun S : BacklundEndpointCountRangeMainSlabCertificate => S.toRangeSlab)
+  cover := by
+    intro T hT140 hT370
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT370
+    refine ⟨S.toRangeSlab, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
 /-- Turing-count/range-main slabs supply endpoint count-range slabs. -/
 noncomputable def
     BacklundFiniteBandTuringCountRangeMainCertificate140_374.toEndpointCountRange
@@ -21789,12 +21820,32 @@ noncomputable def
     have hT0 : 0 ≤ T := by linarith
     exact S.uniform25167 hT0 hA hB
 
+/-- Count-range/main-term slabs supply the narrow uniform finite-band
+certificate on `[140, 370]`. -/
+noncomputable def
+    BacklundFiniteBandCountRangeMainCertificate140_370.toUniform25167Check
+    (C : BacklundFiniteBandCountRangeMainCertificate140_370) :
+    BacklundFiniteBandUniform25167Check140_370 where
+  bound := by
+    intro T hT140 hT370
+    obtain ⟨S, _hS, hA, hB⟩ := C.cover T hT140 hT370
+    have hT0 : 0 ≤ T := by linarith
+    exact S.uniform25167 hT0 hA hB
+
 /-- Endpoint count-range slabs supply the narrow uniform finite-band
 certificate on `[140, 374]`. -/
 noncomputable def
     BacklundFiniteBandEndpointCountRangeMainCertificate140_374.toUniform25167Check
     (C : BacklundFiniteBandEndpointCountRangeMainCertificate140_374) :
     BacklundFiniteBandUniform25167Check140_374 :=
+  C.toCountRange.toUniform25167Check
+
+/-- Endpoint count-range slabs supply the narrow uniform finite-band
+certificate on `[140, 370]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_370.toUniform25167Check
+    (C : BacklundFiniteBandEndpointCountRangeMainCertificate140_370) :
+    BacklundFiniteBandUniform25167Check140_370 :=
   C.toCountRange.toUniform25167Check
 
 /-- Turing-count/range-main slabs supply the narrow uniform finite-band
@@ -22340,6 +22391,21 @@ theorem
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
+estimate and count-range/main-term slabs on `[140, 370]`.  This is the
+exact current finite interval and requires no rectangle argument-principle
+data once endpoint cumulative counts are supplied. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countRangeMainFinite370
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCountRangeMainCertificate140_370)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite370
+    Hglobal
+    Hfinite.toUniform25167Check
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
 estimate and endpoint count-range/main-term slabs on `[140, 374]`. -/
 theorem
     concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite374
@@ -22348,6 +22414,19 @@ theorem
     {T : ℝ} (hT : (140 : ℝ) ≤ T) :
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countRangeMainFinite374
+    Hglobal
+    Hfinite.toCountRange
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and endpoint count-range/main-term slabs on `[140, 370]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite370
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandEndpointCountRangeMainCertificate140_370)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countRangeMainFinite370
     Hglobal
     Hfinite.toCountRange
     hT
@@ -23333,6 +23412,76 @@ noncomputable def
 noncomputable def
     ClassicalBacklundTuringPlattAPFixedPiExpAutoRectEndpointCountInputs370.toTuringStyleSBound
     (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoRectEndpointCountInputs370) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBound.toTuringStyleSBound
+
+/-- Endpoint count-range/main-term source package for the exact current
+finite interval `[140, 370]`.  Its finite rows need endpoint cumulative
+zero counts and endpoint main-term bounds, with no per-row rectangle
+argument-principle theorem data. -/
+structure ClassicalBacklundTuringPlattEndpointCountRangeInputs370 where
+  global : PlattTrudgianBacklundGlobalInput
+  finite370 : BacklundFiniteBandEndpointCountRangeMainCertificate140_370
+
+/-- The endpoint count-range package supplies the good-height Backlund
+argument bound. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeInputs370.toGoodHeightArgumentBound
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeInputs370) :
+    BacklundGoodHeightArgumentBound :=
+  BacklundGoodHeightArgumentBound.of_plattTrudgian_739_125Tail_and_finite
+    (PlattTrudgianBacklundCut739_125TailInput.of_global I.global)
+    (BacklundFiniteBandCheck140_exp739_125.of_140_370
+      I.finite370.toUniform25167Check.toFiniteBandCheck)
+
+/-- The endpoint count-range package supplies the final classical proof
+inputs at `ClassicalBacklundTuringProof.K`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeInputs370.toProofInputs
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeInputs370) :
+    ClassicalBacklundTuringProofInputs :=
+  ClassicalBacklundTuringProofInputs.of_goodHeightArgumentBound
+    I.toGoodHeightArgumentBound
+
+/-- Final Backlund--Turing headline theorem from the endpoint
+count-range/main-term source package on `[140, 370]`. -/
+theorem concreteS_halfLogPlusHalf_of_plattEndpointCountRangeBacklundTuringInputs370
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeInputs370)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite370
+    I.global
+    I.finite370
+    hT
+
+/-- The endpoint count-range package supplies the generic proved
+Backlund/Turing package for `concreteS`, threshold `140`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeInputs370.toProvenBacklundTuringBound
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeInputs370) :
+    ProvenBacklundTuringBound where
+  S := concreteS
+  lower := 140
+  lower_ge_two_pi := by
+    have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+    linarith
+  halfLogPlusHalf := by
+    intro u hu
+    exact concreteS_halfLogPlusHalf_of_plattEndpointCountRangeBacklundTuringInputs370
+      I hu
+
+/-- The endpoint count-range package supplies `HalfLogPlusHalfSBound`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeInputs370.toHalfLogPlusHalfSBound
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeInputs370) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBound.toHalfLogPlusHalfSBound
+
+/-- The endpoint count-range package supplies `TuringStyleSBound`, with
+`C = D = 1/2`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeInputs370.toTuringStyleSBound
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeInputs370) :
     TuringStyleSBound :=
   I.toProvenBacklundTuringBound.toTuringStyleSBound
 
