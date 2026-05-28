@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-59,449 lines and roughly 3,035 top-level declarations. It contains no
+60,429 lines and roughly 3,102 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -1389,6 +1389,46 @@ the three obligation lines, with concrete handoff targets in each case.
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite374`,
   with the broad finite-range source adapter
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete`.
+  The Platt route has also been shaved to the concrete endpoint `373`:
+  `backlund_exp_592_100_lt_373`,
+  `BacklundFiniteBandCheck140_373`,
+  `BacklundFiniteBandUniform25167Check140_373`,
+  `BacklundFiniteBandUniform25167Check140_373.toFiniteBandCheck`,
+  `BacklundFiniteBandCheck140_373.of_plattTrudgian`, and
+  `BacklundFiniteBandCheck140_exp592_100.of_140_373` feed the headline
+  theorems `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite373`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete373`,
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite373`.
+  The same Platt-Trudgian route has now been sharpened one more step:
+  `backlund_log_six_le_224_125` and
+  `backlund_log_log_le_one_sixth_log_plus_ninety_nine_125` improve the
+  tangent/log side, giving
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_739_125`,
+  `backlund_log_ge_739_125_of_ge_exp_739_125`, and
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_739_125`.
+  The sharper tail interface
+  `PlattTrudgianBacklundCut739_125TailInput`, supplied from the global
+  envelope by `PlattTrudgianBacklundCut739_125TailInput.of_global`,
+  pairs with `BacklundFiniteBandCheck140_exp739_125` and
+  `BacklundFiniteBandCheck140_exp739_125.of_plattTrudgian` to prove
+  `concreteS_halfLogPlusHalf_of_plattTrudgian_739_125Tail_and_finite`
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_739_125`.
+  Since `backlund_exp_739_125_lt_370`, the concrete `[140, 370]`
+  interfaces `BacklundFiniteBandCheck140_370`,
+  `BacklundFiniteBandUniform25167Check140_370`,
+  `BacklundFiniteBandUniform25167Check140_370.toFiniteBandCheck`,
+  `BacklundFiniteBandCheck140_370.of_plattTrudgian`, and
+  `BacklundFiniteBandCheck140_exp739_125.of_140_370` yield the headline
+  theorems `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite370`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete370`,
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite370`.
+  The theorem-target certificate
+  `BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoPosCertificate140_370`
+  lowers via `toUniform25167Check` and culminates in
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoPosFinite370`.
   The narrow computational-certificate interface
   `BacklundFiniteBandUniform25167Check140_374` packages the uniform
   `|S(T)| ≤ 2.5167` check on `[140, 374]`, converts through
@@ -1526,6 +1566,21 @@ the three obligation lines, with concrete handoff targets in each case.
   `toProvenBacklundTuringBound`, `toHalfLogPlusHalfSBound`, and
   `toTuringStyleSBound`, and culminates in
   `concreteS_halfLogPlusHalf_of_plattAPFixedPiExpAutoPosBacklundTuringInputs`.
+  It now also lowers individual slabs directly via
+  `BacklundArgumentPrincipleTheoremFixedPiExpAutoPosSlabCertificate.toCountRangeMainSlab`
+  and
+  `BacklundArgumentPrincipleTheoremFixedPiExpAutoPosSlabCertificate.uniform25167`.
+  The sharpened finite list
+  `BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoPosCertificate140_373`
+  supplies `toUniform25167Check`, yielding
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoPosFinite373`.
+  The new `370`-endpoint package
+  `ClassicalBacklundTuringPlattAPFixedPiExpAutoPosInputs370` is the
+  corresponding smallest source surface: it lowers to the good-height
+  proof input, proves
+  `concreteS_halfLogPlusHalf_of_plattAPFixedPiExpAutoPosBacklundTuringInputs370`,
+  and exports `toProvenBacklundTuringBound`, `toHalfLogPlusHalfSBound`,
+  and `toTuringStyleSBound` for the general Path B envelope interface.
 
 * **(P2) Entire-ξ Hadamard bundle.** Inhabit
   `EntireXiClassicalHadamardTheorem ι` (§CCCLXXXVIII) — the per-field
@@ -1599,7 +1654,12 @@ constructors also include
 `PathBNonTuringInputs.of_stieltjesEqualitySourceAFZ`, and
 `PathBNonTuringInputs.of_mid_high_lowIBPSource`, so a unified AFZ
 Stieltjes equality source or the direct mid/high plus low-IBP source
-can enter without first expanding all fields by hand.
+can enter without first expanding all fields by hand. Projection and
+raw-component views are exposed by
+`PathBNonTuringInputs.to_entireHadamard`,
+`PathBNonTuringInputs.to_stieltjesInputs`,
+`PathBNonTuringRawComponents`, `pathBNonTuringInputsEquiv`, and
+`PathBNonTuringRawComponents.to_inputs`.
 
 Once this bundle is inhabited for the same `Dzero`, it pairs with the
 §CDXLVI `PathBTuringEnvelopeInputs Dzero` bundle, whose two fields are
@@ -1626,7 +1686,30 @@ from completed-ξ source data, completed-ξ Hadamard product data,
 classical Path B analytic inputs, concrete completed-ξ Hadamard
 inputs, the publication completed-ξ Hadamard theorem, the existing
 entire-Hadamard bundle, or the entire-ξ source via the Γ-cancellation
-bridge. §CDXLVII adds the canonical completed-ξ source names
+bridge. The source bundle also has explicit projections and a raw
+component equivalence:
+`PathBNonTuringSourceInputs.to_completedXiSource`,
+`PathBNonTuringSourceInputs.to_stieltjesSourceAFZ`,
+`PathBNonTuringSourceRawComponents`, and
+`pathBNonTuringSourceInputsEquiv`, with
+`PathBNonTuringSourceRawComponents.to_sourceInputs` converting back to
+the bundled source form. The same bundled and raw views now expose
+method forms of the non-direct target capstones:
+`PathBNonTuringSourceInputs.to_target_turingBundle`,
+`PathBNonTuringSourceInputs.to_target_turingEnvelopes`,
+`PathBNonTuringInputs.to_target_turingBundle`,
+`PathBNonTuringInputs.to_target_turingEnvelopes`,
+`PathBNonTuringSourceRawComponents.to_target_turingBundle`,
+`PathBNonTuringSourceRawComponents.to_target_turingEnvelopes`,
+`PathBNonTuringRawComponents.to_target_turingBundle`, and
+`PathBNonTuringRawComponents.to_target_turingEnvelopes`. The raw
+component views also feed the direct target through
+`PathBNonTuringSourceRawComponents.to_directAFZ`,
+`PathBNonTuringRawComponents.to_directAFZ`,
+`PathBNonTuringSourceRawComponents.to_target_direct_turingBundle`,
+`PathBNonTuringSourceRawComponents.to_target_direct_turingEnvelopes`,
+`PathBNonTuringRawComponents.to_target_direct_turingBundle`, and
+`PathBNonTuringRawComponents.to_target_direct_turingEnvelopes`. §CDXLVII adds the canonical completed-ξ source names
 `canonicalEntireXiLogDerivativeSourceAFZ`,
 `canonicalCompletedXiLogDerivativeSourceAFZ`,
 `canonicalPathBZeroContribution`, and
@@ -2193,7 +2276,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-59,449 lines and roughly 3,035 top-level declarations.
+60,429 lines and roughly 3,102 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
