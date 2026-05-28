@@ -19913,6 +19913,63 @@ noncomputable def
   upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
   upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
 
+/-- Theorem-target version of a Backlund finite-band slab.  This consumes
+the existing rectangle argument-principle theorem target directly; the
+canonical argument-principle formula used by the previous bridge is
+obtained from it by the already-proved adapters. -/
+structure BacklundArgumentPrincipleTheoremCountRangeMainSlabCertificate where
+  R : ZetaRectangle
+  hleft : R.left < 0
+  hright : 1 < R.right
+  hbottom_two_pi : 2 * Real.pi ≤ R.bottom
+  hgood : GoodHeight R.top
+  theoremData :
+    R.ZetaRectangleArgumentPrincipleTheorem
+      hleft hright
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hbottom_two_pi)
+      hgood
+  argumentIndex_nonneg :
+    0 ≤ theoremData.argumentIndex
+  leftCount : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  left_count_eq :
+    zetaWeightedZeroCountUpToHeight R.bottom
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hbottom_two_pi) =
+      leftCount
+  mainLower_le_left :
+    mainLower ≤ smoothMainTerm R.bottom
+  right_le_mainUpper :
+    smoothMainTerm R.top ≤ mainUpper
+  upperCount_minus_lowerMain_le :
+    ((leftCount
+        + theoremData.toActualNormalizedData.toCanonicalData.toFormula.argumentIndexNat
+          { argumentIndex_nonneg := argumentIndex_nonneg } : ℕ) : ℝ)
+      - mainLower ≤ (25167 / 10000 : ℝ)
+  upperMain_minus_lowerCount_le :
+    mainUpper - (leftCount : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- Theorem-target slabs lower to canonical argument-principle slabs. -/
+noncomputable def
+    BacklundArgumentPrincipleTheoremCountRangeMainSlabCertificate.toArgumentPrinciple
+    (S : BacklundArgumentPrincipleTheoremCountRangeMainSlabCertificate) :
+    BacklundArgumentPrincipleCountRangeMainSlabCertificate where
+  R := S.R
+  hleft := S.hleft
+  hright := S.hright
+  hbottom_two_pi := S.hbottom_two_pi
+  hgood := S.hgood
+  formula := S.theoremData.toActualNormalizedData.toCanonicalData.toFormula
+  argumentIndex_nonneg := S.argumentIndex_nonneg
+  leftCount := S.leftCount
+  mainLower := S.mainLower
+  mainUpper := S.mainUpper
+  left_count_eq := S.left_count_eq
+  mainLower_le_left := S.mainLower_le_left
+  right_le_mainUpper := S.right_le_mainUpper
+  upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
+  upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
+
 /-- A finite list of endpoint-style slabs covering `[140, 374]`. -/
 structure BacklundFiniteBandEndpointCountMainCertificate140_374 where
   slabs : List BacklundEndpointCountMainSlabCertificate
@@ -19948,6 +20005,15 @@ structure BacklundFiniteBandTuringCountRangeMainCertificate140_374 where
 `[140, 374]`. -/
 structure BacklundFiniteBandArgumentPrincipleCountRangeMainCertificate140_374 where
   slabs : List BacklundArgumentPrincipleCountRangeMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
+      ∃ S ∈ slabs, S.R.bottom ≤ T ∧ T ≤ S.R.top
+
+/-- A finite list of rectangle argument-principle theorem-target slabs
+covering `[140, 374]`. -/
+structure
+    BacklundFiniteBandArgumentPrincipleTheoremCountRangeMainCertificate140_374 where
+  slabs : List BacklundArgumentPrincipleTheoremCountRangeMainSlabCertificate
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       ∃ S ∈ slabs, S.R.bottom ≤ T ∧ T ≤ S.R.top
@@ -20020,6 +20086,22 @@ noncomputable def
     refine ⟨S.toTuringCountRange, ?_, hA, hB⟩
     exact List.mem_map.mpr ⟨S, hS, rfl⟩
 
+/-- Rectangle argument-principle theorem-target slabs supply canonical
+argument-principle slabs. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleTheoremCountRangeMainCertificate140_374.toArgumentPrinciple
+    (C :
+      BacklundFiniteBandArgumentPrincipleTheoremCountRangeMainCertificate140_374) :
+    BacklundFiniteBandArgumentPrincipleCountRangeMainCertificate140_374 where
+  slabs := C.slabs.map
+    (fun S : BacklundArgumentPrincipleTheoremCountRangeMainSlabCertificate =>
+      S.toArgumentPrinciple)
+  cover := by
+    intro T hT140 hT374
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT374
+    refine ⟨S.toArgumentPrinciple, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
 /-- Count/main-term slab certificates supply the narrow uniform finite
 band certificate on `[140, 374]`. -/
 noncomputable def
@@ -20083,6 +20165,15 @@ noncomputable def
     (C : BacklundFiniteBandArgumentPrincipleCountRangeMainCertificate140_374) :
     BacklundFiniteBandUniform25167Check140_374 :=
   C.toTuringCountRange.toUniform25167Check
+
+/-- Rectangle argument-principle theorem-target slabs supply the narrow
+uniform finite-band certificate on `[140, 374]`. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleTheoremCountRangeMainCertificate140_374.toUniform25167Check
+    (C :
+      BacklundFiniteBandArgumentPrincipleTheoremCountRangeMainCertificate140_374) :
+    BacklundFiniteBandUniform25167Check140_374 :=
+  C.toArgumentPrinciple.toUniform25167Check
 
 /-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
 concrete finite-band target `[140, 374]`. -/
@@ -20219,6 +20310,24 @@ theorem
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_turingCountRangeMainFinite374
     Hglobal
     Hfinite.toTuringCountRange
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and rectangle argument-principle theorem-target slabs on
+`[140, 374]`.  This is the finite-band front door closest to a literal
+formal proof of the Turing table inside `rh.lean`: each slab supplies a
+proved rectangle argument-principle theorem, nonnegative index, left
+cumulative count, and endpoint main-term bounds. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremCountRangeMainFinite374
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandArgumentPrincipleTheoremCountRangeMainCertificate140_374)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleCountRangeMainFinite374
+    Hglobal
+    Hfinite.toArgumentPrinciple
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
