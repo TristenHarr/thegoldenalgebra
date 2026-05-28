@@ -4491,6 +4491,24 @@ theorem log_ratio_upper_of_ratio_upper
     Real.log (T / (2 * Real.pi)) ≤ logUpper := by
   exact le_trans (Real.log_le_log hT_ratio_pos hratio) hlog
 
+/-- Exponential form of a lower logarithm certificate. -/
+theorem log_lower_of_exp_le
+    {x logLower : ℝ}
+    (h : Real.exp logLower ≤ x) :
+    logLower ≤ Real.log x := by
+  have hpos : 0 < Real.exp logLower := Real.exp_pos _
+  have hlog := Real.log_le_log hpos h
+  simpa [Real.log_exp] using hlog
+
+/-- Exponential form of an upper logarithm certificate. -/
+theorem log_upper_of_le_exp
+    {x logUpper : ℝ}
+    (hx : 0 < x)
+    (h : x ≤ Real.exp logUpper) :
+    Real.log x ≤ logUpper := by
+  have hlog := Real.log_le_log hx h
+  simpa [Real.log_exp] using hlog
+
 /-- Multiplicative form of a lower ratio certificate.  Finite-table
 rows often prove `2π * r ≤ T` by rational interval arithmetic; this
 turns it into `r ≤ T / (2π)`. -/
