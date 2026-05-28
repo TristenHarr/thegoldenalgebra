@@ -16958,6 +16958,24 @@ noncomputable def BacklundClassicalCombinationInput.toGoodHeightArgumentBound
       (backlundRightSideArgumentVariationInput.bound T hgood hT)
       (backlundHorizontalZetaBoundInput.bound T hgood hT)
 
+/-- A good-height Backlund argument bound supplies the classical
+combination lemma: the three estimate arguments are not needed once the
+good-height bound itself is known. -/
+noncomputable def BacklundClassicalCombinationInput.ofGoodHeightArgumentBound
+    (B : BacklundGoodHeightArgumentBound) :
+    BacklundClassicalCombinationInput where
+  combine := by
+    intro T hgood hT _hJ _hR _hH
+    exact B.bound T hgood hT
+
+/-- Under the current discharged estimate inputs, the classical
+combination frontier is equivalent to the good-height Backlund argument
+bound. -/
+theorem backlundClassicalCombinationInput_iff_goodHeightArgumentBound :
+    BacklundClassicalCombinationInput ↔ BacklundGoodHeightArgumentBound :=
+  ⟨BacklundClassicalCombinationInput.toGoodHeightArgumentBound,
+    BacklundClassicalCombinationInput.ofGoodHeightArgumentBound⟩
+
 /-! ### CW14: big reduction pass over the remaining analytic obligations -/
 
 /-- Nonvanishing of `ζ` along Backlund's right vertical side `Re s = 2`,
