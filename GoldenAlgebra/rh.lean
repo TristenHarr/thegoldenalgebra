@@ -7791,6 +7791,23 @@ theorem zetaWeightedZeroCountUpToHeight_mono
       (zetaZeroSetUpToHeight T₁ hT₁)
       (zetaZeroSetUpToHeight T₂ hT₂)
 
+/-- The cumulative weighted zero count is independent of the particular
+proof carried for the nonnegativity of the height. -/
+theorem zetaWeightedZeroCountUpToHeight_proof_irrel
+    {T : ℝ} (h₁ h₂ : 0 ≤ T) :
+    zetaWeightedZeroCountUpToHeight T h₁ =
+    zetaWeightedZeroCountUpToHeight T h₂ := by
+  congr
+
+/-- Transport the cumulative weighted zero count across an equality of
+heights, also normalizing the nonnegativity proof carried by the term. -/
+theorem zetaWeightedZeroCountUpToHeight_eq_of_eq
+    {T U : ℝ} (hTU : T = U) (hT : 0 ≤ T) (hU : 0 ≤ U) :
+    zetaWeightedZeroCountUpToHeight T hT =
+    zetaWeightedZeroCountUpToHeight U hU := by
+  subst U
+  exact zetaWeightedZeroCountUpToHeight_proof_irrel hT hU
+
 /-- If the cumulative weighted zero count has the same value at the two
 endpoints of an interval, monotonicity forces it to have that value
 throughout the interval. -/
@@ -11001,6 +11018,16 @@ theorem zetaLogDeriv_principalPart_at_one_unconditional :
     HasLogDerivIntegerPrincipalPart riemannZeta (1 : ℂ) (-1) :=
   hasLogDerivIntegerPrincipalPart_of_simplePoleFactorization
     riemannZeta_simplePoleFactorizationAtOne
+
+/-- The local logarithmic-derivative principal-part theorem for `ζ'/ζ`:
+nontrivial zeros contribute their analytic multiplicity and the pole at
+`1` contributes `-1`. -/
+theorem zetaLogDeriv_principalPartTheorem :
+    ZetaLogDerivPrincipalPartTheorem where
+  at_nontrivial_zero := by
+    intro s hs
+    exact zetaLogDeriv_principalPart_at_nontrivial_zero hs
+  at_one := zetaLogDeriv_principalPart_at_one_unconditional
 
 /-! ## AN: Rectangle principal-part data (residue-free) -/
 
@@ -21027,6 +21054,62 @@ theorem backlund_log_log_le_tangent_591_100
   have hlog := backlund_log_591_100_le_350_197
   nlinarith
 
+/-- Certified local logarithm bound for the tangent-at-`5910964/1000000`
+comparison: `log (5910964/1000000) ≤ 177681/100000`. -/
+theorem backlund_log_5910964_1000000_le_177681_100000 :
+    Real.log (5910964 / 1000000 : ℝ) ≤ 177681 / 100000 := by
+  have hbase_le_exp : (5910964 / 1000000 : ℝ) ≤
+      Real.exp (177681 / 100000 : ℝ) := by
+    apply backlund_le_exp_of_taylor_lower (n := 12)
+    · norm_num
+    · norm_num [Finset.sum, Nat.factorial]
+  have h :=
+    Real.log_le_log
+      (by norm_num : (0 : ℝ) < 5910964 / 1000000) hbase_le_exp
+  rwa [Real.log_exp] at h
+
+/-- Tangent comparison at `5910964/1000000`, using
+`log (5910964/1000000) ≤ 177681/100000`. -/
+theorem backlund_log_log_le_tangent_5910964_1000000
+    {T : ℝ} (hLpos : 0 < Real.log T) :
+    Real.log (Real.log T)
+      ≤ (1000000 / 5910964 : ℝ) * Real.log T
+          + 177681 / 100000 - 1 := by
+  have htangent :=
+    backlund_log_le_tangent
+      (T := Real.log T) (T₀ := (5910964 / 1000000 : ℝ)) hLpos
+      (by norm_num)
+  have hlog := backlund_log_5910964_1000000_le_177681_100000
+  nlinarith
+
+/-- Certified local logarithm bound for the tangent-at-`591096/100000`
+comparison: `log (591096/100000) ≤ 88840413/50000000`. -/
+theorem backlund_log_591096_100000_le_88840413_50000000 :
+    Real.log (591096 / 100000 : ℝ) ≤ 88840413 / 50000000 := by
+  have hbase_le_exp : (591096 / 100000 : ℝ) ≤
+      Real.exp (88840413 / 50000000 : ℝ) := by
+    apply backlund_le_exp_of_taylor_lower (n := 16)
+    · norm_num
+    · norm_num [Finset.sum, Nat.factorial]
+  have h :=
+    Real.log_le_log
+      (by norm_num : (0 : ℝ) < 591096 / 100000) hbase_le_exp
+  rwa [Real.log_exp] at h
+
+/-- Tangent comparison at `591096/100000`, using the tighter certified
+local logarithm bound. -/
+theorem backlund_log_log_le_tangent_591096_100000
+    {T : ℝ} (hLpos : 0 < Real.log T) :
+    Real.log (Real.log T)
+      ≤ (100000 / 591096 : ℝ) * Real.log T
+          + 88840413 / 50000000 - 1 := by
+  have htangent :=
+    backlund_log_le_tangent
+      (T := Real.log T) (T₀ := (591096 / 100000 : ℝ)) hLpos
+      (by norm_num)
+  have hlog := backlund_log_591096_100000_le_88840413_50000000
+  nlinarith
+
 /-- Sharper symbolic Platt--Trudgian cutoff from the tangent-at-`59/10`
 arithmetic. -/
 theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_475481_80440
@@ -21059,6 +21142,119 @@ theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_5911_1000
   unfold plattTrudgianBacklundEnvelope
   nlinarith
 
+/-- Python-assisted tighter decimal Platt--Trudgian cutoff.  The exact
+tangent-at-`591/100` threshold is `119100/20149 ≈ 5.9109633`, so
+`591097/100000` is the next clean decimal above it and improves on
+`5911/1000`. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_591097_100000
+    {T : ℝ} (hL : (591097 / 100000 : ℝ) ≤ Real.log T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hLpos : 0 < Real.log T := by linarith
+  have hloglog := backlund_log_log_le_tangent_591_100 hLpos
+  have hmul :
+      (29 / 100 : ℝ) * Real.log (Real.log T)
+        ≤ (29 / 100 : ℝ)
+            * ((100 / 591 : ℝ) * Real.log T + 350 / 197 - 1) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  have hlinear :
+      plattTrudgianBacklundEnvelope T ≤
+        ((11 / 100 : ℝ) + (29 / 100 : ℝ) * (100 / 591 : ℝ)) * Real.log T
+          + (29 / 100 : ℝ) * (350 / 197 - 1) + 229 / 100 := by
+    unfold plattTrudgianBacklundEnvelope
+    nlinarith
+  have hbudget :
+        ((11 / 100 : ℝ) + (29 / 100 : ℝ) * (100 / 591 : ℝ)) * Real.log T
+          + (29 / 100 : ℝ) * (350 / 197 - 1) + 229 / 100
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+    nlinarith [hL]
+  exact le_trans hlinear hbudget
+
+/-- Finer decimal Platt--Trudgian cutoff.  This is the next six-decimal
+ceiling above the tangent-at-`591/100` threshold
+`119100/20149 ≈ 5.9109633233`. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_5910964_1000000
+    {T : ℝ} (hL : (5910964 / 1000000 : ℝ) ≤ Real.log T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hLpos : 0 < Real.log T := by linarith
+  have hloglog := backlund_log_log_le_tangent_591_100 hLpos
+  have hmul :
+      (29 / 100 : ℝ) * Real.log (Real.log T)
+        ≤ (29 / 100 : ℝ)
+            * ((100 / 591 : ℝ) * Real.log T + 350 / 197 - 1) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  have hlinear :
+      plattTrudgianBacklundEnvelope T ≤
+        ((11 / 100 : ℝ) + (29 / 100 : ℝ) * (100 / 591 : ℝ)) * Real.log T
+          + (29 / 100 : ℝ) * (350 / 197 - 1) + 229 / 100 := by
+    unfold plattTrudgianBacklundEnvelope
+    nlinarith
+  have hbudget :
+        ((11 / 100 : ℝ) + (29 / 100 : ℝ) * (100 / 591 : ℝ)) * Real.log T
+          + (29 / 100 : ℝ) * (350 / 197 - 1) + 229 / 100
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+    nlinarith [hL]
+  exact le_trans hlinear hbudget
+
+/-- Still finer decimal Platt--Trudgian cutoff, using the
+tangent-at-`5910964/1000000` comparison. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_5910961_1000000
+    {T : ℝ} (hL : (5910961 / 1000000 : ℝ) ≤ Real.log T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hLpos : 0 < Real.log T := by linarith
+  have hloglog := backlund_log_log_le_tangent_5910964_1000000 hLpos
+  have hmul :
+      (29 / 100 : ℝ) * Real.log (Real.log T)
+        ≤ (29 / 100 : ℝ)
+            * ((1000000 / 5910964 : ℝ) * Real.log T
+                + 177681 / 100000 - 1) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  have hlinear :
+      plattTrudgianBacklundEnvelope T ≤
+        ((11 / 100 : ℝ) + (29 / 100 : ℝ) * (1000000 / 5910964 : ℝ))
+            * Real.log T
+          + (29 / 100 : ℝ) * (177681 / 100000 - 1) + 229 / 100 := by
+    unfold plattTrudgianBacklundEnvelope
+    nlinarith
+  have hbudget :
+        ((11 / 100 : ℝ) + (29 / 100 : ℝ) * (1000000 / 5910964 : ℝ))
+            * Real.log T
+          + (29 / 100 : ℝ) * (177681 / 100000 - 1) + 229 / 100
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+    nlinarith [hL]
+  exact le_trans hlinear hbudget
+
+/-- Sharper six-decimal Platt--Trudgian cutoff, using the tangent at
+`591096/100000` and the tighter local log certificate above. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_591096_100000
+    {T : ℝ} (hL : (591096 / 100000 : ℝ) ≤ Real.log T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hLpos : 0 < Real.log T := by linarith
+  have hloglog := backlund_log_log_le_tangent_591096_100000 hLpos
+  have hmul :
+      (29 / 100 : ℝ) * Real.log (Real.log T)
+        ≤ (29 / 100 : ℝ)
+            * ((100000 / 591096 : ℝ) * Real.log T
+                + 88840413 / 50000000 - 1) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  have hlinear :
+      plattTrudgianBacklundEnvelope T ≤
+        ((11 / 100 : ℝ) + (29 / 100 : ℝ) * (100000 / 591096 : ℝ))
+            * Real.log T
+          + (29 / 100 : ℝ) * (88840413 / 50000000 - 1) + 229 / 100 := by
+    unfold plattTrudgianBacklundEnvelope
+    nlinarith
+  have hbudget :
+        ((11 / 100 : ℝ) + (29 / 100 : ℝ) * (100000 / 591096 : ℝ))
+            * Real.log T
+          + (29 / 100 : ℝ) * (88840413 / 50000000 - 1) + 229 / 100
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+    nlinarith [hL]
+  exact le_trans hlinear hbudget
+
 /-- For `T ≥ exp (475481/80440)`, `log T ≥ 475481/80440`. -/
 theorem backlund_log_ge_475481_80440_of_ge_exp_475481_80440
     {T : ℝ} (hT : Real.exp (475481 / 80440 : ℝ) ≤ T) :
@@ -21072,6 +21268,38 @@ theorem backlund_log_ge_5911_1000_of_ge_exp_5911_1000
     {T : ℝ} (hT : Real.exp (5911 / 1000 : ℝ) ≤ T) :
     (5911 / 1000 : ℝ) ≤ Real.log T := by
   have h_exp_pos : 0 < Real.exp (5911 / 1000 : ℝ) := Real.exp_pos _
+  have h := Real.log_le_log h_exp_pos hT
+  rwa [Real.log_exp] at h
+
+/-- For `T ≥ exp (591097/100000)`, `log T ≥ 591097/100000`. -/
+theorem backlund_log_ge_591097_100000_of_ge_exp_591097_100000
+    {T : ℝ} (hT : Real.exp (591097 / 100000 : ℝ) ≤ T) :
+    (591097 / 100000 : ℝ) ≤ Real.log T := by
+  have h_exp_pos : 0 < Real.exp (591097 / 100000 : ℝ) := Real.exp_pos _
+  have h := Real.log_le_log h_exp_pos hT
+  rwa [Real.log_exp] at h
+
+/-- For `T ≥ exp (5910964/1000000)`, `log T ≥ 5910964/1000000`. -/
+theorem backlund_log_ge_5910964_1000000_of_ge_exp_5910964_1000000
+    {T : ℝ} (hT : Real.exp (5910964 / 1000000 : ℝ) ≤ T) :
+    (5910964 / 1000000 : ℝ) ≤ Real.log T := by
+  have h_exp_pos : 0 < Real.exp (5910964 / 1000000 : ℝ) := Real.exp_pos _
+  have h := Real.log_le_log h_exp_pos hT
+  rwa [Real.log_exp] at h
+
+/-- For `T ≥ exp (5910961/1000000)`, `log T ≥ 5910961/1000000`. -/
+theorem backlund_log_ge_5910961_1000000_of_ge_exp_5910961_1000000
+    {T : ℝ} (hT : Real.exp (5910961 / 1000000 : ℝ) ≤ T) :
+    (5910961 / 1000000 : ℝ) ≤ Real.log T := by
+  have h_exp_pos : 0 < Real.exp (5910961 / 1000000 : ℝ) := Real.exp_pos _
+  have h := Real.log_le_log h_exp_pos hT
+  rwa [Real.log_exp] at h
+
+/-- For `T ≥ exp (591096/100000)`, `log T ≥ 591096/100000`. -/
+theorem backlund_log_ge_591096_100000_of_ge_exp_591096_100000
+    {T : ℝ} (hT : Real.exp (591096 / 100000 : ℝ) ≤ T) :
+    (591096 / 100000 : ℝ) ≤ Real.log T := by
+  have h_exp_pos : 0 < Real.exp (591096 / 100000 : ℝ) := Real.exp_pos _
   have h := Real.log_le_log h_exp_pos hT
   rwa [Real.log_exp] at h
 
@@ -21092,6 +21320,63 @@ theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_5911_1000
       ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
   plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_5911_1000
     (backlund_log_ge_5911_1000_of_ge_exp_5911_1000 hT)
+
+/-- The Platt--Trudgian envelope is below the target for every
+`T ≥ exp (591097/100000)`. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_591097_100000
+    {T : ℝ} (hT : Real.exp (591097 / 100000 : ℝ) ≤ T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_591097_100000
+    (backlund_log_ge_591097_100000_of_ge_exp_591097_100000 hT)
+
+/-- The Platt--Trudgian envelope is below the target for every
+`T ≥ exp (5910964/1000000)`. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_5910964_1000000
+    {T : ℝ} (hT : Real.exp (5910964 / 1000000 : ℝ) ≤ T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_5910964_1000000
+    (backlund_log_ge_5910964_1000000_of_ge_exp_5910964_1000000 hT)
+
+/-- The Platt--Trudgian envelope is below the target for every
+`T ≥ exp (5910961/1000000)`. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_5910961_1000000
+    {T : ℝ} (hT : Real.exp (5910961 / 1000000 : ℝ) ≤ T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_5910961_1000000
+    (backlund_log_ge_5910961_1000000_of_ge_exp_5910961_1000000 hT)
+
+/-- The Platt--Trudgian envelope is below the target for every
+`T ≥ exp (591096/100000)`. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_591096_100000
+    {T : ℝ} (hT : Real.exp (591096 / 100000 : ℝ) ≤ T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_591096_100000
+    (backlund_log_ge_591096_100000_of_ge_exp_591096_100000 hT)
+
+/-- The published Platt--Trudgian analytic estimate directly gives the
+sharp Backlund/Turing envelope on the tighter decimal tail
+`T ≥ exp (591097/100000)`. -/
+theorem PlattTrudgianBacklundGlobalInput.concreteS_halfLogPlusHalfEnvelope_tighterDecimal
+    (H : PlattTrudgianBacklundGlobalInput)
+    {z : ℂ} {T u : ℝ}
+    (hTtail : Real.exp (591097 / 100000 : ℝ) ≤ T)
+    (_hy : 0 < z.im)
+    (_hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 := by
+  have h_exp_one_le_exp_cut :
+      Real.exp (1 : ℝ) ≤ Real.exp (591097 / 100000 : ℝ) :=
+    Real.exp_le_exp.mpr (by norm_num)
+  have hutail : Real.exp (591097 / 100000 : ℝ) ≤ u := le_trans hTtail hTu
+  have huexp : Real.exp (1 : ℝ) ≤ u :=
+    le_trans h_exp_one_le_exp_cut hutail
+  exact le_trans (H.bound u huexp)
+    (plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_591097_100000
+      hutail)
 
 /-- The published Platt--Trudgian analytic estimate directly gives the
 sharp Backlund/Turing envelope on the symbolic tail
@@ -21189,6 +21474,82 @@ noncomputable def PlattTrudgianBacklundCut5911_1000TailInput.of_global
       Real.exp_le_exp.mpr (by norm_num)
     exact H.bound T (le_trans h_exp_one_le_exp_cut hT)
 
+/-- Platt--Trudgian tail estimate on the tighter decimal symbolic tail
+`T ≥ exp (591097/100000)`. -/
+structure PlattTrudgianBacklundCut591097_100000TailInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (591097 / 100000 : ℝ) ≤ T →
+      |concreteS T| ≤ plattTrudgianBacklundEnvelope T
+
+/-- Platt--Trudgian tail estimate on the finer decimal symbolic tail
+`T ≥ exp (5910964/1000000)`. -/
+structure PlattTrudgianBacklundCut5910964_1000000TailInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (5910964 / 1000000 : ℝ) ≤ T →
+      |concreteS T| ≤ plattTrudgianBacklundEnvelope T
+
+/-- Platt--Trudgian tail estimate on the still finer decimal symbolic
+tail `T ≥ exp (5910961/1000000)`. -/
+structure PlattTrudgianBacklundCut5910961_1000000TailInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (5910961 / 1000000 : ℝ) ≤ T →
+      |concreteS T| ≤ plattTrudgianBacklundEnvelope T
+
+/-- Platt--Trudgian tail estimate on the sharpened near-root symbolic
+tail `T ≥ exp (591096/100000)`. -/
+structure PlattTrudgianBacklundCut591096_100000TailInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (591096 / 100000 : ℝ) ≤ T →
+      |concreteS T| ≤ plattTrudgianBacklundEnvelope T
+
+/-- A global Platt--Trudgian estimate supplies the tighter
+`exp (591097/100000)` tail estimate. -/
+noncomputable def PlattTrudgianBacklundCut591097_100000TailInput.of_global
+    (H : PlattTrudgianBacklundGlobalInput) :
+    PlattTrudgianBacklundCut591097_100000TailInput where
+  bound := by
+    intro T hT
+    have h_exp_one_le_exp_cut :
+        Real.exp (1 : ℝ) ≤ Real.exp (591097 / 100000 : ℝ) :=
+      Real.exp_le_exp.mpr (by norm_num)
+    exact H.bound T (le_trans h_exp_one_le_exp_cut hT)
+
+/-- A global Platt--Trudgian estimate supplies the finer
+`exp (5910964/1000000)` tail estimate. -/
+noncomputable def PlattTrudgianBacklundCut5910964_1000000TailInput.of_global
+    (H : PlattTrudgianBacklundGlobalInput) :
+    PlattTrudgianBacklundCut5910964_1000000TailInput where
+  bound := by
+    intro T hT
+    have h_exp_one_le_exp_cut :
+        Real.exp (1 : ℝ) ≤ Real.exp (5910964 / 1000000 : ℝ) :=
+      Real.exp_le_exp.mpr (by norm_num)
+    exact H.bound T (le_trans h_exp_one_le_exp_cut hT)
+
+/-- A global Platt--Trudgian estimate supplies the still finer
+`exp (5910961/1000000)` tail estimate. -/
+noncomputable def PlattTrudgianBacklundCut5910961_1000000TailInput.of_global
+    (H : PlattTrudgianBacklundGlobalInput) :
+    PlattTrudgianBacklundCut5910961_1000000TailInput where
+  bound := by
+    intro T hT
+    have h_exp_one_le_exp_cut :
+        Real.exp (1 : ℝ) ≤ Real.exp (5910961 / 1000000 : ℝ) :=
+      Real.exp_le_exp.mpr (by norm_num)
+    exact H.bound T (le_trans h_exp_one_le_exp_cut hT)
+
+/-- A global Platt--Trudgian estimate supplies the sharpened near-root
+`exp (591096/100000)` tail estimate. -/
+noncomputable def PlattTrudgianBacklundCut591096_100000TailInput.of_global
+    (H : PlattTrudgianBacklundGlobalInput) :
+    PlattTrudgianBacklundCut591096_100000TailInput where
+  bound := by
+    intro T hT
+    have h_exp_one_le_exp_cut :
+        Real.exp (1 : ℝ) ≤ Real.exp (591096 / 100000 : ℝ) :=
+      Real.exp_le_exp.mpr (by norm_num)
+    exact H.bound T (le_trans h_exp_one_le_exp_cut hT)
+
 /-- Finite-band check left after using the sharper symbolic
 Platt--Trudgian tail: `[140, exp (475481/80440)]`. -/
 structure BacklundFiniteBandCheck140_exp475481_80440 : Prop where
@@ -21203,6 +21564,38 @@ structure BacklundFiniteBandCheck140_exp5911_1000 : Prop where
   bound :
     ∀ T : ℝ, (140 : ℝ) ≤ T →
       T ≤ Real.exp (5911 / 1000 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- Finite-band check left after the tighter decimal symbolic
+Platt--Trudgian tail: `[140, exp (591097/100000)]`. -/
+structure BacklundFiniteBandCheck140_exp591097_100000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ Real.exp (591097 / 100000 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- Finite-band check left after the finer decimal symbolic
+Platt--Trudgian tail: `[140, exp (5910964/1000000)]`. -/
+structure BacklundFiniteBandCheck140_exp5910964_1000000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ Real.exp (5910964 / 1000000 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- Finite-band check left after the still finer decimal symbolic
+Platt--Trudgian tail: `[140, exp (5910961/1000000)]`. -/
+structure BacklundFiniteBandCheck140_exp5910961_1000000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ Real.exp (5910961 / 1000000 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- Finite-band check left after the sharpened near-root symbolic
+Platt--Trudgian tail: `[140, exp (591096/100000)]`. -/
+structure BacklundFiniteBandCheck140_exp591096_100000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ Real.exp (591096 / 100000 : ℝ) →
         |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
 
 /-- The Platt/Trudgian finite-range `2.5167` bound supplies the sharper
@@ -21236,6 +21629,63 @@ noncomputable def BacklundFiniteBandCheck140_exp5911_1000.of_plattTrudgian
       have hT1200 : T ≤ (1200 : ℝ) := by
         have hExp_le :
             Real.exp (5911 / 1000 : ℝ) ≤ Real.exp (592 / 100 : ℝ) :=
+          Real.exp_le_exp.mpr (by norm_num)
+        exact le_trans (le_trans hTexp hExp_le)
+          (le_of_lt backlund_exp_592_100_lt_1200)
+      linarith
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- The Platt/Trudgian finite-range `2.5167` bound supplies the tighter
+decimal symbolic finite band `[140, exp (591097/100000)]`. -/
+noncomputable def BacklundFiniteBandCheck140_exp591097_100000.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_exp591097_100000 where
+  bound := by
+    intro T hT140 hTexp
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) := by
+      have hT1200 : T ≤ (1200 : ℝ) := by
+        have hExp_le :
+            Real.exp (591097 / 100000 : ℝ) ≤ Real.exp (592 / 100 : ℝ) :=
+          Real.exp_le_exp.mpr (by norm_num)
+        exact le_trans (le_trans hTexp hExp_le)
+          (le_of_lt backlund_exp_592_100_lt_1200)
+      linarith
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- The Platt/Trudgian finite-range `2.5167` bound supplies the finer
+decimal symbolic finite band `[140, exp (5910964/1000000)]`. -/
+noncomputable def BacklundFiniteBandCheck140_exp5910964_1000000.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_exp5910964_1000000 where
+  bound := by
+    intro T hT140 hTexp
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) := by
+      have hT1200 : T ≤ (1200 : ℝ) := by
+        have hExp_le :
+            Real.exp (5910964 / 1000000 : ℝ) ≤ Real.exp (592 / 100 : ℝ) :=
+          Real.exp_le_exp.mpr (by norm_num)
+        exact le_trans (le_trans hTexp hExp_le)
+          (le_of_lt backlund_exp_592_100_lt_1200)
+      linarith
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- The Platt/Trudgian finite-range `2.5167` bound supplies the still
+finer decimal symbolic finite band `[140, exp (5910961/1000000)]`. -/
+noncomputable def BacklundFiniteBandCheck140_exp5910961_1000000.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_exp5910961_1000000 where
+  bound := by
+    intro T hT140 hTexp
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) := by
+      have hT1200 : T ≤ (1200 : ℝ) := by
+        have hExp_le :
+            Real.exp (5910961 / 1000000 : ℝ) ≤ Real.exp (592 / 100 : ℝ) :=
           Real.exp_le_exp.mpr (by norm_num)
         exact le_trans (le_trans hTexp hExp_le)
           (le_of_lt backlund_exp_592_100_lt_1200)
@@ -21299,6 +21749,120 @@ theorem concreteS_halfLogPlusHalf_of_plattTrudgian_5911_1000Tail_and_finite
       Htail Hfinite)
     hT
 
+/-- Tighter decimal symbolic Platt--Trudgian tail plus the corresponding
+finite-band check gives the good-height Backlund argument bound. -/
+noncomputable def
+    BacklundGoodHeightArgumentBound.of_plattTrudgian_591097_100000Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut591097_100000TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp591097_100000) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTail : Real.exp (591097 / 100000 : ℝ) ≤ T
+    · exact le_trans (Htail.bound T hTail)
+        (plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_591097_100000
+          hTail)
+    · have hTle : T ≤ Real.exp (591097 / 100000 : ℝ) := le_of_not_ge hTail
+      exact Hfinite.bound T hT hTle
+
+/-- Finer decimal symbolic Platt--Trudgian tail plus the corresponding
+finite-band check gives the good-height Backlund argument bound. -/
+noncomputable def
+    BacklundGoodHeightArgumentBound.of_plattTrudgian_5910964_1000000Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut5910964_1000000TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp5910964_1000000) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTail : Real.exp (5910964 / 1000000 : ℝ) ≤ T
+    · exact le_trans (Htail.bound T hTail)
+        (plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_5910964_1000000
+          hTail)
+    · have hTle : T ≤ Real.exp (5910964 / 1000000 : ℝ) := le_of_not_ge hTail
+      exact Hfinite.bound T hT hTle
+
+/-- Still finer decimal symbolic Platt--Trudgian tail plus the
+corresponding finite-band check gives the good-height Backlund argument
+bound. -/
+noncomputable def
+    BacklundGoodHeightArgumentBound.of_plattTrudgian_5910961_1000000Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut5910961_1000000TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp5910961_1000000) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTail : Real.exp (5910961 / 1000000 : ℝ) ≤ T
+    · exact le_trans (Htail.bound T hTail)
+        (plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_5910961_1000000
+          hTail)
+    · have hTle : T ≤ Real.exp (5910961 / 1000000 : ℝ) := le_of_not_ge hTail
+      exact Hfinite.bound T hT hTle
+
+/-- Sharpened near-root symbolic Platt--Trudgian tail plus the
+corresponding finite-band check gives the good-height Backlund argument
+bound. -/
+noncomputable def
+    BacklundGoodHeightArgumentBound.of_plattTrudgian_591096_100000Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut591096_100000TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp591096_100000) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTail : Real.exp (591096 / 100000 : ℝ) ≤ T
+    · exact le_trans (Htail.bound T hTail)
+        (plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_591096_100000
+          hTail)
+    · have hTle : T ≤ Real.exp (591096 / 100000 : ℝ) := le_of_not_ge hTail
+      exact Hfinite.bound T hT hTle
+
+/-- Final headline theorem from the tighter decimal symbolic
+Platt--Trudgian tail and finite band `[140, exp (591097/100000)]`. -/
+theorem concreteS_halfLogPlusHalf_of_plattTrudgian_591097_100000Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut591097_100000TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp591097_100000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_plattTrudgian_591097_100000Tail_and_finite
+      Htail Hfinite)
+    hT
+
+/-- Final headline theorem from the finer decimal symbolic
+Platt--Trudgian tail and finite band `[140, exp (5910964/1000000)]`. -/
+theorem concreteS_halfLogPlusHalf_of_plattTrudgian_5910964_1000000Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut5910964_1000000TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp5910964_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_plattTrudgian_5910964_1000000Tail_and_finite
+      Htail Hfinite)
+    hT
+
+/-- Final headline theorem from the still finer decimal symbolic
+Platt--Trudgian tail and finite band `[140, exp (5910961/1000000)]`. -/
+theorem concreteS_halfLogPlusHalf_of_plattTrudgian_5910961_1000000Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut5910961_1000000TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp5910961_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_plattTrudgian_5910961_1000000Tail_and_finite
+      Htail Hfinite)
+    hT
+
+/-- Final headline theorem from the sharpened near-root symbolic
+Platt--Trudgian tail and finite band `[140, exp (591096/100000)]`. -/
+theorem concreteS_halfLogPlusHalf_of_plattTrudgian_591096_100000Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut591096_100000TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp591096_100000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_plattTrudgian_591096_100000Tail_and_finite
+      Htail Hfinite)
+    hT
+
 /-- Final headline theorem from the global Platt--Trudgian argument
 estimate and the finite-range `2.5167` input, using the sharper symbolic
 finite band `[140, exp (475481/80440)]`. -/
@@ -21323,6 +21887,45 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_5911_10
   concreteS_halfLogPlusHalf_of_plattTrudgian_5911_1000Tail_and_finite
     (PlattTrudgianBacklundCut5911_1000TailInput.of_global Hglobal)
     (BacklundFiniteBandCheck140_exp5911_1000.of_plattTrudgian Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the finite-range `2.5167` input, using the tighter decimal
+symbolic finite band `[140, exp (591097/100000)]`. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_591097_100000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_591097_100000Tail_and_finite
+    (PlattTrudgianBacklundCut591097_100000TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp591097_100000.of_plattTrudgian Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the finite-range `2.5167` input, using the finer decimal
+symbolic finite band `[140, exp (5910964/1000000)]`. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_5910964_1000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_5910964_1000000Tail_and_finite
+    (PlattTrudgianBacklundCut5910964_1000000TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp5910964_1000000.of_plattTrudgian Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the finite-range `2.5167` input, using the still finer
+decimal symbolic finite band `[140, exp (5910961/1000000)]`. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_5910961_1000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_5910961_1000000Tail_and_finite
+    (PlattTrudgianBacklundCut5910961_1000000TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp5910961_1000000.of_plattTrudgian Hfinite)
     hT
 
 /-- The sharper symbolic Platt--Trudgian global/finite-range route
@@ -22477,6 +23080,243 @@ theorem backlund_exp_5911_1000_lt_369075049_1000000 :
           (101106073 / 100000000 : ℝ) := hprod
     _ < (369075049 / 1000000 : ℝ) := hnum
 
+/-- Sixth-order Taylor-bound upper estimate for the tighter decimal
+small residual `exp (1097/100000)`. -/
+theorem backlund_exp_1097_100000_le_1011030391079_1000000000000 :
+    Real.exp (1097 / 100000 : ℝ) ≤
+      (1011030391079 / 1000000000000 : ℝ) := by
+  have hb := Real.exp_bound' (x := (1097 / 100000 : ℝ)) (n := 6)
+    (by norm_num) (by norm_num) (by norm_num : 0 < (6 : ℕ))
+  refine hb.trans ?_
+  norm_num [Finset.sum, Nat.factorial]
+
+/-- Sixth-order Taylor-bound upper estimate for the finer decimal
+small residual `exp (10964/1000000)`. -/
+theorem backlund_exp_10964_1000000_le_1011024325_1000000000 :
+    Real.exp (10964 / 1000000 : ℝ) ≤
+      (1011024325 / 1000000000 : ℝ) := by
+  have hb := Real.exp_bound' (x := (10964 / 1000000 : ℝ)) (n := 6)
+    (by norm_num) (by norm_num) (by norm_num : 0 < (6 : ℕ))
+  refine hb.trans ?_
+  norm_num [Finset.sum, Nat.factorial]
+
+/-- Sixth-order Taylor-bound upper estimate for the still finer decimal
+small residual `exp (10961/1000000)`. -/
+theorem backlund_exp_10961_1000000_le_1011021292_1000000000 :
+    Real.exp (10961 / 1000000 : ℝ) ≤
+      (1011021292 / 1000000000 : ℝ) := by
+  have hb := Real.exp_bound' (x := (10961 / 1000000 : ℝ)) (n := 6)
+    (by norm_num) (by norm_num) (by norm_num : 0 < (6 : ℕ))
+  refine hb.trans ?_
+  norm_num [Finset.sum, Nat.factorial]
+
+/-- Taylor-certified bound for the smaller residual
+`exp (1096/100000)`. -/
+theorem backlund_exp_1096_100000_le_1011020281_1000000000 :
+    Real.exp (1096 / 100000 : ℝ) ≤
+      (1011020281 / 1000000000 : ℝ) := by
+  have hb := Real.exp_bound' (x := (1096 / 100000 : ℝ)) (n := 6)
+    (by norm_num) (by norm_num) (by norm_num : 0 < (6 : ℕ))
+  refine hb.trans ?_
+  norm_num [Finset.sum, Nat.factorial]
+
+/-- `exp (591097/100000) < 369064/1000`, a tighter concrete endpoint
+for the sharp decimal Platt--Trudgian route. -/
+theorem backlund_exp_591097_100000_lt_369064_1000 :
+    Real.exp (591097 / 100000 : ℝ) < (369064 / 1000 : ℝ) := by
+  have h1 := backlund_exp_one_le_271828182845905_100000000000000
+  have h9 := backlund_exp_9_10_le_245960311115695_100000000000000
+  have hs := backlund_exp_1097_100000_le_1011030391079_1000000000000
+  have h1pow :
+      (Real.exp (1 : ℝ))^5 ≤
+        (271828182845905 / 100000000000000 : ℝ)^5 := by
+    exact pow_le_pow_left₀ (le_of_lt (Real.exp_pos _)) h1 5
+  have hprod1 :
+      (Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ) ≤
+        (271828182845905 / 100000000000000 : ℝ)^5 *
+          (245960311115695 / 100000000000000 : ℝ) := by
+    exact mul_le_mul h1pow h9 (le_of_lt (Real.exp_pos _)) (by positivity)
+  have hprod :
+      ((Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ)) *
+          Real.exp (1097 / 100000 : ℝ) ≤
+        ((271828182845905 / 100000000000000 : ℝ)^5 *
+            (245960311115695 / 100000000000000 : ℝ)) *
+          (1011030391079 / 1000000000000 : ℝ) := by
+    exact mul_le_mul hprod1 hs (le_of_lt (Real.exp_pos _)) (by positivity)
+  have hnum :
+      ((271828182845905 / 100000000000000 : ℝ)^5 *
+          (245960311115695 / 100000000000000 : ℝ)) *
+        (1011030391079 / 1000000000000 : ℝ) <
+          (369064 / 1000 : ℝ) := by
+    norm_num
+  calc
+    Real.exp (591097 / 100000 : ℝ)
+        = ((Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ)) *
+            Real.exp (1097 / 100000 : ℝ) := by
+          rw [show (591097 / 100000 : ℝ) =
+            (5 + 9 / 10) + 1097 / 100000 by norm_num]
+          rw [Real.exp_add, Real.exp_add]
+          have hpow : Real.exp (5 : ℝ) = (Real.exp (1 : ℝ))^5 := by
+            have h := Real.exp_one_pow 5
+            have h_cast : ((5 : ℕ) : ℝ) = (5 : ℝ) := by norm_num
+            rw [← h_cast]
+            exact h.symm
+          rw [hpow]
+    _ ≤ ((271828182845905 / 100000000000000 : ℝ)^5 *
+            (245960311115695 / 100000000000000 : ℝ)) *
+          (1011030391079 / 1000000000000 : ℝ) := hprod
+    _ < (369064 / 1000 : ℝ) := hnum
+
+/-- `exp (5910964/1000000) < 369062/1000`, a finer concrete endpoint
+for the sharp decimal Platt--Trudgian route. -/
+theorem backlund_exp_5910964_1000000_lt_369062_1000 :
+    Real.exp (5910964 / 1000000 : ℝ) < (369062 / 1000 : ℝ) := by
+  have h1 := backlund_exp_one_le_271828182845905_100000000000000
+  have h9 := backlund_exp_9_10_le_245960311115695_100000000000000
+  have hs := backlund_exp_10964_1000000_le_1011024325_1000000000
+  have h1pow :
+      (Real.exp (1 : ℝ))^5 ≤
+        (271828182845905 / 100000000000000 : ℝ)^5 := by
+    exact pow_le_pow_left₀ (le_of_lt (Real.exp_pos _)) h1 5
+  have hprod1 :
+      (Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ) ≤
+        (271828182845905 / 100000000000000 : ℝ)^5 *
+          (245960311115695 / 100000000000000 : ℝ) := by
+    exact mul_le_mul h1pow h9 (le_of_lt (Real.exp_pos _)) (by positivity)
+  have hprod :
+      ((Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ)) *
+          Real.exp (10964 / 1000000 : ℝ) ≤
+        ((271828182845905 / 100000000000000 : ℝ)^5 *
+            (245960311115695 / 100000000000000 : ℝ)) *
+          (1011024325 / 1000000000 : ℝ) := by
+    exact mul_le_mul hprod1 hs (le_of_lt (Real.exp_pos _)) (by positivity)
+  have hnum :
+      ((271828182845905 / 100000000000000 : ℝ)^5 *
+          (245960311115695 / 100000000000000 : ℝ)) *
+        (1011024325 / 1000000000 : ℝ) <
+          (369062 / 1000 : ℝ) := by
+    norm_num
+  calc
+    Real.exp (5910964 / 1000000 : ℝ)
+        = ((Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ)) *
+            Real.exp (10964 / 1000000 : ℝ) := by
+          rw [show (5910964 / 1000000 : ℝ) =
+            (5 + 9 / 10) + 10964 / 1000000 by norm_num]
+          rw [Real.exp_add, Real.exp_add]
+          have hpow : Real.exp (5 : ℝ) = (Real.exp (1 : ℝ))^5 := by
+            have h := Real.exp_one_pow 5
+            have h_cast : ((5 : ℕ) : ℝ) = (5 : ℝ) := by norm_num
+            rw [← h_cast]
+            exact h.symm
+          rw [hpow]
+    _ ≤ ((271828182845905 / 100000000000000 : ℝ)^5 *
+            (245960311115695 / 100000000000000 : ℝ)) *
+          (1011024325 / 1000000000 : ℝ) := hprod
+    _ < (369062 / 1000 : ℝ) := hnum
+
+/-- `exp (5910961/1000000) < 369061/1000`, a still finer concrete
+endpoint for the sharp decimal Platt--Trudgian route. -/
+theorem backlund_exp_5910961_1000000_lt_369061_1000 :
+    Real.exp (5910961 / 1000000 : ℝ) < (369061 / 1000 : ℝ) := by
+  have h1 := backlund_exp_one_le_271828182845905_100000000000000
+  have h9 := backlund_exp_9_10_le_245960311115695_100000000000000
+  have hs := backlund_exp_10961_1000000_le_1011021292_1000000000
+  have h1pow :
+      (Real.exp (1 : ℝ))^5 ≤
+        (271828182845905 / 100000000000000 : ℝ)^5 := by
+    exact pow_le_pow_left₀ (le_of_lt (Real.exp_pos _)) h1 5
+  have hprod1 :
+      (Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ) ≤
+        (271828182845905 / 100000000000000 : ℝ)^5 *
+          (245960311115695 / 100000000000000 : ℝ) := by
+    exact mul_le_mul h1pow h9 (le_of_lt (Real.exp_pos _)) (by positivity)
+  have hprod :
+      ((Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ)) *
+          Real.exp (10961 / 1000000 : ℝ) ≤
+        ((271828182845905 / 100000000000000 : ℝ)^5 *
+            (245960311115695 / 100000000000000 : ℝ)) *
+          (1011021292 / 1000000000 : ℝ) := by
+    exact mul_le_mul hprod1 hs (le_of_lt (Real.exp_pos _)) (by positivity)
+  have hnum :
+      ((271828182845905 / 100000000000000 : ℝ)^5 *
+          (245960311115695 / 100000000000000 : ℝ)) *
+        (1011021292 / 1000000000 : ℝ) <
+          (369061 / 1000 : ℝ) := by
+    norm_num
+  calc
+    Real.exp (5910961 / 1000000 : ℝ)
+        = ((Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ)) *
+            Real.exp (10961 / 1000000 : ℝ) := by
+          rw [show (5910961 / 1000000 : ℝ) =
+            (5 + 9 / 10) + 10961 / 1000000 by norm_num]
+          rw [Real.exp_add, Real.exp_add]
+          have hpow : Real.exp (5 : ℝ) = (Real.exp (1 : ℝ))^5 := by
+            have h := Real.exp_one_pow 5
+            have h_cast : ((5 : ℕ) : ℝ) = (5 : ℝ) := by norm_num
+            rw [← h_cast]
+            exact h.symm
+          rw [hpow]
+    _ ≤ ((271828182845905 / 100000000000000 : ℝ)^5 *
+            (245960311115695 / 100000000000000 : ℝ)) *
+          (1011021292 / 1000000000 : ℝ) := hprod
+    _ < (369061 / 1000 : ℝ) := hnum
+
+/-- `exp (591096/100000) < 3690603/10000`, the current sharpened
+concrete endpoint for the Platt--Trudgian handoff. -/
+theorem backlund_exp_591096_100000_lt_3690603_10000 :
+    Real.exp (591096 / 100000 : ℝ) < (3690603 / 10000 : ℝ) := by
+  have h1 := backlund_exp_one_le_271828182845905_100000000000000
+  have h9 := backlund_exp_9_10_le_245960311115695_100000000000000
+  have hs := backlund_exp_1096_100000_le_1011020281_1000000000
+  have h1pow :
+      (Real.exp (1 : ℝ))^5 ≤
+        (271828182845905 / 100000000000000 : ℝ)^5 := by
+    exact pow_le_pow_left₀ (le_of_lt (Real.exp_pos _)) h1 5
+  have hprod1 :
+      (Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ) ≤
+        (271828182845905 / 100000000000000 : ℝ)^5 *
+          (245960311115695 / 100000000000000 : ℝ) := by
+    exact mul_le_mul h1pow h9 (le_of_lt (Real.exp_pos _)) (by positivity)
+  have hprod :
+      ((Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ)) *
+          Real.exp (1096 / 100000 : ℝ) ≤
+        ((271828182845905 / 100000000000000 : ℝ)^5 *
+            (245960311115695 / 100000000000000 : ℝ)) *
+          (1011020281 / 1000000000 : ℝ) := by
+    exact mul_le_mul hprod1 hs (le_of_lt (Real.exp_pos _)) (by positivity)
+  have hnum :
+      ((271828182845905 / 100000000000000 : ℝ)^5 *
+          (245960311115695 / 100000000000000 : ℝ)) *
+        (1011020281 / 1000000000 : ℝ) <
+          (3690603 / 10000 : ℝ) := by
+    norm_num
+  calc
+    Real.exp (591096 / 100000 : ℝ)
+        = ((Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ)) *
+            Real.exp (1096 / 100000 : ℝ) := by
+          rw [show (591096 / 100000 : ℝ) =
+            (5 + 9 / 10) + 1096 / 100000 by norm_num]
+          rw [Real.exp_add, Real.exp_add]
+          have hpow : Real.exp (5 : ℝ) = (Real.exp (1 : ℝ))^5 := by
+            have h := Real.exp_one_pow 5
+            have h_cast : ((5 : ℕ) : ℝ) = (5 : ℝ) := by norm_num
+            rw [← h_cast]
+            exact h.symm
+          rw [hpow]
+    _ ≤ ((271828182845905 / 100000000000000 : ℝ)^5 *
+            (245960311115695 / 100000000000000 : ℝ)) *
+          (1011020281 / 1000000000 : ℝ) := hprod
+    _ < (3690603 / 10000 : ℝ) := hnum
+
+/-- The tighter decimal endpoint sits inside the existing improved
+decimal concrete endpoint. -/
+theorem backlund_exp_591097_100000_lt_369075049_1000000 :
+    Real.exp (591097 / 100000 : ℝ) <
+      (369075049 / 1000000 : ℝ) := by
+  exact lt_trans backlund_exp_591097_100000_lt_369064_1000
+    (by norm_num : (369064 / 1000 : ℝ) <
+      (369075049 / 1000000 : ℝ))
+
 /-- Concrete finite-band check left after the Platt--Trudgian tail:
 `[140, 374]`. -/
 structure BacklundFiniteBandCheck140_374 : Prop where
@@ -22577,6 +23417,42 @@ structure BacklundFiniteBandCheck140_369075049_1000000 : Prop where
   bound :
     ∀ T : ℝ, (140 : ℝ) ≤ T →
       T ≤ (369075049 / 1000000 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- Concrete finite-band check left after the tighter decimal
+Platt--Trudgian tail:
+`[140, 369064/1000]`. -/
+structure BacklundFiniteBandCheck140_369064_1000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (369064 / 1000 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- Concrete finite-band check left after the finer decimal
+Platt--Trudgian tail:
+`[140, 369062/1000]`. -/
+structure BacklundFiniteBandCheck140_369062_1000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (369062 / 1000 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- Concrete finite-band check left after the still finer decimal
+Platt--Trudgian tail:
+`[140, 369061/1000]`. -/
+structure BacklundFiniteBandCheck140_369061_1000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (369061 / 1000 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- Concrete finite-band check left after the sharpened near-root
+Platt--Trudgian tail:
+`[140, 3690603/10000]`. -/
+structure BacklundFiniteBandCheck140_3690603_10000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (3690603 / 10000 : ℝ) →
         |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
 
 /-- Uniform computational `S(T)` certificate on the concrete finite band
@@ -33988,6 +34864,158 @@ structure BacklundGrid2EndpointCountEqualities140_369075049_1000000 :
     ∀ R ∈ backlundGrid2EndpointRows140_369075049_1000000,
       BacklundGrid2EndpointCountEqualities R
 
+/-- The `n`th endpoint height for the concrete two-unit Backlund grid.
+For `n < 115` this is `140 + 2n`; the final endpoint is the decimal
+cutoff `369075049/1000000`. -/
+noncomputable def backlundGrid2EndpointHeight140_369075049_1000000
+    (n : Fin 116) : ℝ :=
+  if n.val = 115 then (369075049 / 1000000 : ℝ)
+  else (140 : ℝ) + 2 * (n.val : ℝ)
+
+theorem backlundGrid2EndpointHeight140_369075049_1000000_nonneg
+    (n : Fin 116) :
+    0 ≤ backlundGrid2EndpointHeight140_369075049_1000000 n := by
+  unfold backlundGrid2EndpointHeight140_369075049_1000000
+  by_cases hn : n.val = 115
+  · simp [hn]
+    norm_num
+  · simp [hn]
+    positivity
+
+/-- Left endpoint index of a concrete grid row. -/
+def backlundGrid2EndpointLeftIndex140_369075049_1000000
+    (n : Fin 115) : Fin 116 :=
+  ⟨n.val, by omega⟩
+
+/-- Right endpoint index of a concrete grid row. -/
+def backlundGrid2EndpointRightIndex140_369075049_1000000
+    (n : Fin 115) : Fin 116 :=
+  ⟨n.val + 1, by omega⟩
+
+theorem backlundGrid2EndpointHeight_left140_369075049_1000000
+    (n : Fin 115) :
+    backlundGrid2EndpointHeight140_369075049_1000000
+      (backlundGrid2EndpointLeftIndex140_369075049_1000000 n) =
+      (backlundGrid2EndpointRow140_369075049_1000000 n).A := by
+  have hn : n.val ≠ 115 := by omega
+  simp [backlundGrid2EndpointHeight140_369075049_1000000,
+    backlundGrid2EndpointLeftIndex140_369075049_1000000,
+    backlundGrid2EndpointRow140_369075049_1000000, hn]
+
+theorem backlundGrid2EndpointHeight_right140_369075049_1000000
+    (n : Fin 115) :
+    backlundGrid2EndpointHeight140_369075049_1000000
+      (backlundGrid2EndpointRightIndex140_369075049_1000000 n) =
+      (backlundGrid2EndpointRow140_369075049_1000000 n).B := by
+  by_cases hn : n.val = 114
+  · have hsucc : n.val + 1 = 115 := by omega
+    simp [backlundGrid2EndpointHeight140_369075049_1000000,
+      backlundGrid2EndpointRightIndex140_369075049_1000000,
+      backlundGrid2EndpointRow140_369075049_1000000, hn, hsucc]
+  · have hsucc : n.val + 1 ≠ 115 := by omega
+    simp [backlundGrid2EndpointHeight140_369075049_1000000,
+      backlundGrid2EndpointRightIndex140_369075049_1000000,
+      backlundGrid2EndpointRow140_369075049_1000000, hn, hsucc]
+    ring
+
+theorem backlundGrid2EndpointCount_left140_369075049_1000000
+    (n : Fin 115) :
+    backlundGrid2EndpointCount140_369075049_1000000
+      (backlundGrid2EndpointLeftIndex140_369075049_1000000 n).val =
+      (backlundGrid2EndpointRow140_369075049_1000000 n).countLower := by
+  simp [backlundGrid2EndpointLeftIndex140_369075049_1000000,
+    backlundGrid2EndpointRow140_369075049_1000000]
+
+theorem backlundGrid2EndpointCount_right140_369075049_1000000
+    (n : Fin 115) :
+    backlundGrid2EndpointCount140_369075049_1000000
+      (backlundGrid2EndpointRightIndex140_369075049_1000000 n).val =
+      (backlundGrid2EndpointRow140_369075049_1000000 n).countUpper := by
+  simp [backlundGrid2EndpointRightIndex140_369075049_1000000,
+    backlundGrid2EndpointRow140_369075049_1000000]
+
+/-- Cumulative zero-count certificate at the 116 distinct grid endpoints.
+This is the compact finite Turing-certificate payload: once each endpoint
+count is certified, all 115 row-local count equalities follow. -/
+structure
+    BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000 :
+    Prop where
+  count_eq :
+    ∀ n : Fin 116,
+      zetaWeightedZeroCountUpToHeight
+        (backlundGrid2EndpointHeight140_369075049_1000000 n)
+        (backlundGrid2EndpointHeight140_369075049_1000000_nonneg n) =
+      backlundGrid2EndpointCount140_369075049_1000000 n.val
+
+/-- The 116 endpoint cumulative-count certificate implies the rowwise
+count-equality input used by the Backlund grid argument. -/
+noncomputable def
+    BacklundGrid2EndpointCountEqualities140_369075049_1000000.ofCumulative
+    (C :
+      BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000) :
+    BacklundGrid2EndpointCountEqualities140_369075049_1000000 where
+  counts := by
+    classical
+    intro R hR
+    rw [backlundGrid2EndpointRows140_369075049_1000000] at hR
+    let w := List.mem_map.mp hR
+    let n : Fin 115 := Classical.choose w
+    have hn : n ∈ List.finRange 115 ∧
+        backlundGrid2EndpointRow140_369075049_1000000 n = R :=
+      Classical.choose_spec w
+    rw [← hn.2]
+    refine ⟨?_, ?_⟩
+    · let i := backlundGrid2EndpointLeftIndex140_369075049_1000000 n
+      have hheight :=
+        backlundGrid2EndpointHeight_left140_369075049_1000000 n
+      have htransport := zetaWeightedZeroCountUpToHeight_eq_of_eq
+        hheight
+        (backlundGrid2EndpointHeight140_369075049_1000000_nonneg i)
+        (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140
+            (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140))
+      calc
+        zetaWeightedZeroCountUpToHeight
+            (backlundGrid2EndpointRow140_369075049_1000000 n).A
+            (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+              (backlund_two_pi_le_of_ge_140
+                (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140))
+            = zetaWeightedZeroCountUpToHeight
+                (backlundGrid2EndpointHeight140_369075049_1000000 i)
+                (backlundGrid2EndpointHeight140_369075049_1000000_nonneg i) :=
+              htransport.symm
+        _ = backlundGrid2EndpointCount140_369075049_1000000 i.val :=
+              C.count_eq i
+        _ = (backlundGrid2EndpointRow140_369075049_1000000 n).countLower :=
+              backlundGrid2EndpointCount_left140_369075049_1000000 n
+    · let i := backlundGrid2EndpointRightIndex140_369075049_1000000 n
+      have hheight :=
+        backlundGrid2EndpointHeight_right140_369075049_1000000 n
+      have htransport := zetaWeightedZeroCountUpToHeight_eq_of_eq
+        hheight
+        (backlundGrid2EndpointHeight140_369075049_1000000_nonneg i)
+        (le_trans
+          (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+            (backlund_two_pi_le_of_ge_140
+              (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140))
+          (backlundGrid2EndpointRow140_369075049_1000000 n).hAB)
+      calc
+        zetaWeightedZeroCountUpToHeight
+            (backlundGrid2EndpointRow140_369075049_1000000 n).B
+            (le_trans
+              (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+                (backlund_two_pi_le_of_ge_140
+                  (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140))
+              (backlundGrid2EndpointRow140_369075049_1000000 n).hAB)
+            = zetaWeightedZeroCountUpToHeight
+                (backlundGrid2EndpointHeight140_369075049_1000000 i)
+                (backlundGrid2EndpointHeight140_369075049_1000000_nonneg i) :=
+              htransport.symm
+        _ = backlundGrid2EndpointCount140_369075049_1000000 i.val :=
+              C.count_eq i
+        _ = (backlundGrid2EndpointRow140_369075049_1000000 n).countUpper :=
+              backlundGrid2EndpointCount_right140_369075049_1000000 n
+
 /-- Smooth-main arithmetic facts for every row of the concrete grid. -/
 structure BacklundGrid2EndpointSmoothFacts140_369075049_1000000 :
     Prop where
@@ -34192,6 +35220,18 @@ noncomputable def
     exact BacklundGrid2EndpointCountRowFacts.ofSeparated
       (C.counts R hR) (S.smooth R hR)
 
+/-- The compact 116-endpoint cumulative-count certificate, together with
+the already verified rational/exponential smooth-main arithmetic, supplies
+all row facts for the concrete Backlund grid. -/
+noncomputable def
+    BacklundGrid2EndpointCountFacts140_369075049_1000000.ofCumulative
+    (C : BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000) :
+    BacklundGrid2EndpointCountFacts140_369075049_1000000 :=
+  BacklundGrid2EndpointCountFacts140_369075049_1000000.ofSeparated
+    (BacklundGrid2EndpointCountEqualities140_369075049_1000000.ofCumulative C)
+    (BacklundGrid2EndpointSmoothFacts140_369075049_1000000.ofRationalExpFacts
+      backlundGrid2EndpointSmoothRationalExpFacts140_369075049_1000000)
+
 /-- The concrete grid facts inhabit the existing endpoint
 count-range/main-term finite certificate on `[140, 369075049/1000000]`. -/
 noncomputable def
@@ -34211,6 +35251,15 @@ noncomputable def
         ⟨⟨R, hR⟩, List.mem_attach _ _, rfl⟩
     · exact hA
     · exact hB
+
+/-- The compact cumulative endpoint-count certificate inhabits the finite
+endpoint count-range/main-term certificate on `[140, 369075049/1000000]`;
+the smooth-main side is the verified rational/exponential table. -/
+noncomputable def
+    BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000.toEndpointCountRangeMainCertificate
+    (C : BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000) :
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_369075049_1000000 :=
+  (BacklundGrid2EndpointCountFacts140_369075049_1000000.ofCumulative C).toEndpointCountRangeMainCertificate
 
 /-- A finite list of Turing-count/range-main slabs covering
 `[140, 374]`. -/
@@ -35660,6 +36709,146 @@ noncomputable def
         (le_of_lt backlund_exp_5911_1000_lt_369075049_1000000)
     exact H.bound T hT140 hTendpoint
 
+/-- A concrete `[140, 369075049/1000000]` finite-band check supplies
+the tighter symbolic `[140, exp (591097/100000)]` check. -/
+noncomputable def
+    BacklundFiniteBandCheck140_exp591097_100000.of_140_369075049_1000000
+    (H : BacklundFiniteBandCheck140_369075049_1000000) :
+    BacklundFiniteBandCheck140_exp591097_100000 where
+  bound := by
+    intro T hT140 hTexp
+    have hTendpoint : T ≤ (369075049 / 1000000 : ℝ) :=
+      le_trans hTexp
+        (le_of_lt backlund_exp_591097_100000_lt_369075049_1000000)
+    exact H.bound T hT140 hTendpoint
+
+/-- A concrete `[140, 369064/1000]` finite-band check supplies the
+tighter symbolic `[140, exp (591097/100000)]` check. -/
+noncomputable def
+    BacklundFiniteBandCheck140_exp591097_100000.of_140_369064_1000
+    (H : BacklundFiniteBandCheck140_369064_1000) :
+    BacklundFiniteBandCheck140_exp591097_100000 where
+  bound := by
+    intro T hT140 hTexp
+    have hTendpoint : T ≤ (369064 / 1000 : ℝ) :=
+      le_trans hTexp
+        (le_of_lt backlund_exp_591097_100000_lt_369064_1000)
+    exact H.bound T hT140 hTendpoint
+
+/-- A concrete `[140, 369062/1000]` finite-band check supplies the
+finer symbolic `[140, exp (5910964/1000000)]` check. -/
+noncomputable def
+    BacklundFiniteBandCheck140_exp5910964_1000000.of_140_369062_1000
+    (H : BacklundFiniteBandCheck140_369062_1000) :
+    BacklundFiniteBandCheck140_exp5910964_1000000 where
+  bound := by
+    intro T hT140 hTexp
+    have hTendpoint : T ≤ (369062 / 1000 : ℝ) :=
+      le_trans hTexp
+        (le_of_lt backlund_exp_5910964_1000000_lt_369062_1000)
+    exact H.bound T hT140 hTendpoint
+
+/-- A concrete `[140, 369061/1000]` finite-band check supplies the
+still finer symbolic `[140, exp (5910961/1000000)]` check. -/
+noncomputable def
+    BacklundFiniteBandCheck140_exp5910961_1000000.of_140_369061_1000
+    (H : BacklundFiniteBandCheck140_369061_1000) :
+    BacklundFiniteBandCheck140_exp5910961_1000000 where
+  bound := by
+    intro T hT140 hTexp
+    have hTendpoint : T ≤ (369061 / 1000 : ℝ) :=
+      le_trans hTexp
+        (le_of_lt backlund_exp_5910961_1000000_lt_369061_1000)
+    exact H.bound T hT140 hTendpoint
+
+/-- A concrete `[140, 3690603/10000]` finite-band check supplies the
+sharpened symbolic `[140, exp (591096/100000)]` check. -/
+noncomputable def
+    BacklundFiniteBandCheck140_exp591096_100000.of_140_3690603_10000
+    (H : BacklundFiniteBandCheck140_3690603_10000) :
+    BacklundFiniteBandCheck140_exp591096_100000 where
+  bound := by
+    intro T hT140 hTexp
+    have hTendpoint : T ≤ (3690603 / 10000 : ℝ) :=
+      le_trans hTexp
+        (le_of_lt backlund_exp_591096_100000_lt_3690603_10000)
+    exact H.bound T hT140 hTendpoint
+
+/-- The existing `[140, 369075049/1000000]` finite-band check restricts
+to the tighter concrete interval `[140, 369064/1000]`. -/
+noncomputable def
+    BacklundFiniteBandCheck140_369064_1000.of_140_369075049_1000000
+    (H : BacklundFiniteBandCheck140_369075049_1000000) :
+    BacklundFiniteBandCheck140_369064_1000 where
+  bound := by
+    intro T hT140 hTendpoint
+    exact H.bound T hT140 (le_trans hTendpoint
+      (by norm_num : (369064 / 1000 : ℝ) ≤
+        (369075049 / 1000000 : ℝ)))
+
+/-- The existing `[140, 369064/1000]` finite-band check restricts to
+the finer concrete interval `[140, 369062/1000]`. -/
+noncomputable def
+    BacklundFiniteBandCheck140_369062_1000.of_140_369064_1000
+    (H : BacklundFiniteBandCheck140_369064_1000) :
+    BacklundFiniteBandCheck140_369062_1000 where
+  bound := by
+    intro T hT140 hTendpoint
+    exact H.bound T hT140 (le_trans hTendpoint
+      (by norm_num : (369062 / 1000 : ℝ) ≤
+        (369064 / 1000 : ℝ)))
+
+/-- The existing `[140, 369075049/1000000]` finite-band check restricts
+to the finer concrete interval `[140, 369062/1000]`. -/
+noncomputable def
+    BacklundFiniteBandCheck140_369062_1000.of_140_369075049_1000000
+    (H : BacklundFiniteBandCheck140_369075049_1000000) :
+    BacklundFiniteBandCheck140_369062_1000 :=
+  BacklundFiniteBandCheck140_369062_1000.of_140_369064_1000
+    (BacklundFiniteBandCheck140_369064_1000.of_140_369075049_1000000 H)
+
+/-- The existing `[140, 369062/1000]` finite-band check restricts to
+the still finer concrete interval `[140, 369061/1000]`. -/
+noncomputable def
+    BacklundFiniteBandCheck140_369061_1000.of_140_369062_1000
+    (H : BacklundFiniteBandCheck140_369062_1000) :
+    BacklundFiniteBandCheck140_369061_1000 where
+  bound := by
+    intro T hT140 hTendpoint
+    exact H.bound T hT140 (le_trans hTendpoint
+      (by norm_num : (369061 / 1000 : ℝ) ≤
+        (369062 / 1000 : ℝ)))
+
+/-- The existing `[140, 369075049/1000000]` finite-band check restricts
+to the still finer concrete interval `[140, 369061/1000]`. -/
+noncomputable def
+    BacklundFiniteBandCheck140_369061_1000.of_140_369075049_1000000
+    (H : BacklundFiniteBandCheck140_369075049_1000000) :
+    BacklundFiniteBandCheck140_369061_1000 :=
+  BacklundFiniteBandCheck140_369061_1000.of_140_369062_1000
+    (BacklundFiniteBandCheck140_369062_1000.of_140_369075049_1000000 H)
+
+/-- The existing `[140, 369061/1000]` finite-band check restricts to
+the sharpened concrete interval `[140, 3690603/10000]`. -/
+noncomputable def
+    BacklundFiniteBandCheck140_3690603_10000.of_140_369061_1000
+    (H : BacklundFiniteBandCheck140_369061_1000) :
+    BacklundFiniteBandCheck140_3690603_10000 where
+  bound := by
+    intro T hT140 hTendpoint
+    exact H.bound T hT140 (le_trans hTendpoint
+      (by norm_num : (3690603 / 10000 : ℝ) ≤
+        (369061 / 1000 : ℝ)))
+
+/-- The existing `[140, 369075049/1000000]` finite-band check restricts
+to the sharpened concrete interval `[140, 3690603/10000]`. -/
+noncomputable def
+    BacklundFiniteBandCheck140_3690603_10000.of_140_369075049_1000000
+    (H : BacklundFiniteBandCheck140_369075049_1000000) :
+    BacklundFiniteBandCheck140_3690603_10000 :=
+  BacklundFiniteBandCheck140_3690603_10000.of_140_369061_1000
+    (BacklundFiniteBandCheck140_369061_1000.of_140_369075049_1000000 H)
+
 /-- Final headline theorem from the global Platt--Trudgian argument
 estimate and the concrete finite-band check `[140, 374]`. -/
 theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite374
@@ -35848,6 +37037,123 @@ theorem
   concreteS_halfLogPlusHalf_of_plattTrudgian_5911_1000Tail_and_finite
     (PlattTrudgianBacklundCut5911_1000TailInput.of_global Hglobal)
     (BacklundFiniteBandCheck140_exp5911_1000.of_140_369075049_1000000
+      Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the improved decimal concrete finite-band check
+`[140, 369075049/1000000]`, routed through the tighter decimal
+`exp (591097/100000)` tail split. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369075049_1000000_tighterDecimal
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCheck140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_591097_100000Tail_and_finite
+    (PlattTrudgianBacklundCut591097_100000TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp591097_100000.of_140_369075049_1000000
+      Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the tighter concrete finite-band check `[140, 369064/1000]`.
+This is the smallest concrete finite interval currently justified by the
+in-file Platt--Trudgian cutoff arithmetic. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369064_1000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCheck140_369064_1000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_591097_100000Tail_and_finite
+    (PlattTrudgianBacklundCut591097_100000TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp591097_100000.of_140_369064_1000
+      Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the finer concrete finite-band check `[140, 369062/1000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369062_1000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCheck140_369062_1000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_5910964_1000000Tail_and_finite
+    (PlattTrudgianBacklundCut5910964_1000000TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp5910964_1000000.of_140_369062_1000
+      Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the still finer concrete finite-band check `[140, 369061/1000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369061_1000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCheck140_369061_1000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_5910961_1000000Tail_and_finite
+    (PlattTrudgianBacklundCut5910961_1000000TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp5910961_1000000.of_140_369061_1000
+      Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the sharpened concrete finite-band check
+`[140, 3690603/10000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite3690603_10000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCheck140_3690603_10000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_591096_100000Tail_and_finite
+    (PlattTrudgianBacklundCut591096_100000TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp591096_100000.of_140_3690603_10000
+      Hfinite)
+    hT
+
+/-- The wider improved-decimal finite check also supplies the tighter
+`[140, 369064/1000]` route by restriction. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369075049_1000000_via369064
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCheck140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369064_1000
+    Hglobal
+    (BacklundFiniteBandCheck140_369064_1000.of_140_369075049_1000000
+      Hfinite)
+    hT
+
+/-- The wider improved-decimal finite check also supplies the finer
+`[140, 369062/1000]` route by restriction. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369075049_1000000_via369062
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCheck140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369062_1000
+    Hglobal
+    (BacklundFiniteBandCheck140_369062_1000.of_140_369075049_1000000
+      Hfinite)
+    hT
+
+/-- The wider improved-decimal finite check also supplies the still
+finer `[140, 369061/1000]` route by restriction. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369075049_1000000_via369061
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCheck140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369061_1000
+    Hglobal
+    (BacklundFiniteBandCheck140_369061_1000.of_140_369075049_1000000
       Hfinite)
     hT
 
@@ -36526,6 +37832,395 @@ theorem
     backlundGrid2EndpointSmoothRationalExpFacts140_369075049_1000000
     hT
 
+/-- Concrete-grid Backlund/Turing route from the compact cumulative
+endpoint-count certificate.  The smooth-main table is already verified,
+so the finite-band payload is now exactly the 116 cumulative zero-count
+equalities at the grid endpoints. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CumulativeEndpointCounts369075049
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hcounts :
+      BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite369075049_1000000
+    Hglobal
+    Hcounts.toEndpointCountRangeMainCertificate
+    hT
+
+/-- The compact cumulative endpoint-count certificate also feeds the
+still-finer `369061/1000` Platt--Trudgian handoff by restricting its
+verified finite-band check. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CumulativeEndpointCounts369075049_via369061
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hcounts :
+      BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369061_1000
+    Hglobal
+    (BacklundFiniteBandCheck140_369061_1000.of_140_369075049_1000000
+      (Hcounts.toEndpointCountRangeMainCertificate.toUniform25167Check.toFiniteBandCheck))
+    hT
+
+/-- The compact cumulative endpoint-count certificate also feeds the
+sharpened `3690603/10000` Platt--Trudgian handoff by restricting its
+verified finite-band check. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CumulativeEndpointCounts369075049_via3690603
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hcounts :
+      BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite3690603_10000
+    Hglobal
+    (BacklundFiniteBandCheck140_3690603_10000.of_140_369075049_1000000
+      (Hcounts.toEndpointCountRangeMainCertificate.toUniform25167Check.toFiniteBandCheck))
+    hT
+
+/-- The compact cumulative endpoint-count certificate needs only the
+sharpened Platt--Trudgian tail, not the full global `T ≥ e` estimate.
+The finite table handles `[140, 3690603/10000]`; the tail input handles
+`T ≥ exp (591096/100000)`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2CumulativeEndpointCounts369075049
+    (Htail : PlattTrudgianBacklundCut591096_100000TailInput)
+    (Hcounts :
+      BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_591096_100000Tail_and_finite
+    Htail
+    (BacklundFiniteBandCheck140_exp591096_100000.of_140_3690603_10000
+      (BacklundFiniteBandCheck140_3690603_10000.of_140_369075049_1000000
+        (Hcounts.toEndpointCountRangeMainCertificate.toUniform25167Check.toFiniteBandCheck)))
+    hT
+
+/-- Smaller current Backlund/Turing source package.
+
+Compared with `ClassicalBacklundTuringPlattGrid2CumulativeInputs`, this
+does not assume the full published Platt--Trudgian global estimate on
+`T ≥ e`; it assumes only the exact tail actually used after the finite
+grid handoff. -/
+structure ClassicalBacklundTuringPlattTailGrid2CumulativeInputs where
+  tail : PlattTrudgianBacklundCut591096_100000TailInput
+  endpointCounts :
+    BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000
+
+/-- The smaller tail/grid package supplies the good-height Backlund
+argument bound. -/
+noncomputable def
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toGoodHeightArgumentBound
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    exact
+      concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2CumulativeEndpointCounts369075049
+        I.tail I.endpointCounts hT
+
+/-- The smaller tail/grid package supplies the final classical proof
+inputs at `ClassicalBacklundTuringProof.K`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toProofInputs
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs) :
+    ClassicalBacklundTuringProofInputs :=
+  ClassicalBacklundTuringProofInputs.of_goodHeightArgumentBound
+    I.toGoodHeightArgumentBound
+
+/-- The smaller tail/grid package builds the packaged
+`ClassicalBacklundTuringTheorem`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toTheoremPackage
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs) :
+    ClassicalBacklundTuringTheorem :=
+  I.toProofInputs.toTheoremPackage
+
+/-- Final Backlund--Turing headline theorem from the smaller tail/grid
+source package. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattTailGrid2CumulativeBacklundTuringInputs
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2CumulativeEndpointCounts369075049
+    I.tail I.endpointCounts hT
+
+/-- The smaller tail/grid package supplies the generic proved
+Backlund/Turing package for `concreteS`, threshold `140`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toProvenBacklundTuringBound
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs) :
+    ProvenBacklundTuringBound where
+  S := concreteS
+  lower := 140
+  lower_ge_two_pi := by
+    have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+    linarith
+  halfLogPlusHalf := by
+    intro u hu
+    exact
+      concreteS_halfLogPlusHalf_of_plattTailGrid2CumulativeBacklundTuringInputs
+        I hu
+
+/-- The smaller tail/grid package supplies `HalfLogPlusHalfSBound`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toHalfLogPlusHalfSBound
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBound.toHalfLogPlusHalfSBound
+
+/-- The smaller tail/grid package supplies `TuringStyleSBound`, with
+`C = D = 1/2`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toTuringStyleSBound
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBound.toTuringStyleSBound
+
+/-- The smaller tail/grid half-log package is for `concreteS`. -/
+theorem
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toHalfLogPlusHalfSBound_S
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs) :
+    I.toHalfLogPlusHalfSBound.S = concreteS := rfl
+
+/-- The smaller tail/grid half-log package starts at height `140`. -/
+theorem
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toHalfLogPlusHalfSBound_lower
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs) :
+    I.toHalfLogPlusHalfSBound.lower = 140 := rfl
+
+/-- The smaller tail/grid Turing-style package is for `concreteS`. -/
+theorem
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toTuringStyleSBound_S
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs) :
+    I.toTuringStyleSBound.S = concreteS := rfl
+
+/-- The smaller tail/grid Turing-style package has `C = 1/2`. -/
+theorem
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toTuringStyleSBound_C
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs) :
+    I.toTuringStyleSBound.C = (1 / 2 : ℝ) := rfl
+
+/-- The smaller tail/grid Turing-style package has `D = 1/2`. -/
+theorem
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toTuringStyleSBound_D
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs) :
+    I.toTuringStyleSBound.D = (1 / 2 : ℝ) := rfl
+
+/-- The smaller tail/grid Turing-style package starts at height `140`. -/
+theorem
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toTuringStyleSBound_lower
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs) :
+    I.toTuringStyleSBound.lower = 140 := rfl
+
+/-- Direct bound field for the smaller tail/grid
+`HalfLogPlusHalfSBound`. -/
+theorem
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toHalfLogPlusHalfSBound_bound
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs)
+    {u : ℝ} (hu : (140 : ℝ) ≤ u) :
+    |I.toHalfLogPlusHalfSBound.S u|
+      ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.toHalfLogPlusHalfSBound.bound u hu
+
+/-- Direct bound field for the smaller tail/grid `TuringStyleSBound`. -/
+theorem
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.toTuringStyleSBound_bound
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs)
+    {u : ℝ} (hu : (140 : ℝ) ≤ u) :
+    |I.toTuringStyleSBound.S u|
+      ≤ I.toTuringStyleSBound.C * Real.log u + I.toTuringStyleSBound.D :=
+  I.toTuringStyleSBound.bound u hu
+
+/-- Envelope form exported directly from the smaller tail/grid package. -/
+theorem
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.concreteS_halfLogPlusHalfEnvelope
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.toProvenBacklundTuringBound.halfLogPlusHalfEnvelope
+    hT hy hregime hTu
+
+/-- High-log envelope exported directly from the smaller tail/grid
+package. -/
+theorem
+    ClassicalBacklundTuringPlattTailGrid2CumulativeInputs.concreteS_highLogEnvelope
+    (I : ClassicalBacklundTuringPlattTailGrid2CumulativeInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 49 / 20 :=
+  I.toProvenBacklundTuringBound.highLogEnvelope
+    hT hy hregime hTu
+
+/-- Compact current Backlund/Turing source package.
+
+The finite payload is the 116 cumulative endpoint zero-count equalities
+on the concrete two-unit grid; the smooth-main row arithmetic is already
+verified above. -/
+structure ClassicalBacklundTuringPlattGrid2CumulativeInputs where
+  global : PlattTrudgianBacklundGlobalInput
+  endpointCounts :
+    BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000
+
+/-- The compact grid/cumulative package supplies the good-height
+Backlund argument bound. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGrid2CumulativeInputs.toGoodHeightArgumentBound
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    exact
+      concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CumulativeEndpointCounts369075049_via3690603
+        I.global I.endpointCounts hT
+
+/-- The compact grid/cumulative package supplies the final classical
+proof inputs at `ClassicalBacklundTuringProof.K`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGrid2CumulativeInputs.toProofInputs
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs) :
+    ClassicalBacklundTuringProofInputs :=
+  ClassicalBacklundTuringProofInputs.of_goodHeightArgumentBound
+    I.toGoodHeightArgumentBound
+
+/-- The compact grid/cumulative package builds the packaged
+`ClassicalBacklundTuringTheorem`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGrid2CumulativeInputs.toTheoremPackage
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs) :
+    ClassicalBacklundTuringTheorem :=
+  I.toProofInputs.toTheoremPackage
+
+/-- Final Backlund--Turing headline theorem from the compact
+grid/cumulative source package. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattGrid2CumulativeBacklundTuringInputs
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CumulativeEndpointCounts369075049_via3690603
+    I.global I.endpointCounts hT
+
+/-- The compact grid/cumulative package supplies the generic proved
+Backlund/Turing package for `concreteS`, threshold `140`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGrid2CumulativeInputs.toProvenBacklundTuringBound
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs) :
+    ProvenBacklundTuringBound where
+  S := concreteS
+  lower := 140
+  lower_ge_two_pi := by
+    have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+    linarith
+  halfLogPlusHalf := by
+    intro u hu
+    exact
+      concreteS_halfLogPlusHalf_of_plattGrid2CumulativeBacklundTuringInputs
+        I hu
+
+/-- The compact grid/cumulative package supplies `HalfLogPlusHalfSBound`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGrid2CumulativeInputs.toHalfLogPlusHalfSBound
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBound.toHalfLogPlusHalfSBound
+
+/-- The compact grid/cumulative package supplies `TuringStyleSBound`,
+with `C = D = 1/2`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGrid2CumulativeInputs.toTuringStyleSBound
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBound.toTuringStyleSBound
+
+/-- The compact grid/cumulative half-log package is for `concreteS`. -/
+theorem ClassicalBacklundTuringPlattGrid2CumulativeInputs.toHalfLogPlusHalfSBound_S
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs) :
+    I.toHalfLogPlusHalfSBound.S = concreteS := rfl
+
+/-- The compact grid/cumulative half-log package starts at height `140`. -/
+theorem ClassicalBacklundTuringPlattGrid2CumulativeInputs.toHalfLogPlusHalfSBound_lower
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs) :
+    I.toHalfLogPlusHalfSBound.lower = 140 := rfl
+
+/-- The compact grid/cumulative Turing-style package is for `concreteS`. -/
+theorem ClassicalBacklundTuringPlattGrid2CumulativeInputs.toTuringStyleSBound_S
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs) :
+    I.toTuringStyleSBound.S = concreteS := rfl
+
+/-- The compact grid/cumulative Turing-style package has `C = 1/2`. -/
+theorem ClassicalBacklundTuringPlattGrid2CumulativeInputs.toTuringStyleSBound_C
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs) :
+    I.toTuringStyleSBound.C = (1 / 2 : ℝ) := rfl
+
+/-- The compact grid/cumulative Turing-style package has `D = 1/2`. -/
+theorem ClassicalBacklundTuringPlattGrid2CumulativeInputs.toTuringStyleSBound_D
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs) :
+    I.toTuringStyleSBound.D = (1 / 2 : ℝ) := rfl
+
+/-- The compact grid/cumulative Turing-style package starts at height
+`140`. -/
+theorem ClassicalBacklundTuringPlattGrid2CumulativeInputs.toTuringStyleSBound_lower
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs) :
+    I.toTuringStyleSBound.lower = 140 := rfl
+
+/-- Direct bound field for the compact grid/cumulative
+`HalfLogPlusHalfSBound`. -/
+theorem ClassicalBacklundTuringPlattGrid2CumulativeInputs.toHalfLogPlusHalfSBound_bound
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs)
+    {u : ℝ} (hu : (140 : ℝ) ≤ u) :
+    |I.toHalfLogPlusHalfSBound.S u|
+      ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.toHalfLogPlusHalfSBound.bound u hu
+
+/-- Direct bound field for the compact grid/cumulative
+`TuringStyleSBound`. -/
+theorem ClassicalBacklundTuringPlattGrid2CumulativeInputs.toTuringStyleSBound_bound
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs)
+    {u : ℝ} (hu : (140 : ℝ) ≤ u) :
+    |I.toTuringStyleSBound.S u|
+      ≤ I.toTuringStyleSBound.C * Real.log u
+          + I.toTuringStyleSBound.D :=
+  I.toTuringStyleSBound.bound u hu
+
+/-- Sharp concrete `S` envelope from the compact grid/cumulative
+Backlund/Turing source package. -/
+theorem
+    ClassicalBacklundTuringPlattGrid2CumulativeInputs.concreteS_halfLogPlusHalfEnvelope
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.toProvenBacklundTuringBound.halfLogPlusHalfEnvelope
+    hT140 hy hregime hTu
+
+/-- High-side concrete `S` log envelope from the compact
+grid/cumulative Backlund/Turing source package. -/
+theorem
+    ClassicalBacklundTuringPlattGrid2CumulativeInputs.concreteS_highLogEnvelope
+    (I : ClassicalBacklundTuringPlattGrid2CumulativeInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 49 / 20 :=
+  I.toProvenBacklundTuringBound.highLogEnvelope
+    hT140 hy hregime hTu
+
 /-- Final headline theorem from the global Platt--Trudgian argument
 estimate and endpoint count-range/main-term slabs on the finer
 Taylor-sharpened finite interval
@@ -36615,6 +38310,21 @@ noncomputable def
   BacklundGoodHeightArgumentBound.of_plattTrudgian_5911_1000Tail_and_finite
     (PlattTrudgianBacklundCut5911_1000TailInput.of_global Hglobal)
     (BacklundFiniteBandCheck140_exp5911_1000.of_140_369075049_1000000
+      Hfinite.toUniform25167Check.toFiniteBandCheck)
+
+/-- The improved decimal source pair also supplies the good-height
+Backlund argument bound through the tighter `exp (591097/100000)` tail
+split.  The finite rows are the same `[140, 369075049/1000000]` endpoint
+certificate; this theorem only tightens the analytic handoff point. -/
+noncomputable def
+    BacklundGoodHeightArgumentBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite369075049_1000000_tighterDecimal
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_369075049_1000000) :
+    BacklundGoodHeightArgumentBound :=
+  BacklundGoodHeightArgumentBound.of_plattTrudgian_591097_100000Tail_and_finite
+    (PlattTrudgianBacklundCut591097_100000TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp591097_100000.of_140_369075049_1000000
       Hfinite.toUniform25167Check.toFiniteBandCheck)
 
 /-- The `[140, 370]` fixed-pi exp endpoint-count source also supplies
@@ -65919,6 +67629,80 @@ theorem XiFluctuationTailValue.congr
   subst L₂
   exact H
 
+/-- 🌟🌟🌟 **PROVED — the concrete `trueKernelAdaptiveTail` is a named
+fluctuation tail value.**
+
+This connects the earlier convergence machinery to the Stieltjes
+tail-value interface: inside the adaptive band, the `Classical.choose`
+tail used by `trueKernelAdaptiveTail` is exactly an
+`XiFluctuationTailValue`. -/
+theorem XiFluctuationTailValue.of_trueKernelAdaptiveTail
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ)
+    (hT0_pos : 0 < T0) (hT0_le_10 : T0 ≤ 10)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero T0 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    {z : ℂ} {T : ℝ}
+    (h10 : 10 ≤ T) (h140 : T ≤ 140) (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T) :
+    XiFluctuationTailValue Dzero T0 T z
+      (trueKernelAdaptiveTail
+        Dzero T0 hT0_pos hT0_le_10 hTuring T z) :=
+  ⟨trueKernelAdaptiveTail_tendsto
+    Dzero T0 hT0_pos hT0_le_10 hTuring h10 h140 hy hregime⟩
+
+/-- 🌟🌟🌟 **PROVED — canonical mid-band `trueKernelAdaptiveTail` is a
+named fluctuation tail value.** -/
+theorem XiFluctuationTailValue.trueKernelAdaptiveTail_mid
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ)
+    (hT0_pos : 0 < T0) (hT0_le_10 : T0 ≤ 10)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero T0 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    {z : ℂ}
+    (hy : 0 < z.im)
+    (hmid :
+      ∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+        2 * (1 + |z.re| + z.im) ≤ T) :
+    XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z
+      (trueKernelAdaptiveTail
+        Dzero T0 hT0_pos hT0_le_10 hTuring
+        (canonicalAdaptiveT z) z) := by
+  have hc := canonicalAdaptiveT_spec hmid
+  exact
+    XiFluctuationTailValue.of_trueKernelAdaptiveTail
+      Dzero T0 hT0_pos hT0_le_10 hTuring
+      hc.1 hc.2.1 hy hc.2.2
+
+/-- 🌟🌟🌟 **PROVED — high-band `trueKernelAdaptiveTail` is a named
+fluctuation tail value.** -/
+theorem XiFluctuationTailValue.trueKernelAdaptiveTail_high
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ)
+    (hT0_pos : 0 < T0) (hT0_le_10 : T0 ≤ 10)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero T0 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    {z : ℂ} {T : ℝ}
+    (h10 : 10 ≤ T) (h140 : T ≤ 140) (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T) :
+    XiFluctuationTailValue Dzero T0 T z
+      (trueKernelAdaptiveTail
+        Dzero T0 hT0_pos hT0_le_10 hTuring T z) :=
+  XiFluctuationTailValue.of_trueKernelAdaptiveTail
+    Dzero T0 hT0_pos hT0_le_10 hTuring h10 h140 hy hregime
+
 /-- 📦 **`XiModelTailExplicitFormula`** — master source for both `decomp_high`
 and `decomp_mid`. Says for every `(z, T)` in the adaptive regime,
 there is a tail-limit value `L` with `Λ[Ξ](z) = M.model z + L`. -/
@@ -67954,6 +69738,51 @@ theorem logDerivativeResponse_indexedFiniteHadamardProduct
   rw [logDerivativeResponse_eq_logDeriv]
   exact logDeriv_indexedFiniteHadamardProduct hρ hs
 
+/-- 🌟🌟🌟 **PROVED — derivative of an indexed finite Hadamard product.**
+
+Away from the indexed zeros, the derivative of the finite genus-one
+product is the product times its regularized finite log-derivative sum.
+This is the finite algebraic identity underlying the later locally
+uniform derivative passage. -/
+theorem deriv_indexedFiniteHadamardProduct
+    {ι : Type*} {zeroLoc : ι → ℂ} {F : Finset ι} {s : ℂ}
+    (hρ : ∀ i ∈ F, zeroLoc i ≠ 0)
+    (hs : ∀ i ∈ F, s ≠ zeroLoc i) :
+    deriv (fun s' : ℂ => indexedFiniteHadamardProduct zeroLoc F s') s
+      =
+    indexedFiniteHadamardProduct zeroLoc F s
+      * finiteHadamardRegularizedSum zeroLoc F s := by
+  have hprod_ne :
+      indexedFiniteHadamardProduct zeroLoc F s ≠ 0 := by
+    unfold indexedFiniteHadamardProduct
+    exact Finset.prod_ne_zero_iff.mpr (by
+      intro i hi
+      exact hadamardGenus1Factor_ne_zero (hρ i hi) (hs i hi))
+  have hlog :=
+    logDeriv_indexedFiniteHadamardProduct
+      (zeroLoc := zeroLoc) (F := F) (s := s) hρ hs
+  unfold logDeriv at hlog
+  field_simp [hprod_ne] at hlog
+  rw [mul_comm] at hlog
+  exact hlog
+
+/-- 🌟🌟🌟 **PROVED — finite derivative response identity for indexed
+Hadamard products.**
+
+This is the same statement in the repository's
+`logDerivativeResponse` coordinates. -/
+theorem deriv_indexedFiniteHadamardProduct_eq_response
+    {ι : Type*} {zeroLoc : ι → ℂ} {F : Finset ι} {s : ℂ}
+    (hρ : ∀ i ∈ F, zeroLoc i ≠ 0)
+    (hs : ∀ i ∈ F, s ≠ zeroLoc i) :
+    deriv (fun s' : ℂ => indexedFiniteHadamardProduct zeroLoc F s') s
+      =
+    indexedFiniteHadamardProduct zeroLoc F s
+      * logDerivativeResponse
+          (fun s' : ℂ => indexedFiniteHadamardProduct zeroLoc F s') s := by
+  rw [logDerivativeResponse_indexedFiniteHadamardProduct hρ hs]
+  exact deriv_indexedFiniteHadamardProduct hρ hs
+
 -- =====================================================================
 -- §CCCXXV. Locally-uniform Hadamard product analytic data
 -- =====================================================================
@@ -68158,6 +69987,220 @@ theorem logDerivativeResponse_indexedFiniteHadamardProduct_at_exhaustion
       = finiteHadamardRegularizedSum zeroLoc (Hex.exhaust n) s :=
   logDerivativeResponse_indexedFiniteHadamardProduct hρ hs
 
+/-- ⭐ **PROVED — finite-truncation derivative identity at every
+exhaustion stage.** -/
+theorem deriv_indexedFiniteHadamardProduct_at_exhaustion
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (Hex : HadamardFiniteExhaustion zeroLoc)
+    {s : ℂ} {n : ℕ}
+    (hρ : ∀ i ∈ Hex.exhaust n, zeroLoc i ≠ 0)
+    (hs : ∀ i ∈ Hex.exhaust n, s ≠ zeroLoc i) :
+    deriv
+        (fun s' : ℂ =>
+          indexedFiniteHadamardProduct zeroLoc (Hex.exhaust n) s') s
+      =
+    indexedFiniteHadamardProduct zeroLoc (Hex.exhaust n) s
+      * finiteHadamardRegularizedSum zeroLoc (Hex.exhaust n) s :=
+  deriv_indexedFiniteHadamardProduct hρ hs
+
+/-- ⭐ **PROVED — indexed finite Hadamard products are differentiable
+everywhere.** This is the finite holomorphicity input needed by
+Mathlib's locally-uniform derivative theorem. -/
+theorem indexedFiniteHadamardProduct_differentiableAt
+    {ι : Type*} (zeroLoc : ι → ℂ) (F : Finset ι) (s : ℂ) :
+    DifferentiableAt ℂ (fun s' : ℂ =>
+      indexedFiniteHadamardProduct zeroLoc F s') s := by
+  unfold indexedFiniteHadamardProduct
+  exact DifferentiableAt.finset_prod (fun i _hi =>
+    hadamardGenus1Factor_differentiableAt (zeroLoc i) s)
+
+/-- ⭐ **PROVED — indexed finite Hadamard products are differentiable on
+every region.** -/
+theorem indexedFiniteHadamardProduct_differentiableOn
+    {ι : Type*} (zeroLoc : ι → ℂ) (F : Finset ι) (U : Set ℂ) :
+    DifferentiableOn ℂ
+      (fun s' : ℂ => indexedFiniteHadamardProduct zeroLoc F s') U := by
+  intro s _hs
+  exact (indexedFiniteHadamardProduct_differentiableAt zeroLoc F s).differentiableWithinAt
+
+/-- 📦 **`HadamardFiniteDerivativeLimitData`** — the hard derivative
+passage in finite-exhaustion coordinates.
+
+This is the core locally-uniform derivative-interchange obligation:
+finite genus-one product derivatives must tend to the derivative of the
+infinite Hadamard product on the target region. The separate theorem
+below shows that, together with product/sum convergence from
+`HadamardFiniteExhaustion`, this implies the desired infinite
+log-derivative equals the regularized `tsum`. -/
+structure HadamardFiniteDerivativeLimitData
+    {ι : Type*} (zeroLoc : ι → ℂ)
+    (Hex : HadamardFiniteExhaustion zeroLoc) : Type where
+  region : Set ℂ
+  derivative_tendsto :
+    ∀ s ∈ region,
+      Tendsto
+        (fun n : ℕ =>
+          deriv
+            (fun s' : ℂ =>
+              indexedFiniteHadamardProduct zeroLoc (Hex.exhaust n) s') s)
+        Filter.atTop
+        (𝓝 (deriv (infiniteHadamardProduct zeroLoc) s))
+
+/-- 📦 **`HadamardProductLocallyUniformLimitData`** — the genuine
+Weierstrass-style locally-uniform product convergence input on an open
+region.
+
+Mathlib's complex locally-uniform limit theorem then gives locally
+uniform convergence of derivatives, which is exactly
+`HadamardFiniteDerivativeLimitData`. -/
+structure HadamardProductLocallyUniformLimitData
+    {ι : Type*} (zeroLoc : ι → ℂ)
+    (Hex : HadamardFiniteExhaustion zeroLoc) : Type where
+  region : Set ℂ
+  isOpen_region : IsOpen region
+  locally_uniform_product :
+    TendstoLocallyUniformlyOn
+      (fun n : ℕ => fun s : ℂ =>
+        indexedFiniteHadamardProduct zeroLoc (Hex.exhaust n) s)
+      (infiniteHadamardProduct zeroLoc)
+      Filter.atTop
+      region
+
+/-- 🌟🌟🌟🌟 **PROVED — locally-uniform product convergence gives the
+finite-derivative limit data.**
+
+This is the actual Weierstrass derivative passage: finite Hadamard
+products are holomorphic, and Mathlib's
+`TendstoLocallyUniformlyOn.deriv` converts locally-uniform convergence
+of products into locally-uniform convergence of derivatives. Pointwise
+derivative convergence is then extracted by `tendsto_at`. -/
+def HadamardFiniteDerivativeLimitData.of_locallyUniformProduct
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    {Hex : HadamardFiniteExhaustion zeroLoc}
+    (Hluc : HadamardProductLocallyUniformLimitData zeroLoc Hex) :
+    HadamardFiniteDerivativeLimitData zeroLoc Hex := by
+  let F : ℕ → ℂ → ℂ := fun n s =>
+    indexedFiniteHadamardProduct zeroLoc (Hex.exhaust n) s
+  have hfinite_diff :
+      ∀ᶠ n : ℕ in Filter.atTop,
+        DifferentiableOn ℂ (F n) Hluc.region := by
+    filter_upwards [] with n
+    exact indexedFiniteHadamardProduct_differentiableOn
+      zeroLoc (Hex.exhaust n) Hluc.region
+  have hderiv_luc :
+      TendstoLocallyUniformlyOn
+        (deriv ∘ F)
+        (deriv (infiniteHadamardProduct zeroLoc))
+        Filter.atTop
+        Hluc.region :=
+    Hluc.locally_uniform_product.deriv hfinite_diff Hluc.isOpen_region
+  refine
+    { region := Hluc.region
+      derivative_tendsto := ?_ }
+  intro s hs
+  simpa [F, Function.comp_def] using hderiv_luc.tendsto_at hs
+
+/-- 🌟🌟🌟 **PROVED — the locally-uniform Hadamard product limit is
+differentiable on its open region.**
+
+This is the other half of the Weierstrass theorem: the same
+locally-uniform convergence input that gives derivative convergence also
+proves holomorphicity of the infinite product on the region. -/
+theorem HadamardProductLocallyUniformLimitData.infinite_differentiableOn
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    {Hex : HadamardFiniteExhaustion zeroLoc}
+    (Hluc : HadamardProductLocallyUniformLimitData zeroLoc Hex) :
+    DifferentiableOn ℂ
+      (infiniteHadamardProduct zeroLoc) Hluc.region := by
+  let F : ℕ → ℂ → ℂ := fun n s =>
+    indexedFiniteHadamardProduct zeroLoc (Hex.exhaust n) s
+  have hfinite_diff :
+      ∀ᶠ n : ℕ in Filter.atTop,
+        DifferentiableOn ℂ (F n) Hluc.region := by
+    filter_upwards [] with n
+    exact indexedFiniteHadamardProduct_differentiableOn
+      zeroLoc (Hex.exhaust n) Hluc.region
+  simpa [F] using
+    Hluc.locally_uniform_product.differentiableOn
+      hfinite_diff Hluc.isOpen_region
+
+/-- 🌟🌟🌟 **PROVED — pointwise differentiability from locally-uniform
+Hadamard product convergence on an open region.** -/
+theorem HadamardProductLocallyUniformLimitData.infinite_differentiableAt
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    {Hex : HadamardFiniteExhaustion zeroLoc}
+    (Hluc : HadamardProductLocallyUniformLimitData zeroLoc Hex)
+    {s : ℂ} (hs : s ∈ Hluc.region) :
+    DifferentiableAt ℂ (infiniteHadamardProduct zeroLoc) s :=
+  Hluc.infinite_differentiableOn.differentiableAt
+    (Hluc.isOpen_region.mem_nhds hs)
+
+/-- 🌟🌟🌟🌟 **PROVED — derivative-limit passage gives the infinite
+Hadamard log-derivative formula.**
+
+This is the main algebraic core of the LUC/log-derivative interchange:
+if finite product derivatives converge to the derivative of the
+infinite product, then the finite identity
+`P_F' = P_F · Σ_F` passes to the limit and yields
+`Λ[P] = Σ`. The genuinely hard analytic work is isolated in
+`HadamardFiniteDerivativeLimitData.derivative_tendsto`. -/
+theorem HadamardFiniteDerivativeLimitData.logDeriv_eq_tsum_at
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    {Hex : HadamardFiniteExhaustion zeroLoc}
+    (Hderiv : HadamardFiniteDerivativeLimitData zeroLoc Hex)
+    {s : ℂ}
+    (hs_region : s ∈ Hderiv.region)
+    (hzero_ne : ∀ i : ι, zeroLoc i ≠ 0)
+    (hs_ne : ∀ i : ι, s ≠ zeroLoc i)
+    (hprod_ne : infiniteHadamardProduct zeroLoc s ≠ 0) :
+    logDerivativeResponse (infiniteHadamardProduct zeroLoc) s
+      = hadamardRegularizedLogDerivSeries zeroLoc s := by
+  have hderiv_lim := Hderiv.derivative_tendsto s hs_region
+  have hprod_lim := Hex.product_tendsto s
+  have hsum_lim := Hex.regularized_sum_tendsto s
+  have hmul_lim :
+      Tendsto
+        (fun n : ℕ =>
+          indexedFiniteHadamardProduct zeroLoc (Hex.exhaust n) s
+            * finiteHadamardRegularizedSum zeroLoc (Hex.exhaust n) s)
+        Filter.atTop
+        (𝓝 (infiniteHadamardProduct zeroLoc s
+          * hadamardRegularizedLogDerivSeries zeroLoc s)) :=
+    hprod_lim.mul hsum_lim
+  have hderiv_eq_mul :
+      (fun n : ℕ =>
+          deriv
+            (fun s' : ℂ =>
+              indexedFiniteHadamardProduct zeroLoc (Hex.exhaust n) s') s)
+        =ᶠ[Filter.atTop]
+      (fun n : ℕ =>
+          indexedFiniteHadamardProduct zeroLoc (Hex.exhaust n) s
+            * finiteHadamardRegularizedSum zeroLoc (Hex.exhaust n) s) := by
+    filter_upwards [] with n
+    exact deriv_indexedFiniteHadamardProduct_at_exhaustion
+      Hex
+      (fun i _hi => hzero_ne i)
+      (fun i _hi => hs_ne i)
+  have hderiv_mul_lim :
+      Tendsto
+        (fun n : ℕ =>
+          deriv
+            (fun s' : ℂ =>
+              indexedFiniteHadamardProduct zeroLoc (Hex.exhaust n) s') s)
+        Filter.atTop
+        (𝓝 (infiniteHadamardProduct zeroLoc s
+          * hadamardRegularizedLogDerivSeries zeroLoc s)) :=
+    hmul_lim.congr' hderiv_eq_mul.symm
+  have hderiv_eq :
+      deriv (infiniteHadamardProduct zeroLoc) s
+        =
+      infiniteHadamardProduct zeroLoc s
+        * hadamardRegularizedLogDerivSeries zeroLoc s :=
+    tendsto_nhds_unique hderiv_lim hderiv_mul_lim
+  unfold logDerivativeResponse
+  rw [hderiv_eq]
+  field_simp [hprod_ne]
+
 -- =====================================================================
 -- §CCCXXIX. Regularized Hadamard term — algebraic identity + norm
 -- =====================================================================
@@ -68225,6 +70268,40 @@ structure HadamardZeroInvSqSummability
   eventually_large :
     ∀ s : ℂ, ∀ᶠ i in Filter.cofinite, 2 * ‖s‖ ≤ ‖zeroLoc i‖
 
+/-- 📦 **`HadamardZeroNormProper`** — classical local finiteness/properness
+of the zero locations: every closed norm disk contains only finitely many
+indexed zeros. -/
+structure HadamardZeroNormProper
+    {ι : Type*} (zeroLoc : ι → ℂ) : Prop where
+  finite_norm_le :
+    ∀ R : ℝ, { i : ι | ‖zeroLoc i‖ ≤ R }.Finite
+
+/-- 🌟🌟 **PROVED — norm-proper zero locations are eventually large in the
+cofinite filter.** This discharges the largeness half of the Hadamard
+inverse-square zero-distribution bundle from classical local finiteness in
+bounded disks. -/
+theorem HadamardZeroNormProper.eventually_large
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroNormProper zeroLoc) :
+    ∀ s : ℂ, ∀ᶠ i in Filter.cofinite, 2 * ‖s‖ ≤ ‖zeroLoc i‖ := by
+  intro s
+  rw [Filter.eventually_cofinite]
+  exact (H.finite_norm_le (2 * ‖s‖)).subset (by
+    intro i hi
+    exact (not_le.mp hi).le)
+
+/-- 🌟🌟 **PROVED — build inverse-square Hadamard zero data from the usual
+summability plus local-finiteness/properness statement.** -/
+theorem HadamardZeroInvSqSummability.of_invSqSummable_normProper
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (hzero : ∀ i, zeroLoc i ≠ 0)
+    (hinv : Summable fun i : ι => (‖zeroLoc i‖ ^ 2)⁻¹)
+    (Hproper : HadamardZeroNormProper zeroLoc) :
+    HadamardZeroInvSqSummability zeroLoc :=
+  { zero_ne := hzero
+    inv_sq_summable := hinv
+    eventually_large := Hproper.eventually_large }
+
 /-- 🌟🌟🌟 **PROVED — regularized series is summable from inv-sq
 summability + eventually-large.** -/
 theorem summable_hadamard_regularized_terms_of_inv_sq
@@ -68256,6 +70333,43 @@ theorem HadamardZeroInvSqSummability.summable_regularized
     Summable fun i : ι => 1 / (s - zeroLoc i) + 1 / zeroLoc i :=
   summable_hadamard_regularized_terms_of_inv_sq
     H.zero_ne hs_ne H.inv_sq_summable (H.eventually_large s)
+
+/-- 🌟🌟🌟🌟 **PROVED — build Hadamard log-derivative limit data from
+finite derivative convergence.**
+
+This is the usable hard-Hadamard constructor: inverse-square zero
+distribution supplies summability; no-collision supplies the AFZ
+denominator guards; finite derivative convergence supplies the
+log-derivative/`tsum` identity through
+`HadamardFiniteDerivativeLimitData.logDeriv_eq_tsum_at`. -/
+noncomputable def HadamardLogDerivLimitData.of_finiteDerivativeLimitData
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    {Hex : HadamardFiniteExhaustion zeroLoc}
+    (Hinv : HadamardZeroInvSqSummability zeroLoc)
+    (Hderiv : HadamardFiniteDerivativeLimitData zeroLoc Hex)
+    (Hdiff :
+      ∀ s ∈ Hderiv.region,
+        DifferentiableAt ℂ (infiniteHadamardProduct zeroLoc) s)
+    (Hno_collision :
+      ∀ s ∈ Hderiv.region, ∀ i : ι, s ≠ zeroLoc i)
+    (Hprod_ne :
+      ∀ s ∈ Hderiv.region,
+        infiniteHadamardProduct zeroLoc s ≠ 0) :
+    HadamardLogDerivLimitData zeroLoc :=
+  { region := Hderiv.region
+    product_differentiable_at := Hdiff
+    regularized_summable_at := by
+      intro s hs
+      exact Hinv.summable_regularized (Hno_collision s hs)
+    logDeriv_eq_tsum_at := by
+      intro s hs
+      exact
+        HadamardFiniteDerivativeLimitData.logDeriv_eq_tsum_at
+          Hderiv
+          hs
+          Hinv.zero_ne
+          (Hno_collision s hs)
+          (Hprod_ne s hs) }
 
 -- =====================================================================
 -- §CCCXXXII. Genus-one Taylor bound (data + specialization)
@@ -68426,6 +70540,97 @@ structure HadamardProductLUCLogDerivData
     ∀ s ∈ region,
       logDerivativeResponse (infiniteHadamardProduct zeroLoc) s
         = hadamardRegularizedLogDerivSeries zeroLoc s
+
+/-- 🌟🌟🌟🌟 **PROVED — build the LUC/log-derivative data package from
+finite derivative convergence.**
+
+The locally-uniform product convergence itself is still an analytic
+input, but the derivative/log-derivative interchange is now reduced to
+the explicit finite derivative convergence target above. -/
+noncomputable def HadamardProductLUCLogDerivData.of_finiteDerivativeLimitData
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    {Hex : HadamardFiniteExhaustion zeroLoc}
+    (Hinv : HadamardZeroInvSqSummability zeroLoc)
+    (Hderiv : HadamardFiniteDerivativeLimitData zeroLoc Hex)
+    (HlucProduct :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct zeroLoc F s)
+        (infiniteHadamardProduct zeroLoc)
+        Filter.atTop
+        Hderiv.region)
+    (Hdiff :
+      ∀ s ∈ Hderiv.region,
+        DifferentiableAt ℂ (infiniteHadamardProduct zeroLoc) s)
+    (Hno_collision :
+      ∀ s ∈ Hderiv.region, ∀ i : ι, s ≠ zeroLoc i)
+    (Hprod_ne :
+      ∀ s ∈ Hderiv.region,
+        infiniteHadamardProduct zeroLoc s ≠ 0) :
+    HadamardProductLUCLogDerivData zeroLoc :=
+  { region := Hderiv.region
+    locally_uniform_product := by
+      simpa using HlucProduct
+    infinite_differentiable_at := Hdiff
+    logDeriv_eq_tsum := by
+      intro s hs
+      exact
+        (HadamardLogDerivLimitData.of_finiteDerivativeLimitData
+          Hinv Hderiv Hdiff Hno_collision Hprod_ne).logDeriv_eq_tsum_at s hs }
+
+/-- 🌟🌟🌟🌟🌟 **PROVED — build the LUC/log-derivative package directly
+from locally-uniform finite Hadamard product convergence.**
+
+This removes the artificial `HadamardFiniteDerivativeLimitData` and
+infinite-product differentiability assumptions from the public analytic
+interface: both are now consequences of the open-region locally-uniform
+Weierstrass input above. -/
+noncomputable def
+    HadamardProductLUCLogDerivData.of_locallyUniformProductLimitData
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    {Hex : HadamardFiniteExhaustion zeroLoc}
+    (Hinv : HadamardZeroInvSqSummability zeroLoc)
+    (HlucSeq : HadamardProductLocallyUniformLimitData zeroLoc Hex)
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct zeroLoc F s)
+        (infiniteHadamardProduct zeroLoc)
+        Filter.atTop
+        HlucSeq.region)
+    (Hno_collision :
+      ∀ s ∈ HlucSeq.region, ∀ i : ι, s ≠ zeroLoc i)
+    (Hprod_ne :
+      ∀ s ∈ HlucSeq.region,
+        infiniteHadamardProduct zeroLoc s ≠ 0) :
+    HadamardProductLUCLogDerivData zeroLoc := by
+  let Hderiv : HadamardFiniteDerivativeLimitData zeroLoc Hex :=
+    HadamardFiniteDerivativeLimitData.of_locallyUniformProduct HlucSeq
+  exact
+    HadamardProductLUCLogDerivData.of_finiteDerivativeLimitData
+      Hinv
+      Hderiv
+      (by
+        simpa [Hderiv, HadamardFiniteDerivativeLimitData.of_locallyUniformProduct]
+          using HlucFinset)
+      (by
+        intro s hs
+        exact HlucSeq.infinite_differentiableAt
+          (by
+            simpa [Hderiv, HadamardFiniteDerivativeLimitData.of_locallyUniformProduct]
+              using hs))
+      (by
+        intro s hs
+        exact Hno_collision s
+          (by
+            simpa [Hderiv, HadamardFiniteDerivativeLimitData.of_locallyUniformProduct]
+              using hs))
+      (by
+        intro s hs
+        exact Hprod_ne s
+          (by
+            simpa [Hderiv, HadamardFiniteDerivativeLimitData.of_locallyUniformProduct]
+              using hs))
 
 -- =====================================================================
 -- §CCCXXXVII. Bridge LUC + invSq → HadamardLogDerivLimitData
@@ -68708,6 +70913,112 @@ structure StieltjesHighTailEqualityAFZ
         cloudModel zeros100ceil z
           + zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
           + L
+
+/-- 📦 **`StieltjesMidTailResidualIdentityAFZ`** — the bare mid-band
+residual form of the Stieltjes explicit formula.
+
+This is the equality an IBP/explicit-formula proof naturally gives:
+after subtracting the finite cloud and the smooth density model, the
+remaining zero contribution is the named fluctuation tail value. -/
+structure StieltjesMidTailResidualIdentityAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ)
+    (ZC : ℂ → ℂ) : Prop where
+  residual_eq :
+    ∀ {z : ℂ} {L : ℂ},
+      0 < z.im →
+      XiPullback z ≠ 0 →
+      (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+        2 * (1 + |z.re| + z.im) ≤ T) →
+      XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L →
+      ZC z
+        - cloudModel zeros100ceil z
+        - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+        = L
+
+/-- 📦 **`StieltjesHighTailResidualIdentityAFZ`** — the bare high-band
+residual form of the Stieltjes explicit formula. -/
+structure StieltjesHighTailResidualIdentityAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ)
+    (ZC : ℂ → ℂ) : Prop where
+  residual_eq :
+    ∀ {z : ℂ} {T : ℝ} {L : ℂ},
+      140 ≤ T →
+      0 < z.im →
+      XiPullback z ≠ 0 →
+      2 * (1 + |z.re| + z.im) ≤ T →
+      XiFluctuationTailValue Dzero T0 T z L →
+      ZC z
+        - cloudModel zeros100ceil z
+        - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+        = L
+
+/-- 🌟🌟 **PROVED — mid residual identity gives the usual mid Stieltjes
+tail equality.** -/
+theorem StieltjesMidTailEqualityAFZ.of_residualIdentity
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (H : StieltjesMidTailResidualIdentityAFZ Dzero T0 ZC) :
+    StieltjesMidTailEqualityAFZ Dzero T0 ZC := by
+  refine ⟨?_⟩
+  intro z L hy hne hmid hL
+  have h := H.residual_eq hy hne hmid hL
+  linear_combination h
+
+/-- 🌟🌟 **PROVED — mid Stieltjes tail equality gives the bare residual
+identity.** -/
+theorem StieltjesMidTailResidualIdentityAFZ.of_tailEquality
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (H : StieltjesMidTailEqualityAFZ Dzero T0 ZC) :
+    StieltjesMidTailResidualIdentityAFZ Dzero T0 ZC := by
+  refine ⟨?_⟩
+  intro z L hy hne hmid hL
+  have h := H.mid_eq hy hne hmid hL
+  linear_combination h
+
+/-- 🌟🌟 **PROVED — mid Stieltjes equality is equivalent to the bare
+residual identity.** -/
+theorem stieltjesMidTailEqualityAFZ_iff_residualIdentity
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ} :
+    StieltjesMidTailEqualityAFZ Dzero T0 ZC
+      ↔ StieltjesMidTailResidualIdentityAFZ Dzero T0 ZC :=
+  ⟨StieltjesMidTailResidualIdentityAFZ.of_tailEquality,
+    StieltjesMidTailEqualityAFZ.of_residualIdentity⟩
+
+/-- 🌟🌟 **PROVED — high residual identity gives the usual high Stieltjes
+tail equality.** -/
+theorem StieltjesHighTailEqualityAFZ.of_residualIdentity
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (H : StieltjesHighTailResidualIdentityAFZ Dzero T0 ZC) :
+    StieltjesHighTailEqualityAFZ Dzero T0 ZC := by
+  refine ⟨?_⟩
+  intro z T L hT hy hne hreg hL
+  have h := H.residual_eq hT hy hne hreg hL
+  linear_combination h
+
+/-- 🌟🌟 **PROVED — high Stieltjes tail equality gives the bare residual
+identity.** -/
+theorem StieltjesHighTailResidualIdentityAFZ.of_tailEquality
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (H : StieltjesHighTailEqualityAFZ Dzero T0 ZC) :
+    StieltjesHighTailResidualIdentityAFZ Dzero T0 ZC := by
+  refine ⟨?_⟩
+  intro z T L hT hy hne hreg hL
+  have h := H.high_eq hT hy hne hreg hL
+  linear_combination h
+
+/-- 🌟🌟 **PROVED — high Stieltjes equality is equivalent to the bare
+residual identity.** -/
+theorem stieltjesHighTailEqualityAFZ_iff_residualIdentity
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ} :
+    StieltjesHighTailEqualityAFZ Dzero T0 ZC
+      ↔ StieltjesHighTailResidualIdentityAFZ Dzero T0 ZC :=
+  ⟨StieltjesHighTailResidualIdentityAFZ.of_tailEquality,
+    StieltjesHighTailEqualityAFZ.of_residualIdentity⟩
 
 /-- 📦 **`StieltjesLowEqualityAFZ`** — AFZ Stieltjes equality in the
 LOW band (bounded `[11, 14]`). Wraps
@@ -69606,6 +71917,42 @@ theorem ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit_Z_ge_15
     HlowSplit
     (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
 
+/-- 🌟🌟🌟 **PROVED — `ClassicalPathBStieltjesInputsAFZ` from bare
+mid/high residual identities plus the low zero split.**
+
+This is the Stieltjes-facing formulation closest to the explicit formula:
+mid/high identify the residual after subtracting cloud and smooth terms,
+while low supplies the bounded first-gap cloud/tail split. -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_midHighResidual_lowSplit
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (Hmid : StieltjesMidTailResidualIdentityAFZ Dzero T0 ZC)
+    (Hhigh : StieltjesHighTailResidualIdentityAFZ Dzero T0 ZC)
+    (HlowSplit : LowZeroContributionSplitAFZ Dzero T0 ZC)
+    (Hstarts : DzeroStartsAfter Dzero 14) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit
+    (StieltjesMidTailEqualityAFZ.of_residualIdentity Hmid)
+    (StieltjesHighTailEqualityAFZ.of_residualIdentity Hhigh)
+    HlowSplit
+    Hstarts
+
+/-- 🌟🌟🌟 **PROVED — standard `Z ≥ 15` version of the bare-residual
+Stieltjes constructor.** -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_midHighResidual_lowSplit_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hmid : StieltjesMidTailResidualIdentityAFZ Dzero T0 ZC)
+    (Hhigh : StieltjesHighTailResidualIdentityAFZ Dzero T0 ZC)
+    (HlowSplit : LowZeroContributionSplitAFZ Dzero T0 ZC) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  ClassicalPathBStieltjesInputsAFZ.of_midHighResidual_lowSplit
+    Hmid
+    Hhigh
+    HlowSplit
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+
 -- =====================================================================
 -- §CCCLXV. Final Path B front door using low split directly
 -- =====================================================================
@@ -69865,6 +72212,52 @@ structure LowCloudTailSplitAFZ
       LowFirstZeroGapNoAtoms Dzero →
         ZC z = finiteCloudContribution z + tailContribution z
 
+/-- 🌟🌟 **PROVED — build the low cloud/tail split when the zero
+contribution is literally the sum of a cloud contribution and a tail
+contribution.** The remaining obligations are the two analytic
+identifications of those summands. -/
+theorem LowCloudTailSplitAFZ.of_fun_sum
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ZC finiteCloudContribution tailContribution : ℂ → ℂ}
+    (hZC :
+      ∀ z : ℂ,
+        ZC z = finiteCloudContribution z + tailContribution z)
+    (hcloud :
+      ∀ z : ℂ, lowCompactRegion z →
+        finiteCloudContribution z = cloudModel zeros100ceil z)
+    (htail :
+      ∀ z : ℂ, lowCompactRegion z → XiPullback z ≠ 0 →
+        LowFirstZeroGapNoAtoms Dzero →
+          tailContribution z = lowTailZeroContribution Dzero T0 z) :
+    LowCloudTailSplitAFZ Dzero T0 ZC
+      finiteCloudContribution tailContribution :=
+  { cloud_exact := hcloud
+    tail_exact := htail
+    split := by
+      intro z _hz _hne _Hno
+      exact hZC z }
+
+/-- 🌟🌟 **PROVED — the explicit low model has the atomic cloud/tail
+split by definition.** This is the normalized target for the low-band
+Stieltjes explicit formula. -/
+theorem LowCloudTailSplitAFZ.explicit_lowModel
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ) :
+    LowCloudTailSplitAFZ
+      Dzero T0
+      (fun z : ℂ =>
+        cloudModel zeros100ceil z + lowTailZeroContribution Dzero T0 z)
+      (fun z : ℂ => cloudModel zeros100ceil z)
+      (lowTailZeroContribution Dzero T0) :=
+  { cloud_exact := by
+      intro z _hz
+      rfl
+    tail_exact := by
+      intro z _hz _hne _Hno
+      rfl
+    split := by
+      intro z _hz _hne _Hno
+      rfl }
+
 /-- 🌟🌟🌟 **PROVED — `LowZeroContributionSplitAFZ` from the atomic
 cloud/tail split.** Reduces the §CCCLX target to three independent
 identities. -/
@@ -69878,6 +72271,43 @@ theorem LowZeroContributionSplitAFZ.of_cloudTailSplit
   intro z hz hne Hno
   rw [H.split z hz hne Hno, H.cloud_exact z hz,
       H.tail_exact z hz hne Hno]
+
+/-- 🌟🌟 **PROVED — the explicit low model satisfies the genuine
+low zero-contribution split.** -/
+theorem LowZeroContributionSplitAFZ.explicit_lowModel
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData) (T0 : ℝ) :
+    LowZeroContributionSplitAFZ
+      Dzero T0
+      (fun z : ℂ =>
+        cloudModel zeros100ceil z + lowTailZeroContribution Dzero T0 z) :=
+  LowZeroContributionSplitAFZ.of_cloudTailSplit
+    (LowCloudTailSplitAFZ.explicit_lowModel Dzero T0)
+
+/-- 🌟🌟 **PROVED — the explicit low model satisfies the low Stieltjes
+equality once the first-zero start condition is available.** -/
+theorem StieltjesLowEqualityAFZ.explicit_lowModel_of_startsAfter
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    (Hstarts : DzeroStartsAfter Dzero 14) :
+    StieltjesLowEqualityAFZ
+      Dzero T0
+      (fun z : ℂ =>
+        cloudModel zeros100ceil z + lowTailZeroContribution Dzero T0 z) :=
+  StieltjesLowEqualityAFZ.of_lowZeroContributionSplit
+    (LowZeroContributionSplitAFZ.explicit_lowModel Dzero T0)
+    Hstarts
+
+/-- 🌟🌟 **PROVED — the explicit low model satisfies the low Stieltjes
+equality under the standard `Z ≥ 15` first-zero-gap hypothesis.** -/
+theorem StieltjesLowEqualityAFZ.explicit_lowModel_of_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    (h_Z_ge_15 :
+      ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i) :
+    StieltjesLowEqualityAFZ
+      Dzero T0
+      (fun z : ℂ =>
+        cloudModel zeros100ceil z + lowTailZeroContribution Dzero T0 z) :=
+  StieltjesLowEqualityAFZ.explicit_lowModel_of_startsAfter
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
 
 /-- ⭐ **PROVED — atomic split is identity-shaped.** Records that the
 new atomic reducer fits the §CCCLXVII "pure identities" classification. -/
@@ -70008,6 +72438,16 @@ theorem CompletedXiZeroInvSqDistribution.toHadamardZeroInvSqSummability
   { zero_ne := HZ.zeroLoc_ne_zero
     inv_sq_summable := H.inv_sq_summable
     eventually_large := H.eventually_large }
+
+/-- 🌟🌟 **PROVED — completed-ξ zero distribution from inverse-square
+summability plus norm-properness of the concrete zero system.** -/
+theorem CompletedXiZeroInvSqDistribution.of_invSqSummable_normProper
+    {ι : Type} {HZ : ConcreteCompletedXiZeroSystem ι}
+    (hinv : Summable fun i : ι => (‖HZ.zeroLoc i‖ ^ 2)⁻¹)
+    (Hproper : HadamardZeroNormProper HZ.zeroLoc) :
+    CompletedXiZeroInvSqDistribution HZ :=
+  { inv_sq_summable := hinv
+    eventually_large := Hproper.eventually_large }
 
 -- =====================================================================
 -- §CCCLXXV. Concrete Hadamard inputs bundle
@@ -70200,6 +72640,60 @@ noncomputable def HadamardProductLUCOnXiNonzeroData.of_LUCLogDerivData
       intro s hs
       exact Hluc.logDeriv_eq_tsum s (h_region s hs) }
 
+/-- 🌟🌟🌟🌟 **PROVED — ξ-nonzero LUC/log-derivative data from finite
+derivative convergence and the actual Hadamard factorization.**
+
+This removes two artificial guards from the Hadamard interchange step:
+no-collision follows from the zero-system equation
+`completedXiFunction (zeroLoc i) = 0`, and nonvanishing of the infinite
+product follows from the factorization at every point where
+`completedXiFunction s ≠ 0`. -/
+noncomputable def HadamardProductLUCOnXiNonzeroData.of_finiteDerivativeLimitData
+    {ι : Type*} {zeroLoc : ι → ℂ} {prefactor : ℂ → ℂ}
+    {Hex : HadamardFiniteExhaustion zeroLoc}
+    (Hinv : HadamardZeroInvSqSummability zeroLoc)
+    (Hderiv : HadamardFiniteDerivativeLimitData zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hderiv.region)
+    (HlucProduct :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct zeroLoc F s)
+        (infiniteHadamardProduct zeroLoc)
+        Filter.atTop
+        Hderiv.region)
+    (Hdiff :
+      ∀ s ∈ Hderiv.region,
+        DifferentiableAt ℂ (infiniteHadamardProduct zeroLoc) s)
+    (Hzero : ∀ i : ι, completedXiFunction (zeroLoc i) = 0)
+    (Hfact : CompletedXiHadamardFactorizationData zeroLoc prefactor) :
+    HadamardProductLUCOnXiNonzeroData zeroLoc :=
+  { locally_uniform_product := by
+      exact HlucProduct.mono (by
+        intro s hs
+        exact Hregion s hs)
+    infinite_differentiable_at := by
+      intro s hs
+      exact Hdiff s (Hregion s hs)
+    logDeriv_eq_tsum := by
+      intro s hs
+      have hs_ne : ∀ i : ι, s ≠ zeroLoc i := by
+        intro i hsi
+        apply hs
+        rw [hsi]
+        exact Hzero i
+      have hprod_ne : infiniteHadamardProduct zeroLoc s ≠ 0 := by
+        intro hprod
+        apply hs
+        rw [Hfact.factorization s, hprod, mul_zero]
+      exact
+        HadamardFiniteDerivativeLimitData.logDeriv_eq_tsum_at
+          Hderiv
+          (Hregion s hs)
+          Hinv.zero_ne
+          hs_ne
+          hprod_ne }
+
 /-- 🌟🌟🌟 **PROVED — assemble `ClassicalPathBAnalyticInputs` from
 Hadamard data stated on the ξ-nonzero region.** The no-collision
 condition is derived from the zero-system equation
@@ -70223,6 +72717,43 @@ noncomputable def ClassicalPathBAnalyticInputs.of_hadamard_packages_onXiNonzero
       apply hs
       rw [hsi]
       exact Hzero i)
+    Hfact
+    Hpref
+
+/-- 🌟🌟🌟🌟 **PROVED — assemble Path B Hadamard inputs from finite
+derivative convergence.**
+
+This is the sharper Hadamard front door: instead of assuming the
+log-derivative interchange as `HadamardProductLUCOnXiNonzeroData`, it
+derives that interface from finite product derivative convergence,
+locally-uniform product convergence, the zero-system equation, and the
+Hadamard factorization identity. -/
+noncomputable def ClassicalPathBAnalyticInputs.of_finiteDerivativeHadamard_packages_onXiNonzero
+    {ι : Type} {zeroLoc : ι → ℂ} {prefactor : ℂ → ℂ}
+    {Hex : HadamardFiniteExhaustion zeroLoc}
+    (Hzero : ∀ i : ι, completedXiFunction (zeroLoc i) = 0)
+    (Hinv : HadamardZeroInvSqSummability zeroLoc)
+    (Hderiv : HadamardFiniteDerivativeLimitData zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hderiv.region)
+    (HlucProduct :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct zeroLoc F s)
+        (infiniteHadamardProduct zeroLoc)
+        Filter.atTop
+        Hderiv.region)
+    (Hdiff :
+      ∀ s ∈ Hderiv.region,
+        DifferentiableAt ℂ (infiniteHadamardProduct zeroLoc) s)
+    (Hfact : CompletedXiHadamardFactorizationData zeroLoc prefactor)
+    (Hpref : CompletedXiHadamardPrefactorData prefactor) :
+    ClassicalPathBAnalyticInputs ι :=
+  ClassicalPathBAnalyticInputs.of_hadamard_packages_onXiNonzero
+    Hzero
+    Hinv
+    (HadamardProductLUCOnXiNonzeroData.of_finiteDerivativeLimitData
+      Hinv Hderiv Hregion HlucProduct Hdiff Hzero Hfact)
     Hfact
     Hpref
 
@@ -70277,6 +72808,49 @@ noncomputable def ConcreteCompletedXiHadamardInputs.of_lucLogDerivData
     Hfact
     Hpref
 
+/-- 🌟🌟🌟🌟 **PROVED — concrete completed-ξ Hadamard inputs from finite
+derivative convergence.**
+
+The generic LUC/log-derivative package is now obtained internally from
+finite truncation derivative convergence, the completed-ξ zero system,
+and the Hadamard factorization. -/
+noncomputable def ConcreteCompletedXiHadamardInputs.of_finiteDerivativeLimitData
+    {ι : Type}
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    {Hex : HadamardFiniteExhaustion HZ.zeroLoc}
+    (Hderiv : HadamardFiniteDerivativeLimitData HZ.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hderiv.region)
+    (HlucProduct :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct HZ.zeroLoc F s)
+        (infiniteHadamardProduct HZ.zeroLoc)
+        Filter.atTop
+        Hderiv.region)
+    (Hdiff :
+      ∀ s ∈ Hderiv.region,
+        DifferentiableAt ℂ (infiniteHadamardProduct HZ.zeroLoc) s)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor) :
+    ConcreteCompletedXiHadamardInputs ι :=
+  ConcreteCompletedXiHadamardInputs.of_lucOnXiNonzero
+    HZ
+    prefactor
+    Hdist
+    (HadamardProductLUCOnXiNonzeroData.of_finiteDerivativeLimitData
+      Hdist.toHadamardZeroInvSqSummability
+      Hderiv
+      Hregion
+      HlucProduct
+      Hdiff
+      HZ.zeroLoc_is_zero
+      Hfact.toFactorizationData)
+    Hfact
+    Hpref
+
 /-- 🌟🌟🌟 **PROVED — publication-level completed-ξ Hadamard theorem from
 LUC data on the ξ-nonzero region.** -/
 noncomputable def CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero
@@ -70322,6 +72896,47 @@ noncomputable def CompletedXiClassicalHadamardTheorem.of_lucLogDerivData
     Hdist
     (HadamardProductLUCOnXiNonzeroData.of_LUCLogDerivData
       Hluc h_region)
+    Hfact
+    Hpref
+
+/-- 🌟🌟🌟🌟 **PROVED — publication-level completed-ξ Hadamard theorem from
+finite derivative convergence.** This is the analytic-agent-facing
+Hadamard constructor with the log-derivative interchange reduced to the
+finite truncation derivative limit. -/
+noncomputable def CompletedXiClassicalHadamardTheorem.of_finiteDerivativeLimitData
+    {ι : Type}
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    {Hex : HadamardFiniteExhaustion HZ.zeroLoc}
+    (Hderiv : HadamardFiniteDerivativeLimitData HZ.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hderiv.region)
+    (HlucProduct :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct HZ.zeroLoc F s)
+        (infiniteHadamardProduct HZ.zeroLoc)
+        Filter.atTop
+        Hderiv.region)
+    (Hdiff :
+      ∀ s ∈ Hderiv.region,
+        DifferentiableAt ℂ (infiniteHadamardProduct HZ.zeroLoc) s)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor) :
+    CompletedXiClassicalHadamardTheorem ι :=
+  CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero
+    HZ
+    prefactor
+    Hdist
+    (HadamardProductLUCOnXiNonzeroData.of_finiteDerivativeLimitData
+      Hdist.toHadamardZeroInvSqSummability
+      Hderiv
+      Hregion
+      HlucProduct
+      Hdiff
+      HZ.zeroLoc_is_zero
+      Hfact.toFactorizationData)
     Hfact
     Hpref
 
@@ -70907,6 +73522,32 @@ theorem EntireXiZeroInvSqDistribution.toHadamardZeroInvSqSummability
     inv_sq_summable := H.inv_sq_summable
     eventually_large := H.eventually_large }
 
+/-- 🌟🌟 **PROVED — entire-ξ zero distribution from inverse-square
+summability plus norm-properness of the concrete zero system.** -/
+theorem EntireXiZeroInvSqDistribution.of_invSqSummable_normProper
+    {ι : Type} {HZ : ConcreteEntireXiZeroSystem ι}
+    (hinv : Summable fun i : ι => (‖HZ.zeroLoc i‖ ^ 2)⁻¹)
+    (Hproper : HadamardZeroNormProper HZ.zeroLoc) :
+    EntireXiZeroInvSqDistribution HZ :=
+  { inv_sq_summable := hinv
+    eventually_large := Hproper.eventually_large }
+
+/-- 📦 **Canonical entire-ξ zero norm-properness.** This is the
+finite-in-bounded-disks form of the classical zero discreteness input for
+Mathlib's `entireRiemannXi`. -/
+abbrev EntireXiCanonicalZeroNormProper : Prop :=
+  HadamardZeroNormProper concreteEntireXiZeroSystem.zeroLoc
+
+/-- 🌟🌟 **PROVED — canonical entire-ξ zero distribution from canonical
+inverse-square summability and finite-in-disks properness.** -/
+theorem EntireXiZeroInvSqDistribution.of_canonical_invSqSummable_normProper
+    (hinv :
+      Summable fun i : EntireXiNonzeroZeroIndex =>
+        (‖concreteEntireXiZeroSystem.zeroLoc i‖ ^ 2)⁻¹)
+    (Hproper : EntireXiCanonicalZeroNormProper) :
+    EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem :=
+  EntireXiZeroInvSqDistribution.of_invSqSummable_normProper hinv Hproper
+
 -- =====================================================================
 -- §CCCLXXXVII. Entire-ξ Hadamard prefactor + factorization
 -- =====================================================================
@@ -70981,6 +73622,125 @@ structure EntireXiHadamardFactorization
       entireRiemannXi s
         = prefactor s * infiniteHadamardProduct HZ.zeroLoc s
 
+/-- 📦 **`EntireXiHadamardQuotientFactorization`** — quotient-form
+Hadamard factorization data.
+
+This is closer to the classical proof: the product is known to vanish at
+the indexed zeros, be nonzero off them, and the quotient
+`entireRiemannXi / product` is identified with the prefactor away from
+the zero set. The theorem below turns that punctured quotient statement
+into the global product factorization. -/
+structure EntireXiHadamardQuotientFactorization
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι) (prefactor : ℂ → ℂ) : Prop where
+  product_vanishes_at_zeroLoc :
+    ∀ i : ι,
+      infiniteHadamardProduct HZ.zeroLoc (HZ.zeroLoc i) = 0
+  product_nonzero_off_zeroLoc :
+    ∀ s : ℂ,
+      (∀ i : ι, s ≠ HZ.zeroLoc i) →
+        infiniteHadamardProduct HZ.zeroLoc s ≠ 0
+  quotient_eq_prefactor :
+    ∀ s : ℂ,
+      (∀ i : ι, s ≠ HZ.zeroLoc i) →
+        entireRiemannXi s / infiniteHadamardProduct HZ.zeroLoc s
+          = prefactor s
+
+/-- 🌟🌟🌟 **PROVED — quotient-form Hadamard data gives the global
+entire-ξ product factorization.** This removes the removable-singularity
+bookkeeping from later Path B interfaces: once the quotient has been
+identified off the zeros and the product has the right zero set, the
+ordinary factorization field follows pointwise. -/
+theorem EntireXiHadamardFactorization.of_quotientFactorization
+    {ι : Type} {HZ : ConcreteEntireXiZeroSystem ι}
+    {prefactor : ℂ → ℂ}
+    (H : EntireXiHadamardQuotientFactorization HZ prefactor) :
+    EntireXiHadamardFactorization HZ prefactor := by
+  refine ⟨?_⟩
+  intro s
+  by_cases hhit : ∃ i : ι, HZ.zeroLoc i = s
+  · rcases hhit with ⟨i, hi⟩
+    have hxi : entireRiemannXi s = 0 := by
+      rw [← hi]
+      exact HZ.zeroLoc_is_zero i
+    have hprod :
+        infiniteHadamardProduct HZ.zeroLoc s = 0 := by
+      rw [← hi]
+      exact H.product_vanishes_at_zeroLoc i
+    simp [hxi, hprod]
+  · have hno : ∀ i : ι, s ≠ HZ.zeroLoc i := by
+      intro i hsi
+      exact hhit ⟨i, hsi.symm⟩
+    have hprod_ne :
+        infiniteHadamardProduct HZ.zeroLoc s ≠ 0 :=
+      H.product_nonzero_off_zeroLoc s hno
+    have hq := H.quotient_eq_prefactor s hno
+    rw [div_eq_iff hprod_ne] at hq
+    exact hq
+
+/-- ⭐ **PROVED — a genus-one Hadamard factor vanishes at its own
+zero.** -/
+lemma hadamardGenus1Factor_self_eq_zero
+    {ρ : ℂ} (hρ : ρ ≠ 0) :
+    hadamardGenus1Factor ρ ρ = 0 := by
+  unfold hadamardGenus1Factor
+  simp [hρ]
+
+/-- 🌟🌟 **PROVED — the infinite Hadamard product vanishes at every
+indexed zero.** This discharges the zero-side of the quotient
+factorization data directly from the canonical genus-one factor. -/
+theorem infiniteHadamardProduct_eq_zero_at_zeroLoc
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (hzero : ∀ i : ι, zeroLoc i ≠ 0)
+    (i : ι) :
+    infiniteHadamardProduct zeroLoc (zeroLoc i) = 0 := by
+  unfold infiniteHadamardProduct
+  exact tprod_of_exists_eq_zero
+    ⟨i, hadamardGenus1Factor_self_eq_zero (hzero i)⟩
+
+/-- 🌟🌟🌟 **PROVED — quotient-form Hadamard data with the zero-factor
+side discharged.** A quotient proof now only needs product nonvanishing
+off the indexed zero set and the off-zero quotient identity. -/
+theorem EntireXiHadamardFactorization.of_offZeroQuotient
+    {ι : Type} {HZ : ConcreteEntireXiZeroSystem ι}
+    {prefactor : ℂ → ℂ}
+    (hprod_ne :
+      ∀ s : ℂ,
+        (∀ i : ι, s ≠ HZ.zeroLoc i) →
+          infiniteHadamardProduct HZ.zeroLoc s ≠ 0)
+    (hquot :
+      ∀ s : ℂ,
+        (∀ i : ι, s ≠ HZ.zeroLoc i) →
+          entireRiemannXi s / infiniteHadamardProduct HZ.zeroLoc s
+            = prefactor s) :
+    EntireXiHadamardFactorization HZ prefactor :=
+  EntireXiHadamardFactorization.of_quotientFactorization
+    { product_vanishes_at_zeroLoc :=
+        infiniteHadamardProduct_eq_zero_at_zeroLoc HZ.zeroLoc_ne_zero
+      product_nonzero_off_zeroLoc := hprod_ne
+      quotient_eq_prefactor := hquot }
+
+/-- 🌟🌟🌟 **PROVED — exp-affine entire-ξ Hadamard factorization from
+the classical off-zero quotient identity.** The product-zero behavior at
+the indexed zeros is already discharged by
+`infiniteHadamardProduct_eq_zero_at_zeroLoc`. -/
+theorem EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient
+    {ι : Type} (HZ : ConcreteEntireXiZeroSystem ι)
+    {C a b : ℂ}
+    (hprod_ne :
+      ∀ s : ℂ,
+        (∀ i : ι, s ≠ HZ.zeroLoc i) →
+          infiniteHadamardProduct HZ.zeroLoc s ≠ 0)
+    (hquot :
+      ∀ s : ℂ,
+        (∀ i : ι, s ≠ HZ.zeroLoc i) →
+          entireRiemannXi s / infiniteHadamardProduct HZ.zeroLoc s
+            = C * Complex.exp (a + b * s)) :
+    EntireXiHadamardFactorization
+      HZ
+      (fun s : ℂ => C * Complex.exp (a + b * s)) :=
+  EntireXiHadamardFactorization.of_offZeroQuotient hprod_ne hquot
+
 /-- 📦 **`HadamardProductLUCOnEntireXiNonzeroData`** — Hadamard product
 LUC/log-derivative data stated directly on the natural AFZ region
 `{s | entireRiemannXi s ≠ 0}`.
@@ -71041,6 +73801,104 @@ noncomputable def HadamardProductLUCOnEntireXiNonzeroData.of_LUCLogDerivData
     logDeriv_eq_tsum := by
       intro s hs
       exact Hluc.logDeriv_eq_tsum s (h_region s hs) }
+
+/-- 🌟🌟🌟🌟 **PROVED — entire-ξ nonzero-locus LUC/log-derivative data
+from finite derivative convergence and Hadamard factorization.**
+
+This is the genuine entire-ξ version of the hard Hadamard reduction:
+finite product derivative convergence plus locally-uniform product
+convergence implies the infinite product log-derivative identity on
+`{s | entireRiemannXi s ≠ 0}`. The zero-system supplies no-collision,
+and factorization supplies nonvanishing of the product factor. -/
+noncomputable def HadamardProductLUCOnEntireXiNonzeroData.of_finiteDerivativeLimitData
+    {ι : Type} {prefactor : ℂ → ℂ}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    {Hex : HadamardFiniteExhaustion HZ.zeroLoc}
+    (Hderiv : HadamardFiniteDerivativeLimitData HZ.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hderiv.region)
+    (HlucProduct :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct HZ.zeroLoc F s)
+        (infiniteHadamardProduct HZ.zeroLoc)
+        Filter.atTop
+        Hderiv.region)
+    (Hdiff :
+      ∀ s ∈ Hderiv.region,
+        DifferentiableAt ℂ (infiniteHadamardProduct HZ.zeroLoc) s)
+    (Hfact : EntireXiHadamardFactorization HZ prefactor) :
+    HadamardProductLUCOnEntireXiNonzeroData HZ.zeroLoc :=
+  { locally_uniform_product := by
+      exact HlucProduct.mono (by
+        intro s hs
+        exact Hregion s hs)
+    infinite_differentiable_at := by
+      intro s hs
+      exact Hdiff s (Hregion s hs)
+    logDeriv_eq_tsum := by
+      intro s hs
+      have hs_ne : ∀ i : ι, s ≠ HZ.zeroLoc i :=
+        HZ.nonzero_no_collision hs
+      have hprod_ne : infiniteHadamardProduct HZ.zeroLoc s ≠ 0 := by
+        intro hprod
+        apply hs
+        rw [Hfact.factorization s, hprod, mul_zero]
+      exact
+        HadamardFiniteDerivativeLimitData.logDeriv_eq_tsum_at
+          Hderiv
+          (Hregion s hs)
+          Hdist.toHadamardZeroInvSqSummability.zero_ne
+          hs_ne
+          hprod_ne }
+
+/-- 🌟🌟🌟🌟🌟 **PROVED — entire-ξ nonzero-locus LUC/log-derivative data
+directly from open-region locally-uniform product convergence.**
+
+The derivative-limit and infinite-product differentiability obligations
+are discharged internally by `TendstoLocallyUniformlyOn.deriv` and
+`TendstoLocallyUniformlyOn.differentiableOn`; the remaining product LUC
+field is the Finset-net convergence used by the existing Path B
+interfaces. -/
+noncomputable def
+    HadamardProductLUCOnEntireXiNonzeroData.of_locallyUniformProductLimitData
+    {ι : Type} {prefactor : ℂ → ℂ}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    {Hex : HadamardFiniteExhaustion HZ.zeroLoc}
+    (HlucSeq : HadamardProductLocallyUniformLimitData HZ.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ HlucSeq.region)
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct HZ.zeroLoc F s)
+        (infiniteHadamardProduct HZ.zeroLoc)
+        Filter.atTop
+        HlucSeq.region)
+    (Hfact : EntireXiHadamardFactorization HZ prefactor) :
+    HadamardProductLUCOnEntireXiNonzeroData HZ.zeroLoc := by
+  let Hderiv : HadamardFiniteDerivativeLimitData HZ.zeroLoc Hex :=
+    HadamardFiniteDerivativeLimitData.of_locallyUniformProduct HlucSeq
+  exact
+    HadamardProductLUCOnEntireXiNonzeroData.of_finiteDerivativeLimitData
+      HZ
+      Hdist
+      Hderiv
+      (by
+        intro s hs
+        exact Hregion s hs)
+      (by
+        simpa [Hderiv, HadamardFiniteDerivativeLimitData.of_locallyUniformProduct]
+          using HlucFinset)
+      (by
+        intro s hs
+        exact HlucSeq.infinite_differentiableAt
+          (by
+            simpa [Hderiv, HadamardFiniteDerivativeLimitData.of_locallyUniformProduct]
+              using hs))
+      Hfact
 
 /-- 🌟🌟🌟 **PROVED — entire-ξ nonzero-locus LUC data gives the Hadamard
 log-derivative limit data.**
@@ -71209,6 +74067,80 @@ noncomputable def EntireXiClassicalHadamardTheorem.of_lucLogDerivData
     Hfact
     Hpref
 
+/-- 🌟🌟🌟🌟 **PROVED — publication-level entire-ξ Hadamard theorem from
+finite derivative convergence.**
+
+This is the sharp entire-ξ Hadamard constructor: the LUC/log-derivative
+field is built from finite truncation derivative convergence and
+locally-uniform product convergence, with no-collision and product
+nonvanishing discharged internally. -/
+noncomputable def EntireXiClassicalHadamardTheorem.of_finiteDerivativeLimitData
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    {Hex : HadamardFiniteExhaustion HZ.zeroLoc}
+    (Hderiv : HadamardFiniteDerivativeLimitData HZ.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hderiv.region)
+    (HlucProduct :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct HZ.zeroLoc F s)
+        (infiniteHadamardProduct HZ.zeroLoc)
+        Filter.atTop
+        Hderiv.region)
+    (Hdiff :
+      ∀ s ∈ Hderiv.region,
+        DifferentiableAt ℂ (infiniteHadamardProduct HZ.zeroLoc) s)
+    (Hfact : EntireXiHadamardFactorization HZ prefactor)
+    (Hpref : EntireXiHadamardPrefactor prefactor) :
+    EntireXiClassicalHadamardTheorem ι :=
+  EntireXiClassicalHadamardTheorem.of_lucOnEntireXiNonzero
+    HZ
+    prefactor
+    Hdist
+    (HadamardProductLUCOnEntireXiNonzeroData.of_finiteDerivativeLimitData
+      HZ Hdist Hderiv Hregion HlucProduct Hdiff Hfact)
+    Hfact
+    Hpref
+
+/-- 🌟🌟🌟🌟🌟 **PROVED — publication-level entire-ξ Hadamard theorem
+from open-region locally-uniform finite product convergence.**
+
+This is the first constructor in the entire-ξ stack that no longer asks
+for derivative convergence or differentiability as independent inputs:
+they are proved from the locally-uniform product limit on an open
+region. -/
+noncomputable def
+    EntireXiClassicalHadamardTheorem.of_locallyUniformProductLimitData
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    {Hex : HadamardFiniteExhaustion HZ.zeroLoc}
+    (HlucSeq : HadamardProductLocallyUniformLimitData HZ.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ HlucSeq.region)
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct HZ.zeroLoc F s)
+        (infiniteHadamardProduct HZ.zeroLoc)
+        Filter.atTop
+        HlucSeq.region)
+    (Hfact : EntireXiHadamardFactorization HZ prefactor)
+    (Hpref : EntireXiHadamardPrefactor prefactor) :
+    EntireXiClassicalHadamardTheorem ι :=
+  EntireXiClassicalHadamardTheorem.of_lucOnEntireXiNonzero
+    HZ
+    prefactor
+    Hdist
+    (HadamardProductLUCOnEntireXiNonzeroData.of_locallyUniformProductLimitData
+      HZ Hdist HlucSeq Hregion HlucFinset Hfact)
+    Hfact
+    Hpref
+
 /-- 🌟🌟🌟 **PROVED — publication-level entire-ξ Hadamard theorem using
 the canonical nonzero-zero index type.**
 
@@ -71269,6 +74201,39 @@ noncomputable def EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_l
     Hfact
     (EntireXiHadamardPrefactor.exp_affine hC)
 
+/-- 🌟🌟🌟🌟 **PROVED — canonical-zero exp-affine entire-ξ Hadamard theorem
+from nonzero-locus LUC data and the classical off-zero quotient identity.**
+
+The product vanishing at indexed zeros is now internal, so the
+factorization input has been reduced to product nonvanishing off the
+zero set plus the quotient computation. -/
+noncomputable def
+    EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_offZeroQuotient_lucOnEntireXiNonzero
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCOnEntireXiNonzeroData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (hprod_ne :
+      ∀ s : ℂ,
+        (∀ i : EntireXiNonzeroZeroIndex,
+          s ≠ concreteEntireXiZeroSystem.zeroLoc i) →
+          infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc s ≠ 0)
+    (hquot :
+      ∀ s : ℂ,
+        (∀ i : EntireXiNonzeroZeroIndex,
+          s ≠ concreteEntireXiZeroSystem.zeroLoc i) →
+          entireRiemannXi s
+              / infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc s
+            = C * Complex.exp (a + b * s)) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucOnEntireXiNonzero
+    hC
+    Hdist
+    Hluc
+    (EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient
+      concreteEntireXiZeroSystem hprod_ne hquot)
+
 /-- 🌟🌟🌟 **PROVED — canonical-zero entire-ξ Hadamard theorem with an
 exponential-affine prefactor and arbitrary-region LUC data.** -/
 noncomputable def EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucLogDerivData
@@ -71289,6 +74254,125 @@ noncomputable def EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_l
     Hdist
     Hluc
     h_region
+    Hfact
+    (EntireXiHadamardPrefactor.exp_affine hC)
+
+/-- 🌟🌟🌟🌟 **PROVED — canonical-zero exp-affine entire-ξ Hadamard theorem
+from arbitrary-region LUC data and the classical off-zero quotient
+identity.**
+
+This is the quotient-factorization analogue of
+`of_canonicalZeros_expAffine_lucLogDerivData`: the global product
+factorization is assembled internally from the off-zero quotient
+calculation. -/
+noncomputable def
+    EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_offZeroQuotient_lucLogDerivData
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCLogDerivData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hluc.region)
+    (hprod_ne :
+      ∀ s : ℂ,
+        (∀ i : EntireXiNonzeroZeroIndex,
+          s ≠ concreteEntireXiZeroSystem.zeroLoc i) →
+          infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc s ≠ 0)
+    (hquot :
+      ∀ s : ℂ,
+        (∀ i : EntireXiNonzeroZeroIndex,
+          s ≠ concreteEntireXiZeroSystem.zeroLoc i) →
+          entireRiemannXi s
+              / infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc s
+            = C * Complex.exp (a + b * s)) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucLogDerivData
+    hC
+    Hdist
+    Hluc
+    h_region
+    (EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient
+      concreteEntireXiZeroSystem hprod_ne hquot)
+
+/-- 🌟🌟🌟🌟 **PROVED — canonical-zero exp-affine entire-ξ Hadamard theorem
+from finite derivative convergence.**
+
+This is the most concrete Hadamard-side constructor currently exposed:
+the zero system is the canonical nonzero-zero subtype, the prefactor is
+`C * exp (a + b*s)`, and the log-derivative interchange is reduced to
+finite product derivative convergence. -/
+noncomputable def EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_finiteDerivativeLimitData
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    {Hex : HadamardFiniteExhaustion concreteEntireXiZeroSystem.zeroLoc}
+    (Hderiv :
+      HadamardFiniteDerivativeLimitData concreteEntireXiZeroSystem.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hderiv.region)
+    (HlucProduct :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset EntireXiNonzeroZeroIndex => fun s : ℂ =>
+          indexedFiniteHadamardProduct
+            concreteEntireXiZeroSystem.zeroLoc F s)
+        (infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc)
+        Filter.atTop
+        Hderiv.region)
+    (Hdiff :
+      ∀ s ∈ Hderiv.region,
+        DifferentiableAt ℂ
+          (infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc) s)
+    (Hfact :
+      EntireXiHadamardFactorization
+        concreteEntireXiZeroSystem
+        (fun s : ℂ => C * Complex.exp (a + b * s))) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_finiteDerivativeLimitData
+    concreteEntireXiZeroSystem
+    (fun s : ℂ => C * Complex.exp (a + b * s))
+    Hdist
+    Hderiv
+    Hregion
+    HlucProduct
+    Hdiff
+    Hfact
+    (EntireXiHadamardPrefactor.exp_affine hC)
+
+/-- 🌟🌟🌟🌟🌟 **PROVED — canonical-zero exp-affine entire-ξ Hadamard
+theorem from open-region locally-uniform finite product convergence.**
+
+This is the concrete Hadamard-side target after removing the separate
+finite-derivative convergence and differentiability hypotheses. -/
+noncomputable def
+    EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_locallyUniformProductLimitData
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    {Hex : HadamardFiniteExhaustion concreteEntireXiZeroSystem.zeroLoc}
+    (HlucSeq :
+      HadamardProductLocallyUniformLimitData
+        concreteEntireXiZeroSystem.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ HlucSeq.region)
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset EntireXiNonzeroZeroIndex => fun s : ℂ =>
+          indexedFiniteHadamardProduct
+            concreteEntireXiZeroSystem.zeroLoc F s)
+        (infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc)
+        Filter.atTop
+        HlucSeq.region)
+    (Hfact :
+      EntireXiHadamardFactorization
+        concreteEntireXiZeroSystem
+        (fun s : ℂ => C * Complex.exp (a + b * s))) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_locallyUniformProductLimitData
+    concreteEntireXiZeroSystem
+    (fun s : ℂ => C * Complex.exp (a + b * s))
+    Hdist
+    HlucSeq
+    Hregion
+    HlucFinset
     Hfact
     (EntireXiHadamardPrefactor.exp_affine hC)
 
@@ -72853,7 +75937,108 @@ theorem ExpAffineHadamardResidualTailConvergenceLowAFZ.of_lowZeroSplit
         = lowTailZeroContribution Dzero T0 z := by
       have h := Hlow.split z hz hne Hno
       linear_combination h
-    simpa [expAffineHadamardFiniteLowTail, hlim] using hTail⟩
+    have hTail' :
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardPullbackFiniteContribution
+              H.zeroSystem.zeroLoc b F z
+              - cloudModel zeros100ceil z)
+          Filter.atTop
+          (𝓝 (lowTailZeroContribution Dzero T0 z)) := by
+      simpa [hlim] using hTail
+    simpa [expAffineHadamardFiniteLowTail] using hTail'⟩
+
+/-- 🌟🌟🌟🌟 **PROVED — mid finite-product residual-tail convergence
+directly from the bare Stieltjes residual identity.**
+
+This is the tight Hadamard/Stieltjes join: finite product log derivatives
+converge to `Λ[Ξ](z) - cloud - smooth`, and the residual identity
+identifies that limit with the named fluctuation tail value. -/
+theorem ExpAffineHadamardResidualTailConvergenceMidAFZ.of_residualIdentity
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (Hmid :
+      StieltjesMidTailResidualIdentityAFZ
+        Dzero T0
+        (expAffineHadamardPullbackZeroContribution
+          H.zeroSystem.zeroLoc b)) :
+    ExpAffineHadamardResidualTailConvergenceMidAFZ
+      Dzero T0 H b :=
+  ⟨by
+    intro z L hy hne hmid hL
+    have htail :=
+      H.tendsto_expAffineHadamardFiniteProductResidualTail_to_XiPullback_residual
+        Hbridge hC hpref hy hne
+    have hlog :=
+      H.XiPullback_logDerivativeResponse_eq_expAffine_series
+        Hbridge hC hpref hy hne
+    have htarget :
+        logDerivativeResponse XiPullback z
+          - cloudModel zeros100ceil z
+          - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+        = L := by
+      rw [hlog]
+      exact Hmid.residual_eq hy hne hmid hL
+    have htail' :
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L) := by
+      simpa [htarget] using htail
+    refine htail'.congr' (Filter.Eventually.of_forall ?_)
+    intro F
+    exact
+      H.expAffineHadamardFiniteProductResidualTail_eq_finiteResidualTail
+        Hbridge F hne⟩
+
+/-- 🌟🌟🌟🌟 **PROVED — high finite-product residual-tail convergence
+directly from the bare Stieltjes residual identity.** -/
+theorem ExpAffineHadamardResidualTailConvergenceHighAFZ.of_residualIdentity
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (Hhigh :
+      StieltjesHighTailResidualIdentityAFZ
+        Dzero T0
+        (expAffineHadamardPullbackZeroContribution
+          H.zeroSystem.zeroLoc b)) :
+    ExpAffineHadamardResidualTailConvergenceHighAFZ
+      Dzero T0 H b :=
+  ⟨by
+    intro z L T hT hy hne hreg hL
+    have htail :=
+      H.tendsto_expAffineHadamardFiniteProductResidualTail_to_XiPullback_residual
+        Hbridge hC hpref hy hne
+    have hlog :=
+      H.XiPullback_logDerivativeResponse_eq_expAffine_series
+        Hbridge hC hpref hy hne
+    have htarget :
+        logDerivativeResponse XiPullback z
+          - cloudModel zeros100ceil z
+          - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+        = L := by
+      rw [hlog]
+      exact Hhigh.residual_eq hT hy hne hreg hL
+    have htail' :
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L) := by
+      simpa [htarget] using htail
+    refine htail'.congr' (Filter.Eventually.of_forall ?_)
+    intro F
+    exact
+      H.expAffineHadamardFiniteProductResidualTail_eq_finiteResidualTail
+        Hbridge F hne⟩
 
 /-- 🌟🌟🌟🌟 **PROVED — mid finite product residual convergence directly
 from the Stieltjes equality and the exp-affine Hadamard log-derivative
@@ -73311,6 +76496,60 @@ theorem expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_stieltjesH
     (expAffineHadamardResidualTailConvergenceHigh_iff_stieltjesHighTailEqualityAFZ
       (Hbridge := Hbridge))
 
+/-- 🌟🌟🌟🌟 **PROVED — concrete finite product residual convergence is
+equivalent to the bare mid Stieltjes residual identity.** -/
+theorem expAffineHadamardFiniteProductResidualTailConvergenceMid_iff_stieltjesMidTailResidualIdentityAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ} :
+    (∀ {z L : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L))
+      ↔
+    StieltjesMidTailResidualIdentityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  (expAffineHadamardFiniteProductResidualTailConvergenceMid_iff_stieltjesMidTailEqualityAFZ
+    (Hbridge := Hbridge)).trans
+    stieltjesMidTailEqualityAFZ_iff_residualIdentity
+
+/-- 🌟🌟🌟🌟 **PROVED — concrete finite product residual convergence is
+equivalent to the bare high Stieltjes residual identity.** -/
+theorem expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_stieltjesHighTailResidualIdentityAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ} :
+    (∀ {z L : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        XiFluctuationTailValue Dzero T0 T z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L))
+      ↔
+    StieltjesHighTailResidualIdentityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  (expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_stieltjesHighTailEqualityAFZ
+    (Hbridge := Hbridge)).trans
+    stieltjesHighTailEqualityAFZ_iff_residualIdentity
+
 /-- 🌟🌟🌟🌟 **PROVED — concrete finite product low-tail convergence is
 equivalent to the low zero-contribution split.** -/
 theorem expAffineHadamardFiniteProductLowTailConvergence_iff_lowZeroContributionSplitAFZ
@@ -73336,6 +76575,84 @@ theorem expAffineHadamardFiniteProductLowTailConvergence_iff_lowZeroContribution
     (Hbridge := Hbridge)).trans
     (expAffineHadamardResidualTailConvergenceLow_iff_lowZeroContributionSplitAFZ
       (Hbridge := Hbridge))
+
+/-- 🌟🌟🌟🌟 **PROVED — AFZ Stieltjes bundle from finite product convergence
+in all three bands.**
+
+This is the concrete Stieltjes reduction: mid/high/low Stieltjes
+equalities are obtained from convergence of the finite exp-affine
+Hadamard product residuals themselves. The low first-zero guard is
+closed by the standard `Z ≥ 15` hypothesis. -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_expAffineHadamardFiniteProductConvergences
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HmidProd :
+      ∀ {z L : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L))
+    (HhighProd :
+      ∀ {z L : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        XiFluctuationTailValue Dzero T0 T z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L))
+    (HlowProd :
+      ∀ {z : ℂ},
+        lowCompactRegion z →
+        XiPullback z ≠ 0 →
+        LowFirstZeroGapNoAtoms Dzero →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductLowTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 (lowTailZeroContribution Dzero T0 z))) :
+    ClassicalPathBStieltjesInputsAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) := by
+  have Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero T0
+        (expAffineHadamardPullbackZeroContribution
+          H.zeroSystem.zeroLoc b) :=
+    (expAffineHadamardFiniteProductResidualTailConvergenceMid_iff_stieltjesMidTailEqualityAFZ
+      (Hbridge := Hbridge)).mp HmidProd
+  have Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero T0
+        (expAffineHadamardPullbackZeroContribution
+          H.zeroSystem.zeroLoc b) :=
+    (expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_stieltjesHighTailEqualityAFZ
+      (Hbridge := Hbridge)).mp HhighProd
+  have Hlow :
+      LowZeroContributionSplitAFZ
+        Dzero T0
+        (expAffineHadamardPullbackZeroContribution
+          H.zeroSystem.zeroLoc b) :=
+    (expAffineHadamardFiniteProductLowTailConvergence_iff_lowZeroContributionSplitAFZ
+      (Hbridge := Hbridge)).mp HlowProd
+  exact
+    ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit_Z_ge_15
+      h_Z_ge_15 Hmid Hhigh Hlow
 
 /-- 🌟🌟🌟 **PROVED — mid finite-product residual convergence from one
 identified fluctuation tail value.**
@@ -73413,6 +76730,70 @@ theorem expAffineHadamardFiniteProductResidualTailConvergenceHigh_of_exists_iden
   obtain ⟨L₀, hL₀, hprod⟩ := Hidentify hT hy hne hreg
   have huniq : L₀ = L := hL₀.unique hL
   simpa [huniq] using hprod
+
+/-- 🌟🌟🌟🌟 **PROVED — AFZ Stieltjes bundle from identified finite
+product-tail values.**
+
+For mid/high, the analytic proof only has to identify one
+`XiFluctuationTailValue` and prove convergence to it; uniqueness upgrades
+that to convergence toward any named tail witness. The low side remains
+the direct finite-product low-tail convergence. -/
+theorem ClassicalPathBStieltjesInputsAFZ.of_expAffineHadamardIdentifiedFiniteProductTails
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HmidIdentified :
+      ∀ {z : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        ∃ L₀ : ℂ,
+          XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L₀ ∧
+          Tendsto
+            (fun F : Finset ι =>
+              expAffineHadamardFiniteProductResidualTail
+                H.zeroSystem.zeroLoc b F z)
+            Filter.atTop
+            (𝓝 L₀))
+    (HhighIdentified :
+      ∀ {z : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        ∃ L₀ : ℂ,
+          XiFluctuationTailValue Dzero T0 T z L₀ ∧
+          Tendsto
+            (fun F : Finset ι =>
+              expAffineHadamardFiniteProductResidualTail
+                H.zeroSystem.zeroLoc b F z)
+            Filter.atTop
+            (𝓝 L₀))
+    (HlowProductConv :
+      ∀ {z : ℂ},
+        lowCompactRegion z →
+        XiPullback z ≠ 0 →
+        LowFirstZeroGapNoAtoms Dzero →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductLowTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 (lowTailZeroContribution Dzero T0 z))) :
+    ClassicalPathBStieltjesInputsAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  ClassicalPathBStieltjesInputsAFZ.of_expAffineHadamardFiniteProductConvergences
+    (Hbridge := Hbridge)
+    h_Z_ge_15
+    (expAffineHadamardFiniteProductResidualTailConvergenceMid_of_exists_identified_tail
+      HmidIdentified)
+    (expAffineHadamardFiniteProductResidualTailConvergenceHigh_of_exists_identified_tail
+      HhighIdentified)
+    HlowProductConv
 
 /-- 🌟🌟🌟🌟 **PATH B FRONT DOOR — finite Hadamard Stieltjes sources +
 low split.**
@@ -73696,6 +77077,403 @@ theorem XiPullbackAntiHerglotzTarget_of_expAffineHadamardFiniteProductResidualCo
       (Hbridge := Hbridge) HhighProductConv)
     (ExpAffineHadamardResidualTailConvergenceLowAFZ.of_finiteProductLowTailConvergence
       (Hbridge := Hbridge) HlowProductConv)
+
+/-- 🌟🌟🌟🌟 **PATH B FRONT DOOR — identified finite product-tail values.**
+
+This is the Stieltjes-facing form closest to the analytic proof one
+actually wants to write: in the mid and high bands it is enough to
+exhibit a single fluctuation-tail value `L₀` and prove that the
+concrete finite genus-one product residual tails converge to `L₀`.
+The universal quantification over all named `XiFluctuationTailValue`
+witnesses is recovered internally by tail-limit uniqueness. -/
+theorem XiPullbackAntiHerglotzTarget_of_expAffineHadamardIdentifiedFiniteProductTails
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (hpref : Hhad.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (HmidIdentified :
+      ∀ {z : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        ∃ L₀ : ℂ,
+          XiFluctuationTailValue Dzero 10 (canonicalAdaptiveT z) z L₀ ∧
+          Tendsto
+            (fun F : Finset ι =>
+              expAffineHadamardFiniteProductResidualTail
+                Hhad.zeroSystem.zeroLoc b F z)
+            Filter.atTop
+            (𝓝 L₀))
+    (HhighIdentified :
+      ∀ {z : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        ∃ L₀ : ℂ,
+          XiFluctuationTailValue Dzero 10 T z L₀ ∧
+          Tendsto
+            (fun F : Finset ι =>
+              expAffineHadamardFiniteProductResidualTail
+                Hhad.zeroSystem.zeroLoc b F z)
+            Filter.atTop
+            (𝓝 L₀))
+    (HlowProductConv :
+      ∀ {z : ℂ},
+        lowCompactRegion z →
+        XiPullback z ≠ 0 →
+        LowFirstZeroGapNoAtoms Dzero →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductLowTail
+              Hhad.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 (lowTailZeroContribution Dzero 10 z))) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_expAffineHadamardFiniteProductResidualConvergence
+    Dzero
+    h_Z_ge_15
+    hTuring
+    hHighLog
+    Hbridge
+    Hhad
+    hC
+    hpref
+    (expAffineHadamardFiniteProductResidualTailConvergenceMid_of_exists_identified_tail
+      HmidIdentified)
+      (expAffineHadamardFiniteProductResidualTailConvergenceHigh_of_exists_identified_tail
+        HhighIdentified)
+    HlowProductConv
+
+/-- 🌟🌟🌟🌟🌟 **PATH B FRONT DOOR — canonical exp-affine finite-derivative
+Hadamard data + identified finite-product Stieltjes tails.**
+
+This is the current sharp non-Turing-facing endpoint. The Hadamard side
+is not an opaque `EntireXiClassicalHadamardTheorem`: it is assembled
+from the canonical entire-ξ zero system, inverse-square zero distribution,
+finite product derivative convergence, locally-uniform product
+convergence, and the exp-affine Hadamard factorization. The Stieltjes
+side is likewise stated in finite-product tail convergence coordinates. -/
+theorem XiPullbackAntiHerglotzTarget_of_canonicalExpAffineFiniteDerivativeHadamard_identifiedFiniteProductTails
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    {Hex : HadamardFiniteExhaustion concreteEntireXiZeroSystem.zeroLoc}
+    (Hderiv :
+      HadamardFiniteDerivativeLimitData concreteEntireXiZeroSystem.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hderiv.region)
+    (HlucProduct :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset EntireXiNonzeroZeroIndex => fun s : ℂ =>
+          indexedFiniteHadamardProduct
+            concreteEntireXiZeroSystem.zeroLoc F s)
+        (infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc)
+        Filter.atTop
+        Hderiv.region)
+    (Hdiff :
+      ∀ s ∈ Hderiv.region,
+        DifferentiableAt ℂ
+          (infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc) s)
+    (Hfact :
+      EntireXiHadamardFactorization
+        concreteEntireXiZeroSystem
+        (fun s : ℂ => C * Complex.exp (a + b * s)))
+    (HmidIdentified :
+      ∀ {z : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        ∃ L₀ : ℂ,
+          XiFluctuationTailValue Dzero 10 (canonicalAdaptiveT z) z L₀ ∧
+          Tendsto
+            (fun F : Finset EntireXiNonzeroZeroIndex =>
+              expAffineHadamardFiniteProductResidualTail
+                concreteEntireXiZeroSystem.zeroLoc b F z)
+            Filter.atTop
+            (𝓝 L₀))
+    (HhighIdentified :
+      ∀ {z : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        ∃ L₀ : ℂ,
+          XiFluctuationTailValue Dzero 10 T z L₀ ∧
+          Tendsto
+            (fun F : Finset EntireXiNonzeroZeroIndex =>
+              expAffineHadamardFiniteProductResidualTail
+                concreteEntireXiZeroSystem.zeroLoc b F z)
+            Filter.atTop
+            (𝓝 L₀))
+    (HlowProductConv :
+      ∀ {z : ℂ},
+        lowCompactRegion z →
+        XiPullback z ≠ 0 →
+        LowFirstZeroGapNoAtoms Dzero →
+        Tendsto
+          (fun F : Finset EntireXiNonzeroZeroIndex =>
+            expAffineHadamardFiniteProductLowTail
+              concreteEntireXiZeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 (lowTailZeroContribution Dzero 10 z))) :
+    XiPullbackAntiHerglotzTarget := by
+  let Hhad :
+      EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+    EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_finiteDerivativeLimitData
+      hC Hdist Hderiv Hregion HlucProduct Hdiff Hfact
+  exact
+    XiPullbackAntiHerglotzTarget_of_expAffineHadamardIdentifiedFiniteProductTails
+      Dzero
+      h_Z_ge_15
+      hTuring
+      hHighLog
+      Hbridge
+      Hhad
+      hC
+      rfl
+      HmidIdentified
+      HhighIdentified
+      HlowProductConv
+
+/-- 🌟🌟🌟🌟🌟 **PATH B FRONT DOOR — canonical exp-affine locally-uniform
+Hadamard product convergence + identified finite-product Stieltjes tails.**
+
+Compared with
+`XiPullbackAntiHerglotzTarget_of_canonicalExpAffineFiniteDerivativeHadamard_identifiedFiniteProductTails`,
+this no longer asks for finite derivative convergence or differentiability:
+both are proved internally from the open-region locally-uniform
+Hadamard product convergence theorem. -/
+theorem XiPullbackAntiHerglotzTarget_of_canonicalExpAffineLocallyUniformHadamard_identifiedFiniteProductTails
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    {Hex : HadamardFiniteExhaustion concreteEntireXiZeroSystem.zeroLoc}
+    (HlucSeq :
+      HadamardProductLocallyUniformLimitData
+        concreteEntireXiZeroSystem.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ HlucSeq.region)
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset EntireXiNonzeroZeroIndex => fun s : ℂ =>
+          indexedFiniteHadamardProduct
+            concreteEntireXiZeroSystem.zeroLoc F s)
+        (infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc)
+        Filter.atTop
+        HlucSeq.region)
+    (Hfact :
+      EntireXiHadamardFactorization
+        concreteEntireXiZeroSystem
+        (fun s : ℂ => C * Complex.exp (a + b * s)))
+    (HmidIdentified :
+      ∀ {z : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        ∃ L₀ : ℂ,
+          XiFluctuationTailValue Dzero 10 (canonicalAdaptiveT z) z L₀ ∧
+          Tendsto
+            (fun F : Finset EntireXiNonzeroZeroIndex =>
+              expAffineHadamardFiniteProductResidualTail
+                concreteEntireXiZeroSystem.zeroLoc b F z)
+            Filter.atTop
+            (𝓝 L₀))
+    (HhighIdentified :
+      ∀ {z : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        ∃ L₀ : ℂ,
+          XiFluctuationTailValue Dzero 10 T z L₀ ∧
+          Tendsto
+            (fun F : Finset EntireXiNonzeroZeroIndex =>
+              expAffineHadamardFiniteProductResidualTail
+                concreteEntireXiZeroSystem.zeroLoc b F z)
+            Filter.atTop
+            (𝓝 L₀))
+    (HlowProductConv :
+      ∀ {z : ℂ},
+        lowCompactRegion z →
+        XiPullback z ≠ 0 →
+        LowFirstZeroGapNoAtoms Dzero →
+        Tendsto
+          (fun F : Finset EntireXiNonzeroZeroIndex =>
+            expAffineHadamardFiniteProductLowTail
+              concreteEntireXiZeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 (lowTailZeroContribution Dzero 10 z))) :
+    XiPullbackAntiHerglotzTarget := by
+  let Hderiv :
+      HadamardFiniteDerivativeLimitData
+        concreteEntireXiZeroSystem.zeroLoc Hex :=
+    HadamardFiniteDerivativeLimitData.of_locallyUniformProduct HlucSeq
+  exact
+    XiPullbackAntiHerglotzTarget_of_canonicalExpAffineFiniteDerivativeHadamard_identifiedFiniteProductTails
+      Dzero
+      h_Z_ge_15
+      hTuring
+      hHighLog
+      Hbridge
+      hC
+      Hdist
+      Hderiv
+      (by
+        intro s hs
+        exact Hregion s hs)
+      (by
+        simpa [Hderiv, HadamardFiniteDerivativeLimitData.of_locallyUniformProduct]
+          using HlucFinset)
+      (by
+        intro s hs
+        exact HlucSeq.infinite_differentiableAt
+          (by
+            simpa [Hderiv, HadamardFiniteDerivativeLimitData.of_locallyUniformProduct]
+              using hs))
+      Hfact
+      HmidIdentified
+      HhighIdentified
+      HlowProductConv
+
+/-- 🌟🌟🌟🌟🌟 **PATH B FRONT DOOR — locally-uniform entire-ξ Hadamard
+data + bare Stieltjes residual identities.**
+
+This is the clean non-Turing target after the current reductions:
+
+* Hadamard side: canonical zeros, inverse-square distribution,
+  exp-affine factorization, and open-region locally-uniform finite product
+  convergence.
+* Stieltjes side: mid/high residual identities
+  `ZC - cloud - smooth = fluctuation tail`, plus the low cloud/tail split.
+
+The derivative convergence, differentiability, prefactor data, and
+ordinary mid/high Stieltjes equalities are all discharged internally. -/
+theorem XiPullbackAntiHerglotzTarget_of_canonicalExpAffineLocallyUniformHadamard_stieltjesResiduals
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    {Hex : HadamardFiniteExhaustion concreteEntireXiZeroSystem.zeroLoc}
+    (HlucSeq :
+      HadamardProductLocallyUniformLimitData
+        concreteEntireXiZeroSystem.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ HlucSeq.region)
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset EntireXiNonzeroZeroIndex => fun s : ℂ =>
+          indexedFiniteHadamardProduct
+            concreteEntireXiZeroSystem.zeroLoc F s)
+        (infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc)
+        Filter.atTop
+        HlucSeq.region)
+    (Hfact :
+      EntireXiHadamardFactorization
+        concreteEntireXiZeroSystem
+        (fun s : ℂ => C * Complex.exp (a + b * s)))
+    (HmidResidual :
+      StieltjesMidTailResidualIdentityAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          concreteEntireXiZeroSystem.zeroLoc b))
+    (HhighResidual :
+      StieltjesHighTailResidualIdentityAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          concreteEntireXiZeroSystem.zeroLoc b))
+    (HlowSplit :
+      LowZeroContributionSplitAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          concreteEntireXiZeroSystem.zeroLoc b)) :
+    XiPullbackAntiHerglotzTarget := by
+  let Hhad :
+      EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+    EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_locallyUniformProductLimitData
+      hC Hdist HlucSeq Hregion HlucFinset Hfact
+  have Hst :
+      ClassicalPathBStieltjesInputsAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          concreteEntireXiZeroSystem.zeroLoc b) :=
+    ClassicalPathBStieltjesInputsAFZ.of_midHighResidual_lowSplit_Z_ge_15
+      h_Z_ge_15 HmidResidual HhighResidual HlowSplit
+  exact
+    XiPullbackAntiHerglotzTarget_of_twoPiModel_hadamardAFZAndStieltjesAFZ
+      Dzero
+      h_Z_ge_15
+      hTuring
+      hHighLog
+      (Hhad.toExpAffinePullbackHadamardSourceAFZ Hbridge hC rfl)
+      Hst.toEqualitySource
 
 /-- 🌟🌟 **PROVED — transport AFZ mid-Stieltjes equality across an
 AFZ pointwise equality of zero contributions.** -/

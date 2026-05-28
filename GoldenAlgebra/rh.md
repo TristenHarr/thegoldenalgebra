@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-85,489 lines and roughly 4,088 top-level declarations. It contains no
+89,229 lines and roughly 4,252 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -531,7 +531,10 @@ direct nat-valued principal part at every nontrivial zero, with
 `zetaLogDeriv_principalPart_at_nontrivial_zero_nat` retaining the
 factorization-route spelling; `zetaLogDeriv_integerPrincipalPart_at_nontrivial_zero`
 lifts this zero-side result to the integer-valued interface consumed
-by the later residue-free rectangle machinery.
+by the later residue-free rectangle machinery. The pole side is now
+unconditional via `zetaLogDeriv_principalPart_at_one_unconditional`,
+and the zero-plus-pole package is exported as
+`zetaLogDeriv_principalPartTheorem`.
 
 For the Mathlib-grounded pullback `EntireXiPullback`, the first two
 hold unconditionally:
@@ -1598,25 +1601,97 @@ the three obligation lines, with concrete handoff targets in each case.
   `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_5911_1000`,
   `backlund_log_ge_5911_1000_of_ge_exp_5911_1000`,
   `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_5911_1000`,
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_591097_100000`,
+  `backlund_log_ge_591097_100000_of_ge_exp_591097_100000`,
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_591097_100000`,
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_5910964_1000000`,
+  `backlund_log_ge_5910964_1000000_of_ge_exp_5910964_1000000`,
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_5910964_1000000`,
+  `backlund_log_5910964_1000000_le_177681_100000`,
+  `backlund_log_log_le_tangent_5910964_1000000`,
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_5910961_1000000`,
+  `backlund_log_ge_5910961_1000000_of_ge_exp_5910961_1000000`,
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_5910961_1000000`,
+  `backlund_log_591096_100000_le_88840413_50000000`,
+  `backlund_log_log_le_tangent_591096_100000`,
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_591096_100000`,
+  `backlund_log_ge_591096_100000_of_ge_exp_591096_100000`,
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_591096_100000`,
   `PlattTrudgianBacklundCut5911_1000TailInput`,
   `PlattTrudgianBacklundCut5911_1000TailInput.of_global`,
+  `PlattTrudgianBacklundGlobalInput.concreteS_halfLogPlusHalfEnvelope_tighterDecimal`,
+  `PlattTrudgianBacklundCut591097_100000TailInput`,
+  `PlattTrudgianBacklundCut591097_100000TailInput.of_global`,
+  `PlattTrudgianBacklundCut5910964_1000000TailInput`,
+  `PlattTrudgianBacklundCut5910964_1000000TailInput.of_global`,
+  `PlattTrudgianBacklundCut5910961_1000000TailInput`,
+  `PlattTrudgianBacklundCut5910961_1000000TailInput.of_global`,
   `BacklundFiniteBandCheck140_exp5911_1000`,
+  `BacklundFiniteBandCheck140_exp591097_100000`,
+  `BacklundFiniteBandCheck140_exp5910964_1000000`,
+  `BacklundFiniteBandCheck140_exp5910961_1000000`,
+  `PlattTrudgianBacklundCut591096_100000TailInput`,
+  `PlattTrudgianBacklundCut591096_100000TailInput.of_global`,
+  `BacklundFiniteBandCheck140_exp591096_100000`,
   `BacklundFiniteBandCheck140_exp5911_1000.of_plattTrudgian`,
+  `BacklundFiniteBandCheck140_exp591097_100000.of_plattTrudgian`,
+  `BacklundFiniteBandCheck140_exp5910964_1000000.of_plattTrudgian`,
+  `BacklundFiniteBandCheck140_exp5910961_1000000.of_plattTrudgian`,
   `BacklundGoodHeightArgumentBound.of_plattTrudgian_5911_1000Tail_and_finite`,
+  `BacklundGoodHeightArgumentBound.of_plattTrudgian_591097_100000Tail_and_finite`,
+  `BacklundGoodHeightArgumentBound.of_plattTrudgian_5910964_1000000Tail_and_finite`,
+  `BacklundGoodHeightArgumentBound.of_plattTrudgian_5910961_1000000Tail_and_finite`,
+  `BacklundGoodHeightArgumentBound.of_plattTrudgian_591096_100000Tail_and_finite`,
   `concreteS_halfLogPlusHalf_of_plattTrudgian_5911_1000Tail_and_finite`,
+  `concreteS_halfLogPlusHalf_of_plattTrudgian_591097_100000Tail_and_finite`,
+  `concreteS_halfLogPlusHalf_of_plattTrudgian_5910964_1000000Tail_and_finite`,
+  `concreteS_halfLogPlusHalf_of_plattTrudgian_5910961_1000000Tail_and_finite`,
+  `concreteS_halfLogPlusHalf_of_plattTrudgian_591096_100000Tail_and_finite`,
   and
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_5911_1000`.
+  The tighter decimal route also has
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_591097_100000`
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_5910964_1000000`.
+  The still finer symbolic route also has
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_5910961_1000000`.
   Its concrete endpoint layer records
   `backlund_exp_11_1000_le_101106073_100000000`,
   `backlund_exp_5911_1000_lt_369075049_1000000`,
+  `backlund_exp_1097_100000_le_1011030391079_1000000000000`,
+  `backlund_exp_591097_100000_lt_369064_1000`,
+  `backlund_exp_591097_100000_lt_369075049_1000000`,
+  `backlund_exp_10961_1000000_le_1011021292_1000000000`,
+  `backlund_exp_5910961_1000000_lt_369061_1000`,
+  `backlund_exp_1096_100000_le_1011020281_1000000000`,
+  `backlund_exp_591096_100000_lt_3690603_10000`,
   `BacklundFiniteBandCheck140_369075049_1000000`,
+  `BacklundFiniteBandCheck140_369062_1000`,
+  `BacklundFiniteBandCheck140_369061_1000`,
+  `BacklundFiniteBandCheck140_3690603_10000`,
   `BacklundFiniteBandUniform25167Check140_369075049_1000000`,
   `BacklundFiniteBandUniform25167Check140_369075049_1000000.toFiniteBandCheck`,
   `BacklundFiniteBandCheck140_369075049_1000000.of_plattTrudgian`,
   `BacklundFiniteBandCheck140_exp5911_1000.of_140_369075049_1000000`,
+  `BacklundFiniteBandCheck140_exp591097_100000.of_140_369075049_1000000`,
+  `BacklundFiniteBandCheck140_exp5910964_1000000.of_140_369062_1000`,
+  `BacklundFiniteBandCheck140_exp5910961_1000000.of_140_369061_1000`,
+  `BacklundFiniteBandCheck140_exp591096_100000.of_140_3690603_10000`,
+  `BacklundFiniteBandCheck140_369062_1000.of_140_369064_1000`,
+  `BacklundFiniteBandCheck140_369062_1000.of_140_369075049_1000000`,
+  `BacklundFiniteBandCheck140_369061_1000.of_140_369062_1000`,
+  `BacklundFiniteBandCheck140_369061_1000.of_140_369075049_1000000`,
+  `BacklundFiniteBandCheck140_3690603_10000.of_140_369061_1000`,
+  `BacklundFiniteBandCheck140_3690603_10000.of_140_369075049_1000000`,
   and headline theorems
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369075049_1000000`,
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete369075049_1000000`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369075049_1000000_tighterDecimal`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369062_1000`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369075049_1000000_via369062`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369061_1000`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369075049_1000000_via369061`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite3690603_10000`,
   and
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite369075049_1000000`.
   The improved decimal endpoint now mirrors the count-range certificate
@@ -1782,6 +1857,18 @@ the three obligation lines, with concrete handoff targets in each case.
   `BacklundGrid2EndpointSmoothFacts140_369075049_1000000.ofExpFacts`,
   `BacklundGrid2EndpointCountFacts140_369075049_1000000.ofSeparated`,
   `BacklundGrid2EndpointCountFacts140_369075049_1000000.toEndpointCountRangeMainCertificate`,
+  `backlundGrid2EndpointHeight140_369075049_1000000`,
+  `backlundGrid2EndpointHeight140_369075049_1000000_nonneg`,
+  `backlundGrid2EndpointLeftIndex140_369075049_1000000`,
+  `backlundGrid2EndpointRightIndex140_369075049_1000000`,
+  `backlundGrid2EndpointHeight_left140_369075049_1000000`,
+  `backlundGrid2EndpointHeight_right140_369075049_1000000`,
+  `backlundGrid2EndpointCount_left140_369075049_1000000`,
+  `backlundGrid2EndpointCount_right140_369075049_1000000`,
+  `BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000`,
+  `BacklundGrid2EndpointCountEqualities140_369075049_1000000.ofCumulative`,
+  `BacklundGrid2EndpointCountFacts140_369075049_1000000.ofCumulative`,
+  `BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000.toEndpointCountRangeMainCertificate`,
   and the headline
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2EndpointCountFacts369075049`.
   The separated endpoint-count plus rational/exponential smooth route is
@@ -1789,6 +1876,43 @@ the three obligation lines, with concrete handoff targets in each case.
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CountExpFacts369075049`,
   and its verified smooth-main wrapper is
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CountFacts369075049_verifiedSmooth`.
+  The compact cumulative endpoint-count payload now also reaches the
+  same finite-band interface through
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CumulativeEndpointCounts369075049`.
+  The same compact cumulative payload now also feeds the still-finer
+  `369061/1000` handoff through
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CumulativeEndpointCounts369075049_via369061`.
+  It also has a smaller tail-only handoff
+  `concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2CumulativeEndpointCounts369075049`
+  and source package `ClassicalBacklundTuringPlattTailGrid2CumulativeInputs`,
+  with exports `toGoodHeightArgumentBound`, `toProofInputs`,
+  `toTheoremPackage`, `toProvenBacklundTuringBound`,
+  `toHalfLogPlusHalfSBound`, and `toTuringStyleSBound`, field lemmas
+  `toHalfLogPlusHalfSBound_S`, `toHalfLogPlusHalfSBound_lower`,
+  `toTuringStyleSBound_S`, `toTuringStyleSBound_C`,
+  `toTuringStyleSBound_D`, `toTuringStyleSBound_lower`,
+  `toHalfLogPlusHalfSBound_bound`, and `toTuringStyleSBound_bound`,
+  direct envelope exports `concreteS_halfLogPlusHalfEnvelope` and
+  `concreteS_highLogEnvelope`, and headline theorem
+  `concreteS_halfLogPlusHalf_of_plattTailGrid2CumulativeBacklundTuringInputs`.
+  That current compact Backlund/Turing source is packaged as
+  `ClassicalBacklundTuringPlattGrid2CumulativeInputs`, with exports
+  `toGoodHeightArgumentBound`, `toProofInputs`, `toTheoremPackage`,
+  `toProvenBacklundTuringBound`, `toHalfLogPlusHalfSBound`, and
+  `toTuringStyleSBound`, plus the headline theorem
+  `concreteS_halfLogPlusHalf_of_plattGrid2CumulativeBacklundTuringInputs`.
+  Its concrete field and envelope exports are
+  `ClassicalBacklundTuringPlattGrid2CumulativeInputs.toHalfLogPlusHalfSBound_S`,
+  `ClassicalBacklundTuringPlattGrid2CumulativeInputs.toHalfLogPlusHalfSBound_lower`,
+  `ClassicalBacklundTuringPlattGrid2CumulativeInputs.toTuringStyleSBound_S`,
+  `ClassicalBacklundTuringPlattGrid2CumulativeInputs.toTuringStyleSBound_C`,
+  `ClassicalBacklundTuringPlattGrid2CumulativeInputs.toTuringStyleSBound_D`,
+  `ClassicalBacklundTuringPlattGrid2CumulativeInputs.toTuringStyleSBound_lower`,
+  `ClassicalBacklundTuringPlattGrid2CumulativeInputs.toHalfLogPlusHalfSBound_bound`,
+  `ClassicalBacklundTuringPlattGrid2CumulativeInputs.toTuringStyleSBound_bound`,
+  `ClassicalBacklundTuringPlattGrid2CumulativeInputs.concreteS_halfLogPlusHalfEnvelope`,
+  and
+  `ClassicalBacklundTuringPlattGrid2CumulativeInputs.concreteS_highLogEnvelope`.
   The sharp sourced pair is also packaged as
   `ClassicalBacklundTuringPlattGlobalFiniteRangeInputs`, with exports
   `toGoodHeightArgumentBound`, `toProofInputs`,
@@ -1976,7 +2100,10 @@ the three obligation lines, with concrete handoff targets in each case.
   `BacklundFiniteBandEndpointCumulativeCountMainCertificate140_374`
   records cumulative zero counts only at slab endpoints; the monotonicity
   lemma `zetaWeightedZeroCountUpToHeight_eq_of_endpoint_eq` makes the
-  count constant on the slab. Its adapters `toEndpoint` and
+  count constant on the slab, while
+  `zetaWeightedZeroCountUpToHeight_proof_irrel` and
+  `zetaWeightedZeroCountUpToHeight_eq_of_eq` normalize proof terms and
+  equal endpoint heights in later concrete tables. Its adapters `toEndpoint` and
   `toUniform25167Check` culminate in
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCumulativeCountMainFinite374`.
   A more robust count-range interface,
@@ -2297,7 +2424,10 @@ the three obligation lines, with concrete handoff targets in each case.
   $\mathrm{ZC}(z) = P(z) + \text{tailZC}(z)$.
   The named tail-value wrapper also records the Hausdorff uniqueness
   and transport utilities `XiFluctuationTailValue.unique` and
-  `XiFluctuationTailValue.congr`.
+  `XiFluctuationTailValue.congr`, plus the true-kernel adapters
+  `XiFluctuationTailValue.of_trueKernelAdaptiveTail`,
+  `XiFluctuationTailValue.trueKernelAdaptiveTail_mid`, and
+  `XiFluctuationTailValue.trueKernelAdaptiveTail_high`.
 
 For convenience, `PathBNonTuringInputs Dzero ι` bundles (P2), (P3),
 and the zero-start condition in one structure, with the Stieltjes side
@@ -2715,7 +2845,10 @@ Hadamard product over an indexed zero family:
 `hadamardGenus1Factor (ρ s) := (1 - s/ρ) · exp(s/ρ)`,
 `infiniteHadamardProduct`, `hadamardRegularizedLogDerivSeries`,
 `HadamardLocallyUniformProductData`, `HadamardLogDerivLimitData`,
-`HadamardZeroInvSqSummability`, `GenusOneTaylorBoundData`,
+`HadamardZeroInvSqSummability`, `HadamardZeroNormProper`,
+`HadamardZeroNormProper.eventually_large`,
+`HadamardZeroInvSqSummability.of_invSqSummable_normProper`,
+`GenusOneTaylorBoundData`,
 `CompletedXiHadamardProductWithZeros`, and the user-facing
 `ClassicalPathBAnalyticInputs ι` with composite bridge
 `toCompletedXiSourceAFZ`.
@@ -2748,7 +2881,20 @@ side now has
 `StieltjesMidHighTailEqualityAFZ.of_mid_high` and
 `stieltjesMidHighTailEqualityAFZ_iff_mid_and_high`, and the assembled
 Stieltjes bundle has
-`classicalPathBStieltjesInputsAFZ_iff_equalitySourceAFZ`. The standard
+`classicalPathBStieltjesInputsAFZ_iff_equalitySourceAFZ`. The mid/high
+Stieltjes equalities also have bare residual identity forms
+`StieltjesMidTailResidualIdentityAFZ` and
+`StieltjesHighTailResidualIdentityAFZ`, with conversions
+`StieltjesMidTailEqualityAFZ.of_residualIdentity`,
+`StieltjesMidTailResidualIdentityAFZ.of_tailEquality`,
+`stieltjesMidTailEqualityAFZ_iff_residualIdentity`,
+`StieltjesHighTailEqualityAFZ.of_residualIdentity`,
+`StieltjesHighTailResidualIdentityAFZ.of_tailEquality`, and
+`stieltjesHighTailEqualityAFZ_iff_residualIdentity`. These feed the
+assembled Stieltjes bundle through
+`ClassicalPathBStieltjesInputsAFZ.of_midHighResidual_lowSplit` and
+`ClassicalPathBStieltjesInputsAFZ.of_midHighResidual_lowSplit_Z_ge_15`.
+The standard
 `Z ≥ 15` hypothesis now bypasses explicit `DzeroStartsAfter` plumbing via
 `LowFirstZeroGapNoAtoms.of_Z_ge_15`,
 `LowFiniteStieltjesResidualSourceAFZ.of_ibpSource_and_Z_ge_15`,
@@ -2774,13 +2920,20 @@ lives at §CCCLXV.
 
 **Atomic low-split reducer** (§CCCLXIX). `LowCloudTailSplitAFZ`
 reduces `LowZeroContributionSplitAFZ` to three identity fields against
-any chosen decomposition.
+any chosen decomposition. The explicit model layer now includes
+`LowCloudTailSplitAFZ.of_fun_sum`,
+`LowCloudTailSplitAFZ.explicit_lowModel`,
+`LowZeroContributionSplitAFZ.explicit_lowModel`,
+`StieltjesLowEqualityAFZ.explicit_lowModel_of_startsAfter`, and
+`StieltjesLowEqualityAFZ.explicit_lowModel_of_Z_ge_15`.
 
 **Concrete Hadamard handoff bundles** (§§CCCLXX–CCCLXXVI). The
 analytic-agent-facing templates for the raw-ξ form:
 `ConcreteCompletedXiZeroSystem`, `ConcreteCompletedXiHadamardPrefactor`
 with the `.exp_affine` convenience, `ConcreteCompletedXiHadamardFactorization`,
-`CompletedXiZeroInvSqDistribution`, `ConcreteCompletedXiHadamardInputs`,
+`CompletedXiZeroInvSqDistribution`,
+`CompletedXiZeroInvSqDistribution.of_invSqSummable_normProper`,
+`ConcreteCompletedXiHadamardInputs`,
 and the concrete-input front door
 `XiPullbackAntiHerglotzTarget_of_concreteHadamard_midHigh_cloudTailLow`.
 The Hadamard LUC/log-derivative handoff can now be stated directly on
@@ -2789,8 +2942,9 @@ the ξ-nonzero region through `HadamardProductLUCOnXiNonzeroData`; its
 `HadamardProductLUCOnXiNonzeroData.of_LUCLogDerivData` feed
 `ClassicalPathBAnalyticInputs.of_hadamard_packages_onXiNonzero`,
 `ConcreteCompletedXiHadamardInputs.of_lucOnXiNonzero`,
-`ConcreteCompletedXiHadamardInputs.of_lucLogDerivData`, and the
-publication constructors. Its nonzero completed-ξ zero-system layer now
+`ConcreteCompletedXiHadamardInputs.of_lucLogDerivData`,
+`ConcreteCompletedXiHadamardInputs.of_finiteDerivativeLimitData`, and
+the publication constructors. Its nonzero completed-ξ zero-system layer now
 includes `CompletedXiNonzeroZeroIndex`, `completedXiNonzeroZeroLoc`,
 `ConcreteCompletedXiNonzeroZeroSystem`,
 `ConcreteCompletedXiNonzeroZeroSystem.nonzero_no_collision`, and
@@ -2798,7 +2952,9 @@ includes `CompletedXiNonzeroZeroIndex`, `completedXiNonzeroZeroLoc`,
 zero payload from the later bridge that may reinsert the origin. The
 publication constructors
 `CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero` and
-`CompletedXiClassicalHadamardTheorem.of_lucLogDerivData`. It also has a
+`CompletedXiClassicalHadamardTheorem.of_lucLogDerivData`, plus the
+finite-derivative front door
+`CompletedXiClassicalHadamardTheorem.of_finiteDerivativeLimitData`. It also has a
 direct completed-ξ source constructor
 `CompletedXiLogDerivativeSourceAFZ.of_lucOnXiNonzeroHadamard` and its
 arbitrary-region sibling
@@ -2836,10 +2992,12 @@ The genuine entire-ξ side has the analogous LUC package:
 `HadamardProductLUCOnEntireXiNonzeroData`,
 `HadamardProductLUCOnEntireXiNonzeroData.toLUCLogDerivData`,
 `HadamardProductLUCOnEntireXiNonzeroData.of_LUCLogDerivData`,
+`HadamardProductLUCOnEntireXiNonzeroData.of_finiteDerivativeLimitData`,
 `HadamardProductLUCOnEntireXiNonzeroData.toLogDerivLimitData`,
 `HadamardProductLUCLogDerivData.toEntireXiLogDerivLimitData`,
 `EntireXiClassicalHadamardTheorem.of_lucOnEntireXiNonzero`, and
-`EntireXiClassicalHadamardTheorem.of_lucLogDerivData`; the bundle now
+`EntireXiClassicalHadamardTheorem.of_lucLogDerivData`, plus
+`EntireXiClassicalHadamardTheorem.of_finiteDerivativeLimitData`; the bundle now
 also exposes
 `EntireXiClassicalHadamardTheorem.product_multipliable` and
 `EntireXiClassicalHadamardTheorem.toLogDerivLimitData`, plus nonzero-
@@ -2858,7 +3016,9 @@ The canonical-zero route now also has exponential-affine prefactor
 front doors
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucOnEntireXiNonzero`
 and
-`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucLogDerivData`.
+`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucLogDerivData`,
+plus the finite-derivative version
+`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_finiteDerivativeLimitData`.
 The explicit Hadamard log-derivative layer now includes
 `logDerivativeResponse_exp_affine_prefactor`,
 `EntireXiClassicalHadamardTheorem.logDerivativeResponse_eq_prefactor_plus_series`,
@@ -2891,6 +3051,17 @@ It also exposes the direct AFZ source/front-door layer
 `EntireXiClassicalHadamardTheorem.tendsto_finiteHadamardRegularizedSum_at_XiPullback_nonzero`,
 `EntireXiClassicalHadamardTheorem.tendsto_finiteProductLogDeriv_at_XiPullback_nonzero`,
 `EntireXiClassicalHadamardTheorem.tendsto_expAffine_finiteProductLogDeriv_to_XiPullback_logDerivativeResponse`,
+`deriv_indexedFiniteHadamardProduct`,
+`deriv_indexedFiniteHadamardProduct_eq_response`,
+`deriv_indexedFiniteHadamardProduct_at_exhaustion`,
+`indexedFiniteHadamardProduct_differentiableAt`,
+`indexedFiniteHadamardProduct_differentiableOn`,
+`HadamardFiniteDerivativeLimitData`,
+`HadamardProductLocallyUniformLimitData`,
+`HadamardFiniteDerivativeLimitData.of_locallyUniformProduct`,
+`HadamardFiniteDerivativeLimitData.logDeriv_eq_tsum_at`,
+`HadamardLogDerivLimitData.of_finiteDerivativeLimitData`,
+`HadamardProductLUCLogDerivData.of_finiteDerivativeLimitData`,
 `EntireXiClassicalHadamardTheorem.tendsto_expAffineHadamardPullbackFiniteContribution`,
 `EntireXiClassicalHadamardTheorem.tendsto_expAffineHadamardPullbackFiniteContribution_compact`,
 `EntireXiClassicalHadamardTheorem.tendsto_expAffineHadamardPullbackFiniteContribution_to_XiPullback_logDerivativeResponse`,
@@ -2922,6 +3093,8 @@ It also exposes the direct AFZ source/front-door layer
 `ExpAffineHadamardResidualTailConvergenceMidAFZ.of_stieltjesEquality`,
 `ExpAffineHadamardResidualTailConvergenceHighAFZ.of_stieltjesEquality`,
 `ExpAffineHadamardResidualTailConvergenceLowAFZ.of_lowZeroSplit`,
+`ExpAffineHadamardResidualTailConvergenceMidAFZ.of_residualIdentity`,
+`ExpAffineHadamardResidualTailConvergenceHighAFZ.of_residualIdentity`,
 `expAffineHadamardFiniteProductResidualTailConvergenceMid_of_stieltjesEquality`,
 `expAffineHadamardFiniteProductResidualTailConvergenceHigh_of_stieltjesEquality`,
 `expAffineHadamardFiniteProductLowTailConvergence_of_lowZeroSplit`,
@@ -2936,10 +3109,17 @@ It also exposes the direct AFZ source/front-door layer
 `expAffineHadamardFiniteProductLowTailConvergence_iff_residualTailConvergenceLow`,
 `expAffineHadamardFiniteProductResidualTailConvergenceMid_iff_stieltjesMidTailEqualityAFZ`,
 `expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_stieltjesHighTailEqualityAFZ`,
+`expAffineHadamardFiniteProductResidualTailConvergenceMid_iff_stieltjesMidTailResidualIdentityAFZ`,
+`expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_stieltjesHighTailResidualIdentityAFZ`,
 `expAffineHadamardFiniteProductLowTailConvergence_iff_lowZeroContributionSplitAFZ`,
 `expAffineHadamardFiniteProductResidualTailConvergenceMid_of_exists_identified_tail`,
 `expAffineHadamardFiniteProductResidualTailConvergenceHigh_of_exists_identified_tail`,
+`ClassicalPathBStieltjesInputsAFZ.of_expAffineHadamardFiniteProductConvergences`,
+`ClassicalPathBStieltjesInputsAFZ.of_expAffineHadamardIdentifiedFiniteProductTails`,
 `XiPullbackAntiHerglotzTarget_of_expAffineHadamardFiniteProductResidualConvergence`,
+`XiPullbackAntiHerglotzTarget_of_expAffineHadamardIdentifiedFiniteProductTails`,
+`XiPullbackAntiHerglotzTarget_of_canonicalExpAffineFiniteDerivativeHadamard_identifiedFiniteProductTails`,
+`XiPullbackAntiHerglotzTarget_of_canonicalExpAffineLocallyUniformHadamard_stieltjesResiduals`,
 `expAffineHadamardResidualTailConvergenceMid_iff_stieltjesMidTailEqualityAFZ`,
 `expAffineHadamardResidualTailConvergenceHigh_iff_stieltjesHighTailEqualityAFZ`,
 `expAffineHadamardResidualTailConvergenceLow_iff_lowZeroContributionSplitAFZ`,
@@ -2999,7 +3179,17 @@ front door
 **Entire-ξ Hadamard chain** (§§CCCLXXX–CCCLXXXIX). The parallel
 Hadamard infrastructure for `entireRiemannXi`:
 `ConcreteEntireXiZeroSystem`, `EntireXiZeroInvSqDistribution`,
+`EntireXiZeroInvSqDistribution.of_invSqSummable_normProper`,
+`EntireXiCanonicalZeroNormProper`,
+`EntireXiZeroInvSqDistribution.of_canonical_invSqSummable_normProper`,
 `EntireXiHadamardPrefactor`, `EntireXiHadamardFactorization`,
+`EntireXiHadamardQuotientFactorization`,
+`EntireXiHadamardFactorization.of_quotientFactorization`,
+`hadamardGenus1Factor_self_eq_zero`,
+`infiniteHadamardProduct_eq_zero_at_zeroLoc`,
+`EntireXiHadamardFactorization.of_offZeroQuotient`,
+`EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient`,
+`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_offZeroQuotient_lucOnEntireXiNonzero`,
 `EntireXiClassicalHadamardTheorem` (§CCCLXXXVIII), and
 `EntireXiLogDerivativeSourceAFZ`. The source-level front door
 `XiPullbackAntiHerglotzTarget_of_completedXiSource_midHigh_lowSplit`
@@ -3533,7 +3723,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-85,489 lines and roughly 4,088 top-level declarations.
+89,229 lines and roughly 4,252 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
