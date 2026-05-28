@@ -4471,6 +4471,26 @@ theorem smoothMainTerm_upper_bound_of_log_ratio_upper
   unfold smoothMainTerm smoothZeroCountingN0
   linarith
 
+/-- A certified lower bound for the positive ratio `T / (2π)` gives the
+corresponding lower logarithm bound. -/
+theorem log_ratio_lower_of_ratio_lower
+    {T ratioLower logLower : ℝ}
+    (hratio_pos : 0 < ratioLower)
+    (hratio : ratioLower ≤ T / (2 * Real.pi))
+    (hlog : logLower ≤ Real.log ratioLower) :
+    logLower ≤ Real.log (T / (2 * Real.pi)) := by
+  exact le_trans hlog (Real.log_le_log hratio_pos hratio)
+
+/-- A certified upper bound for the positive ratio `T / (2π)` gives the
+corresponding upper logarithm bound. -/
+theorem log_ratio_upper_of_ratio_upper
+    {T ratioUpper logUpper : ℝ}
+    (hT_ratio_pos : 0 < T / (2 * Real.pi))
+    (hratio : T / (2 * Real.pi) ≤ ratioUpper)
+    (hlog : Real.log ratioUpper ≤ logUpper) :
+    Real.log (T / (2 * Real.pi)) ≤ logUpper := by
+  exact le_trans (Real.log_le_log hT_ratio_pos hratio) hlog
+
 /-! ### Zero-set predicates
 
 We define the predicates needed to talk about nontrivial zeta zeros up to
@@ -20088,6 +20108,102 @@ noncomputable def
   upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
   upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
 
+/-- Ratio-bound version of a Backlund finite-band slab.  This is the
+certificate shape closest to rational interval arithmetic: the table may
+bound `T / (2π)` first, then bound the logarithms of those rational
+ratio endpoints, and finally discharge only linear arithmetic in the
+smooth main term. -/
+structure BacklundArgumentPrincipleTheoremRatioBoundSlabCertificate where
+  R : ZetaRectangle
+  hleft : R.left < 0
+  hright : 1 < R.right
+  hbottom_two_pi : 2 * Real.pi ≤ R.bottom
+  hgood : GoodHeight R.top
+  theoremData :
+    R.ZetaRectangleArgumentPrincipleTheorem
+      hleft hright
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hbottom_two_pi)
+      hgood
+  argumentIndex_nonneg :
+    0 ≤ theoremData.argumentIndex
+  leftCount : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  bottomRatioLower : ℝ
+  topRatioUpper : ℝ
+  bottomLogLower : ℝ
+  topLogUpper : ℝ
+  left_count_eq :
+    zetaWeightedZeroCountUpToHeight R.bottom
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hbottom_two_pi) =
+      leftCount
+  bottom_ratio_pos :
+    0 < bottomRatioLower
+  bottom_ratio_lower :
+    bottomRatioLower ≤ R.bottom / (2 * Real.pi)
+  bottom_log_lower :
+    bottomLogLower ≤ Real.log bottomRatioLower
+  top_ratio_upper :
+    R.top / (2 * Real.pi) ≤ topRatioUpper
+  top_log_upper :
+    Real.log topRatioUpper ≤ topLogUpper
+  bottom_main_arith :
+    mainLower
+      ≤ (R.bottom / (2 * Real.pi)) * bottomLogLower
+        - R.bottom / (2 * Real.pi) + 7 / 8
+  top_main_arith :
+    (R.top / (2 * Real.pi)) * topLogUpper
+      - R.top / (2 * Real.pi) + 7 / 8
+        ≤ mainUpper
+  upperCount_minus_lowerMain_le :
+    ((leftCount
+        + theoremData.toActualNormalizedData.toCanonicalData.toFormula.argumentIndexNat
+          { argumentIndex_nonneg := argumentIndex_nonneg } : ℕ) : ℝ)
+      - mainLower ≤ (25167 / 10000 : ℝ)
+  upperMain_minus_lowerCount_le :
+    mainUpper - (leftCount : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- Ratio-bound theorem-target slabs lower to log-bound theorem-target
+slabs by monotonicity of `Real.log`. -/
+noncomputable def
+    BacklundArgumentPrincipleTheoremRatioBoundSlabCertificate.toLogBoundSlab
+    (S : BacklundArgumentPrincipleTheoremRatioBoundSlabCertificate) :
+    BacklundArgumentPrincipleTheoremLogBoundSlabCertificate where
+  R := S.R
+  hleft := S.hleft
+  hright := S.hright
+  hbottom_two_pi := S.hbottom_two_pi
+  hgood := S.hgood
+  theoremData := S.theoremData
+  argumentIndex_nonneg := S.argumentIndex_nonneg
+  leftCount := S.leftCount
+  mainLower := S.mainLower
+  mainUpper := S.mainUpper
+  bottomLogLower := S.bottomLogLower
+  topLogUpper := S.topLogUpper
+  left_count_eq := S.left_count_eq
+  bottom_log_lower :=
+    log_ratio_lower_of_ratio_lower
+      S.bottom_ratio_pos
+      S.bottom_ratio_lower
+      S.bottom_log_lower
+  top_log_upper := by
+    have hbottom_pos : 0 < S.R.bottom :=
+      lt_of_lt_of_le (by positivity) S.hbottom_two_pi
+    have htop_pos : 0 < S.R.top :=
+      lt_of_lt_of_le hbottom_pos S.R.hbottom_lt_top.le
+    have htop_ratio_pos : 0 < S.R.top / (2 * Real.pi) := by
+      positivity
+    exact
+      log_ratio_upper_of_ratio_upper
+        htop_ratio_pos
+        S.top_ratio_upper
+        S.top_log_upper
+  bottom_main_arith := S.bottom_main_arith
+  top_main_arith := S.top_main_arith
+  upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
+  upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
+
 /-- A finite list of endpoint-style slabs covering `[140, 374]`. -/
 structure BacklundFiniteBandEndpointCountMainCertificate140_374 where
   slabs : List BacklundEndpointCountMainSlabCertificate
@@ -20141,6 +20257,15 @@ structure
 structure
     BacklundFiniteBandArgumentPrincipleTheoremLogBoundCertificate140_374 where
   slabs : List BacklundArgumentPrincipleTheoremLogBoundSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
+      ∃ S ∈ slabs, S.R.bottom ≤ T ∧ T ≤ S.R.top
+
+/-- A finite list of ratio-bound theorem-target slabs covering
+`[140, 374]`. -/
+structure
+    BacklundFiniteBandArgumentPrincipleTheoremRatioBoundCertificate140_374 where
+  slabs : List BacklundArgumentPrincipleTheoremRatioBoundSlabCertificate
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       ∃ S ∈ slabs, S.R.bottom ≤ T ∧ T ≤ S.R.top
@@ -20244,6 +20369,22 @@ noncomputable def
     refine ⟨S.toTheoremSlab, ?_, hA, hB⟩
     exact List.mem_map.mpr ⟨S, hS, rfl⟩
 
+/-- Ratio-bound theorem-target slabs supply log-bound theorem-target
+slabs. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleTheoremRatioBoundCertificate140_374.toLogBound
+    (C :
+      BacklundFiniteBandArgumentPrincipleTheoremRatioBoundCertificate140_374) :
+    BacklundFiniteBandArgumentPrincipleTheoremLogBoundCertificate140_374 where
+  slabs := C.slabs.map
+    (fun S : BacklundArgumentPrincipleTheoremRatioBoundSlabCertificate =>
+      S.toLogBoundSlab)
+  cover := by
+    intro T hT140 hT374
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT374
+    refine ⟨S.toLogBoundSlab, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
 /-- Count/main-term slab certificates supply the narrow uniform finite
 band certificate on `[140, 374]`. -/
 noncomputable def
@@ -20325,6 +20466,15 @@ noncomputable def
       BacklundFiniteBandArgumentPrincipleTheoremLogBoundCertificate140_374) :
     BacklundFiniteBandUniform25167Check140_374 :=
   C.toTheoremCountRange.toUniform25167Check
+
+/-- Ratio-bound theorem-target slabs supply the narrow uniform finite-band
+certificate on `[140, 374]`. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleTheoremRatioBoundCertificate140_374.toUniform25167Check
+    (C :
+      BacklundFiniteBandArgumentPrincipleTheoremRatioBoundCertificate140_374) :
+    BacklundFiniteBandUniform25167Check140_374 :=
+  C.toLogBound.toUniform25167Check
 
 /-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
 concrete finite-band target `[140, 374]`. -/
@@ -20495,6 +20645,23 @@ theorem
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremCountRangeMainFinite374
     Hglobal
     Hfinite.toTheoremCountRange
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and ratio-bound theorem-target slabs on `[140, 374]`.  This
+pushes the finite-band arithmetic one step closer to raw rational
+certificates: bound endpoint ratios, bound logs of the rational
+endpoints, and the existing Backlund/Turing chain closes the theorem. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremRatioBoundFinite374
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandArgumentPrincipleTheoremRatioBoundCertificate140_374)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremLogBoundFinite374
+    Hglobal
+    Hfinite.toLogBound
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
