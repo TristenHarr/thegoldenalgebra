@@ -4432,6 +4432,45 @@ theorem smoothMainTerm_bounds_of_endpoint_bounds
   · exact le_trans hlow hleft
   · exact le_trans hright hhigh
 
+/-- A lower log-ratio bound gives a lower bound for the Backlund smooth
+main term.  This is the reusable endpoint arithmetic step needed by the
+finite `[140, 374]` slab table. -/
+theorem smoothMainTerm_lower_bound_of_log_ratio_lower
+    {T logLower mainLower : ℝ}
+    (hT0 : 0 ≤ T)
+    (hlog : logLower ≤ Real.log (T / (2 * Real.pi)))
+    (harith :
+      mainLower
+        ≤ (T / (2 * Real.pi)) * logLower
+          - T / (2 * Real.pi) + 7 / 8) :
+    mainLower ≤ smoothMainTerm T := by
+  have hratio_nonneg : 0 ≤ T / (2 * Real.pi) := by positivity
+  have hmul :
+      (T / (2 * Real.pi)) * logLower
+        ≤ (T / (2 * Real.pi)) * Real.log (T / (2 * Real.pi)) :=
+    mul_le_mul_of_nonneg_left hlog hratio_nonneg
+  unfold smoothMainTerm smoothZeroCountingN0
+  linarith
+
+/-- An upper log-ratio bound gives an upper bound for the Backlund smooth
+main term. -/
+theorem smoothMainTerm_upper_bound_of_log_ratio_upper
+    {T logUpper mainUpper : ℝ}
+    (hT0 : 0 ≤ T)
+    (hlog : Real.log (T / (2 * Real.pi)) ≤ logUpper)
+    (harith :
+      (T / (2 * Real.pi)) * logUpper
+        - T / (2 * Real.pi) + 7 / 8
+          ≤ mainUpper) :
+    smoothMainTerm T ≤ mainUpper := by
+  have hratio_nonneg : 0 ≤ T / (2 * Real.pi) := by positivity
+  have hmul :
+      (T / (2 * Real.pi)) * Real.log (T / (2 * Real.pi))
+        ≤ (T / (2 * Real.pi)) * logUpper :=
+    mul_le_mul_of_nonneg_left hlog hratio_nonneg
+  unfold smoothMainTerm smoothZeroCountingN0
+  linarith
+
 /-! ### Zero-set predicates
 
 We define the predicates needed to talk about nontrivial zeta zeros up to
@@ -19970,6 +20009,85 @@ noncomputable def
   upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
   upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
 
+/-- Log-bound version of a Backlund finite-band slab.  This is closer to
+the arithmetic certificate the finite table should emit: instead of
+proving endpoint bounds for `smoothMainTerm` directly, it supplies lower
+and upper bounds for the endpoint logarithms plus pure arithmetic
+inequalities. -/
+structure BacklundArgumentPrincipleTheoremLogBoundSlabCertificate where
+  R : ZetaRectangle
+  hleft : R.left < 0
+  hright : 1 < R.right
+  hbottom_two_pi : 2 * Real.pi ≤ R.bottom
+  hgood : GoodHeight R.top
+  theoremData :
+    R.ZetaRectangleArgumentPrincipleTheorem
+      hleft hright
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hbottom_two_pi)
+      hgood
+  argumentIndex_nonneg :
+    0 ≤ theoremData.argumentIndex
+  leftCount : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  bottomLogLower : ℝ
+  topLogUpper : ℝ
+  left_count_eq :
+    zetaWeightedZeroCountUpToHeight R.bottom
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hbottom_two_pi) =
+      leftCount
+  bottom_log_lower :
+    bottomLogLower ≤ Real.log (R.bottom / (2 * Real.pi))
+  top_log_upper :
+    Real.log (R.top / (2 * Real.pi)) ≤ topLogUpper
+  bottom_main_arith :
+    mainLower
+      ≤ (R.bottom / (2 * Real.pi)) * bottomLogLower
+        - R.bottom / (2 * Real.pi) + 7 / 8
+  top_main_arith :
+    (R.top / (2 * Real.pi)) * topLogUpper
+      - R.top / (2 * Real.pi) + 7 / 8
+        ≤ mainUpper
+  upperCount_minus_lowerMain_le :
+    ((leftCount
+        + theoremData.toActualNormalizedData.toCanonicalData.toFormula.argumentIndexNat
+          { argumentIndex_nonneg := argumentIndex_nonneg } : ℕ) : ℝ)
+      - mainLower ≤ (25167 / 10000 : ℝ)
+  upperMain_minus_lowerCount_le :
+    mainUpper - (leftCount : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- Log-bound theorem-target slabs lower to theorem-target slabs by the
+generic smooth-main endpoint arithmetic lemmas. -/
+noncomputable def
+    BacklundArgumentPrincipleTheoremLogBoundSlabCertificate.toTheoremSlab
+    (S : BacklundArgumentPrincipleTheoremLogBoundSlabCertificate) :
+    BacklundArgumentPrincipleTheoremCountRangeMainSlabCertificate where
+  R := S.R
+  hleft := S.hleft
+  hright := S.hright
+  hbottom_two_pi := S.hbottom_two_pi
+  hgood := S.hgood
+  theoremData := S.theoremData
+  argumentIndex_nonneg := S.argumentIndex_nonneg
+  leftCount := S.leftCount
+  mainLower := S.mainLower
+  mainUpper := S.mainUpper
+  left_count_eq := S.left_count_eq
+  mainLower_le_left :=
+    smoothMainTerm_lower_bound_of_log_ratio_lower
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) S.hbottom_two_pi)
+      S.bottom_log_lower
+      S.bottom_main_arith
+  right_le_mainUpper :=
+    smoothMainTerm_upper_bound_of_log_ratio_upper
+      (le_trans
+        (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) S.hbottom_two_pi)
+        S.R.hbottom_lt_top.le)
+      S.top_log_upper
+      S.top_main_arith
+  upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
+  upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
+
 /-- A finite list of endpoint-style slabs covering `[140, 374]`. -/
 structure BacklundFiniteBandEndpointCountMainCertificate140_374 where
   slabs : List BacklundEndpointCountMainSlabCertificate
@@ -20014,6 +20132,15 @@ covering `[140, 374]`. -/
 structure
     BacklundFiniteBandArgumentPrincipleTheoremCountRangeMainCertificate140_374 where
   slabs : List BacklundArgumentPrincipleTheoremCountRangeMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
+      ∃ S ∈ slabs, S.R.bottom ≤ T ∧ T ≤ S.R.top
+
+/-- A finite list of log-bound theorem-target slabs covering
+`[140, 374]`. -/
+structure
+    BacklundFiniteBandArgumentPrincipleTheoremLogBoundCertificate140_374 where
+  slabs : List BacklundArgumentPrincipleTheoremLogBoundSlabCertificate
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       ∃ S ∈ slabs, S.R.bottom ≤ T ∧ T ≤ S.R.top
@@ -20102,6 +20229,21 @@ noncomputable def
     refine ⟨S.toArgumentPrinciple, ?_, hA, hB⟩
     exact List.mem_map.mpr ⟨S, hS, rfl⟩
 
+/-- Log-bound theorem-target slabs supply theorem-target slabs. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleTheoremLogBoundCertificate140_374.toTheoremCountRange
+    (C :
+      BacklundFiniteBandArgumentPrincipleTheoremLogBoundCertificate140_374) :
+    BacklundFiniteBandArgumentPrincipleTheoremCountRangeMainCertificate140_374 where
+  slabs := C.slabs.map
+    (fun S : BacklundArgumentPrincipleTheoremLogBoundSlabCertificate =>
+      S.toTheoremSlab)
+  cover := by
+    intro T hT140 hT374
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT374
+    refine ⟨S.toTheoremSlab, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
 /-- Count/main-term slab certificates supply the narrow uniform finite
 band certificate on `[140, 374]`. -/
 noncomputable def
@@ -20174,6 +20316,15 @@ noncomputable def
       BacklundFiniteBandArgumentPrincipleTheoremCountRangeMainCertificate140_374) :
     BacklundFiniteBandUniform25167Check140_374 :=
   C.toArgumentPrinciple.toUniform25167Check
+
+/-- Log-bound theorem-target slabs supply the narrow uniform finite-band
+certificate on `[140, 374]`. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleTheoremLogBoundCertificate140_374.toUniform25167Check
+    (C :
+      BacklundFiniteBandArgumentPrincipleTheoremLogBoundCertificate140_374) :
+    BacklundFiniteBandUniform25167Check140_374 :=
+  C.toTheoremCountRange.toUniform25167Check
 
 /-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
 concrete finite-band target `[140, 374]`. -/
@@ -20328,6 +20479,22 @@ theorem
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleCountRangeMainFinite374
     Hglobal
     Hfinite.toArgumentPrinciple
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and log-bound theorem-target slabs on `[140, 374]`.  This is the
+same finite route, but the endpoint `smoothMainTerm` obligations are
+reduced to log-ratio bounds and pure arithmetic. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremLogBoundFinite374
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandArgumentPrincipleTheoremLogBoundCertificate140_374)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremCountRangeMainFinite374
+    Hglobal
+    Hfinite.toTheoremCountRange
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
