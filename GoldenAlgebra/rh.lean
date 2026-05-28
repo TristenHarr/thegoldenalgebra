@@ -20327,6 +20327,130 @@ noncomputable def BacklundEndpointCountRangeMainSlabCertificate.toRangeSlab
   upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
   upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
 
+/-- In the current Backlund finite band every slab bottom is at least
+`140`, hence automatically above `2π`. -/
+theorem backlund_two_pi_le_of_ge_140
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    2 * Real.pi ≤ T := by
+  have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+  nlinarith
+
+/-- Fixed-pi exp endpoint count-range slab certificate.  This removes the
+raw endpoint `smoothMainTerm` inequalities from
+`BacklundEndpointCountRangeMainSlabCertificate`: the finite row supplies
+rational ratio bounds and exponential log certificates instead. -/
+structure BacklundEndpointCountRangeFixedPiExpSlabCertificate where
+  A : ℝ
+  B : ℝ
+  hA_two_pi : 2 * Real.pi ≤ A
+  hAB : A ≤ B
+  countLower : ℕ
+  countUpper : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  bottomRatioLower : ℝ
+  topRatioUpper : ℝ
+  bottomLogLower : ℝ
+  topLogUpper : ℝ
+  left_count_eq :
+    zetaWeightedZeroCountUpToHeight A
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hA_two_pi) =
+      countLower
+  right_count_eq :
+    zetaWeightedZeroCountUpToHeight B
+      (le_trans
+        (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hA_two_pi)
+        hAB) =
+      countUpper
+  bottom_ratio_mul_arith :
+    2 * (3141593 / 1000000 : ℝ) * bottomRatioLower ≤ A
+  top_ratio_mul_arith :
+    B ≤ 2 * (3141592 / 1000000 : ℝ) * topRatioUpper
+  bottom_exp_log_lower :
+    Real.exp bottomLogLower ≤ bottomRatioLower
+  top_log_upper_exp :
+    topRatioUpper ≤ Real.exp topLogUpper
+  bottom_main_arith :
+    mainLower
+      ≤ (A / (2 * Real.pi)) * bottomLogLower
+        - A / (2 * Real.pi) + 7 / 8
+  top_main_arith :
+    (B / (2 * Real.pi)) * topLogUpper
+      - B / (2 * Real.pi) + 7 / 8
+        ≤ mainUpper
+  upperCount_minus_lowerMain_le :
+    (countUpper : ℝ) - mainLower ≤ (25167 / 10000 : ℝ)
+  upperMain_minus_lowerCount_le :
+    mainUpper - (countLower : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- Fixed-pi exp endpoint count-range slabs lower to endpoint
+count-range/main-term slabs. -/
+noncomputable def
+    BacklundEndpointCountRangeFixedPiExpSlabCertificate.toEndpointRangeSlab
+    (S : BacklundEndpointCountRangeFixedPiExpSlabCertificate) :
+    BacklundEndpointCountRangeMainSlabCertificate where
+  A := S.A
+  B := S.B
+  countLower := S.countLower
+  countUpper := S.countUpper
+  mainLower := S.mainLower
+  mainUpper := S.mainUpper
+  hA_two_pi := S.hA_two_pi
+  hAB := S.hAB
+  left_count_eq := S.left_count_eq
+  right_count_eq := S.right_count_eq
+  mainLower_le_left := by
+    have hbottom_ratio_pos : 0 < S.bottomRatioLower :=
+      lt_of_lt_of_le (Real.exp_pos S.bottomLogLower) S.bottom_exp_log_lower
+    have hbottom_ratio_lower :
+        S.bottomRatioLower ≤ S.A / (2 * Real.pi) :=
+      ratio_lower_of_pi_upper_bound
+        (le_of_lt hbottom_ratio_pos)
+        backlund_pi_upper_3141593_1000000
+        S.bottom_ratio_mul_arith
+    have hbottom_log_lower :
+        S.bottomLogLower ≤ Real.log (S.A / (2 * Real.pi)) :=
+      log_ratio_lower_of_ratio_lower
+        hbottom_ratio_pos
+        hbottom_ratio_lower
+        (log_lower_of_exp_le S.bottom_exp_log_lower)
+    exact
+      smoothMainTerm_lower_bound_of_log_ratio_lower
+        (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) S.hA_two_pi)
+        hbottom_log_lower
+        S.bottom_main_arith
+  right_le_mainUpper := by
+    have hA_pos : 0 < S.A :=
+      lt_of_lt_of_le (by positivity : (0 : ℝ) < 2 * Real.pi) S.hA_two_pi
+    have hB_pos : 0 < S.B := lt_of_lt_of_le hA_pos S.hAB
+    have htop_ratio_pos : 0 < S.B / (2 * Real.pi) := by positivity
+    have htop_upper_pos : 0 < S.topRatioUpper := by
+      have hprod_pos :
+          0 < 2 * (3141592 / 1000000 : ℝ) * S.topRatioUpper :=
+        lt_of_lt_of_le hB_pos S.top_ratio_mul_arith
+      nlinarith
+    have htop_ratio_upper :
+        S.B / (2 * Real.pi) ≤ S.topRatioUpper :=
+      ratio_upper_of_pi_lower_bound
+        (le_of_lt htop_upper_pos)
+        backlund_pi_lower_3141592_1000000
+        S.top_ratio_mul_arith
+    have htop_log_upper :
+        Real.log (S.B / (2 * Real.pi)) ≤ S.topLogUpper :=
+      log_ratio_upper_of_ratio_upper
+        htop_ratio_pos
+        htop_ratio_upper
+        (log_upper_of_le_exp htop_upper_pos S.top_log_upper_exp)
+    exact
+      smoothMainTerm_upper_bound_of_log_ratio_upper
+        (le_trans
+          (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) S.hA_two_pi)
+          S.hAB)
+        htop_log_upper
+        S.top_main_arith
+  upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
+  upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
+
 /-- Turing-count version of a Backlund finite-band slab.  It records the
 left cumulative count and the certified weighted count in `(A, B]`; the
 right cumulative count is then derived by `N(B) - N(A)`. -/
@@ -20985,14 +21109,6 @@ theorem BacklundArgumentPrincipleTheoremFixedPiExpAutoPosSlabCertificate.uniform
     |concreteS T| ≤ (25167 / 10000 : ℝ) :=
   S.toCountRangeMainSlab.uniform25167 hT0 hA hB
 
-/-- In the current Backlund finite band every slab bottom is at least
-`140`, hence automatically above `2π`. -/
-theorem backlund_two_pi_le_of_ge_140
-    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
-    2 * Real.pi ≤ T := by
-  have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
-  nlinarith
-
 /-- Auto-bottom fixed-pi exp slab certificate.  This is the finite-table
 source shape for the `[140, 370]` route: instead of carrying the analytic
 side condition `2π ≤ R.bottom`, the row only proves `140 ≤ R.bottom`,
@@ -21470,6 +21586,16 @@ structure BacklundFiniteBandEndpointCountRangeMainCertificate140_370 where
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (370 : ℝ) →
       ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
 
+/-- A finite list of fixed-pi exp endpoint count-range slabs covering
+`[140, 370]`.  This is the table-facing finite source shape: rows provide
+endpoint cumulative counts, rational ratio bounds, exponential log
+certificates, and pure arithmetic budget checks. -/
+structure BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370 where
+  slabs : List BacklundEndpointCountRangeFixedPiExpSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (370 : ℝ) →
+      ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
 /-- A finite list of Turing-count/range-main slabs covering
 `[140, 374]`. -/
 structure BacklundFiniteBandTuringCountRangeMainCertificate140_374 where
@@ -21655,6 +21781,25 @@ noncomputable def
     obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT370
     refine ⟨S.toRangeSlab, ?_, hA, hB⟩
     exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
+/-- Fixed-pi exp endpoint count-range slabs supply endpoint
+count-range/main slabs on `[140, 370]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370.toEndpointCountRange
+    (C : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370) :
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_370 where
+  slabs := C.slabs.map
+    (fun S : BacklundEndpointCountRangeFixedPiExpSlabCertificate =>
+      S.toEndpointRangeSlab)
+  cover := by
+    intro T hT140 hT370
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT370
+    refine ⟨S.toEndpointRangeSlab, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨S, hS, rfl⟩
+    · change S.A ≤ T
+      exact hA
+    · change T ≤ S.B
+      exact hB
 
 /-- Turing-count/range-main slabs supply endpoint count-range slabs. -/
 noncomputable def
@@ -21847,6 +21992,14 @@ noncomputable def
     (C : BacklundFiniteBandEndpointCountRangeMainCertificate140_370) :
     BacklundFiniteBandUniform25167Check140_370 :=
   C.toCountRange.toUniform25167Check
+
+/-- Fixed-pi exp endpoint count-range slabs supply the narrow uniform
+finite-band certificate on `[140, 370]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370.toUniform25167Check
+    (C : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370) :
+    BacklundFiniteBandUniform25167Check140_370 :=
+  C.toEndpointCountRange.toUniform25167Check
 
 /-- Turing-count/range-main slabs supply the narrow uniform finite-band
 certificate on `[140, 374]`. -/
@@ -22429,6 +22582,21 @@ theorem
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countRangeMainFinite370
     Hglobal
     Hfinite.toCountRange
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and fixed-pi exp endpoint count-range slabs on `[140, 370]`.
+This removes raw endpoint `smoothMainTerm` inequalities from the exact
+finite route. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite370
+    Hglobal
+    Hfinite.toEndpointCountRange
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
@@ -23482,6 +23650,75 @@ noncomputable def
 noncomputable def
     ClassicalBacklundTuringPlattEndpointCountRangeInputs370.toTuringStyleSBound
     (I : ClassicalBacklundTuringPlattEndpointCountRangeInputs370) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBound.toTuringStyleSBound
+
+/-- Fixed-pi exp endpoint count-range source package for the exact
+finite interval `[140, 370]`.  Compared with
+`ClassicalBacklundTuringPlattEndpointCountRangeInputs370`, finite rows no
+longer provide endpoint `smoothMainTerm` bounds directly; they provide
+rational ratio and exponential log certificates. -/
+structure ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370 where
+  global : PlattTrudgianBacklundGlobalInput
+  finite370 : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370
+
+/-- Fixed-pi exp endpoint count-range inputs lower to the endpoint
+count-range package. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toEndpointCountRangeInputs370
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
+    ClassicalBacklundTuringPlattEndpointCountRangeInputs370 where
+  global := I.global
+  finite370 := I.finite370.toEndpointCountRange
+
+/-- The fixed-pi exp endpoint count-range package supplies the
+good-height Backlund argument bound. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toGoodHeightArgumentBound
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
+    BacklundGoodHeightArgumentBound :=
+  I.toEndpointCountRangeInputs370.toGoodHeightArgumentBound
+
+/-- The fixed-pi exp endpoint count-range package supplies the final
+classical proof inputs at `ClassicalBacklundTuringProof.K`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toProofInputs
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
+    ClassicalBacklundTuringProofInputs :=
+  I.toEndpointCountRangeInputs370.toProofInputs
+
+/-- Final Backlund--Turing headline theorem from the fixed-pi exp
+endpoint count-range source package on `[140, 370]`. -/
+theorem concreteS_halfLogPlusHalf_of_plattEndpointCountRangeFixedPiExpBacklundTuringInputs370
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    I.global
+    I.finite370
+    hT
+
+/-- The fixed-pi exp endpoint count-range package supplies the generic
+proved Backlund/Turing package for `concreteS`, threshold `140`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toProvenBacklundTuringBound
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
+    ProvenBacklundTuringBound :=
+  I.toEndpointCountRangeInputs370.toProvenBacklundTuringBound
+
+/-- The fixed-pi exp endpoint count-range package supplies
+`HalfLogPlusHalfSBound`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toHalfLogPlusHalfSBound
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBound.toHalfLogPlusHalfSBound
+
+/-- The fixed-pi exp endpoint count-range package supplies
+`TuringStyleSBound`, with `C = D = 1/2`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toTuringStyleSBound
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
     TuringStyleSBound :=
   I.toProvenBacklundTuringBound.toTuringStyleSBound
 
