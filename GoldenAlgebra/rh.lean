@@ -20356,6 +20356,89 @@ theorem
     Hfinite.toEndpoint
     hT
 
+/-- The sharpest current Backlund/Turing source package in this file:
+
+* the global Platt--Trudgian explicit argument bound;
+* the concrete finite band `[140, 374]`, discharged by rectangle
+  argument-principle theorem targets plus endpoint main-term arithmetic.
+
+This is still a proof-input package, not an unconditional theorem: the
+fields are exactly the remaining analytic/computational payloads. -/
+structure ClassicalBacklundTuringPlattAPInputs where
+  global : PlattTrudgianBacklundGlobalInput
+  finite374 :
+    BacklundFiniteBandArgumentPrincipleTheoremCountRangeMainCertificate140_374
+
+/-- The finite-band component of the Platt/AP source package as a
+concrete `[140, 374]` finite check. -/
+noncomputable def ClassicalBacklundTuringPlattAPInputs.toFinite374
+    (I : ClassicalBacklundTuringPlattAPInputs) :
+    BacklundFiniteBandCheck140_374 :=
+  I.finite374.toUniform25167Check.toFiniteBandCheck
+
+/-- The Platt/AP source package supplies the good-height Backlund
+argument bound. -/
+noncomputable def ClassicalBacklundTuringPlattAPInputs.toGoodHeightArgumentBound
+    (I : ClassicalBacklundTuringPlattAPInputs) :
+    BacklundGoodHeightArgumentBound :=
+  BacklundGoodHeightArgumentBound.of_plattTrudgian_tighterTail_and_finite
+    (PlattTrudgianBacklundTighterTailInput.of_global I.global)
+    (BacklundFiniteBandCheck140_exp592_100.of_140_374 I.toFinite374)
+
+/-- The Platt/AP source package supplies the final classical proof inputs
+at `ClassicalBacklundTuringProof.K`. -/
+noncomputable def ClassicalBacklundTuringPlattAPInputs.toProofInputs
+    (I : ClassicalBacklundTuringPlattAPInputs) :
+    ClassicalBacklundTuringProofInputs :=
+  ClassicalBacklundTuringProofInputs.of_goodHeightArgumentBound
+    I.toGoodHeightArgumentBound
+
+/-- The Platt/AP source package builds the packaged
+`ClassicalBacklundTuringTheorem`. -/
+noncomputable def ClassicalBacklundTuringPlattAPInputs.toTheoremPackage
+    (I : ClassicalBacklundTuringPlattAPInputs) :
+    ClassicalBacklundTuringTheorem :=
+  I.toProofInputs.toTheoremPackage
+
+/-- Final Backlund--Turing headline theorem from the sharp Platt/AP source
+package. -/
+theorem concreteS_halfLogPlusHalf_of_plattAPBacklundTuringInputs
+    (I : ClassicalBacklundTuringPlattAPInputs)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremCountRangeMainFinite374
+    I.global
+    I.finite374
+    hT
+
+/-- The Platt/AP source package supplies the generic proved
+Backlund/Turing package for `concreteS`, with threshold `140`. -/
+noncomputable def ClassicalBacklundTuringPlattAPInputs.toProvenBacklundTuringBound
+    (I : ClassicalBacklundTuringPlattAPInputs) :
+    ProvenBacklundTuringBound where
+  S := concreteS
+  lower := 140
+  lower_ge_two_pi := by
+    have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+    linarith
+  halfLogPlusHalf := by
+    intro u hu
+    exact concreteS_halfLogPlusHalf_of_plattAPBacklundTuringInputs I hu
+
+/-- The Platt/AP source package supplies the existing
+`HalfLogPlusHalfSBound` interface. -/
+noncomputable def ClassicalBacklundTuringPlattAPInputs.toHalfLogPlusHalfSBound
+    (I : ClassicalBacklundTuringPlattAPInputs) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBound.toHalfLogPlusHalfSBound
+
+/-- The Platt/AP source package supplies the existing general
+`TuringStyleSBound` interface, with `C = D = 1/2`. -/
+noncomputable def ClassicalBacklundTuringPlattAPInputs.toTuringStyleSBound
+    (I : ClassicalBacklundTuringPlattAPInputs) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBound.toTuringStyleSBound
+
 /-- The two sourced ingredients for the concrete Backlund/Turing `S(T)`
 bound:
 
