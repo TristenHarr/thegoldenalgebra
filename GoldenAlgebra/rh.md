@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-89,389 lines and roughly 4,258 top-level declarations. It contains no
+91,190 lines and roughly 4,318 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -1879,6 +1879,62 @@ the three obligation lines, with concrete handoff targets in each case.
   The compact cumulative endpoint-count payload now also reaches the
   same finite-band interface through
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CumulativeEndpointCounts369075049`.
+  The finite-count certificate can now also be supplied in adjacent-slab
+  form by `BacklundGrid2AdjacentSlabCountEqualities140_369075049_1000000`,
+  with
+  `BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000.ofAdjacentSlabs`
+  deriving the cumulative endpoint equalities used downstream. A still
+  closer Turing-table-facing payload
+  `BacklundGrid2TuringSlabCountCertificates140_369075049_1000000`
+  now feeds that adjacent-slab form through
+  `BacklundGrid2AdjacentSlabCountEqualities140_369075049_1000000.ofTuringSlabCountCertificates`,
+  using `zetaWeightedZeroCountInHeightSlab_eq_of_eq` to transport slab
+  counts across endpoint equalities. The analytic finite-table source is
+  now exposed by
+  `BacklundGrid2ArgumentPrincipleNatSlabCertificates140_369075049_1000000`,
+  lowered through
+  `BacklundArgumentPrincipleTheoremFixedPiExpAutoRectNatSlabCertificate.toTuringCountRange`
+  and
+  `BacklundGrid2TuringSlabCountCertificates140_369075049_1000000.ofArgumentPrincipleNatSlabs`,
+  with headline routes
+  `concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2TuringSlabCounts369075049`
+  and
+  `concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ArgumentPrincipleNatSlabs369075049`;
+  the global Platt--Trudgian variant is
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2ArgumentPrincipleNatSlabs369075049`.
+  A count-only analytic source
+  `BacklundGrid2ArgumentPrincipleNatCountCertificates140_369075049_1000000`
+  uses the row lemmas `backlundGrid2EndpointRow_lt140_369075049_1000000`
+  and
+  `backlundGrid2EndpointRow_countLower_le_countUpper140_369075049_1000000`,
+  then lowers through
+  `BacklundGrid2TuringSlabCountCertificates140_369075049_1000000.ofArgumentPrincipleNatCountSlabs`.
+  It also reaches the public half-log bound through
+  `concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ArgumentPrincipleNatCountSlabs369075049`
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2ArgumentPrincipleNatCountSlabs369075049`.
+  The leanest finite-count source is now
+  `BacklundGrid2ArgumentPrincipleNatIndexCertificates140_369075049_1000000`,
+  which supplies one initial count and rowwise natural argument indices;
+  it feeds adjacent slabs through
+  `BacklundGrid2AdjacentSlabCountEqualities140_369075049_1000000.ofArgumentPrincipleNatIndexCertificates`
+  and reaches the public half-log bound via
+  `concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ArgumentPrincipleNatIndexSlabs369075049`
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2ArgumentPrincipleNatIndexSlabs369075049`.
+  The residue-facing finite sources are
+  `BacklundGrid2ResidueIndexCertificates140_369075049_1000000`,
+  `BacklundGrid2ArgumentPrincipleNatIndexCertificates140_369075049_1000000.ofResidueIndexCertificates`,
+  `BacklundGrid2ResidueTheoremOutputCertificates140_369075049_1000000`,
+  and
+  `BacklundGrid2ResidueIndexCertificates140_369075049_1000000.ofResidueTheoremOutputCertificates`,
+  which connect raw residue-theorem output to the same natural-index
+  slab pipeline. Their public half-log routes are
+  `concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ResidueIndexSlabs369075049`,
+  `concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ResidueTheoremOutputSlabs369075049`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2ResidueIndexSlabs369075049`,
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2ResidueTheoremOutputSlabs369075049`.
   The same compact cumulative payload now also feeds the still-finer
   `369061/1000` handoff through
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CumulativeEndpointCounts369075049_via369061`.
@@ -2848,6 +2904,22 @@ Hadamard product over an indexed zero family:
 `HadamardZeroInvSqSummability`, `HadamardZeroNormProper`,
 `HadamardZeroNormProper.eventually_large`,
 `HadamardZeroInvSqSummability.of_invSqSummable_normProper`,
+`infiniteHadamardProduct_ne_zero_of_summable_factor_sub_one`,
+`HadamardZeroInvSqSummability.infiniteProduct_ne_zero`,
+`HadamardZeroInvSqSummability.indexedFiniteProduct_tendsto`,
+`HadamardZeroInvSqSummability.finiteRegularizedSum_tendsto`,
+`HadamardZeroInvSqSummability.indexedFiniteProduct_tendsto_at_exhaustion`,
+`HadamardZeroInvSqSummability.finiteRegularizedSum_tendsto_at_exhaustion`,
+`hasProdLocallyUniformlyOn_hadamardGenus1Factor_of_summable_bound`,
+`tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_of_summable_bound`,
+`HadamardZeroInvSqSummability.eventually_uniform_factor_sub_one_bound`,
+`HadamardZeroInvSqSummability.tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_of_norm_bounded_open`,
+`tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_at_exhaustion`,
+`HadamardProductLocallyUniformLimitData.of_finsetLocallyUniform`,
+`HadamardLogDerivLimitData.of_finiteDerivativeLimitData_invSq`,
+`HadamardProductLUCLogDerivData.of_finiteDerivativeLimitData_invSq`,
+`HadamardProductLUCLogDerivData.of_locallyUniformProductLimitData_invSq`,
+`CompletedXiZeroInvSqDistribution.infiniteProduct_ne_zero`,
 `GenusOneTaylorBoundData`,
 `CompletedXiHadamardProductWithZeros`, and the user-facing
 `ClassicalPathBAnalyticInputs ι` with composite bridge
@@ -2887,6 +2959,8 @@ Stieltjes equalities also have bare residual identity forms
 `StieltjesHighTailResidualIdentityAFZ`, plus the combined residual target
 `StieltjesMidHighTailResidualIdentityAFZ`, with conversions
 `StieltjesMidHighTailEqualityAFZ.of_residualIdentity`,
+`StieltjesMidHighTailResidualIdentityAFZ.of_tailEquality`,
+`stieltjesMidHighTailEqualityAFZ_iff_residualIdentity`,
 `StieltjesMidTailResidualIdentityAFZ.of_midHighResidualIdentity`,
 `StieltjesHighTailResidualIdentityAFZ.of_midHighResidualIdentity`,
 `StieltjesMidHighTailResidualIdentityAFZ.of_mid_high`,
@@ -3116,6 +3190,7 @@ It also exposes the direct AFZ source/front-door layer
 `expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_stieltjesHighTailEqualityAFZ`,
 `expAffineHadamardFiniteProductResidualTailConvergenceMid_iff_stieltjesMidTailResidualIdentityAFZ`,
 `expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_stieltjesHighTailResidualIdentityAFZ`,
+`expAffineHadamardFiniteProductResidualTailConvergenceMidHigh_iff_stieltjesMidHighTailResidualIdentityAFZ`,
 `expAffineHadamardFiniteProductLowTailConvergence_iff_lowZeroContributionSplitAFZ`,
 `expAffineHadamardFiniteProductResidualTailConvergenceMid_of_exists_identified_tail`,
 `expAffineHadamardFiniteProductResidualTailConvergenceHigh_of_exists_identified_tail`,
@@ -3136,6 +3211,9 @@ It also exposes the direct AFZ source/front-door layer
 `LowZeroContributionSplitAFZ.of_expAffineHadamardResidualTailConvergence`,
 `StieltjesLowEqualityAFZ.of_expAffineHadamardResidualTailConvergence_Z_ge_15`,
 `XiPullbackAntiHerglotzTarget_of_expAffineHadamardResidualTailConvergence`,
+`StieltjesMidTailResidualIdentityAFZ.congr_zeroContribution`,
+`StieltjesHighTailResidualIdentityAFZ.congr_zeroContribution`,
+`StieltjesMidHighTailResidualIdentityAFZ.congr_zeroContribution`,
 `StieltjesLowEqualityAFZ.congr_zeroContribution`,
 `LowCloudTailSplitAFZ.congr_zeroContribution`,
 `ClassicalPathBStieltjesInputsAFZ.congr_zeroContribution`,
@@ -3184,6 +3262,7 @@ front door
 **Entire-ξ Hadamard chain** (§§CCCLXXX–CCCLXXXIX). The parallel
 Hadamard infrastructure for `entireRiemannXi`:
 `ConcreteEntireXiZeroSystem`, `EntireXiZeroInvSqDistribution`,
+`EntireXiZeroInvSqDistribution.infiniteProduct_ne_zero`,
 `EntireXiZeroInvSqDistribution.of_invSqSummable_normProper`,
 `EntireXiCanonicalZeroNormProper`,
 `EntireXiZeroInvSqDistribution.of_canonical_invSqSummable_normProper`,
@@ -3193,13 +3272,26 @@ Hadamard infrastructure for `entireRiemannXi`:
 `hadamardGenus1Factor_self_eq_zero`,
 `infiniteHadamardProduct_eq_zero_at_zeroLoc`,
 `EntireXiHadamardFactorization.of_offZeroQuotient`,
+`EntireXiHadamardFactorization.of_offZeroQuotient_invSq`,
 `EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient`,
+`EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient_invSq`,
+`HadamardProductLUCOnEntireXiNonzeroData.of_finiteDerivativeLimitData_invSq`,
+`HadamardProductLUCOnEntireXiNonzeroData.of_locallyUniformProductLimitData_invSq`,
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_offZeroQuotient_lucOnEntireXiNonzero`,
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_offZeroQuotient_locallyUniformProductLimitData`,
+`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_quotient_lucOnEntireXiNonzero`,
+`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_quotient_lucLogDerivData`,
+`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_quotient_locallyUniformProductLimitData`,
+`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_independentLUC_quotient_locallyUniformProductLimitData`,
 `EntireXiClassicalHadamardTheorem` (§CCCLXXXVIII), and
 `EntireXiLogDerivativeSourceAFZ`. The source-level front door
 `XiPullbackAntiHerglotzTarget_of_completedXiSource_midHigh_lowSplit`
-(§CCCLXXXIX) takes a `CompletedXiLogDerivativeSourceAFZ` directly.
+(§CCCLXXXIX) takes a `CompletedXiLogDerivativeSourceAFZ` directly. The
+locally-uniform exp-affine route now also has the combined-residual
+front door
+`XiPullbackAntiHerglotzTarget_of_canonicalExpAffineLocallyUniformHadamard_midHighResidualIdentity`,
+which accepts `StieltjesMidHighTailResidualIdentityAFZ` and projects
+the mid/high residual obligations internally.
 
 **Γ-cancellation bridge between raw-ξ and entire-ξ**
 (§§CCCXC–CDXIV). The chain that identifies `completedXiFunction` with
@@ -3729,7 +3821,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-89,389 lines and roughly 4,258 top-level declarations.
+91,190 lines and roughly 4,318 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.

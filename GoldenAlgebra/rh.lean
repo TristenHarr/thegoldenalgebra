@@ -1,6 +1,7 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Complex.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Summable
+import Mathlib.Analysis.NormedSpace.MultipliableUniformlyOn
 import Mathlib.Data.Complex.Norm
 import Mathlib.Analysis.Calculus.Deriv.Basic
 import Mathlib.Algebra.Polynomial.Derivative
@@ -7852,6 +7853,22 @@ theorem zetaWeightedZeroCountInHeightSlab_eq_sub
       zetaGlobalZeroMultiplicity hA hAB
       (zetaZeroSetUpToHeight A hA)
       (zetaZeroSetUpToHeight B (le_trans hA hAB))
+
+/-- Transport the actual weighted slab count across endpoint equalities,
+also normalizing the proof terms carried by the count. -/
+theorem zetaWeightedZeroCountInHeightSlab_eq_of_eq
+    {A B A' B' : ℝ} (hAeq : A = A') (hBeq : B = B')
+    (hA : 0 ≤ A) (hAB : A ≤ B)
+    (hA' : 0 ≤ A') (hA'B' : A' ≤ B') :
+    zetaWeightedZeroCountInHeightSlab A B hA hAB =
+    zetaWeightedZeroCountInHeightSlab A' B' hA' hA'B' := by
+  subst A'
+  subst B'
+  have hA_proof : hA = hA' := Subsingleton.elim _ _
+  have hAB_proof : hAB = hA'B' := Subsingleton.elim _ _
+  cases hA_proof
+  cases hAB_proof
+  rfl
 
 /-- If a slab `(A, B]` has certified weighted count `slabCount`, then a
 known cumulative count at `A` propagates to the cumulative count at `B`.
@@ -34934,6 +34951,26 @@ theorem backlundGrid2EndpointCount_right140_369075049_1000000
   simp [backlundGrid2EndpointRightIndex140_369075049_1000000,
     backlundGrid2EndpointRow140_369075049_1000000]
 
+/-- Every concrete grid row has a strict height interval. -/
+theorem backlundGrid2EndpointRow_lt140_369075049_1000000
+    (n : Fin 115) :
+    (backlundGrid2EndpointRow140_369075049_1000000 n).A <
+      (backlundGrid2EndpointRow140_369075049_1000000 n).B := by
+  rcases n with ⟨i, hi⟩
+  by_cases hlast : i = 114
+  · subst i
+    norm_num [backlundGrid2EndpointRow140_369075049_1000000]
+  · simp [backlundGrid2EndpointRow140_369075049_1000000, hlast]
+    norm_num
+
+/-- The tabulated endpoint counts are monotone across every concrete
+grid row. -/
+theorem backlundGrid2EndpointRow_countLower_le_countUpper140_369075049_1000000
+    (n : Fin 115) :
+    (backlundGrid2EndpointRow140_369075049_1000000 n).countLower ≤
+      (backlundGrid2EndpointRow140_369075049_1000000 n).countUpper := by
+  fin_cases n <;> decide
+
 /-- Cumulative zero-count certificate at the 116 distinct grid endpoints.
 This is the compact finite Turing-certificate payload: once each endpoint
 count is certified, all 115 row-local count equalities follow. -/
@@ -34946,6 +34983,530 @@ structure
         (backlundGrid2EndpointHeight140_369075049_1000000 n)
         (backlundGrid2EndpointHeight140_369075049_1000000_nonneg n) =
       backlundGrid2EndpointCount140_369075049_1000000 n.val
+
+/-- Adjacent-slab count payload for the concrete Backlund grid.  This is
+the Turing-table-facing form of the finite count certificate: one
+cumulative count at the initial endpoint, plus the certified weighted
+count in each half-open adjacent slab. -/
+structure
+    BacklundGrid2AdjacentSlabCountEqualities140_369075049_1000000 :
+    Prop where
+  initial_count_eq :
+    zetaWeightedZeroCountUpToHeight
+      (backlundGrid2EndpointHeight140_369075049_1000000 ⟨0, by norm_num⟩)
+      (backlundGrid2EndpointHeight140_369075049_1000000_nonneg
+        ⟨0, by norm_num⟩) =
+    backlundGrid2EndpointCount140_369075049_1000000 0
+  slab_count_add_eq :
+    ∀ n : Fin 115,
+      (backlundGrid2EndpointRow140_369075049_1000000 n).countLower +
+        zetaWeightedZeroCountInHeightSlab
+          (backlundGrid2EndpointRow140_369075049_1000000 n).A
+          (backlundGrid2EndpointRow140_369075049_1000000 n).B
+          (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+            (backlund_two_pi_le_of_ge_140
+              (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140))
+          (backlundGrid2EndpointRow140_369075049_1000000 n).hAB =
+      (backlundGrid2EndpointRow140_369075049_1000000 n).countUpper
+
+/-- Argument-principle natural-index certificates for the concrete
+Backlund grid.
+
+This is the lean finite-count source: one initial cumulative count at
+height `140`, plus for each adjacent slab a good top height, rectangle
+argument-principle theorem data, and the certified natural contour index.
+The row endpoint counts are then propagated from the slab counts. -/
+structure
+    BacklundGrid2ArgumentPrincipleNatIndexCertificates140_369075049_1000000 where
+  initial_count_eq :
+    zetaWeightedZeroCountUpToHeight
+      (backlundGrid2EndpointHeight140_369075049_1000000 ⟨0, by norm_num⟩)
+      (backlundGrid2EndpointHeight140_369075049_1000000_nonneg
+        ⟨0, by norm_num⟩) =
+    backlundGrid2EndpointCount140_369075049_1000000 0
+  hgood :
+    ∀ n : Fin 115,
+      GoodHeight (backlundGrid2EndpointRow140_369075049_1000000 n).B
+  theoremData :
+    ∀ n : Fin 115,
+      (backlundFixedSideRectangle
+          (backlundGrid2EndpointRow140_369075049_1000000 n).A
+          (backlundGrid2EndpointRow140_369075049_1000000 n).B
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+        ).ZetaRectangleArgumentPrincipleTheorem
+          backlundFixedSideRectangle_left_lt_zero
+          backlundFixedSideRectangle_one_lt_right
+          (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+            (backlund_two_pi_le_of_ge_140
+              (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140))
+          (hgood n)
+  argumentIndex_eq_nat :
+    ∀ n : Fin 115,
+      (theoremData n).toActualNormalizedData.toCanonicalData.toFormula.argumentIndex =
+        ((backlundGrid2EndpointRow140_369075049_1000000 n).countUpper -
+          (backlundGrid2EndpointRow140_369075049_1000000 n).countLower : ℕ)
+
+/-- Argument-principle natural-index certificates supply the adjacent
+slab-count payload for the concrete Backlund grid. -/
+noncomputable def
+    BacklundGrid2AdjacentSlabCountEqualities140_369075049_1000000.ofArgumentPrincipleNatIndexCertificates
+    (C :
+      BacklundGrid2ArgumentPrincipleNatIndexCertificates140_369075049_1000000) :
+    BacklundGrid2AdjacentSlabCountEqualities140_369075049_1000000 where
+  initial_count_eq := C.initial_count_eq
+  slab_count_add_eq := by
+    intro n
+    let row := backlundGrid2EndpointRow140_369075049_1000000 n
+    let hA0 : 0 ≤ row.A :=
+      le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+        (backlund_two_pi_le_of_ge_140 row.hA_ge_140)
+    let F :=
+      (C.theoremData n).toActualNormalizedData.toCanonicalData.toFormula
+    have hbottom_pos :
+        0 <
+          (backlundFixedSideRectangle row.A row.B
+            (backlundGrid2EndpointRow_lt140_369075049_1000000 n)).bottom := by
+      simpa [row, backlundFixedSideRectangle] using
+        (lt_of_lt_of_le (by positivity : (0 : ℝ) < 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140 row.hA_ge_140))
+    have harg :
+        F.argumentIndex =
+          (zetaWeightedZeroCountInHeightSlab
+            row.A row.B hA0 row.hAB : ℤ) := by
+      simpa [F, row, hA0, backlundFixedSideRectangle] using
+        (F.argumentIndex_eq_actual_slab_count hbottom_pos)
+    have hidx :
+        F.argumentIndex =
+          ((row.countUpper - row.countLower : ℕ) : ℤ) := by
+      simpa [F, row] using C.argumentIndex_eq_nat n
+    have hslab :
+        zetaWeightedZeroCountInHeightSlab row.A row.B hA0 row.hAB =
+          row.countUpper - row.countLower := by
+      have hcast :
+          (zetaWeightedZeroCountInHeightSlab
+              row.A row.B hA0 row.hAB : ℤ) =
+            ((row.countUpper - row.countLower : ℕ) : ℤ) := by
+        rw [← harg]
+        exact hidx
+      exact Int.ofNat.inj hcast
+    have hle : row.countLower ≤ row.countUpper := by
+      simpa [row] using
+        backlundGrid2EndpointRow_countLower_le_countUpper140_369075049_1000000
+          n
+    calc
+      row.countLower +
+          zetaWeightedZeroCountInHeightSlab row.A row.B hA0 row.hAB
+          = row.countLower + (row.countUpper - row.countLower) := by
+              rw [hslab]
+      _ = row.countUpper := by omega
+
+/-- Residue-index certificates for the concrete Backlund grid.
+
+This is the residue-theorem-facing finite source: one initial count at
+height `140`, and for each adjacent slab a good top height, the
+rectangle residue-index formula, and the certified integer residue index
+equal to the tabulated natural slab increment. -/
+structure
+    BacklundGrid2ResidueIndexCertificates140_369075049_1000000 where
+  initial_count_eq :
+    zetaWeightedZeroCountUpToHeight
+      (backlundGrid2EndpointHeight140_369075049_1000000 ⟨0, by norm_num⟩)
+      (backlundGrid2EndpointHeight140_369075049_1000000_nonneg
+        ⟨0, by norm_num⟩) =
+    backlundGrid2EndpointCount140_369075049_1000000 0
+  hgood :
+    ∀ n : Fin 115,
+      GoodHeight (backlundGrid2EndpointRow140_369075049_1000000 n).B
+  residueData :
+    ∀ n : Fin 115,
+      (backlundFixedSideRectangle
+          (backlundGrid2EndpointRow140_369075049_1000000 n).A
+          (backlundGrid2EndpointRow140_369075049_1000000 n).B
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+        ).ZetaRectangleResidueIndexFormula
+          backlundFixedSideRectangle_left_lt_zero
+          backlundFixedSideRectangle_one_lt_right
+          (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+            (backlund_two_pi_le_of_ge_140
+              (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140))
+          (hgood n)
+  residueIndex_eq_nat :
+    ∀ n : Fin 115,
+      (residueData n).residueIndex =
+        ((backlundGrid2EndpointRow140_369075049_1000000 n).countUpper -
+          (backlundGrid2EndpointRow140_369075049_1000000 n).countLower : ℕ)
+
+/-- Residue-index rows lower to the natural-index argument-principle rows. -/
+noncomputable def
+    BacklundGrid2ArgumentPrincipleNatIndexCertificates140_369075049_1000000.ofResidueIndexCertificates
+    (C :
+      BacklundGrid2ResidueIndexCertificates140_369075049_1000000) :
+    BacklundGrid2ArgumentPrincipleNatIndexCertificates140_369075049_1000000 where
+  initial_count_eq := C.initial_count_eq
+  hgood := C.hgood
+  theoremData := fun n => (C.residueData n).toArgumentPrincipleTheorem
+  argumentIndex_eq_nat := by
+    intro n
+    simpa [ZetaRectangle.ZetaRectangleResidueIndexFormula.toArgumentPrincipleTheorem] using
+      C.residueIndex_eq_nat n
+
+/-- Raw residue-theorem certificates for the concrete Backlund grid.
+
+This is a Mathlib-residue-theorem-facing source: it asks for the raw
+rectangle residue theorem output and the algebraic match between its
+finite residue sum and `zeros - poles`; the existing adapter then
+produces the residue-index rows above. -/
+structure
+    BacklundGrid2ResidueTheoremOutputCertificates140_369075049_1000000 where
+  initial_count_eq :
+    zetaWeightedZeroCountUpToHeight
+      (backlundGrid2EndpointHeight140_369075049_1000000 ⟨0, by norm_num⟩)
+      (backlundGrid2EndpointHeight140_369075049_1000000_nonneg
+        ⟨0, by norm_num⟩) =
+    backlundGrid2EndpointCount140_369075049_1000000 0
+  hgood :
+    ∀ n : Fin 115,
+      GoodHeight (backlundGrid2EndpointRow140_369075049_1000000 n).B
+  output :
+    ∀ n : Fin 115,
+      (backlundFixedSideRectangle
+          (backlundGrid2EndpointRow140_369075049_1000000 n).A
+          (backlundGrid2EndpointRow140_369075049_1000000 n).B
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+        ).ZetaRectangleResidueTheoremOutput
+  singularities_match :
+    ∀ n : Fin 115,
+      let R :=
+        backlundFixedSideRectangle
+          (backlundGrid2EndpointRow140_369075049_1000000 n).A
+          (backlundGrid2EndpointRow140_369075049_1000000 n).B
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+      let hA0 : 0 ≤ (backlundGrid2EndpointRow140_369075049_1000000 n).A :=
+        le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140
+            (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140)
+      (output n).singularities.sum (output n).residueAt =
+        (R.weightedZeroCountInside
+            (R.zeroSetInsideOfSlab
+              backlundFixedSideRectangle_left_lt_zero
+              backlundFixedSideRectangle_one_lt_right
+              (hgood n)
+              (R.canonicalSlabZeroSet hA0))
+            zetaGlobalZeroMultiplicity : ℤ)
+          -
+        (R.poleCountInside : ℤ)
+  residueIndex_eq_nat :
+    ∀ n : Fin 115,
+      (output n).singularities.sum (output n).residueAt =
+        ((backlundGrid2EndpointRow140_369075049_1000000 n).countUpper -
+          (backlundGrid2EndpointRow140_369075049_1000000 n).countLower : ℕ)
+
+/-- Raw residue-theorem rows lower to residue-index rows. -/
+noncomputable def
+    BacklundGrid2ResidueIndexCertificates140_369075049_1000000.ofResidueTheoremOutputCertificates
+    (C :
+      BacklundGrid2ResidueTheoremOutputCertificates140_369075049_1000000) :
+    BacklundGrid2ResidueIndexCertificates140_369075049_1000000 where
+  initial_count_eq := C.initial_count_eq
+  hgood := C.hgood
+  residueData := by
+    intro n
+    let R :=
+      backlundFixedSideRectangle
+        (backlundGrid2EndpointRow140_369075049_1000000 n).A
+        (backlundGrid2EndpointRow140_369075049_1000000 n).B
+        (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+    let hA0 : 0 ≤ (backlundGrid2EndpointRow140_369075049_1000000 n).A :=
+      le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+        (backlund_two_pi_le_of_ge_140
+          (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140)
+    exact
+      (C.output n).toResidueIndexFormula
+        zetaLogDerivExpectedResidueTheorem.toLocalResidueData
+        (by
+          simpa [R, hA0] using C.singularities_match n)
+  residueIndex_eq_nat := by
+    intro n
+    simpa [ZetaRectangle.ZetaRectangleResidueTheoremOutput.toResidueIndexFormula] using
+      C.residueIndex_eq_nat n
+
+/-- Turing-count certificate rows for the concrete Backlund grid.
+
+This is the finite zero-table-facing form after the smooth-main
+arithmetic has already been verified: one initial cumulative count at
+height `140`, and one certified Turing slab count for each adjacent grid
+interval. -/
+structure
+    BacklundGrid2TuringSlabCountCertificates140_369075049_1000000 where
+  initial_count_eq :
+    zetaWeightedZeroCountUpToHeight
+      (backlundGrid2EndpointHeight140_369075049_1000000 ⟨0, by norm_num⟩)
+      (backlundGrid2EndpointHeight140_369075049_1000000_nonneg
+        ⟨0, by norm_num⟩) =
+    backlundGrid2EndpointCount140_369075049_1000000 0
+  slab :
+    Fin 115 → BacklundTuringCountRangeMainSlabCertificate
+  slab_A_eq :
+    ∀ n : Fin 115,
+      (slab n).A =
+        (backlundGrid2EndpointRow140_369075049_1000000 n).A
+  slab_B_eq :
+    ∀ n : Fin 115,
+      (slab n).B =
+        (backlundGrid2EndpointRow140_369075049_1000000 n).B
+  slab_leftCount_eq :
+    ∀ n : Fin 115,
+      (slab n).leftCount =
+        (backlundGrid2EndpointRow140_369075049_1000000 n).countLower
+  slab_rightCount_eq :
+    ∀ n : Fin 115,
+      (slab n).leftCount + (slab n).slabCount =
+        (backlundGrid2EndpointRow140_369075049_1000000 n).countUpper
+
+/-- Count-only argument-principle rows for the concrete Backlund grid.
+
+The existing verified rational/exponential grid table supplies the
+smooth-main endpoint arithmetic.  This source shape asks only for the
+row-local analytic/computational data that remains: good top heights,
+rectangle argument-principle theorem data, the certified natural contour
+index, and the left cumulative count. -/
+structure
+    BacklundGrid2ArgumentPrincipleNatCountCertificates140_369075049_1000000 where
+  hgood :
+    ∀ n : Fin 115,
+      GoodHeight (backlundGrid2EndpointRow140_369075049_1000000 n).B
+  theoremData :
+    ∀ n : Fin 115,
+      (backlundFixedSideRectangle
+          (backlundGrid2EndpointRow140_369075049_1000000 n).A
+          (backlundGrid2EndpointRow140_369075049_1000000 n).B
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+        ).ZetaRectangleArgumentPrincipleTheorem
+          backlundFixedSideRectangle_left_lt_zero
+          backlundFixedSideRectangle_one_lt_right
+          (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+            (backlund_two_pi_le_of_ge_140
+              (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140))
+          (hgood n)
+  argumentIndex_eq_nat :
+    ∀ n : Fin 115,
+      (theoremData n).toActualNormalizedData.toCanonicalData.toFormula.argumentIndex =
+        ((backlundGrid2EndpointRow140_369075049_1000000 n).countUpper -
+          (backlundGrid2EndpointRow140_369075049_1000000 n).countLower : ℕ)
+  left_count_eq :
+    ∀ n : Fin 115,
+      zetaWeightedZeroCountUpToHeight
+        (backlundGrid2EndpointRow140_369075049_1000000 n).A
+        (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140
+            (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140)) =
+        (backlundGrid2EndpointRow140_369075049_1000000 n).countLower
+
+/-- Natural-index fixed-rectangle argument-principle rows lower to the
+Turing slab-count rows used by the concrete grid. -/
+noncomputable def
+    BacklundArgumentPrincipleTheoremFixedPiExpAutoRectNatSlabCertificate.toTuringCountRange
+    (S :
+      BacklundArgumentPrincipleTheoremFixedPiExpAutoRectNatSlabCertificate) :
+    BacklundTuringCountRangeMainSlabCertificate :=
+  S.toAutoRectSlab
+    |>.toAutoBottomSlab
+    |>.toAutoPosSlab
+    |>.toFixedPiExpSlab
+    |>.toPiExpSlab
+    |>.toRatioBoundSlab
+    |>.toLogBoundSlab
+    |>.toTheoremSlab
+    |>.toArgumentPrinciple
+    |>.toTuringCountRange
+
+/-- Argument-principle natural-index rows for the concrete Backlund
+grid.  This is the analytic finite-table source: each row carries the
+rectangle argument-principle theorem data and the certified natural
+contour index, with endpoint identifications to the concrete grid. -/
+structure
+    BacklundGrid2ArgumentPrincipleNatSlabCertificates140_369075049_1000000 where
+  initial_count_eq :
+    zetaWeightedZeroCountUpToHeight
+      (backlundGrid2EndpointHeight140_369075049_1000000 ⟨0, by norm_num⟩)
+      (backlundGrid2EndpointHeight140_369075049_1000000_nonneg
+        ⟨0, by norm_num⟩) =
+    backlundGrid2EndpointCount140_369075049_1000000 0
+  slab :
+    Fin 115 →
+      BacklundArgumentPrincipleTheoremFixedPiExpAutoRectNatSlabCertificate
+  slab_A_eq :
+    ∀ n : Fin 115,
+      ((slab n).toTuringCountRange).A =
+        (backlundGrid2EndpointRow140_369075049_1000000 n).A
+  slab_B_eq :
+    ∀ n : Fin 115,
+      ((slab n).toTuringCountRange).B =
+        (backlundGrid2EndpointRow140_369075049_1000000 n).B
+  slab_leftCount_eq :
+    ∀ n : Fin 115,
+      ((slab n).toTuringCountRange).leftCount =
+        (backlundGrid2EndpointRow140_369075049_1000000 n).countLower
+  slab_rightCount_eq :
+    ∀ n : Fin 115,
+      ((slab n).toTuringCountRange).leftCount +
+          ((slab n).toTuringCountRange).slabCount =
+        (backlundGrid2EndpointRow140_369075049_1000000 n).countUpper
+
+/-- Argument-principle natural-index grid rows supply the Turing
+slab-count certificate rows. -/
+noncomputable def
+    BacklundGrid2TuringSlabCountCertificates140_369075049_1000000.ofArgumentPrincipleNatSlabs
+    (C :
+      BacklundGrid2ArgumentPrincipleNatSlabCertificates140_369075049_1000000) :
+    BacklundGrid2TuringSlabCountCertificates140_369075049_1000000 where
+  initial_count_eq := C.initial_count_eq
+  slab := fun n => (C.slab n).toTuringCountRange
+  slab_A_eq := C.slab_A_eq
+  slab_B_eq := C.slab_B_eq
+  slab_leftCount_eq := C.slab_leftCount_eq
+  slab_rightCount_eq := C.slab_rightCount_eq
+
+/-- Rowwise Turing slab-count certificates imply the adjacent-slab count
+payload for the concrete Backlund grid. -/
+noncomputable def
+    BacklundGrid2AdjacentSlabCountEqualities140_369075049_1000000.ofTuringSlabCountCertificates
+    (C :
+      BacklundGrid2TuringSlabCountCertificates140_369075049_1000000) :
+    BacklundGrid2AdjacentSlabCountEqualities140_369075049_1000000 where
+  initial_count_eq := C.initial_count_eq
+  slab_count_add_eq := by
+    intro n
+    let row := backlundGrid2EndpointRow140_369075049_1000000 n
+    let S := C.slab n
+    have hrowA0 : 0 ≤ row.A :=
+      le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+        (backlund_two_pi_le_of_ge_140 row.hA_ge_140)
+    have hS_A0 : 0 ≤ S.A :=
+      le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) S.hA_two_pi
+    have hslab :
+        zetaWeightedZeroCountInHeightSlab row.A row.B
+            hrowA0 row.hAB =
+          S.slabCount := by
+      have htransport :
+          zetaWeightedZeroCountInHeightSlab row.A row.B
+              hrowA0 row.hAB =
+            zetaWeightedZeroCountInHeightSlab S.A S.B
+              hS_A0 S.hAB :=
+        zetaWeightedZeroCountInHeightSlab_eq_of_eq
+          (C.slab_A_eq n).symm
+          (C.slab_B_eq n).symm
+          hrowA0 row.hAB hS_A0 S.hAB
+      exact htransport.trans S.slab_count_eq
+    calc
+      row.countLower +
+          zetaWeightedZeroCountInHeightSlab row.A row.B
+            hrowA0 row.hAB
+          = row.countLower + S.slabCount := by
+              rw [hslab]
+      _ = S.leftCount + S.slabCount := by
+              rw [← C.slab_leftCount_eq n]
+      _ = row.countUpper := C.slab_rightCount_eq n
+
+/-- One initial cumulative count plus all adjacent slab counts imply the
+116 cumulative endpoint equalities for the concrete Backlund grid. -/
+noncomputable def
+    BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000.ofAdjacentSlabs
+    (C :
+      BacklundGrid2AdjacentSlabCountEqualities140_369075049_1000000) :
+    BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000 where
+  count_eq := by
+    intro n
+    rcases n with ⟨k, hk⟩
+    revert hk
+    refine Nat.strong_induction_on k ?_
+    intro k ih hk
+    cases k with
+    | zero =>
+        simpa using C.initial_count_eq
+    | succ j =>
+        have hj115 : j < 115 := by omega
+        let rowIndex : Fin 115 := ⟨j, hj115⟩
+        let L : Fin 116 :=
+          backlundGrid2EndpointLeftIndex140_369075049_1000000 rowIndex
+        let R : Fin 116 :=
+          backlundGrid2EndpointRightIndex140_369075049_1000000 rowIndex
+        let row := backlundGrid2EndpointRow140_369075049_1000000 rowIndex
+        have hprev :
+            zetaWeightedZeroCountUpToHeight
+                (backlundGrid2EndpointHeight140_369075049_1000000 L)
+                (backlundGrid2EndpointHeight140_369075049_1000000_nonneg L) =
+              backlundGrid2EndpointCount140_369075049_1000000 L.val := by
+          have h := ih j (by omega) (by omega : j < 116)
+          simpa [L, backlundGrid2EndpointLeftIndex140_369075049_1000000]
+            using h
+        have hA0 : 0 ≤ row.A :=
+          le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+            (backlund_two_pi_le_of_ge_140 row.hA_ge_140)
+        have hleft :
+            zetaWeightedZeroCountUpToHeight row.A hA0 =
+              row.countLower := by
+          have hheight :=
+            backlundGrid2EndpointHeight_left140_369075049_1000000
+              rowIndex
+          have htransport :=
+            zetaWeightedZeroCountUpToHeight_eq_of_eq hheight
+              (backlundGrid2EndpointHeight140_369075049_1000000_nonneg L)
+              hA0
+          calc
+            zetaWeightedZeroCountUpToHeight row.A hA0
+                = zetaWeightedZeroCountUpToHeight
+                    (backlundGrid2EndpointHeight140_369075049_1000000 L)
+                    (backlundGrid2EndpointHeight140_369075049_1000000_nonneg
+                      L) :=
+                  htransport.symm
+            _ = backlundGrid2EndpointCount140_369075049_1000000 L.val :=
+                  hprev
+            _ = row.countLower := by
+                  simpa [row, L,
+                    backlundGrid2EndpointRow140_369075049_1000000] using
+                    backlundGrid2EndpointCount_left140_369075049_1000000
+                      rowIndex
+        have hright :
+            zetaWeightedZeroCountUpToHeight row.B (le_trans hA0 row.hAB) =
+              row.countUpper := by
+          have hraw :
+              zetaWeightedZeroCountUpToHeight row.B
+                  (le_trans hA0 row.hAB) =
+                row.countLower +
+                  zetaWeightedZeroCountInHeightSlab
+                    row.A row.B hA0 row.hAB :=
+            zetaWeightedZeroCountUpToHeight_right_eq_of_left_eq_slab_count
+              hA0 row.hAB hleft rfl
+          have hadd := C.slab_count_add_eq rowIndex
+          simpa [row] using hraw.trans hadd
+        have htarget :
+            zetaWeightedZeroCountUpToHeight
+                (backlundGrid2EndpointHeight140_369075049_1000000 R)
+                (backlundGrid2EndpointHeight140_369075049_1000000_nonneg R) =
+              backlundGrid2EndpointCount140_369075049_1000000 R.val := by
+          have hheight :=
+            backlundGrid2EndpointHeight_right140_369075049_1000000
+              rowIndex
+          have htransport :=
+            zetaWeightedZeroCountUpToHeight_eq_of_eq hheight
+              (backlundGrid2EndpointHeight140_369075049_1000000_nonneg R)
+              (le_trans hA0 row.hAB)
+          calc
+            zetaWeightedZeroCountUpToHeight
+                (backlundGrid2EndpointHeight140_369075049_1000000 R)
+                (backlundGrid2EndpointHeight140_369075049_1000000_nonneg R)
+                = zetaWeightedZeroCountUpToHeight row.B
+                    (le_trans hA0 row.hAB) :=
+                  htransport
+            _ = row.countUpper := hright
+            _ = backlundGrid2EndpointCount140_369075049_1000000 R.val := by
+                  simpa [row, R,
+                    backlundGrid2EndpointRow140_369075049_1000000] using
+                    (backlundGrid2EndpointCount_right140_369075049_1000000
+                      rowIndex).symm
+        simpa [R, backlundGrid2EndpointRightIndex140_369075049_1000000]
+          using htarget
 
 /-- The 116 endpoint cumulative-count certificate implies the rowwise
 count-equality input used by the Backlund grid argument. -/
@@ -35168,6 +35729,123 @@ noncomputable def backlundGrid2EndpointSmoothRationalExpFact_byIndex
   · exact backlundGrid2EndpointSmoothRationalExpFact_row112
   · exact backlundGrid2EndpointSmoothRationalExpFact_row113
   · exact backlundGrid2EndpointSmoothRationalExpFact_row114
+
+/-- Count-only argument-principle grid rows supply the Turing slab-count
+certificate rows, using the already verified smooth-main arithmetic table
+for the concrete grid. -/
+noncomputable def
+    BacklundGrid2TuringSlabCountCertificates140_369075049_1000000.ofArgumentPrincipleNatCountSlabs
+    (C :
+      BacklundGrid2ArgumentPrincipleNatCountCertificates140_369075049_1000000) :
+    BacklundGrid2TuringSlabCountCertificates140_369075049_1000000 where
+  initial_count_eq := by
+    let n : Fin 115 := ⟨0, by norm_num⟩
+    let e : Fin 116 := ⟨0, by norm_num⟩
+    let row := backlundGrid2EndpointRow140_369075049_1000000 n
+    have hheight :
+        backlundGrid2EndpointHeight140_369075049_1000000 e = row.A := by
+      norm_num [e, row, n, backlundGrid2EndpointHeight140_369075049_1000000,
+        backlundGrid2EndpointRow140_369075049_1000000]
+    have htransport :=
+      zetaWeightedZeroCountUpToHeight_eq_of_eq hheight
+        (backlundGrid2EndpointHeight140_369075049_1000000_nonneg e)
+        (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140 row.hA_ge_140))
+    calc
+      zetaWeightedZeroCountUpToHeight
+          (backlundGrid2EndpointHeight140_369075049_1000000 e)
+          (backlundGrid2EndpointHeight140_369075049_1000000_nonneg e)
+          =
+        zetaWeightedZeroCountUpToHeight row.A
+          (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+            (backlund_two_pi_le_of_ge_140 row.hA_ge_140)) :=
+          htransport
+      _ = row.countLower := C.left_count_eq n
+      _ = 48 := by rfl
+      _ = backlundGrid2EndpointCount140_369075049_1000000 0 := by rfl
+  slab := fun n =>
+    let row := backlundGrid2EndpointRow140_369075049_1000000 n
+    let hA0 : 0 ≤ row.A :=
+      le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+        (backlund_two_pi_le_of_ge_140 row.hA_ge_140)
+    let Ssmooth :
+        BacklundGrid2EndpointSmoothFacts row :=
+      (backlundGrid2EndpointSmoothRationalExpFact_byIndex n).toSmoothFacts
+    {
+      A := row.A
+      B := row.B
+      leftCount := row.countLower
+      slabCount := row.countUpper - row.countLower
+      mainLower := (row.countUpper : ℝ) - (25167 / 10000 : ℝ)
+      mainUpper := (row.countLower : ℝ) + (25167 / 10000 : ℝ)
+      hA_two_pi := backlund_two_pi_le_of_ge_140 row.hA_ge_140
+      hAB := row.hAB
+      left_count_eq := C.left_count_eq n
+      slab_count_eq := by
+        let F :=
+          (C.theoremData n).toActualNormalizedData.toCanonicalData.toFormula
+        have hbottom_pos :
+            0 <
+              (backlundFixedSideRectangle row.A row.B
+                (backlundGrid2EndpointRow_lt140_369075049_1000000 n)).bottom := by
+          simpa [row, backlundFixedSideRectangle] using
+            (lt_of_lt_of_le (by positivity : (0 : ℝ) < 2 * Real.pi)
+              (backlund_two_pi_le_of_ge_140 row.hA_ge_140))
+        have harg :
+            F.argumentIndex =
+              (zetaWeightedZeroCountInHeightSlab
+                row.A row.B hA0 row.hAB : ℤ) := by
+          simpa [F, row, hA0, backlundFixedSideRectangle] using
+            (F.argumentIndex_eq_actual_slab_count hbottom_pos)
+        have hidx :
+            F.argumentIndex =
+              ((row.countUpper - row.countLower : ℕ) : ℤ) := by
+          simpa [F, row] using C.argumentIndex_eq_nat n
+        have hcast :
+            (zetaWeightedZeroCountInHeightSlab
+                row.A row.B hA0 row.hAB : ℤ) =
+              ((row.countUpper - row.countLower : ℕ) : ℤ) := by
+          rw [← harg]
+          exact hidx
+        exact Int.ofNat.inj hcast
+      mainLower_le_left := Ssmooth.mainLower_le_left
+      right_le_mainUpper := Ssmooth.right_le_mainUpper
+      upperCount_minus_lowerMain_le := by
+        have hle :=
+          backlundGrid2EndpointRow_countLower_le_countUpper140_369075049_1000000
+            n
+        have hle_row : row.countLower ≤ row.countUpper := by
+          simpa [row] using hle
+        have hsum :
+            row.countLower + (row.countUpper - row.countLower) =
+              row.countUpper := by
+          omega
+        rw [hsum]
+        ring_nf
+        norm_num
+      upperMain_minus_lowerCount_le := by
+        ring_nf
+        norm_num
+    }
+  slab_A_eq := by
+    intro n
+    rfl
+  slab_B_eq := by
+    intro n
+    rfl
+  slab_leftCount_eq := by
+    intro n
+    rfl
+  slab_rightCount_eq := by
+    intro n
+    let row := backlundGrid2EndpointRow140_369075049_1000000 n
+    have hle :=
+      backlundGrid2EndpointRow_countLower_le_countUpper140_369075049_1000000
+        n
+    have hle_row : row.countLower ≤ row.countUpper := by
+      simpa [row] using hle
+    dsimp
+    omega
 
 /-- Fully verified rational/exponential smooth-main facts for every row
 of the concrete two-unit Backlund grid. -/
@@ -37896,6 +38574,173 @@ theorem
     (BacklundFiniteBandCheck140_exp591096_100000.of_140_3690603_10000
       (BacklundFiniteBandCheck140_3690603_10000.of_140_369075049_1000000
         (Hcounts.toEndpointCountRangeMainCertificate.toUniform25167Check.toFiniteBandCheck)))
+    hT
+
+/-- Backlund/Turing from the current reduced finite source: the
+Platt--Trudgian tail plus rowwise Turing slab-count certificates on the
+concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2TuringSlabCounts369075049
+    (Htail : PlattTrudgianBacklundCut591096_100000TailInput)
+    (Hslabs :
+      BacklundGrid2TuringSlabCountCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2CumulativeEndpointCounts369075049
+    Htail
+    (BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000.ofAdjacentSlabs
+      (BacklundGrid2AdjacentSlabCountEqualities140_369075049_1000000.ofTuringSlabCountCertificates
+        Hslabs))
+    hT
+
+/-- Backlund/Turing from the leanest finite count source: the
+Platt--Trudgian tail plus one initial count and rowwise
+argument-principle natural-index certificates on the concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ArgumentPrincipleNatIndexSlabs369075049
+    (Htail : PlattTrudgianBacklundCut591096_100000TailInput)
+    (Hslabs :
+      BacklundGrid2ArgumentPrincipleNatIndexCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2CumulativeEndpointCounts369075049
+    Htail
+    (BacklundGrid2EndpointCumulativeCountEqualities140_369075049_1000000.ofAdjacentSlabs
+      (BacklundGrid2AdjacentSlabCountEqualities140_369075049_1000000.ofArgumentPrincipleNatIndexCertificates
+        Hslabs))
+    hT
+
+/-- Backlund/Turing from residue-index rows on the concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ResidueIndexSlabs369075049
+    (Htail : PlattTrudgianBacklundCut591096_100000TailInput)
+    (Hslabs :
+      BacklundGrid2ResidueIndexCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ArgumentPrincipleNatIndexSlabs369075049
+    Htail
+    (BacklundGrid2ArgumentPrincipleNatIndexCertificates140_369075049_1000000.ofResidueIndexCertificates
+      Hslabs)
+    hT
+
+/-- Backlund/Turing from raw residue-theorem rows on the concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ResidueTheoremOutputSlabs369075049
+    (Htail : PlattTrudgianBacklundCut591096_100000TailInput)
+    (Hslabs :
+      BacklundGrid2ResidueTheoremOutputCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ResidueIndexSlabs369075049
+    Htail
+    (BacklundGrid2ResidueIndexCertificates140_369075049_1000000.ofResidueTheoremOutputCertificates
+      Hslabs)
+    hT
+
+/-- Backlund/Turing from the analytic finite source: the
+Platt--Trudgian tail plus fixed-rectangle argument-principle
+natural-index certificates on the concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ArgumentPrincipleNatSlabs369075049
+    (Htail : PlattTrudgianBacklundCut591096_100000TailInput)
+    (Hslabs :
+      BacklundGrid2ArgumentPrincipleNatSlabCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2TuringSlabCounts369075049
+    Htail
+    (BacklundGrid2TuringSlabCountCertificates140_369075049_1000000.ofArgumentPrincipleNatSlabs
+      Hslabs)
+    hT
+
+/-- Backlund/Turing from the lean finite source: the Platt--Trudgian
+tail plus count-only fixed-rectangle argument-principle natural-index
+certificates on the concrete grid.  The smooth-main arithmetic is the
+verified rational/exponential grid table already in this file. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ArgumentPrincipleNatCountSlabs369075049
+    (Htail : PlattTrudgianBacklundCut591096_100000TailInput)
+    (Hslabs :
+      BacklundGrid2ArgumentPrincipleNatCountCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2TuringSlabCounts369075049
+    Htail
+    (BacklundGrid2TuringSlabCountCertificates140_369075049_1000000.ofArgumentPrincipleNatCountSlabs
+      Hslabs)
+    hT
+
+/-- Backlund/Turing from the published Platt--Trudgian global estimate
+and the analytic finite argument-principle rows on the concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2ArgumentPrincipleNatSlabs369075049
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hslabs :
+      BacklundGrid2ArgumentPrincipleNatSlabCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ArgumentPrincipleNatSlabs369075049
+    (PlattTrudgianBacklundCut591096_100000TailInput.of_global Hglobal)
+    Hslabs
+    hT
+
+/-- Backlund/Turing from the published Platt--Trudgian global estimate
+plus one initial count and rowwise argument-principle natural-index
+certificates on the concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2ArgumentPrincipleNatIndexSlabs369075049
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hslabs :
+      BacklundGrid2ArgumentPrincipleNatIndexCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ArgumentPrincipleNatIndexSlabs369075049
+    (PlattTrudgianBacklundCut591096_100000TailInput.of_global Hglobal)
+    Hslabs
+    hT
+
+/-- Backlund/Turing from the published Platt--Trudgian global estimate
+plus residue-index rows on the concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2ResidueIndexSlabs369075049
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hslabs :
+      BacklundGrid2ResidueIndexCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ResidueIndexSlabs369075049
+    (PlattTrudgianBacklundCut591096_100000TailInput.of_global Hglobal)
+    Hslabs
+    hT
+
+/-- Backlund/Turing from the published Platt--Trudgian global estimate
+plus raw residue-theorem rows on the concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2ResidueTheoremOutputSlabs369075049
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hslabs :
+      BacklundGrid2ResidueTheoremOutputCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ResidueTheoremOutputSlabs369075049
+    (PlattTrudgianBacklundCut591096_100000TailInput.of_global Hglobal)
+    Hslabs
+    hT
+
+/-- Backlund/Turing from the published Platt--Trudgian global estimate
+and the lean count-only argument-principle finite source on the concrete
+grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2ArgumentPrincipleNatCountSlabs369075049
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hslabs :
+      BacklundGrid2ArgumentPrincipleNatCountCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ArgumentPrincipleNatCountSlabs369075049
+    (PlattTrudgianBacklundCut591096_100000TailInput.of_global Hglobal)
+    Hslabs
     hT
 
 /-- Smaller current Backlund/Turing source package.
@@ -70515,6 +71360,352 @@ theorem HadamardZeroInvSqSummability.product_multipliable
       Multipliable fun i : ι => hadamardGenus1Factor (zeroLoc i) s :=
   fun s => H.multipliable_genus1 genusOneTaylorBoundData s
 
+/-- 🌟🌟🌟 **PROVED — finite Hadamard products converge to the `tprod`.**
+
+This is the actual finite-net convergence statement behind the infinite
+genus-one product. It follows directly from Mathlib's `HasProd`
+definition once inverse-square zero distribution gives `Multipliable`. -/
+theorem HadamardZeroInvSqSummability.indexedFiniteProduct_tendsto
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroInvSqSummability zeroLoc) (s : ℂ) :
+    Tendsto
+      (fun F : Finset ι => indexedFiniteHadamardProduct zeroLoc F s)
+      Filter.atTop
+      (𝓝 (infiniteHadamardProduct zeroLoc s)) := by
+  unfold indexedFiniteHadamardProduct infiniteHadamardProduct
+  exact (H.product_multipliable s).hasProd
+
+/-- 🌟🌟🌟 **PROVED — finite regularized sums converge to the `tsum`
+away from the indexed zeros.**
+
+This is the additive twin of the product convergence theorem and is the
+real convergence input used by the log-derivative passage. -/
+theorem HadamardZeroInvSqSummability.finiteRegularizedSum_tendsto
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroInvSqSummability zeroLoc)
+    {s : ℂ} (hs_ne : ∀ i : ι, s ≠ zeroLoc i) :
+    Tendsto
+      (fun F : Finset ι => finiteHadamardRegularizedSum zeroLoc F s)
+      Filter.atTop
+      (𝓝 (hadamardRegularizedLogDerivSeries zeroLoc s)) := by
+  unfold finiteHadamardRegularizedSum hadamardRegularizedLogDerivSeries
+  exact (H.summable_regularized hs_ne).hasSum
+
+/-- 🌟🌟🌟 **PROVED — monotone finite exhaustions inherit Hadamard product
+convergence.**
+
+This converts the canonical `Finset ι` net convergence into the sequential
+finite-exhaustion coordinate used by the Hadamard derivative machinery. -/
+theorem HadamardZeroInvSqSummability.indexedFiniteProduct_tendsto_at_exhaustion
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroInvSqSummability zeroLoc)
+    {exhaust : ℕ → Finset ι}
+    (hmono : Monotone exhaust)
+    (hexhaustive : ∀ i : ι, ∃ n : ℕ, i ∈ exhaust n)
+    (s : ℂ) :
+    Tendsto
+      (fun n : ℕ => indexedFiniteHadamardProduct zeroLoc (exhaust n) s)
+      Filter.atTop
+      (𝓝 (infiniteHadamardProduct zeroLoc s)) :=
+  (H.indexedFiniteProduct_tendsto s).comp
+    (tendsto_atTop_finset_of_monotone hmono hexhaustive)
+
+/-- 🌟🌟🌟 **PROVED — monotone finite exhaustions inherit regularized-sum
+convergence away from indexed zeros.** -/
+theorem HadamardZeroInvSqSummability.finiteRegularizedSum_tendsto_at_exhaustion
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroInvSqSummability zeroLoc)
+    {exhaust : ℕ → Finset ι}
+    (hmono : Monotone exhaust)
+    (hexhaustive : ∀ i : ι, ∃ n : ℕ, i ∈ exhaust n)
+    {s : ℂ} (hs_ne : ∀ i : ι, s ≠ zeroLoc i) :
+    Tendsto
+      (fun n : ℕ => finiteHadamardRegularizedSum zeroLoc (exhaust n) s)
+      Filter.atTop
+      (𝓝 (hadamardRegularizedLogDerivSeries zeroLoc s)) :=
+  (H.finiteRegularizedSum_tendsto hs_ne).comp
+    (tendsto_atTop_finset_of_monotone hmono hexhaustive)
+
+/-- 🌟🌟🌟🌟 **PROVED — locally uniform convergence of the genus-one
+Hadamard product from a summable uniform deviation bound.**
+
+This is the Mathlib Weierstrass product theorem applied to the concrete
+factors `E₁(s/ρᵢ) = 1 + (E₁(s/ρᵢ)-1)`. The remaining analytic estimate
+is now precisely the standard compact-uniform bound on the genus-one
+deviation. -/
+theorem hasProdLocallyUniformlyOn_hadamardGenus1Factor_of_summable_bound
+    {ι : Type*} {zeroLoc : ι → ℂ} {U : Set ℂ} {u : ι → ℝ}
+    (hU : IsOpen U)
+    (hu : Summable u)
+    (hbound :
+      ∀ᶠ i in Filter.cofinite,
+        ∀ s ∈ U,
+          ‖hadamardGenus1Factor (zeroLoc i) s - 1‖ ≤ u i) :
+    HasProdLocallyUniformlyOn
+      (fun i : ι => fun s : ℂ => hadamardGenus1Factor (zeroLoc i) s)
+      (fun s : ℂ => infiniteHadamardProduct zeroLoc s)
+      U := by
+  have hcts :
+      ∀ i : ι,
+        ContinuousOn
+          (fun s : ℂ => hadamardGenus1Factor (zeroLoc i) s - 1) U := by
+    intro i s _hs
+    exact
+      ((hadamardGenus1Factor_differentiableAt (zeroLoc i) s).continuousAt.sub
+        continuousAt_const).continuousWithinAt
+  have hprod :=
+    hu.hasProdLocallyUniformlyOn_one_add
+      (K := U)
+      (f := fun i : ι => fun s : ℂ =>
+        hadamardGenus1Factor (zeroLoc i) s - 1)
+      hU
+      hbound
+      hcts
+  simpa [infiniteHadamardProduct, sub_eq_add_neg, add_comm, add_left_comm,
+    add_assoc] using hprod
+
+/-- 🌟🌟🌟🌟 **PROVED — finite Hadamard products tend locally uniformly
+to the infinite genus-one product under a summable uniform bound.**
+
+This is the exact `TendstoLocallyUniformlyOn` shape used by the
+Hadamard derivative-interchange machinery. -/
+theorem tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_of_summable_bound
+    {ι : Type*} {zeroLoc : ι → ℂ} {U : Set ℂ} {u : ι → ℝ}
+    (hU : IsOpen U)
+    (hu : Summable u)
+    (hbound :
+      ∀ᶠ i in Filter.cofinite,
+        ∀ s ∈ U,
+          ‖hadamardGenus1Factor (zeroLoc i) s - 1‖ ≤ u i) :
+    TendstoLocallyUniformlyOn
+      (fun F : Finset ι => fun s : ℂ =>
+        indexedFiniteHadamardProduct zeroLoc F s)
+      (infiniteHadamardProduct zeroLoc)
+      Filter.atTop
+      U := by
+  have hprod :=
+    hasProdLocallyUniformlyOn_hadamardGenus1Factor_of_summable_bound
+      (zeroLoc := zeroLoc) hU hu hbound
+  simpa [HasProdLocallyUniformlyOn, indexedFiniteHadamardProduct] using hprod
+
+/-- 🌟🌟🌟🌟 **PROVED — bounded-region uniform genus-one deviation
+estimate from inverse-square zero data.**
+
+On any region bounded by `R`, all sufficiently large zeros satisfy
+`‖s‖ ≤ ‖ρᵢ‖` uniformly on the region; the genus-one Taylor bound then
+gives the summable majorant
+`4 R^2 / ‖ρᵢ‖^2`. -/
+theorem HadamardZeroInvSqSummability.eventually_uniform_factor_sub_one_bound
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroInvSqSummability zeroLoc)
+    {U : Set ℂ} {R : ℝ}
+    (hR : 0 ≤ R)
+    (hUbound : ∀ s : ℂ, s ∈ U → ‖s‖ ≤ R) :
+    ∀ᶠ i in Filter.cofinite,
+      ∀ s ∈ U,
+        ‖hadamardGenus1Factor (zeroLoc i) s - 1‖
+          ≤ 4 * R ^ 2 * (‖zeroLoc i‖ ^ 2)⁻¹ := by
+  filter_upwards [H.eventually_large ((R : ℝ) : ℂ)] with i hi s hs
+  have hnorm_R : ‖((R : ℝ) : ℂ)‖ = R := by
+    simp [Complex.normSq, hR]
+  rw [hnorm_R] at hi
+  have hR_le : R ≤ ‖zeroLoc i‖ := by
+    nlinarith [hR, hi]
+  have hlarge : ‖s‖ ≤ ‖zeroLoc i‖ :=
+    le_trans (hUbound s hs) hR_le
+  have htail :=
+    norm_one_sub_hadamardGenus1Factor_le_large
+      (ρ := zeroLoc i) (s := s) (H.zero_ne i) hlarge
+      genusOneTaylorBoundData
+  have hdiff :
+      ‖hadamardGenus1Factor (zeroLoc i) s - 1‖
+        = ‖1 - hadamardGenus1Factor (zeroLoc i) s‖ := by
+    rw [← norm_neg (hadamardGenus1Factor (zeroLoc i) s - 1)]
+    congr 1
+    ring
+  have hsq : ‖s‖ ^ 2 ≤ R ^ 2 := by
+    nlinarith [hUbound s hs, norm_nonneg s, hR]
+  have hinv_nonneg : 0 ≤ (‖zeroLoc i‖ ^ 2)⁻¹ :=
+    inv_nonneg.mpr (sq_nonneg _)
+  calc
+    ‖hadamardGenus1Factor (zeroLoc i) s - 1‖
+        = ‖1 - hadamardGenus1Factor (zeroLoc i) s‖ := hdiff
+    _ ≤ 4 * (‖s‖ ^ 2 / ‖zeroLoc i‖ ^ 2) := htail
+    _ = 4 * (‖s‖ ^ 2 * (‖zeroLoc i‖ ^ 2)⁻¹) := by
+        rw [div_eq_mul_inv]
+    _ ≤ 4 * (R ^ 2 * (‖zeroLoc i‖ ^ 2)⁻¹) := by
+        gcongr
+    _ = 4 * R ^ 2 * (‖zeroLoc i‖ ^ 2)⁻¹ := by ring
+
+/-- 🌟🌟🌟🌟 **PROVED — locally uniform Hadamard product convergence on
+bounded open regions from inverse-square zero distribution.**
+
+This composes the concrete bounded-region genus-one estimate with
+Mathlib's locally-uniform infinite-product theorem. -/
+theorem HadamardZeroInvSqSummability.tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_of_norm_bounded_open
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroInvSqSummability zeroLoc)
+    {U : Set ℂ} {R : ℝ}
+    (hU : IsOpen U)
+    (hR : 0 ≤ R)
+    (hUbound : ∀ s : ℂ, s ∈ U → ‖s‖ ≤ R) :
+    TendstoLocallyUniformlyOn
+      (fun F : Finset ι => fun s : ℂ =>
+        indexedFiniteHadamardProduct zeroLoc F s)
+      (infiniteHadamardProduct zeroLoc)
+      Filter.atTop
+      U := by
+  have hu :
+      Summable fun i : ι =>
+        4 * R ^ 2 * (‖zeroLoc i‖ ^ 2)⁻¹ :=
+    H.inv_sq_summable.mul_left (4 * R ^ 2)
+  exact
+    tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_of_summable_bound
+      hU
+      hu
+      (H.eventually_uniform_factor_sub_one_bound hR hUbound)
+
+/-- 🌟🌟🌟 **PROVED — a monotone exhaustive finite sequence inherits
+locally-uniform convergence from the canonical `Finset` net.** -/
+theorem tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_at_exhaustion
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    {U : Set ℂ} {exhaust : ℕ → Finset ι}
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct zeroLoc F s)
+        (infiniteHadamardProduct zeroLoc)
+        Filter.atTop
+        U)
+    (hmono : Monotone exhaust)
+    (hexhaustive : ∀ i : ι, ∃ n : ℕ, i ∈ exhaust n) :
+    TendstoLocallyUniformlyOn
+      (fun n : ℕ => fun s : ℂ =>
+        indexedFiniteHadamardProduct zeroLoc (exhaust n) s)
+      (infiniteHadamardProduct zeroLoc)
+      Filter.atTop
+      U := by
+  intro V hV x hx
+  rcases HlucFinset V hV x hx with ⟨t, ht, htail⟩
+  refine ⟨t, ht, ?_⟩
+  exact
+    (tendsto_atTop_finset_of_monotone hmono hexhaustive).eventually htail
+
+/-- 🌟🌟🌟🌟 **PROVED — build the sequential locally-uniform Hadamard
+product-limit data from `Finset`-net locally-uniform convergence.** -/
+noncomputable def HadamardProductLocallyUniformLimitData.of_finsetLocallyUniform
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (Hex : HadamardFiniteExhaustion zeroLoc)
+    (hexhaustive : ∀ i : ι, ∃ n : ℕ, i ∈ Hex.exhaust n)
+    {U : Set ℂ}
+    (hU : IsOpen U)
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct zeroLoc F s)
+        (infiniteHadamardProduct zeroLoc)
+        Filter.atTop
+        U) :
+    HadamardProductLocallyUniformLimitData zeroLoc Hex :=
+  { region := U
+    isOpen_region := hU
+    locally_uniform_product :=
+      tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_at_exhaustion
+        HlucFinset
+        (by
+          intro n m hnm
+          exact Hex.exhaust_mono hnm)
+        hexhaustive }
+
+/-- 🌟🌟🌟 **PROVED — infinite genus-one product is nonzero off the
+indexed zeros when the genus-one deviations are summable.**
+
+The proof uses Mathlib's complex logarithm infinite-product theorem:
+summability of `E₁(s/ρᵢ) - 1` gives summability of
+`log E₁(s/ρᵢ)`, and the product is the exponential of that sum. -/
+theorem infiniteHadamardProduct_ne_zero_of_summable_factor_sub_one
+    {ι : Type*} {zeroLoc : ι → ℂ} {s : ℂ}
+    (hfactor_ne :
+      ∀ i : ι, hadamardGenus1Factor (zeroLoc i) s ≠ 0)
+    (hsum :
+      Summable fun i : ι => hadamardGenus1Factor (zeroLoc i) s - 1) :
+    infiniteHadamardProduct zeroLoc s ≠ 0 := by
+  unfold infiniteHadamardProduct
+  have hlog :
+      Summable fun i : ι =>
+        Complex.log (hadamardGenus1Factor (zeroLoc i) s) := by
+    have h :=
+      Complex.summable_log_one_add_of_summable
+        (f := fun i : ι => hadamardGenus1Factor (zeroLoc i) s - 1)
+        hsum
+    simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using h
+  have hprod :=
+    Complex.cexp_tsum_eq_tprod
+      (f := fun i : ι => hadamardGenus1Factor (zeroLoc i) s)
+      hfactor_ne
+      hlog
+  intro hzero
+  have hexp_zero :
+      Complex.exp
+          (∑' i : ι,
+            Complex.log (hadamardGenus1Factor (zeroLoc i) s))
+        = 0 := by
+    exact hprod.trans hzero
+  exact Complex.exp_ne_zero _ hexp_zero
+
+/-- 🌟🌟🌟 **PROVED — inverse-square zero distribution implies the
+infinite genus-one product is nonzero away from the indexed zeros.** -/
+theorem HadamardZeroInvSqSummability.infiniteProduct_ne_zero
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroInvSqSummability zeroLoc)
+    {s : ℂ} (hs_ne : ∀ i : ι, s ≠ zeroLoc i) :
+    infiniteHadamardProduct zeroLoc s ≠ 0 := by
+  refine
+    infiniteHadamardProduct_ne_zero_of_summable_factor_sub_one
+      (zeroLoc := zeroLoc) (s := s) ?_ ?_
+  · intro i
+    exact hadamardGenus1Factor_ne_zero (H.zero_ne i) (hs_ne i)
+  · have h_one_sub :
+        Summable fun i : ι =>
+          1 - hadamardGenus1Factor (zeroLoc i) s :=
+      summable_one_sub_hadamardGenus1Factor_of_inv_sq
+        genusOneTaylorBoundData
+        H.zero_ne
+        H.inv_sq_summable
+        (by
+          filter_upwards [H.eventually_large s] with i hi
+          have h_s_nn : 0 ≤ ‖s‖ := norm_nonneg s
+          linarith)
+    have h_neg := h_one_sub.neg
+    simpa [neg_sub] using h_neg
+
+/-- 🌟🌟🌟🌟 **PROVED — finite derivative convergence gives
+Hadamard log-derivative limit data with product nonvanishing discharged.**
+
+Compared with `HadamardLogDerivLimitData.of_finiteDerivativeLimitData`,
+the separate `Hprod_ne` input is gone: inverse-square zero distribution
+and no-collision imply nonvanishing of the genus-one product by the
+complex logarithmic infinite-product theorem. -/
+noncomputable def HadamardLogDerivLimitData.of_finiteDerivativeLimitData_invSq
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    {Hex : HadamardFiniteExhaustion zeroLoc}
+    (Hinv : HadamardZeroInvSqSummability zeroLoc)
+    (Hderiv : HadamardFiniteDerivativeLimitData zeroLoc Hex)
+    (Hdiff :
+      ∀ s ∈ Hderiv.region,
+        DifferentiableAt ℂ (infiniteHadamardProduct zeroLoc) s)
+    (Hno_collision :
+      ∀ s ∈ Hderiv.region, ∀ i : ι, s ≠ zeroLoc i) :
+    HadamardLogDerivLimitData zeroLoc :=
+  HadamardLogDerivLimitData.of_finiteDerivativeLimitData
+    Hinv
+    Hderiv
+    Hdiff
+    Hno_collision
+    (by
+      intro s hs
+      exact Hinv.infiniteProduct_ne_zero (Hno_collision s hs))
+
 -- =====================================================================
 -- §CCCXXXVI. LUC log-derivative interchange scaffold
 -- =====================================================================
@@ -70578,6 +71769,41 @@ noncomputable def HadamardProductLUCLogDerivData.of_finiteDerivativeLimitData
         (HadamardLogDerivLimitData.of_finiteDerivativeLimitData
           Hinv Hderiv Hdiff Hno_collision Hprod_ne).logDeriv_eq_tsum_at s hs }
 
+/-- 🌟🌟🌟🌟 **PROVED — build LUC/log-derivative data from finite
+derivative convergence with product nonvanishing discharged by invSq.**
+
+The remaining Hadamard-side analytic inputs are now exactly finite
+derivative convergence, locally-uniform product convergence, product
+differentiability, and no-collision on the region. Product
+nonvanishing is no longer an input. -/
+noncomputable def HadamardProductLUCLogDerivData.of_finiteDerivativeLimitData_invSq
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    {Hex : HadamardFiniteExhaustion zeroLoc}
+    (Hinv : HadamardZeroInvSqSummability zeroLoc)
+    (Hderiv : HadamardFiniteDerivativeLimitData zeroLoc Hex)
+    (HlucProduct :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct zeroLoc F s)
+        (infiniteHadamardProduct zeroLoc)
+        Filter.atTop
+        Hderiv.region)
+    (Hdiff :
+      ∀ s ∈ Hderiv.region,
+        DifferentiableAt ℂ (infiniteHadamardProduct zeroLoc) s)
+    (Hno_collision :
+      ∀ s ∈ Hderiv.region, ∀ i : ι, s ≠ zeroLoc i) :
+    HadamardProductLUCLogDerivData zeroLoc :=
+  HadamardProductLUCLogDerivData.of_finiteDerivativeLimitData
+    Hinv
+    Hderiv
+    HlucProduct
+    Hdiff
+    Hno_collision
+    (by
+      intro s hs
+      exact Hinv.infiniteProduct_ne_zero (Hno_collision s hs))
+
 /-- 🌟🌟🌟🌟🌟 **PROVED — build the LUC/log-derivative package directly
 from locally-uniform finite Hadamard product convergence.**
 
@@ -70631,6 +71857,39 @@ noncomputable def
           (by
             simpa [Hderiv, HadamardFiniteDerivativeLimitData.of_locallyUniformProduct]
               using hs))
+
+/-- 🌟🌟🌟🌟🌟 **PROVED — build the LUC/log-derivative package directly
+from locally-uniform product convergence with product nonvanishing
+discharged by inverse-square zero distribution.**
+
+This is the sharper Weierstrass/Hadamard reduction: open-region LUC
+supplies differentiability and derivative convergence, inverse-square
+zero distribution supplies product nonvanishing, and no-collision is the
+only remaining pointwise zero-set guard. -/
+noncomputable def
+    HadamardProductLUCLogDerivData.of_locallyUniformProductLimitData_invSq
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    {Hex : HadamardFiniteExhaustion zeroLoc}
+    (Hinv : HadamardZeroInvSqSummability zeroLoc)
+    (HlucSeq : HadamardProductLocallyUniformLimitData zeroLoc Hex)
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct zeroLoc F s)
+        (infiniteHadamardProduct zeroLoc)
+        Filter.atTop
+        HlucSeq.region)
+    (Hno_collision :
+      ∀ s ∈ HlucSeq.region, ∀ i : ι, s ≠ zeroLoc i) :
+    HadamardProductLUCLogDerivData zeroLoc :=
+  HadamardProductLUCLogDerivData.of_locallyUniformProductLimitData
+    Hinv
+    HlucSeq
+    HlucFinset
+    Hno_collision
+    (by
+      intro s hs
+      exact Hinv.infiniteProduct_ne_zero (Hno_collision s hs))
 
 -- =====================================================================
 -- §CCCXXXVII. Bridge LUC + invSq → HadamardLogDerivLimitData
@@ -70996,6 +72255,35 @@ theorem StieltjesMidHighTailEqualityAFZ.of_residualIdentity
   · intro z T L hT hy hne hreg hL
     have h := H.high_residual_eq hT hy hne hreg hL
     linear_combination h
+
+/-- 🌟🌟 **PROVED — combined mid/high Stieltjes tail equality gives the
+bare residual identity.**
+
+This is the algebraic direction used by an explicit-formula proof that
+first establishes `ZC = cloud + smooth + L`: subtracting the cloud and
+smooth model leaves exactly the fluctuation tail value `L`. -/
+theorem StieltjesMidHighTailResidualIdentityAFZ.of_tailEquality
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (H : StieltjesMidHighTailEqualityAFZ Dzero T0 ZC) :
+    StieltjesMidHighTailResidualIdentityAFZ Dzero T0 ZC := by
+  refine ⟨?_, ?_⟩
+  · intro z L hy hne hmid hL
+    have h := H.mid_eq hy hne hmid hL
+    linear_combination h
+  · intro z T L hT hy hne hreg hL
+    have h := H.high_eq hT hy hne hreg hL
+    linear_combination h
+
+/-- 🌟🌟 **PROVED — combined mid/high equality is equivalent to the
+combined bare residual identity.** -/
+theorem stieltjesMidHighTailEqualityAFZ_iff_residualIdentity
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ} :
+    StieltjesMidHighTailEqualityAFZ Dzero T0 ZC
+      ↔ StieltjesMidHighTailResidualIdentityAFZ Dzero T0 ZC :=
+  ⟨StieltjesMidHighTailResidualIdentityAFZ.of_tailEquality,
+    StieltjesMidHighTailEqualityAFZ.of_residualIdentity⟩
 
 /-- 🌟🌟 **PROVED — combined mid/high residual identity projects to the
 split mid residual target.** -/
@@ -72544,6 +73832,15 @@ theorem CompletedXiZeroInvSqDistribution.toHadamardZeroInvSqSummability
     inv_sq_summable := H.inv_sq_summable
     eventually_large := H.eventually_large }
 
+/-- 🌟🌟🌟 **PROVED — completed-ξ inverse-square zero distribution gives
+nonvanishing of the genus-one product off the indexed zero set.** -/
+theorem CompletedXiZeroInvSqDistribution.infiniteProduct_ne_zero
+    {ι : Type} {HZ : ConcreteCompletedXiZeroSystem ι}
+    (H : CompletedXiZeroInvSqDistribution HZ)
+    {s : ℂ} (hs_ne : ∀ i : ι, s ≠ HZ.zeroLoc i) :
+    infiniteHadamardProduct HZ.zeroLoc s ≠ 0 :=
+  H.toHadamardZeroInvSqSummability.infiniteProduct_ne_zero hs_ne
+
 /-- 🌟🌟 **PROVED — completed-ξ zero distribution from inverse-square
 summability plus norm-properness of the concrete zero system.** -/
 theorem CompletedXiZeroInvSqDistribution.of_invSqSummable_normProper
@@ -73627,6 +74924,15 @@ theorem EntireXiZeroInvSqDistribution.toHadamardZeroInvSqSummability
     inv_sq_summable := H.inv_sq_summable
     eventually_large := H.eventually_large }
 
+/-- 🌟🌟🌟 **PROVED — entire-ξ inverse-square zero distribution gives
+nonvanishing of the genus-one product off the indexed zero set.** -/
+theorem EntireXiZeroInvSqDistribution.infiniteProduct_ne_zero
+    {ι : Type} {HZ : ConcreteEntireXiZeroSystem ι}
+    (H : EntireXiZeroInvSqDistribution HZ)
+    {s : ℂ} (hs_ne : ∀ i : ι, s ≠ HZ.zeroLoc i) :
+    infiniteHadamardProduct HZ.zeroLoc s ≠ 0 :=
+  H.toHadamardZeroInvSqSummability.infiniteProduct_ne_zero hs_ne
+
 /-- 🌟🌟 **PROVED — entire-ξ zero distribution from inverse-square
 summability plus norm-properness of the concrete zero system.** -/
 theorem EntireXiZeroInvSqDistribution.of_invSqSummable_normProper
@@ -73825,6 +75131,23 @@ theorem EntireXiHadamardFactorization.of_offZeroQuotient
       product_nonzero_off_zeroLoc := hprod_ne
       quotient_eq_prefactor := hquot }
 
+/-- 🌟🌟🌟🌟 **PROVED — quotient-form Hadamard factorization with product
+nonvanishing discharged from inverse-square zero distribution.** The
+only remaining factorization input is the off-zero quotient identity. -/
+theorem EntireXiHadamardFactorization.of_offZeroQuotient_invSq
+    {ι : Type} {HZ : ConcreteEntireXiZeroSystem ι}
+    {prefactor : ℂ → ℂ}
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    (hquot :
+      ∀ s : ℂ,
+        (∀ i : ι, s ≠ HZ.zeroLoc i) →
+          entireRiemannXi s / infiniteHadamardProduct HZ.zeroLoc s
+            = prefactor s) :
+    EntireXiHadamardFactorization HZ prefactor :=
+  EntireXiHadamardFactorization.of_offZeroQuotient
+    (fun s hs => Hdist.infiniteProduct_ne_zero hs)
+    hquot
+
 /-- 🌟🌟🌟 **PROVED — exp-affine entire-ξ Hadamard factorization from
 the classical off-zero quotient identity.** The product-zero behavior at
 the indexed zeros is already discharged by
@@ -73845,6 +75168,23 @@ theorem EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient
       HZ
       (fun s : ℂ => C * Complex.exp (a + b * s)) :=
   EntireXiHadamardFactorization.of_offZeroQuotient hprod_ne hquot
+
+/-- 🌟🌟🌟🌟 **PROVED — exp-affine entire-ξ Hadamard factorization from
+the off-zero quotient identity, with product nonvanishing discharged by
+the inverse-square zero distribution.** -/
+theorem EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient_invSq
+    {ι : Type} {HZ : ConcreteEntireXiZeroSystem ι}
+    {C a b : ℂ}
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    (hquot :
+      ∀ s : ℂ,
+        (∀ i : ι, s ≠ HZ.zeroLoc i) →
+          entireRiemannXi s / infiniteHadamardProduct HZ.zeroLoc s
+            = C * Complex.exp (a + b * s)) :
+    EntireXiHadamardFactorization
+      HZ
+      (fun s : ℂ => C * Complex.exp (a + b * s)) :=
+  EntireXiHadamardFactorization.of_offZeroQuotient_invSq Hdist hquot
 
 /-- 📦 **`HadamardProductLUCOnEntireXiNonzeroData`** — Hadamard product
 LUC/log-derivative data stated directly on the natural AFZ region
@@ -73959,6 +75299,54 @@ noncomputable def HadamardProductLUCOnEntireXiNonzeroData.of_finiteDerivativeLim
           hprod_ne }
 
 /-- 🌟🌟🌟🌟🌟 **PROVED — entire-ξ nonzero-locus LUC/log-derivative data
+from finite derivative convergence, independent of factorization.**
+
+The previous constructor used the global Hadamard factorization to show
+the product is nonzero on `{s | entireRiemannXi s ≠ 0}`. This sharper
+version proves that nonvanishing directly from inverse-square zero
+distribution plus the concrete zero-system no-collision lemma. Thus the
+LUC/log-derivative interchange can be developed before the quotient
+factorization is identified. -/
+noncomputable def
+    HadamardProductLUCOnEntireXiNonzeroData.of_finiteDerivativeLimitData_invSq
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    {Hex : HadamardFiniteExhaustion HZ.zeroLoc}
+    (Hderiv : HadamardFiniteDerivativeLimitData HZ.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hderiv.region)
+    (HlucProduct :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct HZ.zeroLoc F s)
+        (infiniteHadamardProduct HZ.zeroLoc)
+        Filter.atTop
+        Hderiv.region)
+    (Hdiff :
+      ∀ s ∈ Hderiv.region,
+        DifferentiableAt ℂ (infiniteHadamardProduct HZ.zeroLoc) s) :
+    HadamardProductLUCOnEntireXiNonzeroData HZ.zeroLoc :=
+  { locally_uniform_product := by
+      exact HlucProduct.mono (by
+        intro s hs
+        exact Hregion s hs)
+    infinite_differentiable_at := by
+      intro s hs
+      exact Hdiff s (Hregion s hs)
+    logDeriv_eq_tsum := by
+      intro s hs
+      have hs_ne : ∀ i : ι, s ≠ HZ.zeroLoc i :=
+        HZ.nonzero_no_collision hs
+      exact
+        HadamardFiniteDerivativeLimitData.logDeriv_eq_tsum_at
+          Hderiv
+          (Hregion s hs)
+          Hdist.toHadamardZeroInvSqSummability.zero_ne
+          hs_ne
+          (Hdist.infiniteProduct_ne_zero hs_ne) }
+
+/-- 🌟🌟🌟🌟🌟 **PROVED — entire-ξ nonzero-locus LUC/log-derivative data
 directly from open-region locally-uniform product convergence.**
 
 The derivative-limit and infinite-product differentiability obligations
@@ -74004,6 +75392,52 @@ noncomputable def
             simpa [Hderiv, HadamardFiniteDerivativeLimitData.of_locallyUniformProduct]
               using hs))
       Hfact
+
+/-- 🌟🌟🌟🌟🌟🌟 **PROVED — entire-ξ nonzero-locus LUC/log-derivative data
+directly from open-region locally-uniform product convergence, with no
+factorization input.**
+
+This is the cleanest current internal Hadamard LUC target: once the
+finite products converge locally uniformly on an open region covering
+`{s | entireRiemannXi s ≠ 0}`, Mathlib gives differentiability and
+derivative convergence; inverse-square zero distribution gives product
+nonvanishing. The quotient/factorization theorem is not used here. -/
+noncomputable def
+    HadamardProductLUCOnEntireXiNonzeroData.of_locallyUniformProductLimitData_invSq
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    {Hex : HadamardFiniteExhaustion HZ.zeroLoc}
+    (HlucSeq : HadamardProductLocallyUniformLimitData HZ.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ HlucSeq.region)
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset ι => fun s : ℂ =>
+          indexedFiniteHadamardProduct HZ.zeroLoc F s)
+        (infiniteHadamardProduct HZ.zeroLoc)
+        Filter.atTop
+        HlucSeq.region) :
+    HadamardProductLUCOnEntireXiNonzeroData HZ.zeroLoc := by
+  let Hderiv : HadamardFiniteDerivativeLimitData HZ.zeroLoc Hex :=
+    HadamardFiniteDerivativeLimitData.of_locallyUniformProduct HlucSeq
+  exact
+    HadamardProductLUCOnEntireXiNonzeroData.of_finiteDerivativeLimitData_invSq
+      HZ
+      Hdist
+      Hderiv
+      (by
+        intro s hs
+        exact Hregion s hs)
+      (by
+        simpa [Hderiv, HadamardFiniteDerivativeLimitData.of_locallyUniformProduct]
+          using HlucFinset)
+      (by
+        intro s hs
+        exact HlucSeq.infinite_differentiableAt
+          (by
+            simpa [Hderiv, HadamardFiniteDerivativeLimitData.of_locallyUniformProduct]
+              using hs))
 
 /-- 🌟🌟🌟 **PROVED — entire-ξ nonzero-locus LUC data gives the Hadamard
 log-derivative limit data.**
@@ -74339,6 +75773,33 @@ noncomputable def
     (EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient
       concreteEntireXiZeroSystem hprod_ne hquot)
 
+/-- 🌟🌟🌟🌟🌟 **PROVED — canonical-zero exp-affine entire-ξ Hadamard theorem
+from nonzero-locus LUC data and only the off-zero quotient identity.**
+
+Product nonvanishing off the indexed zero set is discharged internally
+from the inverse-square zero distribution. -/
+noncomputable def
+    EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_quotient_lucOnEntireXiNonzero
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCOnEntireXiNonzeroData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (hquot :
+      ∀ s : ℂ,
+        (∀ i : EntireXiNonzeroZeroIndex,
+          s ≠ concreteEntireXiZeroSystem.zeroLoc i) →
+          entireRiemannXi s
+              / infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc s
+            = C * Complex.exp (a + b * s)) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucOnEntireXiNonzero
+    hC
+    Hdist
+    Hluc
+    (EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient_invSq
+      Hdist hquot)
+
 /-- 🌟🌟🌟 **PROVED — canonical-zero entire-ξ Hadamard theorem with an
 exponential-affine prefactor and arbitrary-region LUC data.** -/
 noncomputable def EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucLogDerivData
@@ -74399,6 +75860,36 @@ noncomputable def
     h_region
     (EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient
       concreteEntireXiZeroSystem hprod_ne hquot)
+
+/-- 🌟🌟🌟🌟🌟 **PROVED — canonical-zero exp-affine entire-ξ Hadamard theorem
+from arbitrary-region LUC data and only the off-zero quotient identity.**
+
+The inverse-square zero distribution supplies product nonvanishing off
+the indexed zero set. -/
+noncomputable def
+    EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_quotient_lucLogDerivData
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCLogDerivData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hluc.region)
+    (hquot :
+      ∀ s : ℂ,
+        (∀ i : EntireXiNonzeroZeroIndex,
+          s ≠ concreteEntireXiZeroSystem.zeroLoc i) →
+          entireRiemannXi s
+              / infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc s
+            = C * Complex.exp (a + b * s)) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucLogDerivData
+    hC
+    Hdist
+    Hluc
+    h_region
+    (EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient_invSq
+      Hdist hquot)
 
 /-- 🌟🌟🌟🌟 **PROVED — canonical-zero exp-affine entire-ξ Hadamard theorem
 from finite derivative convergence.**
@@ -74528,6 +76019,103 @@ noncomputable def
     HlucFinset
     (EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient
       concreteEntireXiZeroSystem hprod_ne hquot)
+
+/-- 🌟🌟🌟🌟🌟🌟 **PROVED — canonical-zero exp-affine entire-ξ Hadamard
+theorem from locally-uniform product convergence and only the off-zero
+quotient identity.**
+
+Compared with
+`of_canonicalZeros_expAffine_offZeroQuotient_locallyUniformProductLimitData`,
+the separate product-nonvanishing hypothesis is gone: it follows from
+the inverse-square zero distribution and the genus-one logarithmic
+product theorem. -/
+noncomputable def
+    EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_quotient_locallyUniformProductLimitData
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    {Hex : HadamardFiniteExhaustion concreteEntireXiZeroSystem.zeroLoc}
+    (HlucSeq :
+      HadamardProductLocallyUniformLimitData
+        concreteEntireXiZeroSystem.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ HlucSeq.region)
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset EntireXiNonzeroZeroIndex => fun s : ℂ =>
+          indexedFiniteHadamardProduct
+            concreteEntireXiZeroSystem.zeroLoc F s)
+        (infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc)
+        Filter.atTop
+        HlucSeq.region)
+    (hquot :
+      ∀ s : ℂ,
+        (∀ i : EntireXiNonzeroZeroIndex,
+          s ≠ concreteEntireXiZeroSystem.zeroLoc i) →
+          entireRiemannXi s
+              / infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc s
+            = C * Complex.exp (a + b * s)) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_locallyUniformProductLimitData
+    hC
+    Hdist
+    HlucSeq
+    Hregion
+    HlucFinset
+    (EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient_invSq
+      Hdist hquot)
+
+/-- 🌟🌟🌟🌟🌟🌟🌟 **PROVED — canonical-zero exp-affine entire-ξ Hadamard
+theorem from locally-uniform product convergence and the off-zero
+quotient identity, with LUC independent of factorization.**
+
+This is the clean dependency split for the entire-Hadamard proof:
+
+* locally-uniform product convergence on an open region covering
+  `{s | entireRiemannXi s ≠ 0}` gives the product log-derivative
+  identity;
+* inverse-square zero distribution gives product nonvanishing away from
+  the indexed zeros;
+* the off-zero quotient identity gives the global product factorization.
+
+Unlike `of_canonicalZeros_expAffine_quotient_locallyUniformProductLimitData`,
+the LUC/log-derivative data is built without using the factorization. -/
+noncomputable def
+    EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_independentLUC_quotient_locallyUniformProductLimitData
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    {Hex : HadamardFiniteExhaustion concreteEntireXiZeroSystem.zeroLoc}
+    (HlucSeq :
+      HadamardProductLocallyUniformLimitData
+        concreteEntireXiZeroSystem.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ HlucSeq.region)
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset EntireXiNonzeroZeroIndex => fun s : ℂ =>
+          indexedFiniteHadamardProduct
+            concreteEntireXiZeroSystem.zeroLoc F s)
+        (infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc)
+        Filter.atTop
+        HlucSeq.region)
+    (hquot :
+      ∀ s : ℂ,
+        (∀ i : EntireXiNonzeroZeroIndex,
+          s ≠ concreteEntireXiZeroSystem.zeroLoc i) →
+          entireRiemannXi s
+              / infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc s
+            = C * Complex.exp (a + b * s)) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucOnEntireXiNonzero
+    hC
+    Hdist
+    (HadamardProductLUCOnEntireXiNonzeroData.of_locallyUniformProductLimitData_invSq
+      concreteEntireXiZeroSystem
+      Hdist
+      HlucSeq
+      Hregion
+      HlucFinset)
+    (EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient_invSq
+      Hdist hquot)
 
 /-- 🌟🌟🌟 **PROVED — `EntireXiLogDerivativeSourceAFZ` from the
 entire-ξ Hadamard theorem.** -/
@@ -76703,6 +78291,65 @@ theorem expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_stieltjesH
     (Hbridge := Hbridge)).trans
     stieltjesHighTailEqualityAFZ_iff_residualIdentity
 
+/-- 🌟🌟🌟🌟🌟 **PROVED — combined finite-product residual convergence is
+equivalent to the combined bare mid/high Stieltjes residual identity.**
+
+This is the single mid/high explicit-formula target in Hadamard product
+coordinates: convergence of the concrete finite genus-one product
+residual tails in the mid and high regimes is exactly the combined
+Stieltjes residual statement
+`ZC - cloud - smooth = fluctuation tail`. -/
+theorem expAffineHadamardFiniteProductResidualTailConvergenceMidHigh_iff_stieltjesMidHighTailResidualIdentityAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ} :
+    ((∀ {z L : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L))
+      ∧
+      (∀ {z L : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        XiFluctuationTailValue Dzero T0 T z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L)))
+      ↔
+    StieltjesMidHighTailResidualIdentityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) := by
+  constructor
+  · intro Hprod
+    exact
+      StieltjesMidHighTailResidualIdentityAFZ.of_mid_high
+        ((expAffineHadamardFiniteProductResidualTailConvergenceMid_iff_stieltjesMidTailResidualIdentityAFZ
+          (Hbridge := Hbridge)).mp Hprod.1)
+        ((expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_stieltjesHighTailResidualIdentityAFZ
+          (Hbridge := Hbridge)).mp Hprod.2)
+  · intro Hres
+    exact
+      ⟨(expAffineHadamardFiniteProductResidualTailConvergenceMid_iff_stieltjesMidTailResidualIdentityAFZ
+          (Hbridge := Hbridge)).mpr
+          (StieltjesMidTailResidualIdentityAFZ.of_midHighResidualIdentity Hres),
+        (expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_stieltjesHighTailResidualIdentityAFZ
+          (Hbridge := Hbridge)).mpr
+          (StieltjesHighTailResidualIdentityAFZ.of_midHighResidualIdentity Hres)⟩
+
 /-- 🌟🌟🌟🌟 **PROVED — concrete finite product low-tail convergence is
 equivalent to the low zero-contribution split.** -/
 theorem expAffineHadamardFiniteProductLowTailConvergence_iff_lowZeroContributionSplitAFZ
@@ -77628,6 +79275,80 @@ theorem XiPullbackAntiHerglotzTarget_of_canonicalExpAffineLocallyUniformHadamard
       (Hhad.toExpAffinePullbackHadamardSourceAFZ Hbridge hC rfl)
       Hst.toEqualitySource
 
+/-- 🌟🌟🌟🌟🌟 **PATH B FRONT DOOR — locally-uniform entire-ξ Hadamard
+data + combined mid/high Stieltjes residual identity.**
+
+This is the Stieltjes-sharpened version of
+`XiPullbackAntiHerglotzTarget_of_canonicalExpAffineLocallyUniformHadamard_stieltjesResiduals`:
+the mid/high explicit-formula proof is supplied as one combined residual
+identity and projected internally. -/
+theorem XiPullbackAntiHerglotzTarget_of_canonicalExpAffineLocallyUniformHadamard_midHighResidualIdentity
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ))
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    {Hex : HadamardFiniteExhaustion concreteEntireXiZeroSystem.zeroLoc}
+    (HlucSeq :
+      HadamardProductLocallyUniformLimitData
+        concreteEntireXiZeroSystem.zeroLoc Hex)
+    (Hregion :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ HlucSeq.region)
+    (HlucFinset :
+      TendstoLocallyUniformlyOn
+        (fun F : Finset EntireXiNonzeroZeroIndex => fun s : ℂ =>
+          indexedFiniteHadamardProduct
+            concreteEntireXiZeroSystem.zeroLoc F s)
+        (infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc)
+        Filter.atTop
+        HlucSeq.region)
+    (Hfact :
+      EntireXiHadamardFactorization
+        concreteEntireXiZeroSystem
+        (fun s : ℂ => C * Complex.exp (a + b * s)))
+    (HmidHighResidual :
+      StieltjesMidHighTailResidualIdentityAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          concreteEntireXiZeroSystem.zeroLoc b))
+    (HlowSplit :
+      LowZeroContributionSplitAFZ
+        Dzero 10
+        (expAffineHadamardPullbackZeroContribution
+          concreteEntireXiZeroSystem.zeroLoc b)) :
+    XiPullbackAntiHerglotzTarget :=
+  XiPullbackAntiHerglotzTarget_of_canonicalExpAffineLocallyUniformHadamard_stieltjesResiduals
+    Dzero
+    h_Z_ge_15
+    hTuring
+    hHighLog
+    Hbridge
+    hC
+    Hdist
+    HlucSeq
+    Hregion
+    HlucFinset
+    Hfact
+    (StieltjesMidTailResidualIdentityAFZ.of_midHighResidualIdentity
+      HmidHighResidual)
+    (StieltjesHighTailResidualIdentityAFZ.of_midHighResidualIdentity
+      HmidHighResidual)
+    HlowSplit
+
 /-- 🌟🌟 **PROVED — transport AFZ mid-Stieltjes equality across an
 AFZ pointwise equality of zero contributions.** -/
 theorem StieltjesMidTailEqualityAFZ.congr_zeroContribution
@@ -77676,6 +79397,55 @@ theorem StieltjesMidHighTailEqualityAFZ.congr_zeroContribution
       intro z T L hT hy hne hreg hL
       rw [hZC z hy hne]
       exact H.high_eq hT hy hne hreg hL }
+
+/-- 🌟🌟 **PROVED — transport AFZ mid residual identity across an AFZ
+pointwise equality of zero contributions.** -/
+theorem StieltjesMidTailResidualIdentityAFZ.congr_zeroContribution
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC₁ ZC₂ : ℂ → ℂ}
+    (hZC :
+      ∀ z : ℂ, 0 < z.im → XiPullback z ≠ 0 →
+        ZC₂ z = ZC₁ z)
+    (H : StieltjesMidTailResidualIdentityAFZ Dzero T0 ZC₁) :
+    StieltjesMidTailResidualIdentityAFZ Dzero T0 ZC₂ :=
+  ⟨by
+    intro z L hy hne hmid hL
+    rw [hZC z hy hne]
+    exact H.residual_eq hy hne hmid hL⟩
+
+/-- 🌟🌟 **PROVED — transport AFZ high residual identity across an AFZ
+pointwise equality of zero contributions.** -/
+theorem StieltjesHighTailResidualIdentityAFZ.congr_zeroContribution
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC₁ ZC₂ : ℂ → ℂ}
+    (hZC :
+      ∀ z : ℂ, 0 < z.im → XiPullback z ≠ 0 →
+        ZC₂ z = ZC₁ z)
+    (H : StieltjesHighTailResidualIdentityAFZ Dzero T0 ZC₁) :
+    StieltjesHighTailResidualIdentityAFZ Dzero T0 ZC₂ :=
+  ⟨by
+    intro z T L hT hy hne hreg hL
+    rw [hZC z hy hne]
+    exact H.residual_eq hT hy hne hreg hL⟩
+
+/-- 🌟🌟 **PROVED — transport combined AFZ mid/high residual identity
+across an AFZ pointwise equality of zero contributions.** -/
+theorem StieltjesMidHighTailResidualIdentityAFZ.congr_zeroContribution
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC₁ ZC₂ : ℂ → ℂ}
+    (hZC :
+      ∀ z : ℂ, 0 < z.im → XiPullback z ≠ 0 →
+        ZC₂ z = ZC₁ z)
+    (H : StieltjesMidHighTailResidualIdentityAFZ Dzero T0 ZC₁) :
+    StieltjesMidHighTailResidualIdentityAFZ Dzero T0 ZC₂ :=
+  { mid_residual_eq := by
+      intro z L hy hne hmid hL
+      rw [hZC z hy hne]
+      exact H.mid_residual_eq hy hne hmid hL
+    high_residual_eq := by
+      intro z T L hT hy hne hreg hL
+      rw [hZC z hy hne]
+      exact H.high_residual_eq hT hy hne hreg hL }
 
 /-- 🌟🌟 **PROVED — transport the AFZ low first-zero Stieltjes formula
 across a pointwise equality on the low compact region.** -/
