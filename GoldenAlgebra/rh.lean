@@ -20764,6 +20764,17 @@ theorem backlund_exp_151476_25625_lt_370 :
     Real.exp_le_exp.mpr (by norm_num)
   exact lt_of_le_of_lt hle backlund_exp_59113_10000_lt_370
 
+/-- `exp (475481/80440) < 370`, so the sharper tangent-at-`59/10`
+Platt--Trudgian tail split still needs only the concrete finite endpoint
+`370`. -/
+theorem backlund_exp_475481_80440_lt_370 :
+    Real.exp (475481 / 80440 : ℝ) < 370 := by
+  have hle :
+      Real.exp (475481 / 80440 : ℝ) ≤
+        Real.exp (151476 / 25625 : ℝ) :=
+    Real.exp_le_exp.mpr (by norm_num)
+  exact lt_of_le_of_lt hle backlund_exp_151476_25625_lt_370
+
 /-- Concrete finite-band check left after the Platt--Trudgian tail:
 `[140, 374]`. -/
 structure BacklundFiniteBandCheck140_374 : Prop where
@@ -23103,6 +23114,17 @@ noncomputable def BacklundFiniteBandCheck140_exp151476_25625.of_140_370
       le_trans hTexp (le_of_lt backlund_exp_151476_25625_lt_370)
     exact H.bound T hT140 hT370
 
+/-- A concrete `[140, 370]` finite-band check supplies the symbolic
+`[140, exp (475481/80440)]` check. -/
+noncomputable def BacklundFiniteBandCheck140_exp475481_80440.of_140_370
+    (H : BacklundFiniteBandCheck140_370) :
+    BacklundFiniteBandCheck140_exp475481_80440 where
+  bound := by
+    intro T hT140 hTexp
+    have hT370 : T ≤ (370 : ℝ) :=
+      le_trans hTexp (le_of_lt backlund_exp_475481_80440_lt_370)
+    exact H.bound T hT140 hT370
+
 /-- Final headline theorem from the global Platt--Trudgian argument
 estimate and the concrete finite-band check `[140, 374]`. -/
 theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite374
@@ -23134,22 +23156,22 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite370
     (Hfinite : BacklundFiniteBandCheck140_370)
     {T : ℝ} (hT : (140 : ℝ) ≤ T) :
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
-  concreteS_halfLogPlusHalf_of_plattTrudgian_151476_25625Tail_and_finite
-    (PlattTrudgianBacklundCut151476_25625TailInput.of_global Hglobal)
-    (BacklundFiniteBandCheck140_exp151476_25625.of_140_370 Hfinite)
+  concreteS_halfLogPlusHalf_of_plattTrudgian_475481_80440Tail_and_finite
+    (PlattTrudgianBacklundCut475481_80440TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp475481_80440.of_140_370 Hfinite)
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
 estimate and the concrete finite-band check `[140, 370]`, routed through
-the exact tangent-arithmetic tail split `log T ≥ 151476/25625`. -/
+the sharper tangent-at-`59/10` split `log T ≥ 475481/80440`. -/
 theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite370_nearTail
     (Hglobal : PlattTrudgianBacklundGlobalInput)
     (Hfinite : BacklundFiniteBandCheck140_370)
     {T : ℝ} (hT : (140 : ℝ) ≤ T) :
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
-  concreteS_halfLogPlusHalf_of_plattTrudgian_151476_25625Tail_and_finite
-    (PlattTrudgianBacklundCut151476_25625TailInput.of_global Hglobal)
-    (BacklundFiniteBandCheck140_exp151476_25625.of_140_370 Hfinite)
+  concreteS_halfLogPlusHalf_of_plattTrudgian_475481_80440Tail_and_finite
+    (PlattTrudgianBacklundCut475481_80440TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp475481_80440.of_140_370 Hfinite)
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
@@ -24405,9 +24427,9 @@ noncomputable def
     ClassicalBacklundTuringPlattEndpointCountRangeInputs370.toGoodHeightArgumentBound
     (I : ClassicalBacklundTuringPlattEndpointCountRangeInputs370) :
     BacklundGoodHeightArgumentBound :=
-  BacklundGoodHeightArgumentBound.of_plattTrudgian_151476_25625Tail_and_finite
-    (PlattTrudgianBacklundCut151476_25625TailInput.of_global I.global)
-    (BacklundFiniteBandCheck140_exp151476_25625.of_140_370
+  BacklundGoodHeightArgumentBound.of_plattTrudgian_475481_80440Tail_and_finite
+    (PlattTrudgianBacklundCut475481_80440TailInput.of_global I.global)
+    (BacklundFiniteBandCheck140_exp475481_80440.of_140_370
       I.finite370.toUniform25167Check.toFiniteBandCheck)
 
 /-- The endpoint count-range package supplies the final classical proof
