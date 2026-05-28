@@ -19796,6 +19796,62 @@ noncomputable def BacklundEndpointCountRangeMainSlabCertificate.toRangeSlab
   upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
   upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
 
+/-- Turing-count version of a Backlund finite-band slab.  It records the
+left cumulative count and the certified weighted count in `(A, B]`; the
+right cumulative count is then derived by `N(B) - N(A)`. -/
+structure BacklundTuringCountRangeMainSlabCertificate where
+  A : ℝ
+  B : ℝ
+  leftCount : ℕ
+  slabCount : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  hA_two_pi : 2 * Real.pi ≤ A
+  hAB : A ≤ B
+  left_count_eq :
+    zetaWeightedZeroCountUpToHeight A
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hA_two_pi) =
+      leftCount
+  slab_count_eq :
+    zetaWeightedZeroCountInHeightSlab A B
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hA_two_pi)
+      hAB =
+      slabCount
+  mainLower_le_left :
+    mainLower ≤ smoothMainTerm A
+  right_le_mainUpper :
+    smoothMainTerm B ≤ mainUpper
+  upperCount_minus_lowerMain_le :
+    ((leftCount + slabCount : ℕ) : ℝ) - mainLower
+      ≤ (25167 / 10000 : ℝ)
+  upperMain_minus_lowerCount_le :
+    mainUpper - (leftCount : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- Turing-count slabs lower to endpoint count-range slabs by propagating
+the certified slab count to the right endpoint. -/
+noncomputable def BacklundTuringCountRangeMainSlabCertificate.toEndpointRangeSlab
+    (S : BacklundTuringCountRangeMainSlabCertificate) :
+    BacklundEndpointCountRangeMainSlabCertificate where
+  A := S.A
+  B := S.B
+  countLower := S.leftCount
+  countUpper := S.leftCount + S.slabCount
+  mainLower := S.mainLower
+  mainUpper := S.mainUpper
+  hA_two_pi := S.hA_two_pi
+  hAB := S.hAB
+  left_count_eq := S.left_count_eq
+  right_count_eq :=
+    zetaWeightedZeroCountUpToHeight_right_eq_of_left_eq_slab_count
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) S.hA_two_pi)
+      S.hAB
+      S.left_count_eq
+      S.slab_count_eq
+  mainLower_le_left := S.mainLower_le_left
+  right_le_mainUpper := S.right_le_mainUpper
+  upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
+  upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
+
 /-- A finite list of endpoint-style slabs covering `[140, 374]`. -/
 structure BacklundFiniteBandEndpointCountMainCertificate140_374 where
   slabs : List BacklundEndpointCountMainSlabCertificate
@@ -19815,6 +19871,14 @@ structure BacklundFiniteBandEndpointCumulativeCountMainCertificate140_374 where
 `[140, 374]`. -/
 structure BacklundFiniteBandEndpointCountRangeMainCertificate140_374 where
   slabs : List BacklundEndpointCountRangeMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
+      ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-- A finite list of Turing-count/range-main slabs covering
+`[140, 374]`. -/
+structure BacklundFiniteBandTuringCountRangeMainCertificate140_374 where
+  slabs : List BacklundTuringCountRangeMainSlabCertificate
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
@@ -19857,6 +19921,20 @@ noncomputable def
     intro T hT140 hT374
     obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT374
     refine ⟨S.toRangeSlab, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
+/-- Turing-count/range-main slabs supply endpoint count-range slabs. -/
+noncomputable def
+    BacklundFiniteBandTuringCountRangeMainCertificate140_374.toEndpointCountRange
+    (C : BacklundFiniteBandTuringCountRangeMainCertificate140_374) :
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_374 where
+  slabs := C.slabs.map
+    (fun S : BacklundTuringCountRangeMainSlabCertificate =>
+      S.toEndpointRangeSlab)
+  cover := by
+    intro T hT140 hT374
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT374
+    refine ⟨S.toEndpointRangeSlab, ?_, hA, hB⟩
     exact List.mem_map.mpr ⟨S, hS, rfl⟩
 
 /-- Count/main-term slab certificates supply the narrow uniform finite
@@ -19906,6 +19984,14 @@ noncomputable def
     (C : BacklundFiniteBandEndpointCountRangeMainCertificate140_374) :
     BacklundFiniteBandUniform25167Check140_374 :=
   C.toCountRange.toUniform25167Check
+
+/-- Turing-count/range-main slabs supply the narrow uniform finite-band
+certificate on `[140, 374]`. -/
+noncomputable def
+    BacklundFiniteBandTuringCountRangeMainCertificate140_374.toUniform25167Check
+    (C : BacklundFiniteBandTuringCountRangeMainCertificate140_374) :
+    BacklundFiniteBandUniform25167Check140_374 :=
+  C.toEndpointCountRange.toUniform25167Check
 
 /-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
 concrete finite-band target `[140, 374]`. -/
@@ -20010,6 +20096,21 @@ theorem
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countRangeMainFinite374
     Hglobal
     Hfinite.toCountRange
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and Turing-count/range-main slabs on `[140, 374]`.  This is the
+front door closest to a literal Turing table: each slab supplies a left
+cumulative count and the certified count in `(A, B]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_turingCountRangeMainFinite374
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandTuringCountRangeMainCertificate140_374)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite374
+    Hglobal
+    Hfinite.toEndpointCountRange
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
