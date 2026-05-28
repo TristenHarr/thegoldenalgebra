@@ -7072,6 +7072,35 @@ noncomputable def toTuringStyleSBound
     TuringStyleSBound :=
   B.toHalfLogPlusHalfSBound.toTuringStyleSBound
 
+/-- Sharp Backlund/Turing envelope exported by a proved package.  The
+extra geometric parameters match the downstream envelope-call shape; the
+estimate itself only needs that the queried height `u` is above the
+package threshold. -/
+theorem halfLogPlusHalfEnvelope
+    (B : ProvenBacklundTuringBound)
+    {z : ℂ} {T u : ℝ}
+    (hTlower : B.lower ≤ T)
+    (_hy : 0 < z.im)
+    (_hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |B.S u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  B.halfLogPlusHalf u (le_trans hTlower hTu)
+
+/-- High-side Backlund/Turing envelope exported by a proved package.
+This is the standard looser envelope used by later estimates; it follows
+immediately from the sharp half-log-plus-half bound. -/
+theorem highLogEnvelope
+    (B : ProvenBacklundTuringBound)
+    {z : ℂ} {T u : ℝ}
+    (hTlower : B.lower ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |B.S u| ≤ (1 / 2 : ℝ) * Real.log u + 49 / 20 := by
+  have hsharp :=
+    B.halfLogPlusHalfEnvelope hTlower hy hregime hTu
+  linarith
+
 end ProvenBacklundTuringBound
 
 /-!
@@ -15158,6 +15187,32 @@ theorem BacklundTuringAnalyticInputs.concreteS_halfLogPlusHalf
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
   I.toProvenBacklundTuringBound.halfLogPlusHalf T hT
 
+/-- Sharp concrete `S` envelope exported directly from the master
+analytic Backlund/Turing input package. -/
+theorem BacklundTuringAnalyticInputs.concreteS_halfLogPlusHalfEnvelope
+    (I : BacklundTuringAnalyticInputs)
+    {z : ℂ} {T u : ℝ}
+    (hTlower : I.backlundGood.lower ≤ T)
+    (_hy : 0 < z.im)
+    (_hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.concreteS_halfLogPlusHalf (le_trans hTlower hTu)
+
+/-- High-side concrete `S` envelope exported directly from the master
+analytic Backlund/Turing input package. -/
+theorem BacklundTuringAnalyticInputs.concreteS_highLogEnvelope
+    (I : BacklundTuringAnalyticInputs)
+    {z : ℂ} {T u : ℝ}
+    (hTlower : I.backlundGood.lower ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 49 / 20 := by
+  have hsharp :=
+    I.concreteS_halfLogPlusHalfEnvelope hTlower hy hregime hTu
+  linarith
+
 /-! ### AW6: final theorem target.
 
 Once an inhabitant of `BacklundTuringAnalyticInputs` is constructed by
@@ -16058,6 +16113,57 @@ theorem FinalBacklundTuringAnalyticInputs.concreteS_halfLogPlusHalf
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
   I.H140.to_concreteS_halfLogPlusHalf_unconditionalZetaClass I.RvMC I.E hT
 
+/-- The master final Backlund/Turing input package supplies the generic
+proved `concreteS` bound package at threshold `140`. -/
+noncomputable def FinalBacklundTuringAnalyticInputs.toProvenBacklundTuringBound
+    (I : FinalBacklundTuringAnalyticInputs) :
+    ProvenBacklundTuringBound where
+  S := concreteS
+  lower := 140
+  lower_ge_two_pi := by
+    have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+    nlinarith
+  halfLogPlusHalf := by
+    intro u hu
+    exact I.concreteS_halfLogPlusHalf hu
+
+/-- The master final package supplies `HalfLogPlusHalfSBound`. -/
+noncomputable def FinalBacklundTuringAnalyticInputs.toHalfLogPlusHalfSBound
+    (I : FinalBacklundTuringAnalyticInputs) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBound.toHalfLogPlusHalfSBound
+
+/-- The master final package supplies `TuringStyleSBound`, with
+`C = D = 1/2`. -/
+noncomputable def FinalBacklundTuringAnalyticInputs.toTuringStyleSBound
+    (I : FinalBacklundTuringAnalyticInputs) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBound.toTuringStyleSBound
+
+/-- Sharp `concreteS` envelope exported by the master final package. -/
+theorem FinalBacklundTuringAnalyticInputs.concreteS_halfLogPlusHalfEnvelope
+    (I : FinalBacklundTuringAnalyticInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.toProvenBacklundTuringBound.halfLogPlusHalfEnvelope
+    hT140 hy hregime hTu
+
+/-- High-side `concreteS` envelope exported by the master final package. -/
+theorem FinalBacklundTuringAnalyticInputs.concreteS_highLogEnvelope
+    (I : FinalBacklundTuringAnalyticInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 49 / 20 :=
+  I.toProvenBacklundTuringBound.highLogEnvelope
+    hT140 hy hregime hTu
+
 /-! ## CU: `RvMFormulaGoodHeightClosure` is unconditional for the canonical `Fgood`
 
 Since `Sarg := concreteS` (from CI3) and
@@ -16107,6 +16213,26 @@ theorem FinalBacklundTuringTwoInputs.concreteS_halfLogPlusHalf
     {T : ℝ} (hT : (140 : ℝ) ≤ T) :
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
   I.toFinalInputs.concreteS_halfLogPlusHalf hT
+
+/-- The two-input final package supplies the generic proved
+Backlund/Turing package. -/
+noncomputable def FinalBacklundTuringTwoInputs.toProvenBacklundTuringBound
+    (I : FinalBacklundTuringTwoInputs) :
+    ProvenBacklundTuringBound :=
+  I.toFinalInputs.toProvenBacklundTuringBound
+
+/-- The two-input final package supplies `HalfLogPlusHalfSBound`. -/
+noncomputable def FinalBacklundTuringTwoInputs.toHalfLogPlusHalfSBound
+    (I : FinalBacklundTuringTwoInputs) :
+    HalfLogPlusHalfSBound :=
+  I.toFinalInputs.toHalfLogPlusHalfSBound
+
+/-- The two-input final package supplies `TuringStyleSBound`, with
+`C = D = 1/2`. -/
+noncomputable def FinalBacklundTuringTwoInputs.toTuringStyleSBound
+    (I : FinalBacklundTuringTwoInputs) :
+    TuringStyleSBound :=
+  I.toFinalInputs.toTuringStyleSBound
 
 /-- **CV4 — DIRECT HEADLINE THEOREM:** the same final theorem without the
 package wrapper.  Takes only the two analytic obligations directly. -/
@@ -17862,6 +17988,26 @@ theorem zetaWeightedCountExtensionalityInput :
       · push_neg at hU_nn
         rw [dif_neg hU_nn.not_ge]
 
+/-- **CW22a — strip-gap → local constancy DISCHARGED.**  A strip gap
+gives equality of the geometric zero sets just to the right of `T`; the
+proved weighted-count extensionality theorem then turns that set equality
+into right-local-constancy of the real-valued weighted zero count. -/
+noncomputable def zetaStripGapToLocalConstancyInput :
+    ZetaStripGapToLocalConstancyInput :=
+  (ZetaStripGapPointwiseCountConstancyInput.of_set_ext
+    zetaWeightedCountExtensionalityInput).toStripGapToLC
+
+/-- Final theorem from numerical extraction and the strip right-gap
+alone.  The former strip-gap → local-constancy bridge is now constructed
+inside `rh.lean` from the proved count-extensionality theorem. -/
+theorem concreteS_halfLogPlusHalf_of_numericalExtraction_and_stripGap
+    (E : BacklundNumericalExtractionInput)
+    (G : ZetaZeroHeightRightGapInBacklundStripInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_numericalExtraction_and_countLC
+    E (zetaStripGapToLocalConstancyInput.bridge G) hT
+
 /-- **CW22a — global zero-height gap → local constancy DISCHARGED.**
 The global gap gives set equality for zero sets just to the right of
 `T`; the already-proved weighted-count extensionality turns that set
@@ -17889,6 +18035,17 @@ noncomputable def zetaZeroHeightRightGapToLocalConstancyInput :
         (fun ρ hzero _hre_low _hre_high him him_upper =>
           hgap ρ hzero him him_upper))
 
+/-- Final theorem from numerical extraction and a global right gap in
+zero heights.  The previous gap → local-constancy bridge is now supplied
+by `zetaZeroHeightRightGapToLocalConstancyInput`. -/
+theorem concreteS_halfLogPlusHalf_of_numericalExtraction_and_zeroHeightGap
+    (E : BacklundNumericalExtractionInput)
+    (G : ZetaZeroHeightRightGapInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_numericalExtraction_and_countLC
+    E (zetaZeroHeightRightGapToLocalConstancyInput.bridge G) hT
+
 /-- **CW22a — count right-local-constancy DISCHARGED.**  Combines the
 unconditional global right-gap theorem with the proved gap→local-
 constancy bridge. -/
@@ -17907,6 +18064,54 @@ theorem concreteS_halfLogPlusHalf_of_backlundArgument
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
   concreteS_halfLogPlusHalf_of_backlundArgument_and_countLC
     B zetaWeightedZeroCountRightLocalConstancyInput hT
+
+/-- **CW22a — concrete `S` right-continuity DISCHARGED.**  The weighted
+zero count is right-locally constant by the proved right-gap theorem,
+and the smooth main term is continuous; hence `concreteS` is
+right-continuous at every height `T ≥ 140`. -/
+noncomputable def concreteSRightContinuityInput :
+    ConcreteSRightContinuityInput :=
+  ConcreteSRightContinuityInput.of_count_and_smooth
+    zetaWeightedZeroCountRightLocalConstancyInput.toZC
+    smoothMainTermContinuityInput
+
+/-- **CW22a — Backlund extension DISCHARGED from a good-height bound.**
+Once a good-height Backlund estimate is available, the passage to all
+heights `T ≥ 140` follows from the internally proved right-continuity
+object `concreteSRightContinuityInput`. -/
+noncomputable def
+    ConcreteSBacklundEstimateExtensionFrom140.of_backlundGoodHeightArgumentBound
+    (B : BacklundGoodHeightArgumentBound) :
+    ConcreteSBacklundEstimateExtensionFrom140 B.toH140 :=
+  concreteSRightContinuityInput.toBacklundExtension B.toH140
+
+/-- The discharged zero-height gap/local-constancy machinery turns any
+good-height Backlund argument bound into the final two-input package.
+Thus the extension input in `FinalBacklundTuringTwoInputs` is no longer
+an independent remaining obligation once a good-height Backlund estimate
+is available. -/
+noncomputable def BacklundGoodHeightArgumentBound.toFinalBacklundTuringTwoInputs
+    (B : BacklundGoodHeightArgumentBound) :
+    FinalBacklundTuringTwoInputs where
+  H140 := B.toH140
+  E := ConcreteSBacklundEstimateExtensionFrom140.of_backlundGoodHeightArgumentBound B
+
+/-- The same discharged extension machinery gives the master analytic
+input package from a single good-height Backlund argument bound.  The
+RvM closure and zero-classification sides are supplied by the already
+proved canonical inputs in this file. -/
+noncomputable def BacklundGoodHeightArgumentBound.toFinalBacklundTuringAnalyticInputs
+    (B : BacklundGoodHeightArgumentBound) :
+    FinalBacklundTuringAnalyticInputs :=
+  B.toFinalBacklundTuringTwoInputs.toFinalInputs
+
+/-- Final package-form theorem from a single good-height Backlund
+argument bound, using the internally discharged extension side. -/
+theorem BacklundGoodHeightArgumentBound.concreteS_halfLogPlusHalf
+    (B : BacklundGoodHeightArgumentBound)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  B.toFinalBacklundTuringTwoInputs.concreteS_halfLogPlusHalf hT
 
 /-- **CW22 — strongest 1-input final theorem.**  After CW22, the entire
 extension / count / continuity / compactness / classification side is
@@ -19793,6 +19998,34 @@ theorem plattTrudgianBacklundEnvelope_le_trudgianBacklundEnvelope_of_ge_exp_one
   unfold plattTrudgianBacklundEnvelope trudgianBacklundEnvelope
   nlinarith
 
+/-- On the full published Platt--Trudgian range `T ≥ e`, the explicit
+envelope is already below the looser high-side Backlund/Turing envelope
+`(1/2) log T + 49/20`.  This is a purely elementary consequence of
+concavity of `log`, via the tangent inequality `log L ≤ L - 1` for
+`L = log T ≥ 1`. -/
+theorem plattTrudgianBacklundEnvelope_le_highLogEnvelope_of_ge_exp_one
+    {T : ℝ} (hT : Real.exp (1 : ℝ) ≤ T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 49 / 20 := by
+  have h_exp_pos : 0 < Real.exp (1 : ℝ) := Real.exp_pos 1
+  have hL_ge_one : (1 : ℝ) ≤ Real.log T := by
+    have h := Real.log_le_log h_exp_pos hT
+    rwa [Real.log_exp] at h
+  have hLpos : 0 < Real.log T := by linarith
+  have hloglog_tangent :
+      Real.log (Real.log T) ≤ Real.log (1 : ℝ) + (Real.log T - 1) / 1 :=
+    backlund_log_le_tangent hLpos (by norm_num)
+  have hloglog_linear :
+      Real.log (Real.log T) ≤ Real.log T - 1 := by
+    rw [Real.log_one] at hloglog_tangent
+    linarith
+  have hmul :
+      (29 / 100 : ℝ) * Real.log (Real.log T)
+        ≤ (29 / 100 : ℝ) * (Real.log T - 1) :=
+    mul_le_mul_of_nonneg_left hloglog_linear (by norm_num)
+  unfold plattTrudgianBacklundEnvelope
+  nlinarith
+
 /-- The stronger Platt--Trudgian global estimate supplies the older
 Trudgian global estimate on the same `T ≥ e` range. -/
 noncomputable def PlattTrudgianBacklundGlobalInput.toTrudgianGlobal
@@ -19803,6 +20036,50 @@ noncomputable def PlattTrudgianBacklundGlobalInput.toTrudgianGlobal
     exact le_trans (H.bound T hT)
       (plattTrudgianBacklundEnvelope_le_trudgianBacklundEnvelope_of_ge_exp_one
         hT)
+
+/-- The published Platt--Trudgian analytic estimate directly gives the
+standard high-side Backlund/Turing envelope on every later height.  The
+geometric parameters are carried so this theorem can plug into the same
+downstream envelope interface as the fully bundled Backlund/Turing
+packages. -/
+theorem PlattTrudgianBacklundGlobalInput.concreteS_highLogEnvelope
+    (H : PlattTrudgianBacklundGlobalInput)
+    {z : ℂ} {T u : ℝ}
+    (hTexp : Real.exp (1 : ℝ) ≤ T)
+    (_hy : 0 < z.im)
+    (_hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 49 / 20 := by
+  have huexp : Real.exp (1 : ℝ) ≤ u := le_trans hTexp hTu
+  exact le_trans (H.bound u huexp)
+    (plattTrudgianBacklundEnvelope_le_highLogEnvelope_of_ge_exp_one huexp)
+
+/-- The published Platt--Trudgian global estimate exports directly as a
+high-side `TuringStyleSBound` for `concreteS` on `u ≥ e`, with
+`C = 1/2` and `D = 49/20`.  This is the reusable analytic envelope
+available before the finite-band correction sharpens the constant to
+`1/2`. -/
+noncomputable def PlattTrudgianBacklundGlobalInput.toHighLogTuringStyleSBound
+    (H : PlattTrudgianBacklundGlobalInput) :
+    TuringStyleSBound where
+  S := concreteS
+  C := 1 / 2
+  D := 49 / 20
+  lower := Real.exp (1 : ℝ)
+  bound := by
+    intro u hu
+    exact le_trans (H.bound u hu)
+      (plattTrudgianBacklundEnvelope_le_highLogEnvelope_of_ge_exp_one hu)
+
+/-- Field lemma for the high-side `TuringStyleSBound` exported from the
+global Platt--Trudgian estimate. -/
+theorem PlattTrudgianBacklundGlobalInput.toHighLogTuringStyleSBound_bound
+    (H : PlattTrudgianBacklundGlobalInput)
+    {u : ℝ} (hu : Real.exp (1 : ℝ) ≤ u) :
+    |H.toHighLogTuringStyleSBound.S u|
+      ≤ H.toHighLogTuringStyleSBound.C * Real.log u
+          + H.toHighLogTuringStyleSBound.D :=
+  H.toHighLogTuringStyleSBound.bound u hu
 
 /-- On the large-height range, the Platt--Trudgian envelope is dominated
 by the older Trudgian envelope.  This is a pure arithmetic comparison of
@@ -20621,6 +20898,56 @@ theorem backlund_log_log_le_tangent_59_10
   have hlog := backlund_log_59_10_le_71_40
   linarith
 
+/-- Certified local bound for the tangent-at-`591/100` comparison:
+`log (591/100) ≤ 350/197`. -/
+theorem backlund_log_591_100_le_350_197 :
+    Real.log (591 / 100 : ℝ) ≤ 350 / 197 := by
+  have h_e_gt : (2.7182818283 : ℝ) < Real.exp 1 := Real.exp_one_gt_d9
+  have h_pow_lt : (2.7182818283 : ℝ)^350 < (Real.exp 1)^350 :=
+    pow_lt_pow_left₀ h_e_gt (by norm_num) (by norm_num)
+  have h_591_100_pow : (591 / 100 : ℝ)^197 < (2.7182818283 : ℝ)^350 := by
+    norm_num
+  have h_591_100_pow_lt_exp350 :
+      (591 / 100 : ℝ)^197 < (Real.exp 1)^350 := by
+    linarith
+  have h_exp350_eq : Real.exp (350 : ℝ) = (Real.exp 1)^350 := by
+    have h := Real.exp_one_pow 350
+    have h_cast : ((350 : ℕ) : ℝ) = (350 : ℝ) := by norm_num
+    rw [← h_cast]
+    exact h.symm
+  have h_exp_350_197_pow :
+      (Real.exp (350 / 197 : ℝ))^197 = Real.exp 350 := by
+    have h := Real.exp_nat_mul (350 / 197 : ℝ) 197
+    have h_eq : ((197 : ℕ) : ℝ) * (350 / 197 : ℝ) = 350 := by
+      norm_num
+    rw [h_eq] at h
+    exact h.symm
+  have hbase_nonneg : (0 : ℝ) ≤ 591 / 100 := by norm_num
+  have hexp_nonneg : 0 ≤ Real.exp (350 / 197 : ℝ) :=
+    le_of_lt (Real.exp_pos _)
+  have hbase_le_exp : (591 / 100 : ℝ) ≤ Real.exp (350 / 197 : ℝ) := by
+    apply
+      (pow_le_pow_iff_left₀ hbase_nonneg hexp_nonneg
+        (by norm_num : (197 : ℕ) ≠ 0)).mp
+    rw [h_exp_350_197_pow, h_exp350_eq]
+    exact le_of_lt h_591_100_pow_lt_exp350
+  have h :=
+    Real.log_le_log (by norm_num : (0 : ℝ) < 591 / 100) hbase_le_exp
+  rwa [Real.log_exp] at h
+
+/-- Tangent comparison at `591/100`, using
+`log (591/100) ≤ 350/197`. -/
+theorem backlund_log_log_le_tangent_591_100
+    {T : ℝ} (hLpos : 0 < Real.log T) :
+    Real.log (Real.log T)
+      ≤ (100 / 591 : ℝ) * Real.log T + 350 / 197 - 1 := by
+  have htangent :=
+    backlund_log_le_tangent
+      (T := Real.log T) (T₀ := (591 / 100 : ℝ)) hLpos
+      (by norm_num)
+  have hlog := backlund_log_591_100_le_350_197
+  nlinarith
+
 /-- Sharper symbolic Platt--Trudgian cutoff from the tangent-at-`59/10`
 arithmetic. -/
 theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_475481_80440
@@ -20637,11 +20964,35 @@ theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_475481_80440
   unfold plattTrudgianBacklundEnvelope
   nlinarith
 
+/-- Sharper decimal Platt--Trudgian cutoff from the same
+tangent-at-`59/10` arithmetic. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_5911_1000
+    {T : ℝ} (hL : (5911 / 1000 : ℝ) ≤ Real.log T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 := by
+  have hLpos : 0 < Real.log T := by linarith
+  have hloglog := backlund_log_log_le_tangent_591_100 hLpos
+  have hmul :
+      (29 / 100 : ℝ) * Real.log (Real.log T)
+        ≤ (29 / 100 : ℝ)
+            * ((100 / 591 : ℝ) * Real.log T + 350 / 197 - 1) :=
+    mul_le_mul_of_nonneg_left hloglog (by norm_num)
+  unfold plattTrudgianBacklundEnvelope
+  nlinarith
+
 /-- For `T ≥ exp (475481/80440)`, `log T ≥ 475481/80440`. -/
 theorem backlund_log_ge_475481_80440_of_ge_exp_475481_80440
     {T : ℝ} (hT : Real.exp (475481 / 80440 : ℝ) ≤ T) :
     (475481 / 80440 : ℝ) ≤ Real.log T := by
   have h_exp_pos : 0 < Real.exp (475481 / 80440 : ℝ) := Real.exp_pos _
+  have h := Real.log_le_log h_exp_pos hT
+  rwa [Real.log_exp] at h
+
+/-- For `T ≥ exp (5911/1000)`, `log T ≥ 5911/1000`. -/
+theorem backlund_log_ge_5911_1000_of_ge_exp_5911_1000
+    {T : ℝ} (hT : Real.exp (5911 / 1000 : ℝ) ≤ T) :
+    (5911 / 1000 : ℝ) ≤ Real.log T := by
+  have h_exp_pos : 0 < Real.exp (5911 / 1000 : ℝ) := Real.exp_pos _
   have h := Real.log_le_log h_exp_pos hT
   rwa [Real.log_exp] at h
 
@@ -20653,6 +21004,73 @@ theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_475481_80440
       ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
   plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_475481_80440
     (backlund_log_ge_475481_80440_of_ge_exp_475481_80440 hT)
+
+/-- The Platt--Trudgian envelope is below the target for every
+`T ≥ exp (5911/1000)`. -/
+theorem plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_5911_1000
+    {T : ℝ} (hT : Real.exp (5911 / 1000 : ℝ) ≤ T) :
+    plattTrudgianBacklundEnvelope T
+      ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_5911_1000
+    (backlund_log_ge_5911_1000_of_ge_exp_5911_1000 hT)
+
+/-- The published Platt--Trudgian analytic estimate directly gives the
+sharp Backlund/Turing envelope on the symbolic tail
+`T ≥ exp (475481/80440)`.  This is the usable large-height analytic
+payload: the remaining work for `T ≥ 140` is exactly the finite band
+below this cutoff. -/
+theorem PlattTrudgianBacklundGlobalInput.concreteS_halfLogPlusHalfEnvelope
+    (H : PlattTrudgianBacklundGlobalInput)
+    {z : ℂ} {T u : ℝ}
+    (hTtail : Real.exp (475481 / 80440 : ℝ) ≤ T)
+    (_hy : 0 < z.im)
+    (_hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 := by
+  have h_exp_one_le_exp_cut :
+      Real.exp (1 : ℝ) ≤ Real.exp (475481 / 80440 : ℝ) :=
+    Real.exp_le_exp.mpr (by norm_num)
+  have hutail : Real.exp (475481 / 80440 : ℝ) ≤ u := le_trans hTtail hTu
+  have huexp : Real.exp (1 : ℝ) ≤ u :=
+    le_trans h_exp_one_le_exp_cut hutail
+  exact le_trans (H.bound u huexp)
+    (plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_475481_80440
+      hutail)
+
+/-- The published Platt--Trudgian global estimate exports as a sharp
+`HalfLogPlusHalfSBound` on the symbolic tail
+`u ≥ exp (475481/80440)`.  This isolates the analytic tail from the
+finite verification band `[140, exp (475481/80440)]`. -/
+noncomputable def
+    PlattTrudgianBacklundGlobalInput.toTailHalfLogPlusHalfSBound
+    (H : PlattTrudgianBacklundGlobalInput) :
+    HalfLogPlusHalfSBound where
+  S := concreteS
+  lower := Real.exp (475481 / 80440 : ℝ)
+  bound := by
+    intro u hu
+    have h_exp_one_le_exp_cut :
+        Real.exp (1 : ℝ) ≤ Real.exp (475481 / 80440 : ℝ) :=
+      Real.exp_le_exp.mpr (by norm_num)
+    exact le_trans (H.bound u (le_trans h_exp_one_le_exp_cut hu))
+      (plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_475481_80440
+        hu)
+
+/-- The sharp Platt--Trudgian tail bound also exports through the general
+`TuringStyleSBound` interface with `C = D = 1/2`. -/
+noncomputable def PlattTrudgianBacklundGlobalInput.toTailTuringStyleSBound
+    (H : PlattTrudgianBacklundGlobalInput) :
+    TuringStyleSBound :=
+  H.toTailHalfLogPlusHalfSBound.toTuringStyleSBound
+
+/-- Field lemma for the sharp tail `HalfLogPlusHalfSBound` exported from
+the global Platt--Trudgian estimate. -/
+theorem PlattTrudgianBacklundGlobalInput.toTailHalfLogPlusHalfSBound_bound
+    (H : PlattTrudgianBacklundGlobalInput)
+    {u : ℝ} (hu : Real.exp (475481 / 80440 : ℝ) ≤ u) :
+    |H.toTailHalfLogPlusHalfSBound.S u|
+      ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  H.toTailHalfLogPlusHalfSBound.bound u hu
 
 /-- Platt--Trudgian tail estimate on the sharper symbolic tail obtained
 from the tangent-at-`59/10` arithmetic. -/
@@ -20673,12 +21091,39 @@ noncomputable def PlattTrudgianBacklundCut475481_80440TailInput.of_global
       Real.exp_le_exp.mpr (by norm_num)
     exact H.bound T (le_trans h_exp_one_le_exp_cut hT)
 
+/-- Platt--Trudgian tail estimate on the improved decimal symbolic tail
+`T ≥ exp (5911/1000)`. -/
+structure PlattTrudgianBacklundCut5911_1000TailInput : Prop where
+  bound :
+    ∀ T : ℝ, Real.exp (5911 / 1000 : ℝ) ≤ T →
+      |concreteS T| ≤ plattTrudgianBacklundEnvelope T
+
+/-- A global Platt--Trudgian estimate supplies the
+`exp (5911/1000)` tail estimate. -/
+noncomputable def PlattTrudgianBacklundCut5911_1000TailInput.of_global
+    (H : PlattTrudgianBacklundGlobalInput) :
+    PlattTrudgianBacklundCut5911_1000TailInput where
+  bound := by
+    intro T hT
+    have h_exp_one_le_exp_cut :
+        Real.exp (1 : ℝ) ≤ Real.exp (5911 / 1000 : ℝ) :=
+      Real.exp_le_exp.mpr (by norm_num)
+    exact H.bound T (le_trans h_exp_one_le_exp_cut hT)
+
 /-- Finite-band check left after using the sharper symbolic
 Platt--Trudgian tail: `[140, exp (475481/80440)]`. -/
 structure BacklundFiniteBandCheck140_exp475481_80440 : Prop where
   bound :
     ∀ T : ℝ, (140 : ℝ) ≤ T →
       T ≤ Real.exp (475481 / 80440 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- Finite-band check left after the improved decimal symbolic
+Platt--Trudgian tail: `[140, exp (5911/1000)]`. -/
+structure BacklundFiniteBandCheck140_exp5911_1000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ Real.exp (5911 / 1000 : ℝ) →
         |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
 
 /-- The Platt/Trudgian finite-range `2.5167` bound supplies the sharper
@@ -20693,6 +21138,25 @@ noncomputable def BacklundFiniteBandCheck140_exp475481_80440.of_plattTrudgian
       have hT1200 : T ≤ (1200 : ℝ) := by
         have hExp_le :
             Real.exp (475481 / 80440 : ℝ) ≤ Real.exp (592 / 100 : ℝ) :=
+          Real.exp_le_exp.mpr (by norm_num)
+        exact le_trans (le_trans hTexp hExp_le)
+          (le_of_lt backlund_exp_592_100_lt_1200)
+      linarith
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- The Platt/Trudgian finite-range `2.5167` bound supplies the improved
+symbolic finite band `[140, exp (5911/1000)]`. -/
+noncomputable def BacklundFiniteBandCheck140_exp5911_1000.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_exp5911_1000 where
+  bound := by
+    intro T hT140 hTexp
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) := by
+      have hT1200 : T ≤ (1200 : ℝ) := by
+        have hExp_le :
+            Real.exp (5911 / 1000 : ℝ) ≤ Real.exp (592 / 100 : ℝ) :=
           Real.exp_le_exp.mpr (by norm_num)
         exact le_trans (le_trans hTexp hExp_le)
           (le_of_lt backlund_exp_592_100_lt_1200)
@@ -20728,6 +21192,34 @@ theorem concreteS_halfLogPlusHalf_of_plattTrudgian_475481_80440Tail_and_finite
       Htail Hfinite)
     hT
 
+/-- Improved decimal symbolic Platt--Trudgian tail plus the corresponding
+finite-band check gives the good-height Backlund argument bound. -/
+noncomputable def
+    BacklundGoodHeightArgumentBound.of_plattTrudgian_5911_1000Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut5911_1000TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp5911_1000) :
+    BacklundGoodHeightArgumentBound where
+  bound := by
+    intro T _hgood hT
+    by_cases hTail : Real.exp (5911 / 1000 : ℝ) ≤ T
+    · exact le_trans (Htail.bound T hTail)
+        (plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_5911_1000
+          hTail)
+    · have hTle : T ≤ Real.exp (5911 / 1000 : ℝ) := le_of_not_ge hTail
+      exact Hfinite.bound T hT hTle
+
+/-- Final headline theorem from the improved decimal symbolic
+Platt--Trudgian tail and finite band `[140, exp (5911/1000)]`. -/
+theorem concreteS_halfLogPlusHalf_of_plattTrudgian_5911_1000Tail_and_finite
+    (Htail : PlattTrudgianBacklundCut5911_1000TailInput)
+    (Hfinite : BacklundFiniteBandCheck140_exp5911_1000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_classicalBacklundGoodHeight
+    (BacklundGoodHeightArgumentBound.of_plattTrudgian_5911_1000Tail_and_finite
+      Htail Hfinite)
+    hT
+
 /-- Final headline theorem from the global Platt--Trudgian argument
 estimate and the finite-range `2.5167` input, using the sharper symbolic
 finite band `[140, exp (475481/80440)]`. -/
@@ -20739,6 +21231,19 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_475481_
   concreteS_halfLogPlusHalf_of_plattTrudgian_475481_80440Tail_and_finite
     (PlattTrudgianBacklundCut475481_80440TailInput.of_global Hglobal)
     (BacklundFiniteBandCheck140_exp475481_80440.of_plattTrudgian Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the finite-range `2.5167` input, using the improved decimal
+symbolic finite band `[140, exp (5911/1000)]`. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_5911_1000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_5911_1000Tail_and_finite
+    (PlattTrudgianBacklundCut5911_1000TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp5911_1000.of_plattTrudgian Hfinite)
     hT
 
 /-- The sharper symbolic Platt--Trudgian global/finite-range route
@@ -20777,6 +21282,40 @@ noncomputable def TuringStyleSBound.of_globalPlattTrudgian_and_finiteRange_47548
   (ProvenBacklundTuringBound.of_globalPlattTrudgian_and_finiteRange_475481_80440
     Hglobal Hfinite).toTuringStyleSBound
 
+/-- The global Platt--Trudgian estimate plus the finite-range computation
+directly supplies the final two-input Backlund/Turing package; the
+second field is built from the discharged right-local-constancy
+machinery rather than left as a separate source assumption. -/
+noncomputable def
+    FinalBacklundTuringTwoInputs.of_globalPlattTrudgian_and_finiteRange_475481_80440
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput) :
+    FinalBacklundTuringTwoInputs :=
+  (BacklundGoodHeightArgumentBound.of_plattTrudgian_475481_80440Tail_and_finite
+    (PlattTrudgianBacklundCut475481_80440TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp475481_80440.of_plattTrudgian
+      Hfinite)).toFinalBacklundTuringTwoInputs
+
+/-- The global Platt--Trudgian estimate plus the finite-range computation
+also supplies the master analytic Backlund/Turing package. -/
+noncomputable def
+    FinalBacklundTuringAnalyticInputs.of_globalPlattTrudgian_and_finiteRange_475481_80440
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput) :
+    FinalBacklundTuringAnalyticInputs :=
+  (FinalBacklundTuringTwoInputs.of_globalPlattTrudgian_and_finiteRange_475481_80440
+    Hglobal Hfinite).toFinalInputs
+
+/-- Headline theorem through the master final-input path from the global
+Platt--Trudgian estimate and the finite-range computation. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_viaFinalInputs
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  (FinalBacklundTuringAnalyticInputs.of_globalPlattTrudgian_and_finiteRange_475481_80440
+    Hglobal Hfinite).concreteS_halfLogPlusHalf hT
+
 /-- Sharp Platt--Trudgian source package for the current Backlund/Turing
 frontier.
 
@@ -20800,6 +21339,26 @@ noncomputable def
     (PlattTrudgianBacklundCut475481_80440TailInput.of_global I.global)
     (BacklundFiniteBandCheck140_exp475481_80440.of_plattTrudgian
       I.finiteRange)
+
+/-- The sharp Platt global/finite-range package supplies the final
+two-input Backlund/Turing package, with the extension side constructed
+unconditionally from the proved right-local-constancy machinery. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.toFinalBacklundTuringTwoInputs
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs) :
+    FinalBacklundTuringTwoInputs :=
+  I.toGoodHeightArgumentBound.toFinalBacklundTuringTwoInputs
+
+/-- The sharp Platt global/finite-range package supplies the master
+analytic Backlund/Turing package.  The only source data in this package
+are the Platt--Trudgian global estimate and the finite-range
+computation; the RvM closure, zero classification, and extension side
+are already discharged in `rh.lean`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.toFinalBacklundTuringAnalyticInputs
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs) :
+    FinalBacklundTuringAnalyticInputs :=
+  I.toGoodHeightArgumentBound.toFinalBacklundTuringAnalyticInputs
 
 /-- The sharp Platt global/finite-range package supplies the final
 classical proof inputs at `ClassicalBacklundTuringProof.K`. -/
@@ -20843,6 +21402,34 @@ noncomputable def
     (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs) :
     TuringStyleSBound :=
   I.toProvenBacklundTuringBound.toTuringStyleSBound
+
+/-- Sharp concrete `S` envelope from the Platt--Trudgian global/finite
+source package. -/
+theorem
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.concreteS_halfLogPlusHalfEnvelope
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.toProvenBacklundTuringBound.halfLogPlusHalfEnvelope
+    hT140 hy hregime hTu
+
+/-- High-side concrete `S` envelope from the Platt--Trudgian
+global/finite source package. -/
+theorem
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.concreteS_highLogEnvelope
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 49 / 20 :=
+  I.toProvenBacklundTuringBound.highLogEnvelope
+    hT140 hy hregime hTu
 
 /-! ### CW36: concrete finite endpoint for the Platt--Trudgian route -/
 
@@ -21656,6 +22243,16 @@ theorem backlund_exp_177_16088_le_101106273350734_100000000000000 :
   refine hb.trans ?_
   norm_num [Finset.sum, Nat.factorial]
 
+/-- Fifth-order Taylor-bound upper estimate for the small residual
+`exp (11/1000)`. -/
+theorem backlund_exp_11_1000_le_101106073_100000000 :
+    Real.exp (11 / 1000 : ℝ) ≤
+      (101106073 / 100000000 : ℝ) := by
+  have hb := Real.exp_bound' (x := (11 / 1000 : ℝ)) (n := 5)
+    (by norm_num) (by norm_num) (by norm_num : 0 < (5 : ℕ))
+  refine hb.trans ?_
+  norm_num [Finset.sum, Nat.factorial]
+
 /-- `exp (475481/80440) < 3690757800926/10000000000`, a
 nineteenth-order Taylor-certified endpoint for the sharp
 Platt--Trudgian route. -/
@@ -21704,6 +22301,102 @@ theorem backlund_exp_475481_80440_lt_3690757800926_10000000000 :
             (245960311115695 / 100000000000000 : ℝ)) *
           (101106273350734 / 100000000000000 : ℝ) := hprod
     _ < (3690757800926 / 10000000000 : ℝ) := hnum
+
+/-- `exp (475481/80440) < 3690757800925204/10000000000000`, a
+finer Taylor-certified endpoint for the sharp Platt--Trudgian route. -/
+theorem backlund_exp_475481_80440_lt_3690757800925204_10000000000000 :
+    Real.exp (475481 / 80440 : ℝ) <
+      (3690757800925204 / 10000000000000 : ℝ) := by
+  have h1 := backlund_exp_one_le_271828182845905_100000000000000
+  have h9 := backlund_exp_9_10_le_245960311115695_100000000000000
+  have hs := backlund_exp_177_16088_le_101106273350734_100000000000000
+  have h1pow :
+      (Real.exp (1 : ℝ))^5 ≤
+        (271828182845905 / 100000000000000 : ℝ)^5 := by
+    exact pow_le_pow_left₀ (le_of_lt (Real.exp_pos _)) h1 5
+  have hprod1 :
+      (Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ) ≤
+        (271828182845905 / 100000000000000 : ℝ)^5 *
+          (245960311115695 / 100000000000000 : ℝ) := by
+    exact mul_le_mul h1pow h9 (le_of_lt (Real.exp_pos _)) (by positivity)
+  have hprod :
+      ((Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ)) *
+          Real.exp (177 / 16088 : ℝ) ≤
+        ((271828182845905 / 100000000000000 : ℝ)^5 *
+            (245960311115695 / 100000000000000 : ℝ)) *
+          (101106273350734 / 100000000000000 : ℝ) := by
+    exact mul_le_mul hprod1 hs (le_of_lt (Real.exp_pos _)) (by positivity)
+  have hnum :
+      ((271828182845905 / 100000000000000 : ℝ)^5 *
+          (245960311115695 / 100000000000000 : ℝ)) *
+        (101106273350734 / 100000000000000 : ℝ) <
+          (3690757800925204 / 10000000000000 : ℝ) := by
+    norm_num
+  calc
+    Real.exp (475481 / 80440 : ℝ)
+        = ((Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ)) *
+            Real.exp (177 / 16088 : ℝ) := by
+          rw [show (475481 / 80440 : ℝ) =
+            (5 + 9 / 10) + 177 / 16088 by norm_num]
+          rw [Real.exp_add, Real.exp_add]
+          have hpow : Real.exp (5 : ℝ) = (Real.exp (1 : ℝ))^5 := by
+            have h := Real.exp_one_pow 5
+            have h_cast : ((5 : ℕ) : ℝ) = (5 : ℝ) := by norm_num
+            rw [← h_cast]
+            exact h.symm
+          rw [hpow]
+    _ ≤ ((271828182845905 / 100000000000000 : ℝ)^5 *
+            (245960311115695 / 100000000000000 : ℝ)) *
+          (101106273350734 / 100000000000000 : ℝ) := hprod
+    _ < (3690757800925204 / 10000000000000 : ℝ) := hnum
+
+/-- `exp (5911/1000) < 369075049/1000000`, a concrete endpoint for the
+improved decimal Platt--Trudgian route. -/
+theorem backlund_exp_5911_1000_lt_369075049_1000000 :
+    Real.exp (5911 / 1000 : ℝ) <
+      (369075049 / 1000000 : ℝ) := by
+  have h1 := backlund_exp_one_le_271828182845905_100000000000000
+  have h9 := backlund_exp_9_10_le_245960311115695_100000000000000
+  have hs := backlund_exp_11_1000_le_101106073_100000000
+  have h1pow :
+      (Real.exp (1 : ℝ))^5 ≤
+        (271828182845905 / 100000000000000 : ℝ)^5 := by
+    exact pow_le_pow_left₀ (le_of_lt (Real.exp_pos _)) h1 5
+  have hprod1 :
+      (Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ) ≤
+        (271828182845905 / 100000000000000 : ℝ)^5 *
+          (245960311115695 / 100000000000000 : ℝ) := by
+    exact mul_le_mul h1pow h9 (le_of_lt (Real.exp_pos _)) (by positivity)
+  have hprod :
+      ((Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ)) *
+          Real.exp (11 / 1000 : ℝ) ≤
+        ((271828182845905 / 100000000000000 : ℝ)^5 *
+            (245960311115695 / 100000000000000 : ℝ)) *
+          (101106073 / 100000000 : ℝ) := by
+    exact mul_le_mul hprod1 hs (le_of_lt (Real.exp_pos _)) (by positivity)
+  have hnum :
+      ((271828182845905 / 100000000000000 : ℝ)^5 *
+          (245960311115695 / 100000000000000 : ℝ)) *
+        (101106073 / 100000000 : ℝ) <
+          (369075049 / 1000000 : ℝ) := by
+    norm_num
+  calc
+    Real.exp (5911 / 1000 : ℝ)
+        = ((Real.exp (1 : ℝ))^5 * Real.exp (9 / 10 : ℝ)) *
+            Real.exp (11 / 1000 : ℝ) := by
+          rw [show (5911 / 1000 : ℝ) =
+            (5 + 9 / 10) + 11 / 1000 by norm_num]
+          rw [Real.exp_add, Real.exp_add]
+          have hpow : Real.exp (5 : ℝ) = (Real.exp (1 : ℝ))^5 := by
+            have h := Real.exp_one_pow 5
+            have h_cast : ((5 : ℕ) : ℝ) = (5 : ℝ) := by norm_num
+            rw [← h_cast]
+            exact h.symm
+          rw [hpow]
+    _ ≤ ((271828182845905 / 100000000000000 : ℝ)^5 *
+            (245960311115695 / 100000000000000 : ℝ)) *
+          (101106073 / 100000000 : ℝ) := hprod
+    _ < (369075049 / 1000000 : ℝ) := hnum
 
 /-- Concrete finite-band check left after the Platt--Trudgian tail:
 `[140, 374]`. -/
@@ -21787,6 +22480,24 @@ structure BacklundFiniteBandCheck140_3690757800926_10000000000 : Prop where
   bound :
     ∀ T : ℝ, (140 : ℝ) ≤ T →
       T ≤ (3690757800926 / 10000000000 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- Concrete finite-band check left after the finer Taylor-sharpened
+Platt--Trudgian tail:
+`[140, 3690757800925204/10000000000000]`. -/
+structure BacklundFiniteBandCheck140_3690757800925204_10000000000000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (3690757800925204 / 10000000000000 : ℝ) →
+        |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
+
+/-- Concrete finite-band check left after the improved decimal
+Platt--Trudgian tail:
+`[140, 369075049/1000000]`. -/
+structure BacklundFiniteBandCheck140_369075049_1000000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (369075049 / 1000000 : ℝ) →
         |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2
 
 /-- Uniform computational `S(T)` certificate on the concrete finite band
@@ -21873,6 +22584,25 @@ structure BacklundFiniteBandUniform25167Check140_3690757800926_10000000000 : Pro
   bound :
     ∀ T : ℝ, (140 : ℝ) ≤ T →
       T ≤ (3690757800926 / 10000000000 : ℝ) →
+        |concreteS T| ≤ (25167 / 10000 : ℝ)
+
+/-- Uniform computational `S(T)` certificate on the finer
+Taylor-sharpened concrete finite band
+`[140, 3690757800925204/10000000000000]`. -/
+structure
+    BacklundFiniteBandUniform25167Check140_3690757800925204_10000000000000 :
+    Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (3690757800925204 / 10000000000000 : ℝ) →
+        |concreteS T| ≤ (25167 / 10000 : ℝ)
+
+/-- Uniform computational `S(T)` certificate on the improved decimal
+concrete finite band `[140, 369075049/1000000]`. -/
+structure BacklundFiniteBandUniform25167Check140_369075049_1000000 : Prop where
+  bound :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (369075049 / 1000000 : ℝ) →
         |concreteS T| ≤ (25167 / 10000 : ℝ)
 
 /-- The uniform finite-band `2.5167` certificate on `[140, 374]` supplies
@@ -21990,6 +22720,31 @@ noncomputable def
     BacklundFiniteBandUniform25167Check140_3690757800926_10000000000.toFiniteBandCheck
     (H : BacklundFiniteBandUniform25167Check140_3690757800926_10000000000) :
     BacklundFiniteBandCheck140_3690757800926_10000000000 where
+  bound := by
+    intro T hT140 hTendpoint
+    exact le_trans (H.bound T hT140 hTendpoint)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- The uniform finite-band `2.5167` certificate on
+`[140, 3690757800925204/10000000000000]` supplies the finer
+Taylor-sharpened half-log-plus-half finite-band check. -/
+noncomputable def
+    BacklundFiniteBandUniform25167Check140_3690757800925204_10000000000000.toFiniteBandCheck
+    (H :
+      BacklundFiniteBandUniform25167Check140_3690757800925204_10000000000000) :
+    BacklundFiniteBandCheck140_3690757800925204_10000000000000 where
+  bound := by
+    intro T hT140 hTendpoint
+    exact le_trans (H.bound T hT140 hTendpoint)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- The uniform finite-band `2.5167` certificate on
+`[140, 369075049/1000000]` supplies the improved decimal
+half-log-plus-half finite-band check. -/
+noncomputable def
+    BacklundFiniteBandUniform25167Check140_369075049_1000000.toFiniteBandCheck
+    (H : BacklundFiniteBandUniform25167Check140_369075049_1000000) :
+    BacklundFiniteBandCheck140_369075049_1000000 where
   bound := by
     intro T hT140 hTendpoint
     exact le_trans (H.bound T hT140 hTendpoint)
@@ -22138,6 +22893,27 @@ structure BacklundFiniteBandCountRangeMainCertificate140_3690757803_10000000 whe
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T →
       T ≤ (3690757803 / 10000000 : ℝ) →
+        ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-- A finite list of count-range/main-term slabs covering the improved
+decimal Backlund finite interval `[140, 369075049/1000000]`. -/
+structure BacklundFiniteBandCountRangeMainCertificate140_369075049_1000000 where
+  slabs : List BacklundCountRangeMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (369075049 / 1000000 : ℝ) →
+        ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-- A finite list of count-range/main-term slabs covering the finer
+Taylor-sharpened Backlund finite interval
+`[140, 3690757800925204/10000000000000]`. -/
+structure
+    BacklundFiniteBandCountRangeMainCertificate140_3690757800925204_10000000000000
+    where
+  slabs : List BacklundCountRangeMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (3690757800925204 / 10000000000000 : ℝ) →
         ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
 
 /-- Endpoint-style version of a count/main slab.  Since the smooth main
@@ -23605,6 +24381,29 @@ structure
       T ≤ (3690757803 / 10000000 : ℝ) →
         ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
 
+/-- A finite list of endpoint count-range/main-term slabs covering the
+improved decimal remaining finite interval `[140, 369075049/1000000]`. -/
+structure
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_369075049_1000000
+    where
+  slabs : List BacklundEndpointCountRangeMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (369075049 / 1000000 : ℝ) →
+        ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-- A finite list of endpoint count-range/main-term slabs covering the
+finer Taylor-sharpened remaining finite interval
+`[140, 3690757800925204/10000000000000]`. -/
+structure
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757800925204_10000000000000
+    where
+  slabs : List BacklundEndpointCountRangeMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (3690757800925204 / 10000000000000 : ℝ) →
+        ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
 /-- A finite list of fixed-pi exp endpoint count-range slabs covering
 `[140, 370]`.  This is the table-facing finite source shape: rows provide
 endpoint cumulative counts, rational ratio bounds, exponential log
@@ -23626,6 +24425,1312 @@ structure
     ∀ T : ℝ, (140 : ℝ) ≤ T →
       T ≤ (3690757803 / 10000000 : ℝ) →
         ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-- A finite list of fixed-pi exp endpoint count-range slabs covering
+the improved decimal remaining finite interval
+`[140, 369075049/1000000]`. -/
+structure
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_369075049_1000000
+    where
+  slabs : List BacklundEndpointCountRangeFixedPiExpSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (369075049 / 1000000 : ℝ) →
+        ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-- A finite list of fixed-pi exp endpoint count-range slabs covering
+the finer Taylor-sharpened remaining finite interval
+`[140, 3690757800925204/10000000000000]`. -/
+structure
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000
+    where
+  slabs : List BacklundEndpointCountRangeFixedPiExpSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (3690757800925204 / 10000000000000 : ℝ) →
+        ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-! ### Concrete two-unit endpoint-count grid for the Backlund finite band -/
+
+/-- One row of the concrete rational grid used for the remaining
+Backlund finite interval. The analytic count and smooth-main facts are
+kept separate in `BacklundGrid2EndpointCountRowFacts`; this row type
+records only the rational endpoints, endpoint counts, and elementary
+order data. -/
+structure BacklundGrid2EndpointCountRow where
+  A : ℝ
+  B : ℝ
+  countLower : ℕ
+  countUpper : ℕ
+  hA_ge_140 : (140 : ℝ) ≤ A
+  hAB : A ≤ B
+
+/-- The row-local facts needed to turn a concrete grid row into an
+endpoint count-range/main-term slab. These are exactly the future
+finite endpoint-count obligations for the row: two cumulative count
+equalities and two smooth-main inequalities. -/
+structure BacklundGrid2EndpointCountRowFacts
+    (R : BacklundGrid2EndpointCountRow) : Prop where
+  left_count_eq :
+    zetaWeightedZeroCountUpToHeight R.A
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+        (backlund_two_pi_le_of_ge_140 R.hA_ge_140)) =
+      R.countLower
+  right_count_eq :
+    zetaWeightedZeroCountUpToHeight R.B
+      (le_trans
+        (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140 R.hA_ge_140))
+        R.hAB) =
+      R.countUpper
+  mainLower_le_left :
+    (R.countUpper : ℝ) - (25167 / 10000 : ℝ) ≤ smoothMainTerm R.A
+  right_le_mainUpper :
+    smoothMainTerm R.B ≤ (R.countLower : ℝ) + (25167 / 10000 : ℝ)
+
+/-- A concrete grid row plus its endpoint-count and smooth-main facts
+lowers to the existing endpoint count-range/main-term slab interface. -/
+noncomputable def BacklundGrid2EndpointCountRow.toEndpointCountRangeMainSlab
+    (R : BacklundGrid2EndpointCountRow)
+    (F : BacklundGrid2EndpointCountRowFacts R) :
+    BacklundEndpointCountRangeMainSlabCertificate where
+  A := R.A
+  B := R.B
+  countLower := R.countLower
+  countUpper := R.countUpper
+  mainLower := (R.countUpper : ℝ) - (25167 / 10000 : ℝ)
+  mainUpper := (R.countLower : ℝ) + (25167 / 10000 : ℝ)
+  hA_two_pi := backlund_two_pi_le_of_ge_140 R.hA_ge_140
+  hAB := R.hAB
+  left_count_eq := F.left_count_eq
+  right_count_eq := F.right_count_eq
+  mainLower_le_left := F.mainLower_le_left
+  right_le_mainUpper := F.right_le_mainUpper
+  upperCount_minus_lowerMain_le := by
+    ring_nf
+    norm_num
+  upperMain_minus_lowerCount_le := by
+    ring_nf
+    norm_num
+
+/-- Expected cumulative zero count at the `n`th endpoint of the
+two-unit grid. Endpoint `0` is `140`; endpoint `115` is
+`369075049/1000000`. -/
+def backlundGrid2EndpointCount140_369075049_1000000 : ℕ → ℕ
+  | 0 => 48
+  | 1 => 49
+  | 2 => 50
+  | 3 => 50
+  | 4 => 52
+  | 5 => 52
+  | 6 => 54
+  | 7 => 55
+  | 8 => 55
+  | 9 => 57
+  | 10 => 58
+  | 11 => 59
+  | 12 => 60
+  | 13 => 61
+  | 14 => 62
+  | 15 => 64
+  | 16 => 64
+  | 17 => 65
+  | 18 => 66
+  | 19 => 67
+  | 20 => 69
+  | 21 => 69
+  | 22 => 70
+  | 23 => 72
+  | 24 => 73
+  | 25 => 74
+  | 26 => 74
+  | 27 => 76
+  | 28 => 77
+  | 29 => 78
+  | 30 => 79
+  | 31 => 80
+  | 32 => 81
+  | 33 => 83
+  | 34 => 84
+  | 35 => 85
+  | 36 => 86
+  | 37 => 87
+  | 38 => 88
+  | 39 => 89
+  | 40 => 90
+  | 41 => 92
+  | 42 => 92
+  | 43 => 94
+  | 44 => 95
+  | 45 => 96
+  | 46 => 98
+  | 47 => 99
+  | 48 => 99
+  | 49 => 101
+  | 50 => 102
+  | 51 => 103
+  | 52 => 104
+  | 53 => 105
+  | 54 => 106
+  | 55 => 108
+  | 56 => 109
+  | 57 => 110
+  | 58 => 111
+  | 59 => 112
+  | 60 => 114
+  | 61 => 115
+  | 62 => 116
+  | 63 => 117
+  | 64 => 119
+  | 65 => 120
+  | 66 => 121
+  | 67 => 122
+  | 68 => 123
+  | 69 => 124
+  | 70 => 126
+  | 71 => 126
+  | 72 => 128
+  | 73 => 129
+  | 74 => 131
+  | 75 => 132
+  | 76 => 133
+  | 77 => 134
+  | 78 => 136
+  | 79 => 137
+  | 80 => 138
+  | 81 => 139
+  | 82 => 140
+  | 83 => 142
+  | 84 => 143
+  | 85 => 143
+  | 86 => 145
+  | 87 => 147
+  | 88 => 148
+  | 89 => 149
+  | 90 => 150
+  | 91 => 151
+  | 92 => 153
+  | 93 => 154
+  | 94 => 155
+  | 95 => 157
+  | 96 => 158
+  | 97 => 159
+  | 98 => 160
+  | 99 => 161
+  | 100 => 163
+  | 101 => 164
+  | 102 => 165
+  | 103 => 166
+  | 104 => 168
+  | 105 => 169
+  | 106 => 171
+  | 107 => 172
+  | 108 => 172
+  | 109 => 175
+  | 110 => 176
+  | 111 => 177
+  | 112 => 178
+  | 113 => 179
+  | 114 => 181
+  | 115 => 182
+  | _ => 182
+
+/-- The `n`th concrete two-unit row, for `n < 115`. -/
+noncomputable def backlundGrid2EndpointRow140_369075049_1000000
+    (n : Fin 115) : BacklundGrid2EndpointCountRow where
+  A := (140 : ℝ) + 2 * (n.val : ℝ)
+  B := if n.val = 114 then
+      (369075049 / 1000000 : ℝ)
+    else
+      (142 : ℝ) + 2 * (n.val : ℝ)
+  countLower := backlundGrid2EndpointCount140_369075049_1000000 n.val
+  countUpper := backlundGrid2EndpointCount140_369075049_1000000 (n.val + 1)
+  hA_ge_140 := by
+    have hn : (0 : ℝ) ≤ (n.val : ℝ) := by positivity
+    nlinarith
+  hAB := by
+    by_cases hn : n.val = 114
+    · simp [hn]
+      norm_num
+    · simp [hn]
+      nlinarith
+
+/-- The concrete rational two-unit grid for `[140, 369075049/1000000]`.
+The endpoint counts are the expected cumulative counts from the classical
+zeta-zero table; their Lean verification is carried by
+`BacklundGrid2EndpointCountFacts140_369075049_1000000`. -/
+noncomputable def backlundGrid2EndpointRows140_369075049_1000000 :
+    List BacklundGrid2EndpointCountRow :=
+  (List.finRange 115).map backlundGrid2EndpointRow140_369075049_1000000
+
+/-- The concrete two-unit grid covers the improved Backlund finite
+interval `[140, 369075049/1000000]`. -/
+theorem backlundGrid2EndpointRows140_369075049_1000000_cover
+    {T : ℝ} (hT140 : (140 : ℝ) ≤ T)
+    (hTendpoint : T ≤ (369075049 / 1000000 : ℝ)) :
+    ∃ R ∈ backlundGrid2EndpointRows140_369075049_1000000,
+      R.A ≤ T ∧ T ≤ R.B := by
+  by_cases h0 : T ≤ (142 : ℝ)
+  · let n : Fin 115 := ⟨0, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hT140 ⊢
+      exact hT140
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h0 ⊢
+      exact h0
+  by_cases h1 : T ≤ (144 : ℝ)
+  · let n : Fin 115 := ⟨1, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (142 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h0)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h1 ⊢
+      exact h1
+  by_cases h2 : T ≤ (146 : ℝ)
+  · let n : Fin 115 := ⟨2, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (144 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h1)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h2 ⊢
+      exact h2
+  by_cases h3 : T ≤ (148 : ℝ)
+  · let n : Fin 115 := ⟨3, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (146 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h2)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h3 ⊢
+      exact h3
+  by_cases h4 : T ≤ (150 : ℝ)
+  · let n : Fin 115 := ⟨4, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (148 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h3)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h4 ⊢
+      exact h4
+  by_cases h5 : T ≤ (152 : ℝ)
+  · let n : Fin 115 := ⟨5, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (150 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h4)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h5 ⊢
+      exact h5
+  by_cases h6 : T ≤ (154 : ℝ)
+  · let n : Fin 115 := ⟨6, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (152 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h5)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h6 ⊢
+      exact h6
+  by_cases h7 : T ≤ (156 : ℝ)
+  · let n : Fin 115 := ⟨7, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (154 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h6)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h7 ⊢
+      exact h7
+  by_cases h8 : T ≤ (158 : ℝ)
+  · let n : Fin 115 := ⟨8, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (156 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h7)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h8 ⊢
+      exact h8
+  by_cases h9 : T ≤ (160 : ℝ)
+  · let n : Fin 115 := ⟨9, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (158 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h8)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h9 ⊢
+      exact h9
+  by_cases h10 : T ≤ (162 : ℝ)
+  · let n : Fin 115 := ⟨10, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (160 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h9)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h10 ⊢
+      exact h10
+  by_cases h11 : T ≤ (164 : ℝ)
+  · let n : Fin 115 := ⟨11, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (162 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h10)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h11 ⊢
+      exact h11
+  by_cases h12 : T ≤ (166 : ℝ)
+  · let n : Fin 115 := ⟨12, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (164 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h11)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h12 ⊢
+      exact h12
+  by_cases h13 : T ≤ (168 : ℝ)
+  · let n : Fin 115 := ⟨13, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (166 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h12)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h13 ⊢
+      exact h13
+  by_cases h14 : T ≤ (170 : ℝ)
+  · let n : Fin 115 := ⟨14, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (168 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h13)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h14 ⊢
+      exact h14
+  by_cases h15 : T ≤ (172 : ℝ)
+  · let n : Fin 115 := ⟨15, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (170 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h14)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h15 ⊢
+      exact h15
+  by_cases h16 : T ≤ (174 : ℝ)
+  · let n : Fin 115 := ⟨16, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (172 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h15)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h16 ⊢
+      exact h16
+  by_cases h17 : T ≤ (176 : ℝ)
+  · let n : Fin 115 := ⟨17, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (174 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h16)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h17 ⊢
+      exact h17
+  by_cases h18 : T ≤ (178 : ℝ)
+  · let n : Fin 115 := ⟨18, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (176 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h17)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h18 ⊢
+      exact h18
+  by_cases h19 : T ≤ (180 : ℝ)
+  · let n : Fin 115 := ⟨19, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (178 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h18)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h19 ⊢
+      exact h19
+  by_cases h20 : T ≤ (182 : ℝ)
+  · let n : Fin 115 := ⟨20, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (180 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h19)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h20 ⊢
+      exact h20
+  by_cases h21 : T ≤ (184 : ℝ)
+  · let n : Fin 115 := ⟨21, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (182 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h20)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h21 ⊢
+      exact h21
+  by_cases h22 : T ≤ (186 : ℝ)
+  · let n : Fin 115 := ⟨22, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (184 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h21)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h22 ⊢
+      exact h22
+  by_cases h23 : T ≤ (188 : ℝ)
+  · let n : Fin 115 := ⟨23, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (186 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h22)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h23 ⊢
+      exact h23
+  by_cases h24 : T ≤ (190 : ℝ)
+  · let n : Fin 115 := ⟨24, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (188 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h23)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h24 ⊢
+      exact h24
+  by_cases h25 : T ≤ (192 : ℝ)
+  · let n : Fin 115 := ⟨25, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (190 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h24)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h25 ⊢
+      exact h25
+  by_cases h26 : T ≤ (194 : ℝ)
+  · let n : Fin 115 := ⟨26, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (192 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h25)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h26 ⊢
+      exact h26
+  by_cases h27 : T ≤ (196 : ℝ)
+  · let n : Fin 115 := ⟨27, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (194 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h26)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h27 ⊢
+      exact h27
+  by_cases h28 : T ≤ (198 : ℝ)
+  · let n : Fin 115 := ⟨28, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (196 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h27)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h28 ⊢
+      exact h28
+  by_cases h29 : T ≤ (200 : ℝ)
+  · let n : Fin 115 := ⟨29, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (198 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h28)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h29 ⊢
+      exact h29
+  by_cases h30 : T ≤ (202 : ℝ)
+  · let n : Fin 115 := ⟨30, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (200 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h29)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h30 ⊢
+      exact h30
+  by_cases h31 : T ≤ (204 : ℝ)
+  · let n : Fin 115 := ⟨31, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (202 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h30)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h31 ⊢
+      exact h31
+  by_cases h32 : T ≤ (206 : ℝ)
+  · let n : Fin 115 := ⟨32, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (204 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h31)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h32 ⊢
+      exact h32
+  by_cases h33 : T ≤ (208 : ℝ)
+  · let n : Fin 115 := ⟨33, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (206 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h32)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h33 ⊢
+      exact h33
+  by_cases h34 : T ≤ (210 : ℝ)
+  · let n : Fin 115 := ⟨34, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (208 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h33)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h34 ⊢
+      exact h34
+  by_cases h35 : T ≤ (212 : ℝ)
+  · let n : Fin 115 := ⟨35, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (210 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h34)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h35 ⊢
+      exact h35
+  by_cases h36 : T ≤ (214 : ℝ)
+  · let n : Fin 115 := ⟨36, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (212 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h35)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h36 ⊢
+      exact h36
+  by_cases h37 : T ≤ (216 : ℝ)
+  · let n : Fin 115 := ⟨37, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (214 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h36)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h37 ⊢
+      exact h37
+  by_cases h38 : T ≤ (218 : ℝ)
+  · let n : Fin 115 := ⟨38, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (216 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h37)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h38 ⊢
+      exact h38
+  by_cases h39 : T ≤ (220 : ℝ)
+  · let n : Fin 115 := ⟨39, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (218 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h38)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h39 ⊢
+      exact h39
+  by_cases h40 : T ≤ (222 : ℝ)
+  · let n : Fin 115 := ⟨40, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (220 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h39)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h40 ⊢
+      exact h40
+  by_cases h41 : T ≤ (224 : ℝ)
+  · let n : Fin 115 := ⟨41, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (222 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h40)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h41 ⊢
+      exact h41
+  by_cases h42 : T ≤ (226 : ℝ)
+  · let n : Fin 115 := ⟨42, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (224 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h41)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h42 ⊢
+      exact h42
+  by_cases h43 : T ≤ (228 : ℝ)
+  · let n : Fin 115 := ⟨43, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (226 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h42)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h43 ⊢
+      exact h43
+  by_cases h44 : T ≤ (230 : ℝ)
+  · let n : Fin 115 := ⟨44, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (228 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h43)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h44 ⊢
+      exact h44
+  by_cases h45 : T ≤ (232 : ℝ)
+  · let n : Fin 115 := ⟨45, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (230 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h44)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h45 ⊢
+      exact h45
+  by_cases h46 : T ≤ (234 : ℝ)
+  · let n : Fin 115 := ⟨46, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (232 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h45)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h46 ⊢
+      exact h46
+  by_cases h47 : T ≤ (236 : ℝ)
+  · let n : Fin 115 := ⟨47, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (234 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h46)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h47 ⊢
+      exact h47
+  by_cases h48 : T ≤ (238 : ℝ)
+  · let n : Fin 115 := ⟨48, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (236 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h47)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h48 ⊢
+      exact h48
+  by_cases h49 : T ≤ (240 : ℝ)
+  · let n : Fin 115 := ⟨49, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (238 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h48)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h49 ⊢
+      exact h49
+  by_cases h50 : T ≤ (242 : ℝ)
+  · let n : Fin 115 := ⟨50, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (240 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h49)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h50 ⊢
+      exact h50
+  by_cases h51 : T ≤ (244 : ℝ)
+  · let n : Fin 115 := ⟨51, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (242 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h50)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h51 ⊢
+      exact h51
+  by_cases h52 : T ≤ (246 : ℝ)
+  · let n : Fin 115 := ⟨52, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (244 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h51)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h52 ⊢
+      exact h52
+  by_cases h53 : T ≤ (248 : ℝ)
+  · let n : Fin 115 := ⟨53, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (246 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h52)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h53 ⊢
+      exact h53
+  by_cases h54 : T ≤ (250 : ℝ)
+  · let n : Fin 115 := ⟨54, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (248 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h53)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h54 ⊢
+      exact h54
+  by_cases h55 : T ≤ (252 : ℝ)
+  · let n : Fin 115 := ⟨55, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (250 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h54)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h55 ⊢
+      exact h55
+  by_cases h56 : T ≤ (254 : ℝ)
+  · let n : Fin 115 := ⟨56, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (252 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h55)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h56 ⊢
+      exact h56
+  by_cases h57 : T ≤ (256 : ℝ)
+  · let n : Fin 115 := ⟨57, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (254 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h56)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h57 ⊢
+      exact h57
+  by_cases h58 : T ≤ (258 : ℝ)
+  · let n : Fin 115 := ⟨58, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (256 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h57)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h58 ⊢
+      exact h58
+  by_cases h59 : T ≤ (260 : ℝ)
+  · let n : Fin 115 := ⟨59, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (258 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h58)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h59 ⊢
+      exact h59
+  by_cases h60 : T ≤ (262 : ℝ)
+  · let n : Fin 115 := ⟨60, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (260 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h59)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h60 ⊢
+      exact h60
+  by_cases h61 : T ≤ (264 : ℝ)
+  · let n : Fin 115 := ⟨61, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (262 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h60)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h61 ⊢
+      exact h61
+  by_cases h62 : T ≤ (266 : ℝ)
+  · let n : Fin 115 := ⟨62, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (264 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h61)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h62 ⊢
+      exact h62
+  by_cases h63 : T ≤ (268 : ℝ)
+  · let n : Fin 115 := ⟨63, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (266 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h62)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h63 ⊢
+      exact h63
+  by_cases h64 : T ≤ (270 : ℝ)
+  · let n : Fin 115 := ⟨64, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (268 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h63)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h64 ⊢
+      exact h64
+  by_cases h65 : T ≤ (272 : ℝ)
+  · let n : Fin 115 := ⟨65, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (270 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h64)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h65 ⊢
+      exact h65
+  by_cases h66 : T ≤ (274 : ℝ)
+  · let n : Fin 115 := ⟨66, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (272 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h65)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h66 ⊢
+      exact h66
+  by_cases h67 : T ≤ (276 : ℝ)
+  · let n : Fin 115 := ⟨67, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (274 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h66)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h67 ⊢
+      exact h67
+  by_cases h68 : T ≤ (278 : ℝ)
+  · let n : Fin 115 := ⟨68, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (276 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h67)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h68 ⊢
+      exact h68
+  by_cases h69 : T ≤ (280 : ℝ)
+  · let n : Fin 115 := ⟨69, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (278 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h68)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h69 ⊢
+      exact h69
+  by_cases h70 : T ≤ (282 : ℝ)
+  · let n : Fin 115 := ⟨70, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (280 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h69)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h70 ⊢
+      exact h70
+  by_cases h71 : T ≤ (284 : ℝ)
+  · let n : Fin 115 := ⟨71, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (282 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h70)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h71 ⊢
+      exact h71
+  by_cases h72 : T ≤ (286 : ℝ)
+  · let n : Fin 115 := ⟨72, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (284 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h71)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h72 ⊢
+      exact h72
+  by_cases h73 : T ≤ (288 : ℝ)
+  · let n : Fin 115 := ⟨73, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (286 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h72)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h73 ⊢
+      exact h73
+  by_cases h74 : T ≤ (290 : ℝ)
+  · let n : Fin 115 := ⟨74, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (288 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h73)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h74 ⊢
+      exact h74
+  by_cases h75 : T ≤ (292 : ℝ)
+  · let n : Fin 115 := ⟨75, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (290 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h74)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h75 ⊢
+      exact h75
+  by_cases h76 : T ≤ (294 : ℝ)
+  · let n : Fin 115 := ⟨76, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (292 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h75)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h76 ⊢
+      exact h76
+  by_cases h77 : T ≤ (296 : ℝ)
+  · let n : Fin 115 := ⟨77, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (294 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h76)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h77 ⊢
+      exact h77
+  by_cases h78 : T ≤ (298 : ℝ)
+  · let n : Fin 115 := ⟨78, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (296 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h77)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h78 ⊢
+      exact h78
+  by_cases h79 : T ≤ (300 : ℝ)
+  · let n : Fin 115 := ⟨79, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (298 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h78)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h79 ⊢
+      exact h79
+  by_cases h80 : T ≤ (302 : ℝ)
+  · let n : Fin 115 := ⟨80, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (300 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h79)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h80 ⊢
+      exact h80
+  by_cases h81 : T ≤ (304 : ℝ)
+  · let n : Fin 115 := ⟨81, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (302 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h80)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h81 ⊢
+      exact h81
+  by_cases h82 : T ≤ (306 : ℝ)
+  · let n : Fin 115 := ⟨82, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (304 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h81)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h82 ⊢
+      exact h82
+  by_cases h83 : T ≤ (308 : ℝ)
+  · let n : Fin 115 := ⟨83, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (306 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h82)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h83 ⊢
+      exact h83
+  by_cases h84 : T ≤ (310 : ℝ)
+  · let n : Fin 115 := ⟨84, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (308 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h83)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h84 ⊢
+      exact h84
+  by_cases h85 : T ≤ (312 : ℝ)
+  · let n : Fin 115 := ⟨85, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (310 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h84)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h85 ⊢
+      exact h85
+  by_cases h86 : T ≤ (314 : ℝ)
+  · let n : Fin 115 := ⟨86, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (312 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h85)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h86 ⊢
+      exact h86
+  by_cases h87 : T ≤ (316 : ℝ)
+  · let n : Fin 115 := ⟨87, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (314 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h86)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h87 ⊢
+      exact h87
+  by_cases h88 : T ≤ (318 : ℝ)
+  · let n : Fin 115 := ⟨88, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (316 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h87)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h88 ⊢
+      exact h88
+  by_cases h89 : T ≤ (320 : ℝ)
+  · let n : Fin 115 := ⟨89, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (318 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h88)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h89 ⊢
+      exact h89
+  by_cases h90 : T ≤ (322 : ℝ)
+  · let n : Fin 115 := ⟨90, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (320 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h89)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h90 ⊢
+      exact h90
+  by_cases h91 : T ≤ (324 : ℝ)
+  · let n : Fin 115 := ⟨91, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (322 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h90)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h91 ⊢
+      exact h91
+  by_cases h92 : T ≤ (326 : ℝ)
+  · let n : Fin 115 := ⟨92, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (324 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h91)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h92 ⊢
+      exact h92
+  by_cases h93 : T ≤ (328 : ℝ)
+  · let n : Fin 115 := ⟨93, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (326 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h92)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h93 ⊢
+      exact h93
+  by_cases h94 : T ≤ (330 : ℝ)
+  · let n : Fin 115 := ⟨94, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (328 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h93)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h94 ⊢
+      exact h94
+  by_cases h95 : T ≤ (332 : ℝ)
+  · let n : Fin 115 := ⟨95, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (330 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h94)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h95 ⊢
+      exact h95
+  by_cases h96 : T ≤ (334 : ℝ)
+  · let n : Fin 115 := ⟨96, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (332 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h95)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h96 ⊢
+      exact h96
+  by_cases h97 : T ≤ (336 : ℝ)
+  · let n : Fin 115 := ⟨97, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (334 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h96)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h97 ⊢
+      exact h97
+  by_cases h98 : T ≤ (338 : ℝ)
+  · let n : Fin 115 := ⟨98, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (336 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h97)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h98 ⊢
+      exact h98
+  by_cases h99 : T ≤ (340 : ℝ)
+  · let n : Fin 115 := ⟨99, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (338 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h98)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h99 ⊢
+      exact h99
+  by_cases h100 : T ≤ (342 : ℝ)
+  · let n : Fin 115 := ⟨100, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (340 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h99)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h100 ⊢
+      exact h100
+  by_cases h101 : T ≤ (344 : ℝ)
+  · let n : Fin 115 := ⟨101, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (342 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h100)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h101 ⊢
+      exact h101
+  by_cases h102 : T ≤ (346 : ℝ)
+  · let n : Fin 115 := ⟨102, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (344 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h101)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h102 ⊢
+      exact h102
+  by_cases h103 : T ≤ (348 : ℝ)
+  · let n : Fin 115 := ⟨103, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (346 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h102)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h103 ⊢
+      exact h103
+  by_cases h104 : T ≤ (350 : ℝ)
+  · let n : Fin 115 := ⟨104, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (348 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h103)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h104 ⊢
+      exact h104
+  by_cases h105 : T ≤ (352 : ℝ)
+  · let n : Fin 115 := ⟨105, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (350 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h104)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h105 ⊢
+      exact h105
+  by_cases h106 : T ≤ (354 : ℝ)
+  · let n : Fin 115 := ⟨106, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (352 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h105)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h106 ⊢
+      exact h106
+  by_cases h107 : T ≤ (356 : ℝ)
+  · let n : Fin 115 := ⟨107, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (354 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h106)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h107 ⊢
+      exact h107
+  by_cases h108 : T ≤ (358 : ℝ)
+  · let n : Fin 115 := ⟨108, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (356 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h107)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h108 ⊢
+      exact h108
+  by_cases h109 : T ≤ (360 : ℝ)
+  · let n : Fin 115 := ⟨109, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (358 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h108)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h109 ⊢
+      exact h109
+  by_cases h110 : T ≤ (362 : ℝ)
+  · let n : Fin 115 := ⟨110, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (360 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h109)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h110 ⊢
+      exact h110
+  by_cases h111 : T ≤ (364 : ℝ)
+  · let n : Fin 115 := ⟨111, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (362 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h110)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h111 ⊢
+      exact h111
+  by_cases h112 : T ≤ (366 : ℝ)
+  · let n : Fin 115 := ⟨112, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (364 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h111)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h112 ⊢
+      exact h112
+  by_cases h113 : T ≤ (368 : ℝ)
+  · let n : Fin 115 := ⟨113, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (366 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h112)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at h113 ⊢
+      exact h113
+  · let n : Fin 115 := ⟨114, by norm_num⟩
+    refine ⟨backlundGrid2EndpointRow140_369075049_1000000 n, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨n, List.mem_finRange n, rfl⟩
+    · have hA : (368 : ℝ) ≤ T := le_of_lt (lt_of_not_ge h113)
+      norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hA ⊢
+      exact hA
+    · norm_num [n, backlundGrid2EndpointRow140_369075049_1000000] at hTendpoint ⊢
+      exact hTendpoint
+
+/-- Row facts for every row in the concrete two-unit grid. This is the
+finite endpoint-count certificate payload left to verify from a zero
+table and elementary smooth-main estimates. -/
+structure BacklundGrid2EndpointCountFacts140_369075049_1000000 : Prop where
+  facts :
+    ∀ R ∈ backlundGrid2EndpointRows140_369075049_1000000,
+      BacklundGrid2EndpointCountRowFacts R
+
+/-- The concrete grid facts inhabit the existing endpoint
+count-range/main-term finite certificate on `[140, 369075049/1000000]`. -/
+noncomputable def
+    BacklundGrid2EndpointCountFacts140_369075049_1000000.toEndpointCountRangeMainCertificate
+    (F : BacklundGrid2EndpointCountFacts140_369075049_1000000) :
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_369075049_1000000 where
+  slabs :=
+    backlundGrid2EndpointRows140_369075049_1000000.attach.map
+      (fun R => R.val.toEndpointCountRangeMainSlab
+        (F.facts R.val R.property))
+  cover := by
+    intro T hT140 hTendpoint
+    obtain ⟨R, hR, hA, hB⟩ :=
+      backlundGrid2EndpointRows140_369075049_1000000_cover hT140 hTendpoint
+    refine ⟨R.toEndpointCountRangeMainSlab (F.facts R hR), ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr
+        ⟨⟨R, hR⟩, List.mem_attach _ _, rfl⟩
+    · exact hA
+    · exact hB
 
 /-- A finite list of Turing-count/range-main slabs covering
 `[140, 374]`. -/
@@ -23826,12 +25931,66 @@ noncomputable def
       linarith
     exact C.cover T hT140 hT370
 
+/-- Count-range/main slabs on `[140, 370]` restrict to the improved
+decimal finite interval `[140, 369075049/1000000]`. -/
+noncomputable def
+    BacklundFiniteBandCountRangeMainCertificate140_369075049_1000000.of_140_370
+    (C : BacklundFiniteBandCountRangeMainCertificate140_370) :
+    BacklundFiniteBandCountRangeMainCertificate140_369075049_1000000 where
+  slabs := C.slabs
+  cover := by
+    intro T hT140 hTendpoint
+    have hT370 : T ≤ (370 : ℝ) := by
+      linarith
+    exact C.cover T hT140 hT370
+
+/-- Count-range/main slabs on `[140, 370]` restrict to the finer
+Taylor-sharpened finite interval
+`[140, 3690757800925204/10000000000000]`. -/
+noncomputable def
+    BacklundFiniteBandCountRangeMainCertificate140_3690757800925204_10000000000000.of_140_370
+    (C : BacklundFiniteBandCountRangeMainCertificate140_370) :
+    BacklundFiniteBandCountRangeMainCertificate140_3690757800925204_10000000000000 where
+  slabs := C.slabs
+  cover := by
+    intro T hT140 hTendpoint
+    have hT370 : T ≤ (370 : ℝ) := by
+      linarith
+    exact C.cover T hT140 hT370
+
 /-- Endpoint count-range slabs on `[140, 370]` restrict to the
 near-exact finite interval `[140, 3690757803/10000000]`. -/
 noncomputable def
     BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000.of_140_370
     (C : BacklundFiniteBandEndpointCountRangeMainCertificate140_370) :
     BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000 where
+  slabs := C.slabs
+  cover := by
+    intro T hT140 hTendpoint
+    have hT370 : T ≤ (370 : ℝ) := by
+      linarith
+    exact C.cover T hT140 hT370
+
+/-- Endpoint count-range slabs on `[140, 370]` restrict to the improved
+decimal finite interval `[140, 369075049/1000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_369075049_1000000.of_140_370
+    (C : BacklundFiniteBandEndpointCountRangeMainCertificate140_370) :
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_369075049_1000000 where
+  slabs := C.slabs
+  cover := by
+    intro T hT140 hTendpoint
+    have hT370 : T ≤ (370 : ℝ) := by
+      linarith
+    exact C.cover T hT140 hT370
+
+/-- Endpoint count-range slabs on `[140, 370]` restrict to the finer
+Taylor-sharpened finite interval
+`[140, 3690757800925204/10000000000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757800925204_10000000000000.of_140_370
+    (C : BacklundFiniteBandEndpointCountRangeMainCertificate140_370) :
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757800925204_10000000000000 where
   slabs := C.slabs
   cover := by
     intro T hT140 hTendpoint
@@ -23846,6 +26005,37 @@ noncomputable def
     (C :
       BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000) :
     BacklundFiniteBandCountRangeMainCertificate140_3690757803_10000000 where
+  slabs := C.slabs.map
+    (fun S : BacklundEndpointCountRangeMainSlabCertificate => S.toRangeSlab)
+  cover := by
+    intro T hT140 hTendpoint
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hTendpoint
+    refine ⟨S.toRangeSlab, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
+/-- Endpoint count-range slabs supply count-range/main slabs on the
+improved decimal finite interval `[140, 369075049/1000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_369075049_1000000.toCountRange
+    (C :
+      BacklundFiniteBandEndpointCountRangeMainCertificate140_369075049_1000000) :
+    BacklundFiniteBandCountRangeMainCertificate140_369075049_1000000 where
+  slabs := C.slabs.map
+    (fun S : BacklundEndpointCountRangeMainSlabCertificate => S.toRangeSlab)
+  cover := by
+    intro T hT140 hTendpoint
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hTendpoint
+    refine ⟨S.toRangeSlab, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
+/-- Endpoint count-range slabs supply count-range/main slabs on the
+finer Taylor-sharpened finite interval
+`[140, 3690757800925204/10000000000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757800925204_10000000000000.toCountRange
+    (C :
+      BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757800925204_10000000000000) :
+    BacklundFiniteBandCountRangeMainCertificate140_3690757800925204_10000000000000 where
   slabs := C.slabs.map
     (fun S : BacklundEndpointCountRangeMainSlabCertificate => S.toRangeSlab)
   cover := by
@@ -23886,6 +26076,33 @@ noncomputable def
       linarith
     exact C.cover T hT140 hT370
 
+/-- Fixed-pi exp endpoint count-range slabs on `[140, 370]` restrict to
+the improved decimal finite interval `[140, 369075049/1000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_369075049_1000000.of_140_370
+    (C : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370) :
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_369075049_1000000 where
+  slabs := C.slabs
+  cover := by
+    intro T hT140 hTendpoint
+    have hT370 : T ≤ (370 : ℝ) := by
+      linarith
+    exact C.cover T hT140 hT370
+
+/-- Fixed-pi exp endpoint count-range slabs on `[140, 370]` restrict to
+the finer Taylor-sharpened finite interval
+`[140, 3690757800925204/10000000000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000.of_140_370
+    (C : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370) :
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000 where
+  slabs := C.slabs
+  cover := by
+    intro T hT140 hTendpoint
+    have hT370 : T ≤ (370 : ℝ) := by
+      linarith
+    exact C.cover T hT140 hT370
+
 /-- Fixed-pi exp endpoint count-range slabs supply endpoint
 count-range/main slabs on the near-exact finite interval
 `[140, 3690757803/10000000]`. -/
@@ -23894,6 +26111,48 @@ noncomputable def
     (C :
       BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757803_10000000) :
     BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000 where
+  slabs := C.slabs.map
+    (fun S : BacklundEndpointCountRangeFixedPiExpSlabCertificate =>
+      S.toEndpointRangeSlab)
+  cover := by
+    intro T hT140 hTendpoint
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hTendpoint
+    refine ⟨S.toEndpointRangeSlab, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨S, hS, rfl⟩
+    · change S.A ≤ T
+      exact hA
+    · change T ≤ S.B
+      exact hB
+
+/-- Fixed-pi exp endpoint count-range slabs supply endpoint
+count-range/main slabs on the improved decimal finite interval
+`[140, 369075049/1000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_369075049_1000000.toEndpointCountRange
+    (C :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_369075049_1000000) :
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_369075049_1000000 where
+  slabs := C.slabs.map
+    (fun S : BacklundEndpointCountRangeFixedPiExpSlabCertificate =>
+      S.toEndpointRangeSlab)
+  cover := by
+    intro T hT140 hTendpoint
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hTendpoint
+    refine ⟨S.toEndpointRangeSlab, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨S, hS, rfl⟩
+    · change S.A ≤ T
+      exact hA
+    · change T ≤ S.B
+      exact hB
+
+/-- Fixed-pi exp endpoint count-range slabs supply endpoint
+count-range/main slabs on the finer Taylor-sharpened finite interval
+`[140, 3690757800925204/10000000000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000.toEndpointCountRange
+    (C :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000) :
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757800925204_10000000000000 where
   slabs := C.slabs.map
     (fun S : BacklundEndpointCountRangeFixedPiExpSlabCertificate =>
       S.toEndpointRangeSlab)
@@ -24095,6 +26354,31 @@ noncomputable def
     have hT0 : 0 ≤ T := by linarith
     exact S.uniform25167 hT0 hA hB
 
+/-- Count-range/main-term slabs supply the narrow uniform finite-band
+certificate on `[140, 369075049/1000000]`. -/
+noncomputable def
+    BacklundFiniteBandCountRangeMainCertificate140_369075049_1000000.toUniform25167Check
+    (C : BacklundFiniteBandCountRangeMainCertificate140_369075049_1000000) :
+    BacklundFiniteBandUniform25167Check140_369075049_1000000 where
+  bound := by
+    intro T hT140 hTendpoint
+    obtain ⟨S, _hS, hA, hB⟩ := C.cover T hT140 hTendpoint
+    have hT0 : 0 ≤ T := by linarith
+    exact S.uniform25167 hT0 hA hB
+
+/-- Count-range/main-term slabs supply the narrow uniform finite-band
+certificate on `[140, 3690757800925204/10000000000000]`. -/
+noncomputable def
+    BacklundFiniteBandCountRangeMainCertificate140_3690757800925204_10000000000000.toUniform25167Check
+    (C :
+      BacklundFiniteBandCountRangeMainCertificate140_3690757800925204_10000000000000) :
+    BacklundFiniteBandUniform25167Check140_3690757800925204_10000000000000 where
+  bound := by
+    intro T hT140 hTendpoint
+    obtain ⟨S, _hS, hA, hB⟩ := C.cover T hT140 hTendpoint
+    have hT0 : 0 ≤ T := by linarith
+    exact S.uniform25167 hT0 hA hB
+
 /-- Endpoint count-range slabs supply the narrow uniform finite-band
 certificate on `[140, 374]`. -/
 noncomputable def
@@ -24120,6 +26404,24 @@ noncomputable def
     BacklundFiniteBandUniform25167Check140_3690757803_10000000 :=
   C.toCountRange.toUniform25167Check
 
+/-- Endpoint count-range slabs supply the narrow uniform finite-band
+certificate on `[140, 369075049/1000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_369075049_1000000.toUniform25167Check
+    (C :
+      BacklundFiniteBandEndpointCountRangeMainCertificate140_369075049_1000000) :
+    BacklundFiniteBandUniform25167Check140_369075049_1000000 :=
+  C.toCountRange.toUniform25167Check
+
+/-- Endpoint count-range slabs supply the narrow uniform finite-band
+certificate on `[140, 3690757800925204/10000000000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757800925204_10000000000000.toUniform25167Check
+    (C :
+      BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757800925204_10000000000000) :
+    BacklundFiniteBandUniform25167Check140_3690757800925204_10000000000000 :=
+  C.toCountRange.toUniform25167Check
+
 /-- Fixed-pi exp endpoint count-range slabs supply the narrow uniform
 finite-band certificate on `[140, 370]`. -/
 noncomputable def
@@ -24135,6 +26437,24 @@ noncomputable def
     (C :
       BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757803_10000000) :
     BacklundFiniteBandUniform25167Check140_3690757803_10000000 :=
+  C.toEndpointCountRange.toUniform25167Check
+
+/-- Fixed-pi exp endpoint count-range slabs supply the narrow uniform
+finite-band certificate on `[140, 369075049/1000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_369075049_1000000.toUniform25167Check
+    (C :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_369075049_1000000) :
+    BacklundFiniteBandUniform25167Check140_369075049_1000000 :=
+  C.toEndpointCountRange.toUniform25167Check
+
+/-- Fixed-pi exp endpoint count-range slabs supply the narrow uniform
+finite-band certificate on `[140, 3690757800925204/10000000000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000.toUniform25167Check
+    (C :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000) :
+    BacklundFiniteBandUniform25167Check140_3690757800925204_10000000000000 :=
   C.toEndpointCountRange.toUniform25167Check
 
 /-- Turing-count/range-main slabs supply the narrow uniform finite-band
@@ -24566,6 +26886,34 @@ noncomputable def
     exact le_trans (H.bound T hT0 hTbig)
       (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
 
+/-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
+finer Taylor-sharpened concrete finite-band target
+`[140, 3690757800925204/10000000000000]`. -/
+noncomputable def
+    BacklundFiniteBandCheck140_3690757800925204_10000000000000.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_3690757800925204_10000000000000 where
+  bound := by
+    intro T hT140 hTendpoint
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) := by linarith
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
+/-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
+improved decimal concrete finite-band target
+`[140, 369075049/1000000]`. -/
+noncomputable def
+    BacklundFiniteBandCheck140_369075049_1000000.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_369075049_1000000 where
+  bound := by
+    intro T hT140 hTendpoint
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) := by linarith
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
 /-- A concrete `[140, 369075781/1000000]` finite-band check restricts
 to the near-exact concrete band `[140, 3690757803/10000000]`. -/
 noncomputable def
@@ -24613,6 +26961,19 @@ noncomputable def
   bound := by
     intro T hT140 hTendpoint
     have hTprev : T ≤ (369075780093 / 1000000000 : ℝ) := by
+      linarith
+    exact H.bound T hT140 hTprev
+
+/-- A concrete `[140, 3690757800926/10000000000]` finite-band check
+restricts to the finer Taylor-sharpened concrete band
+`[140, 3690757800925204/10000000000000]`. -/
+noncomputable def
+    BacklundFiniteBandCheck140_3690757800925204_10000000000000.of_140_3690757800926_10000000000
+    (H : BacklundFiniteBandCheck140_3690757800926_10000000000) :
+    BacklundFiniteBandCheck140_3690757800925204_10000000000000 where
+  bound := by
+    intro T hT140 hTendpoint
+    have hTprev : T ≤ (3690757800926 / 10000000000 : ℝ) := by
       linarith
     exact H.bound T hT140 hTprev
 
@@ -24792,6 +27153,33 @@ noncomputable def
         (le_of_lt backlund_exp_475481_80440_lt_3690757800926_10000000000)
     exact H.bound T hT140 hTendpoint
 
+/-- A concrete `[140, 3690757800925204/10000000000000]` finite-band
+check supplies the symbolic `[140, exp (475481/80440)]` check. -/
+noncomputable def
+    BacklundFiniteBandCheck140_exp475481_80440.of_140_3690757800925204_10000000000000
+    (H : BacklundFiniteBandCheck140_3690757800925204_10000000000000) :
+    BacklundFiniteBandCheck140_exp475481_80440 where
+  bound := by
+    intro T hT140 hTexp
+    have hTendpoint : T ≤ (3690757800925204 / 10000000000000 : ℝ) :=
+      le_trans hTexp
+        (le_of_lt
+          backlund_exp_475481_80440_lt_3690757800925204_10000000000000)
+    exact H.bound T hT140 hTendpoint
+
+/-- A concrete `[140, 369075049/1000000]` finite-band check supplies
+the symbolic `[140, exp (5911/1000)]` check. -/
+noncomputable def
+    BacklundFiniteBandCheck140_exp5911_1000.of_140_369075049_1000000
+    (H : BacklundFiniteBandCheck140_369075049_1000000) :
+    BacklundFiniteBandCheck140_exp5911_1000 where
+  bound := by
+    intro T hT140 hTexp
+    have hTendpoint : T ≤ (369075049 / 1000000 : ℝ) :=
+      le_trans hTexp
+        (le_of_lt backlund_exp_5911_1000_lt_369075049_1000000)
+    exact H.bound T hT140 hTendpoint
+
 /-- Final headline theorem from the global Platt--Trudgian argument
 estimate and the concrete finite-band check `[140, 374]`. -/
 theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite374
@@ -24954,6 +27342,36 @@ theorem
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the finer Taylor-sharpened concrete finite-band check
+`[140, 3690757800925204/10000000000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite3690757800925204_10000000000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCheck140_3690757800925204_10000000000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_475481_80440Tail_and_finite
+    (PlattTrudgianBacklundCut475481_80440TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp475481_80440.of_140_3690757800925204_10000000000000
+      Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the improved decimal concrete finite-band check
+`[140, 369075049/1000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369075049_1000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandCheck140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_5911_1000Tail_and_finite
+    (PlattTrudgianBacklundCut5911_1000TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp5911_1000.of_140_369075049_1000000
+      Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
 estimate and the broad Platt/Trudgian finite-range source, routed through
 the concrete finite endpoint `[140, 374]`. -/
 theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete
@@ -25109,6 +27527,37 @@ theorem
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the broad Platt/Trudgian finite-range source, routed
+through the finer Taylor-sharpened concrete finite endpoint
+`[140, 3690757800925204/10000000000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete3690757800925204_10000000000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite3690757800925204_10000000000000
+    Hglobal
+    (BacklundFiniteBandCheck140_3690757800925204_10000000000000.of_plattTrudgian
+      Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the broad Platt/Trudgian finite-range source, routed
+through the improved decimal concrete finite endpoint
+`[140, 369075049/1000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete369075049_1000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369075049_1000000
+    Hglobal
+    (BacklundFiniteBandCheck140_369075049_1000000.of_plattTrudgian Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
 estimate and the narrow uniform finite-band computational certificate
 `|S(T)| ≤ 2.5167` on `[140, 374]`. -/
 theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite374
@@ -25261,6 +27710,37 @@ theorem
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the finer Taylor-sharpened narrow uniform finite-band
+computational certificate `|S(T)| ≤ 2.5167` on
+`[140, 3690757800925204/10000000000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite3690757800925204_10000000000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandUniform25167Check140_3690757800925204_10000000000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite3690757800925204_10000000000000
+    Hglobal
+    Hfinite.toFiniteBandCheck
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the improved decimal narrow uniform finite-band
+computational certificate `|S(T)| ≤ 2.5167` on
+`[140, 369075049/1000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite369075049_1000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandUniform25167Check140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369075049_1000000
+    Hglobal
+    Hfinite.toFiniteBandCheck
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
 estimate and auto-positivity fixed-pi exp theorem-target slabs on the
 sharpened interval `[140, 373]`. -/
 theorem
@@ -25397,6 +27877,36 @@ theorem
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
+estimate and count-range/main-term slabs on the finer Taylor-sharpened
+finite interval `[140, 3690757800925204/10000000000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countRangeMainFinite3690757800925204_10000000000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandCountRangeMainCertificate140_3690757800925204_10000000000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite3690757800925204_10000000000000
+    Hglobal
+    Hfinite.toUniform25167Check
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and count-range/main-term slabs on the improved decimal finite
+interval `[140, 369075049/1000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countRangeMainFinite369075049_1000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandCountRangeMainCertificate140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite369075049_1000000
+    Hglobal
+    Hfinite.toUniform25167Check
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
 estimate and endpoint count-range/main-term slabs on `[140, 374]`. -/
 theorem
     concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite374
@@ -25438,6 +27948,51 @@ theorem
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
+estimate and endpoint count-range/main-term slabs on the improved
+decimal finite interval `[140, 369075049/1000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite369075049_1000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeMainCertificate140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countRangeMainFinite369075049_1000000
+    Hglobal
+    Hfinite.toCountRange
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the concrete two-unit endpoint-count grid facts on
+`[140, 369075049/1000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2EndpointCountFacts369075049
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundGrid2EndpointCountFacts140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite369075049_1000000
+    Hglobal
+    Hfinite.toEndpointCountRangeMainCertificate
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and endpoint count-range/main-term slabs on the finer
+Taylor-sharpened finite interval
+`[140, 3690757800925204/10000000000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite3690757800925204_10000000000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757800925204_10000000000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_countRangeMainFinite3690757800925204_10000000000000
+    Hglobal
+    Hfinite.toCountRange
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
 estimate and fixed-pi exp endpoint count-range slabs on `[140, 370]`.
 This removes raw endpoint `smoothMainTerm` inequalities from the exact
 finite route. -/
@@ -25451,6 +28006,220 @@ theorem
     Hglobal
     Hfinite.toEndpointCountRange
     hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and fixed-pi exp endpoint count-range slabs on the improved
+decimal finite interval `[140, 369075049/1000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite369075049_1000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite369075049_1000000
+    Hglobal
+    Hfinite.toEndpointCountRange
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and fixed-pi exp endpoint count-range slabs on the finer
+Taylor-sharpened finite interval
+`[140, 3690757800925204/10000000000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite3690757800925204_10000000000000
+    Hglobal
+    Hfinite.toEndpointCountRange
+    hT
+
+/-- The exact current source pair (global Platt--Trudgian plus fixed-pi
+exp endpoint count-range finite rows on `[140, 370]`) supplies the
+good-height Backlund argument bound. -/
+noncomputable def
+    BacklundGoodHeightArgumentBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370) :
+    BacklundGoodHeightArgumentBound :=
+  BacklundGoodHeightArgumentBound.of_plattTrudgian_475481_80440Tail_and_finite
+    (PlattTrudgianBacklundCut475481_80440TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp475481_80440.of_140_3690757803_10000000
+      ((BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757803_10000000.of_140_370
+        Hfinite).toUniform25167Check.toFiniteBandCheck))
+
+/-- The improved decimal source pair (global Platt--Trudgian plus
+fixed-pi exp endpoint count-range finite rows on
+`[140, 369075049/1000000]`) supplies the good-height Backlund argument
+bound through the `exp (5911/1000)` tail split. -/
+noncomputable def
+    BacklundGoodHeightArgumentBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite369075049_1000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_369075049_1000000) :
+    BacklundGoodHeightArgumentBound :=
+  BacklundGoodHeightArgumentBound.of_plattTrudgian_5911_1000Tail_and_finite
+    (PlattTrudgianBacklundCut5911_1000TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp5911_1000.of_140_369075049_1000000
+      Hfinite.toUniform25167Check.toFiniteBandCheck)
+
+/-- The `[140, 370]` fixed-pi exp endpoint-count source also supplies
+the improved decimal good-height argument bound by restricting the
+finite rows to `[140, 369075049/1000000]`. -/
+noncomputable def
+    BacklundGoodHeightArgumentBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370_improvedDecimal
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370) :
+    BacklundGoodHeightArgumentBound :=
+  BacklundGoodHeightArgumentBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite369075049_1000000
+    Hglobal
+    (BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_369075049_1000000.of_140_370
+      Hfinite)
+
+/-- The sharper source pair (global Platt--Trudgian plus fixed-pi exp
+endpoint count-range finite rows on the Taylor endpoint
+`[140, 3690757800925204/10000000000000]`) supplies the good-height
+Backlund argument bound. -/
+noncomputable def
+    BacklundGoodHeightArgumentBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000) :
+    BacklundGoodHeightArgumentBound :=
+  BacklundGoodHeightArgumentBound.of_plattTrudgian_475481_80440Tail_and_finite
+    (PlattTrudgianBacklundCut475481_80440TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp475481_80440.of_140_3690757800925204_10000000000000
+      Hfinite.toUniform25167Check.toFiniteBandCheck)
+
+/-- The exact current source pair supplies the final two-input
+Backlund/Turing package, with the extension side discharged
+unconditionally inside `rh.lean`. -/
+noncomputable def
+    FinalBacklundTuringTwoInputs.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370) :
+    FinalBacklundTuringTwoInputs :=
+  (BacklundGoodHeightArgumentBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    Hglobal Hfinite).toFinalBacklundTuringTwoInputs
+
+/-- The sharper source pair supplies the final two-input Backlund/Turing
+package. -/
+noncomputable def
+    FinalBacklundTuringTwoInputs.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000) :
+    FinalBacklundTuringTwoInputs :=
+  (BacklundGoodHeightArgumentBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000
+    Hglobal Hfinite).toFinalBacklundTuringTwoInputs
+
+/-- The exact current source pair supplies the master analytic
+Backlund/Turing package. -/
+noncomputable def
+    FinalBacklundTuringAnalyticInputs.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370) :
+    FinalBacklundTuringAnalyticInputs :=
+  (FinalBacklundTuringTwoInputs.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    Hglobal Hfinite).toFinalInputs
+
+/-- The sharper source pair supplies the master analytic Backlund/Turing
+package. -/
+noncomputable def
+    FinalBacklundTuringAnalyticInputs.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000) :
+    FinalBacklundTuringAnalyticInputs :=
+  (FinalBacklundTuringTwoInputs.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000
+    Hglobal Hfinite).toFinalInputs
+
+/-- The exact current source pair supplies the generic proved
+Backlund/Turing package for `concreteS`. -/
+noncomputable def
+    ProvenBacklundTuringBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370) :
+    ProvenBacklundTuringBound :=
+  (FinalBacklundTuringAnalyticInputs.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    Hglobal Hfinite).toProvenBacklundTuringBound
+
+/-- The sharper source pair supplies the generic proved
+Backlund/Turing package for `concreteS`. -/
+noncomputable def
+    ProvenBacklundTuringBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000) :
+    ProvenBacklundTuringBound :=
+  (FinalBacklundTuringAnalyticInputs.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000
+    Hglobal Hfinite).toProvenBacklundTuringBound
+
+/-- The exact current source pair supplies `HalfLogPlusHalfSBound`. -/
+noncomputable def
+    HalfLogPlusHalfSBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370) :
+    HalfLogPlusHalfSBound :=
+  (ProvenBacklundTuringBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    Hglobal Hfinite).toHalfLogPlusHalfSBound
+
+/-- The sharper source pair supplies `HalfLogPlusHalfSBound`. -/
+noncomputable def
+    HalfLogPlusHalfSBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000) :
+    HalfLogPlusHalfSBound :=
+  (ProvenBacklundTuringBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000
+    Hglobal Hfinite).toHalfLogPlusHalfSBound
+
+/-- The exact current source pair supplies `TuringStyleSBound`, with
+`C = D = 1/2`. -/
+noncomputable def
+    TuringStyleSBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370) :
+    TuringStyleSBound :=
+  (ProvenBacklundTuringBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    Hglobal Hfinite).toTuringStyleSBound
+
+/-- The sharper source pair supplies `TuringStyleSBound`, with
+`C = D = 1/2`. -/
+noncomputable def
+    TuringStyleSBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000) :
+    TuringStyleSBound :=
+  (ProvenBacklundTuringBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000
+    Hglobal Hfinite).toTuringStyleSBound
+
+/-- Direct headline theorem through the exact current source pair and
+the generic proved Backlund/Turing package. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370_viaProven
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  (ProvenBacklundTuringBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+    Hglobal Hfinite).halfLogPlusHalf T hT
+
+/-- Direct headline theorem through the sharper source pair and the
+generic proved Backlund/Turing package. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000_viaProven
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757800925204_10000000000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  (ProvenBacklundTuringBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757800925204_10000000000000
+    Hglobal Hfinite).halfLogPlusHalf T hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
 estimate and fixed-pi exp endpoint count-range slabs on the near-exact
@@ -26409,6 +29178,23 @@ noncomputable def
   I.toNatInputs370.toGoodHeightArgumentBound
 
 /-- The endpoint-count auto-rectangle package supplies the final
+two-input Backlund/Turing package, with extension discharged
+unconditionally. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoRectEndpointCountInputs370.toFinalBacklundTuringTwoInputs
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoRectEndpointCountInputs370) :
+    FinalBacklundTuringTwoInputs :=
+  I.toGoodHeightArgumentBound.toFinalBacklundTuringTwoInputs
+
+/-- The endpoint-count auto-rectangle package supplies the master
+analytic Backlund/Turing package. -/
+noncomputable def
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoRectEndpointCountInputs370.toFinalBacklundTuringAnalyticInputs
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoRectEndpointCountInputs370) :
+    FinalBacklundTuringAnalyticInputs :=
+  I.toGoodHeightArgumentBound.toFinalBacklundTuringAnalyticInputs
+
+/-- The endpoint-count auto-rectangle package supplies the final
 classical proof inputs at `ClassicalBacklundTuringProof.K`. -/
 noncomputable def
     ClassicalBacklundTuringPlattAPFixedPiExpAutoRectEndpointCountInputs370.toProofInputs
@@ -26451,6 +29237,34 @@ noncomputable def
     TuringStyleSBound :=
   I.toProvenBacklundTuringBound.toTuringStyleSBound
 
+/-- Sharp concrete `S` envelope from the endpoint-count auto-rectangle
+finite-table source package on `[140, 370]`. -/
+theorem
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoRectEndpointCountInputs370.concreteS_halfLogPlusHalfEnvelope
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoRectEndpointCountInputs370)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.toProvenBacklundTuringBound.halfLogPlusHalfEnvelope
+    hT140 hy hregime hTu
+
+/-- High-side concrete `S` envelope from the endpoint-count
+auto-rectangle finite-table source package on `[140, 370]`. -/
+theorem
+    ClassicalBacklundTuringPlattAPFixedPiExpAutoRectEndpointCountInputs370.concreteS_highLogEnvelope
+    (I : ClassicalBacklundTuringPlattAPFixedPiExpAutoRectEndpointCountInputs370)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 49 / 20 :=
+  I.toProvenBacklundTuringBound.highLogEnvelope
+    hT140 hy hregime hTu
+
 /-- Endpoint count-range/main-term source package for the exact current
 finite interval `[140, 370]`.  Its finite rows need endpoint cumulative
 zero counts and endpoint main-term bounds, with no per-row rectangle
@@ -26470,6 +29284,23 @@ noncomputable def
     (BacklundFiniteBandCheck140_exp475481_80440.of_140_3690757803_10000000
       ((BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000.of_140_370
         I.finite370).toUniform25167Check.toFiniteBandCheck))
+
+/-- The endpoint count-range package supplies the final two-input
+Backlund/Turing package, with the extension side discharged by the
+proved right-local-constancy path. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeInputs370.toFinalBacklundTuringTwoInputs
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeInputs370) :
+    FinalBacklundTuringTwoInputs :=
+  I.toGoodHeightArgumentBound.toFinalBacklundTuringTwoInputs
+
+/-- The endpoint count-range package supplies the master analytic
+Backlund/Turing package. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeInputs370.toFinalBacklundTuringAnalyticInputs
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeInputs370) :
+    FinalBacklundTuringAnalyticInputs :=
+  I.toGoodHeightArgumentBound.toFinalBacklundTuringAnalyticInputs
 
 /-- The endpoint count-range package supplies the final classical proof
 inputs at `ClassicalBacklundTuringProof.K`. -/
@@ -26550,6 +29381,22 @@ noncomputable def
   I.toEndpointCountRangeInputs370.toGoodHeightArgumentBound
 
 /-- The fixed-pi exp endpoint count-range package supplies the final
+two-input Backlund/Turing package. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toFinalBacklundTuringTwoInputs
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
+    FinalBacklundTuringTwoInputs :=
+  I.toGoodHeightArgumentBound.toFinalBacklundTuringTwoInputs
+
+/-- The fixed-pi exp endpoint count-range package supplies the master
+analytic Backlund/Turing package. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toFinalBacklundTuringAnalyticInputs
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
+    FinalBacklundTuringAnalyticInputs :=
+  I.toGoodHeightArgumentBound.toFinalBacklundTuringAnalyticInputs
+
+/-- The fixed-pi exp endpoint count-range package supplies the final
 classical proof inputs at `ClassicalBacklundTuringProof.K`. -/
 noncomputable def
     ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toProofInputs
@@ -26592,6 +29439,101 @@ noncomputable def
     (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
     TuringStyleSBound :=
   I.toProvenBacklundTuringBound.toTuringStyleSBound
+
+/-- The fixed-pi exp endpoint count-range package also supplies the
+improved decimal good-height argument bound, using the
+`exp (5911/1000)` tail and restricting the finite rows to
+`[140, 369075049/1000000]`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toGoodHeightArgumentBoundImprovedDecimal
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
+    BacklundGoodHeightArgumentBound :=
+  BacklundGoodHeightArgumentBound.of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370_improvedDecimal
+    I.global I.finite370
+
+/-- The fixed-pi exp endpoint count-range package supplies final
+classical proof inputs through the improved decimal split. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toProofInputsImprovedDecimal
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
+    ClassicalBacklundTuringProofInputs :=
+  ClassicalBacklundTuringProofInputs.of_goodHeightArgumentBound
+    I.toGoodHeightArgumentBoundImprovedDecimal
+
+/-- Final Backlund--Turing headline theorem from the fixed-pi exp
+endpoint count-range source package on `[140, 370]`, routed through the
+improved decimal tail split and finite endpoint
+`[140, 369075049/1000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattEndpointCountRangeFixedPiExpBacklundTuringInputs370_improvedDecimal
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite369075049_1000000
+    I.global
+    (BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_369075049_1000000.of_140_370
+      I.finite370)
+    hT
+
+/-- The fixed-pi exp endpoint count-range package supplies the generic
+proved Backlund/Turing package through the improved decimal route. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toProvenBacklundTuringBoundImprovedDecimal
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
+    ProvenBacklundTuringBound where
+  S := concreteS
+  lower := 140
+  lower_ge_two_pi := by
+    have h_pi_lt : Real.pi < 4 := Real.pi_lt_four
+    linarith
+  halfLogPlusHalf := by
+    intro u hu
+    exact
+      concreteS_halfLogPlusHalf_of_plattEndpointCountRangeFixedPiExpBacklundTuringInputs370_improvedDecimal
+        I hu
+
+/-- The improved decimal route supplies `HalfLogPlusHalfSBound`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toHalfLogPlusHalfSBoundImprovedDecimal
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
+    HalfLogPlusHalfSBound :=
+  I.toProvenBacklundTuringBoundImprovedDecimal.toHalfLogPlusHalfSBound
+
+/-- The improved decimal route supplies `TuringStyleSBound`, with
+`C = D = 1/2`. -/
+noncomputable def
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.toTuringStyleSBoundImprovedDecimal
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370) :
+    TuringStyleSBound :=
+  I.toProvenBacklundTuringBoundImprovedDecimal.toTuringStyleSBound
+
+/-- Sharp concrete `S` envelope from the lean fixed-pi exp endpoint
+count-range source package on `[140, 370]`. -/
+theorem
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.concreteS_halfLogPlusHalfEnvelope
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.toProvenBacklundTuringBound.halfLogPlusHalfEnvelope
+    hT140 hy hregime hTu
+
+/-- High-side concrete `S` envelope from the lean fixed-pi exp endpoint
+count-range source package on `[140, 370]`. -/
+theorem
+    ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370.concreteS_highLogEnvelope
+    (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 49 / 20 :=
+  I.toProvenBacklundTuringBound.highLogEnvelope
+    hT140 hy hregime hTu
 
 /-- Endpoint-count auto-rectangle theorem-target inputs also supply the
 lean fixed-pi exp endpoint count-range source package.  The global
@@ -26687,6 +29629,34 @@ noncomputable def
     TuringStyleSBound :=
   I.toProvenBacklundTuringBoundNearEndpoint.toTuringStyleSBound
 
+/-- Sharp concrete `S` envelope from the near-endpoint Platt
+global/finite-range route. -/
+theorem
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.concreteS_halfLogPlusHalfEnvelopeNearEndpoint
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.toProvenBacklundTuringBoundNearEndpoint.halfLogPlusHalfEnvelope
+    hT140 hy hregime hTu
+
+/-- High-side concrete `S` envelope from the near-endpoint Platt
+global/finite-range route. -/
+theorem
+    ClassicalBacklundTuringPlattGlobalFiniteRangeInputs.concreteS_highLogEnvelopeNearEndpoint
+    (I : ClassicalBacklundTuringPlattGlobalFiniteRangeInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 49 / 20 :=
+  I.toProvenBacklundTuringBoundNearEndpoint.highLogEnvelope
+    hT140 hy hregime hTu
+
 /-- The two sourced ingredients for the concrete Backlund/Turing `S(T)`
 bound:
 
@@ -26716,6 +29686,24 @@ noncomputable def ClassicalBacklundTuringVerifiedInputs.toGoodHeightArgumentBoun
   BacklundGoodHeightArgumentBound.of_trudgian_large_and_finiteBand
     I.largeHeight
     (BacklundFiniteBandCheck140_1200.of_plattTrudgian I.finiteRange)
+
+/-- The sourced verified inputs supply the final two-input
+Backlund/Turing package.  The extension side is constructed
+unconditionally from the right-local-constancy theorem already proved in
+this file. -/
+noncomputable def ClassicalBacklundTuringVerifiedInputs.toFinalBacklundTuringTwoInputs
+    (I : ClassicalBacklundTuringVerifiedInputs) :
+    FinalBacklundTuringTwoInputs :=
+  I.toGoodHeightArgumentBound.toFinalBacklundTuringTwoInputs
+
+/-- The sourced verified inputs supply the master analytic
+Backlund/Turing package, with the RvM closure and extension side already
+discharged. -/
+noncomputable def
+    ClassicalBacklundTuringVerifiedInputs.toFinalBacklundTuringAnalyticInputs
+    (I : ClassicalBacklundTuringVerifiedInputs) :
+    FinalBacklundTuringAnalyticInputs :=
+  I.toGoodHeightArgumentBound.toFinalBacklundTuringAnalyticInputs
 
 /-- The sourced verified inputs supply the final classical proof inputs at
 `ClassicalBacklundTuringProof.K`. -/
@@ -26909,6 +29897,21 @@ theorem ClassicalBacklundTuringVerifiedInputs.toTuringStyleSBound_bound
           + I.toTuringStyleSBound.D :=
   I.toTuringStyleSBound.bound u hu
 
+/-- Sharp concrete `S` Backlund/Turing envelope supplied by the
+classical proof inputs.  This is the direct `concreteS` envelope shape
+matching later kernel estimates, with the geometric arguments retained
+for API compatibility. -/
+theorem ClassicalBacklundTuringProofInputs.concreteS_halfLogPlusHalfEnvelope
+    (I : ClassicalBacklundTuringProofInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.toProvenBacklundTuringBound.halfLogPlusHalfEnvelope
+    hT140 hy hregime hTu
+
 /-- High-side concrete `S` log envelope supplied by the classical
 Backlund/Turing proof inputs. -/
 theorem ClassicalBacklundTuringProofInputs.concreteS_highLogEnvelope
@@ -26919,11 +29922,21 @@ theorem ClassicalBacklundTuringProofInputs.concreteS_highLogEnvelope
     (_hregime : 2 * (1 + |z.re| + z.im) ≤ T)
     (hTu : T ≤ u) :
     |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 49 / 20 := by
-  have hu140 : (140 : ℝ) ≤ u := le_trans hT140 hTu
-  have hhalf :
-      |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
-    concreteS_halfLogPlusHalf_of_classicalProofInputs I hu140
-  linarith
+  exact I.toProvenBacklundTuringBound.highLogEnvelope hT140
+    ‹0 < z.im› ‹2 * (1 + |z.re| + z.im) ≤ T› hTu
+
+/-- Sharp concrete `S` Backlund/Turing envelope supplied by the sourced
+Backlund/Turing inputs. -/
+theorem ClassicalBacklundTuringVerifiedInputs.concreteS_halfLogPlusHalfEnvelope
+    (I : ClassicalBacklundTuringVerifiedInputs)
+    {z : ℂ} {T u : ℝ}
+    (hT140 : (140 : ℝ) ≤ T)
+    (hy : 0 < z.im)
+    (hregime : 2 * (1 + |z.re| + z.im) ≤ T)
+    (hTu : T ≤ u) :
+    |concreteS u| ≤ (1 / 2 : ℝ) * Real.log u + 1 / 2 :=
+  I.toProofInputs.concreteS_halfLogPlusHalfEnvelope hT140
+    hy hregime hTu
 
 /-- High-side concrete `S` log envelope supplied by the sourced
 Backlund/Turing inputs.  This is the direct `concreteS` analogue of the
@@ -57675,6 +60688,160 @@ theorem LowFiniteStieltjesResidualSourceAFZ.of_ibpSource_and_Z_ge_15
     (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
     H
 
+/-- 🌟🌟🌟 **PROVED — finite zero-sum Stieltjes formula from the low IBP
+source and first-zero start condition.**
+
+This is a direct internal Stieltjes reduction: the analytic low-side
+IBP source gives the residual model, and the definition of
+`lowFiniteStieltjesResidualModel` expands that residual into the
+boundary plus kernel integral appearing in the complex zero-sum formula. -/
+theorem LowFiniteZeroSumStieltjesFormulaAFZ.of_ibpSource_and_startsAfter
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (Hstarts : DzeroStartsAfter Dzero 14)
+    (H : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    LowFiniteZeroSumStieltjesFormulaAFZ Dzero T0 ZC := by
+  refine ⟨?_⟩
+  intro z hz hne _Hgap
+  have h := H.ibp z hz hne (LowFirstZeroGapNoAtoms.of_startsAfter Hstarts)
+  rw [h]
+  unfold lowFiniteStieltjesResidualModel
+  ring
+
+/-- 🌟🌟🌟 **PROVED — finite zero-sum Stieltjes formula from the low IBP
+source and the standard `Z ≥ 15` first-zero-gap hypothesis.** -/
+theorem LowFiniteZeroSumStieltjesFormulaAFZ.of_ibpSource_and_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (H : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    LowFiniteZeroSumStieltjesFormulaAFZ Dzero T0 ZC :=
+  LowFiniteZeroSumStieltjesFormulaAFZ.of_ibpSource_and_startsAfter
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+    H
+
+/-- 🌟🌟🌟 **PROVED — low IBP-imaginary identity directly from the low
+finite IBP source.**
+
+The finite IBP source gives `ZC = cloud + smooth + residual`; cancelling
+the model terms leaves exactly the residual model, whose definition is
+the boundary-plus-kernel integral on `[11, 14]`. -/
+theorem LowFiniteStieltjesIBPIdentityAFZ.of_ibpSource_and_startsAfter
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (Hstarts : DzeroStartsAfter Dzero 14)
+    (H : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    LowFiniteStieltjesIBPIdentityAFZ Dzero T0 ZC := by
+  refine ⟨?_⟩
+  intro z hz hne _Hgap
+  have h := H.ibp z hz hne (LowFirstZeroGapNoAtoms.of_startsAfter Hstarts)
+  rw [h]
+  have hcancel :
+      cloudModel zeros100ceil z
+          + zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+          + lowFiniteStieltjesResidualModel Dzero T0 z
+          - (cloudModel zeros100ceil z
+              + zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z)
+        = lowFiniteStieltjesResidualModel Dzero T0 z := by
+    ring
+  rw [hcancel]
+  unfold lowFiniteStieltjesResidualModel
+  rfl
+
+/-- 🌟🌟🌟 **PROVED — low IBP-imaginary identity directly from the low
+finite IBP source and standard `Z ≥ 15`.** -/
+theorem LowFiniteStieltjesIBPIdentityAFZ.of_ibpSource_and_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (H : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    LowFiniteStieltjesIBPIdentityAFZ Dzero T0 ZC :=
+  LowFiniteStieltjesIBPIdentityAFZ.of_ibpSource_and_startsAfter
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+    H
+
+/-- 🌟🌟🌟 **PROVED — low Stieltjes contribution identity directly from
+the low finite IBP source.**
+
+This is the low-side internal calculation without passing through the
+four-term zero-sum wrapper: the IBP source identifies `ZC` as
+cloud + smooth + residual, and the residual's imaginary part is exactly
+`lowFiniteFluctuationContribution`. -/
+theorem LowFiniteStieltjesContributionIdentityAFZ.of_ibpSource_and_startsAfter
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (Hstarts : DzeroStartsAfter Dzero 14)
+    (H : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    LowFiniteStieltjesContributionIdentityAFZ Dzero T0 ZC := by
+  exact LowFiniteStieltjesContributionIdentityAFZ.of_ibp
+    (LowFiniteStieltjesIBPIdentityAFZ.of_ibpSource_and_startsAfter
+      Hstarts H)
+
+/-- 🌟🌟🌟 **PROVED — low Stieltjes contribution identity directly from
+the low finite IBP source and standard `Z ≥ 15`.** -/
+theorem LowFiniteStieltjesContributionIdentityAFZ.of_ibpSource_and_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (H : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    LowFiniteStieltjesContributionIdentityAFZ Dzero T0 ZC :=
+  LowFiniteStieltjesContributionIdentityAFZ.of_ibpSource_and_startsAfter
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+    H
+
+/-- 🌟🌟🌟 **PROVED — low Stieltjes equality directly from the low IBP
+source and first-zero start condition.**
+
+This routes the genuine low explicit-formula source through the newly
+proved complex zero-sum formula rather than through the longer residual
+decomposition chain. -/
+theorem StieltjesLowEqualityAFZ.of_lowIBPSource_and_startsAfter
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (Hstarts : DzeroStartsAfter Dzero 14)
+    (H : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    StieltjesLowEqualityAFZ Dzero T0 ZC :=
+  StieltjesLowEqualityAFZ.of_lowFiniteFormula
+    (LowFiniteStieltjesFormulaOnFirstZeroGapAFZ.of_contributionIdentity
+      (LowFiniteStieltjesContributionIdentityAFZ.of_ibpSource_and_startsAfter
+        Hstarts H))
+
+/-- 🌟🌟🌟 **PROVED — low Stieltjes equality directly from the low IBP
+source and the standard `Z ≥ 15` first-zero-gap hypothesis.** -/
+theorem StieltjesLowEqualityAFZ.of_lowIBPSource_and_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (H : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    StieltjesLowEqualityAFZ Dzero T0 ZC :=
+  StieltjesLowEqualityAFZ.of_lowIBPSource_and_startsAfter
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+    H
+
+/-- 🌟🌟🌟 **PROVED — low first-zero AFZ formula directly from the low
+IBP source and first-zero start condition.** -/
+theorem LowFiniteStieltjesFormulaOnFirstZeroGapAFZ.of_lowIBPSource_and_startsAfter
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (Hstarts : DzeroStartsAfter Dzero 14)
+    (H : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    LowFiniteStieltjesFormulaOnFirstZeroGapAFZ Dzero T0 ZC :=
+  LowFiniteStieltjesFormulaOnFirstZeroGapAFZ.of_contributionIdentity
+    (LowFiniteStieltjesContributionIdentityAFZ.of_ibpSource_and_startsAfter
+      Hstarts H)
+
+/-- 🌟🌟🌟 **PROVED — low first-zero AFZ formula directly from the low
+IBP source and the standard `Z ≥ 15` first-zero-gap hypothesis.** -/
+theorem LowFiniteStieltjesFormulaOnFirstZeroGapAFZ.of_lowIBPSource_and_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC : ℂ → ℂ}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (H : LowFiniteStieltjesIBPSourceAFZ Dzero T0 ZC) :
+    LowFiniteStieltjesFormulaOnFirstZeroGapAFZ Dzero T0 ZC :=
+  LowFiniteStieltjesFormulaOnFirstZeroGapAFZ.of_lowIBPSource_and_startsAfter
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+    H
+
 -- =====================================================================
 -- §CCCLX. Low tail zero contribution + zero-contribution split
 -- =====================================================================
@@ -57814,13 +60981,9 @@ theorem StieltjesLowEqualityAFZ.of_lowZeroContributionSplit
     (Hsplit : LowZeroContributionSplitAFZ Dzero T0 ZC)
     (Hstarts : DzeroStartsAfter Dzero 14) :
     StieltjesLowEqualityAFZ Dzero T0 ZC :=
-  StieltjesLowEqualityAFZ.of_lowZeroSumFormula
-    (LowFiniteZeroSumStieltjesFormulaAFZ.of_decomposition
-      (LowZeroContributionDecompositionAFZ.of_residualEquality
-        (LowStieltjesResidualEqualityAFZ.of_residualSource
-          (LowFiniteStieltjesResidualSourceAFZ.of_ibpSource_and_startsAfter
-            Hstarts
-            (LowFiniteStieltjesIBPSourceAFZ.of_zeroSplit Hsplit)))))
+  StieltjesLowEqualityAFZ.of_lowIBPSource_and_startsAfter
+    Hstarts
+    (LowFiniteStieltjesIBPSourceAFZ.of_zeroSplit Hsplit)
 
 /-- 🌟🌟🌟 **PROVED — low capstone directly from low zero split plus the
 standard `Z ≥ 15` first-zero-gap hypothesis.** -/
@@ -59088,6 +62251,34 @@ theorem ConcreteEntireXiZeroSystem.nonzero_no_collision
   rw [hsi]
   exact H.zeroLoc_is_zero i
 
+/-- **Subtype of nonzero zeros of `entireRiemannXi`.** This is the
+canonical zero-index type for the genuine entire ξ Hadamard theorem. -/
+def EntireXiNonzeroZeroIndex : Type :=
+  { s : ℂ // entireRiemannXi s = 0 ∧ s ≠ 0 }
+
+/-- The canonical entire-ξ nonzero-zero location map. -/
+def entireXiNonzeroZeroLoc (i : EntireXiNonzeroZeroIndex) : ℂ := i.1
+
+/-- 🌟🌟🌟 **PROVED — canonical concrete entire-ξ zero system.**
+
+This discharges the `ConcreteEntireXiZeroSystem` Hadamard input by
+choosing the index type to be the subtype of nonzero zeros itself.
+Unlike the raw `completedXiFunction` subtype, there is no zero-at-origin
+hazard here because the `ConcreteEntireXiZeroSystem` surjectivity field
+is already restricted to nonzero zeros. -/
+def concreteEntireXiZeroSystem :
+    ConcreteEntireXiZeroSystem EntireXiNonzeroZeroIndex :=
+  { zeroLoc := entireXiNonzeroZeroLoc
+    zeroLoc_ne_zero := by
+      intro i
+      exact i.2.2
+    zeroLoc_is_zero := by
+      intro i
+      exact i.2.1
+    all_nonzero_entireXi_zeros := by
+      intro s hs hs0
+      exact ⟨⟨s, ⟨hs, hs0⟩⟩, rfl⟩ }
+
 -- =====================================================================
 -- §CCCLXXXVI. Entire-ξ inverse-square zero distribution
 -- =====================================================================
@@ -59138,6 +62329,43 @@ theorem EntireXiHadamardPrefactor.exp_affine
   · intro s _hs
     exact mul_ne_zero hC (Complex.exp_ne_zero _)
 
+/-- 🌟🌟🌟 **PROVED — the exponential-affine Hadamard prefactor has
+constant log-derivative `b`.**
+
+This is the concrete Hadamard prefactor calculation used in the
+classical genus-one product: the nonzero scalar `C` contributes no
+log-derivative, and `exp (a + b·s)` contributes exactly `b`. -/
+theorem logDerivativeResponse_exp_affine_prefactor
+    {C a b s : ℂ} (hC : C ≠ 0) :
+    logDerivativeResponse
+        (fun w : ℂ => C * Complex.exp (a + b * w)) s = b := by
+  unfold logDerivativeResponse
+  have h_aff : DifferentiableAt ℂ (fun w : ℂ => a + b * w) s :=
+    (differentiableAt_const _).add
+      ((differentiableAt_const _).mul differentiableAt_id')
+  have h_deriv_aff :
+      deriv (fun w : ℂ => a + b * w) s = b := by
+    rw [deriv_add (differentiableAt_const _)
+          ((differentiableAt_const _).mul differentiableAt_id'),
+        deriv_const,
+        deriv_mul (differentiableAt_const _) differentiableAt_id',
+        deriv_const, deriv_id'']
+    ring
+  have h_deriv_exp :
+      deriv (fun w : ℂ => Complex.exp (a + b * w)) s
+        = Complex.exp (a + b * s) * b := by
+    rw [deriv_cexp h_aff, h_deriv_aff]
+  have h_deriv :
+      deriv (fun w : ℂ => C * Complex.exp (a + b * w)) s
+        = C * (Complex.exp (a + b * s) * b) := by
+    rw [deriv_mul (differentiableAt_const _) h_aff.cexp,
+        deriv_const, h_deriv_exp]
+    ring
+  rw [h_deriv]
+  have h_exp : Complex.exp (a + b * s) ≠ 0 := Complex.exp_ne_zero _
+  field_simp [hC, h_exp]
+  ring
+
 /-- 📦 **`EntireXiHadamardFactorization`** — classical Hadamard
 product identity for entire ξ. -/
 structure EntireXiHadamardFactorization
@@ -59147,6 +62375,103 @@ structure EntireXiHadamardFactorization
     ∀ s : ℂ,
       entireRiemannXi s
         = prefactor s * infiniteHadamardProduct HZ.zeroLoc s
+
+/-- 📦 **`HadamardProductLUCOnEntireXiNonzeroData`** — Hadamard product
+LUC/log-derivative data stated directly on the natural AFZ region
+`{s | entireRiemannXi s ≠ 0}`.
+
+This is the entire-ξ analogue of `HadamardProductLUCOnXiNonzeroData`.
+It removes the separate `region` cover obligation from the publication
+Hadamard theorem: the region is definitionally the nonzero locus of the
+entire function. -/
+structure HadamardProductLUCOnEntireXiNonzeroData
+    {ι : Type*} (zeroLoc : ι → ℂ) where
+  locally_uniform_product :
+    TendstoLocallyUniformlyOn
+      (fun F : Finset ι => fun s : ℂ =>
+        indexedFiniteHadamardProduct zeroLoc F s)
+      (infiniteHadamardProduct zeroLoc)
+      Filter.atTop
+      {s : ℂ | entireRiemannXi s ≠ 0}
+  infinite_differentiable_at :
+    ∀ s : ℂ,
+      entireRiemannXi s ≠ 0 →
+      DifferentiableAt ℂ (infiniteHadamardProduct zeroLoc) s
+  logDeriv_eq_tsum :
+    ∀ s : ℂ,
+      entireRiemannXi s ≠ 0 →
+      logDerivativeResponse (infiniteHadamardProduct zeroLoc) s
+        = hadamardRegularizedLogDerivSeries zeroLoc s
+
+/-- 🌟🌟 **PROVED — convert entire-ξ-nonzero-region LUC data to the
+general `HadamardProductLUCLogDerivData` interface.** -/
+noncomputable def HadamardProductLUCOnEntireXiNonzeroData.toLUCLogDerivData
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardProductLUCOnEntireXiNonzeroData zeroLoc) :
+    HadamardProductLUCLogDerivData zeroLoc :=
+  { region := {s : ℂ | entireRiemannXi s ≠ 0}
+    locally_uniform_product := H.locally_uniform_product
+    infinite_differentiable_at := by
+      intro s hs
+      exact H.infinite_differentiable_at s hs
+    logDeriv_eq_tsum := by
+      intro s hs
+      exact H.logDeriv_eq_tsum s hs }
+
+/-- 🌟🌟 **PROVED — restrict arbitrary-region LUC/log-derivative data to
+the nonzero locus of `entireRiemannXi`.** -/
+noncomputable def HadamardProductLUCOnEntireXiNonzeroData.of_LUCLogDerivData
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (Hluc : HadamardProductLUCLogDerivData zeroLoc)
+    (h_region :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hluc.region) :
+    HadamardProductLUCOnEntireXiNonzeroData zeroLoc :=
+  { locally_uniform_product :=
+      Hluc.locally_uniform_product.mono (by
+        intro s hs
+        exact h_region s hs)
+    infinite_differentiable_at := by
+      intro s hs
+      exact Hluc.infinite_differentiable_at s (h_region s hs)
+    logDeriv_eq_tsum := by
+      intro s hs
+      exact Hluc.logDeriv_eq_tsum s (h_region s hs) }
+
+/-- 🌟🌟🌟 **PROVED — entire-ξ nonzero-locus LUC data gives the Hadamard
+log-derivative limit data.**
+
+This is an internal Hadamard reduction, not a new front door: the
+no-collision hypothesis required by `HadamardLogDerivLimitData` is
+discharged from the concrete entire-ξ zero system. If
+`entireRiemannXi s ≠ 0`, then `s` cannot be one of the indexed zeros. -/
+noncomputable def HadamardProductLUCOnEntireXiNonzeroData.toLogDerivLimitData
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnEntireXiNonzeroData HZ.zeroLoc) :
+    HadamardLogDerivLimitData HZ.zeroLoc :=
+  HadamardLogDerivLimitData.of_productLUC_and_invSq
+    Hluc.toLUCLogDerivData
+    Hdist.toHadamardZeroInvSqSummability
+    (by
+      intro s hs
+      exact HZ.nonzero_no_collision hs)
+
+/-- 🌟🌟🌟 **PROVED — arbitrary-region LUC data covering the entire-ξ
+nonzero locus gives the Hadamard log-derivative limit data.**
+
+The arbitrary region is first restricted to `{s | entireRiemannXi s ≠ 0}`;
+the concrete zero system then supplies the no-collision condition. -/
+noncomputable def HadamardProductLUCLogDerivData.toEntireXiLogDerivLimitData
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hluc.region) :
+    HadamardLogDerivLimitData HZ.zeroLoc :=
+  (HadamardProductLUCOnEntireXiNonzeroData.of_LUCLogDerivData
+    Hluc h_region).toLogDerivLimitData HZ Hdist
 
 -- =====================================================================
 -- §CCCLXXXVIII. Entire-ξ Hadamard theorem bundle + AFZ source
@@ -59166,6 +62491,202 @@ structure EntireXiClassicalHadamardTheorem (ι : Type) : Type where
   prefactorData :
     EntireXiHadamardPrefactor prefactor
 
+/-- 🌟🌟🌟 **PROVED — an entire-ξ Hadamard theorem supplies product
+multipliability.**
+
+This exposes the concrete consequence of the inverse-square zero
+distribution field: the genus-one Hadamard product over the indexed
+entire-ξ zeros is multipliable at every point. -/
+theorem EntireXiClassicalHadamardTheorem.product_multipliable
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι) :
+    ∀ s : ℂ,
+      Multipliable fun i : ι =>
+        hadamardGenus1Factor (H.zeroSystem.zeroLoc i) s :=
+  H.zeroDistribution.toHadamardZeroInvSqSummability.product_multipliable
+
+/-- 🌟🌟🌟 **PROVED — an entire-ξ Hadamard theorem supplies the lower-level
+Hadamard log-derivative limit data.**
+
+The region-cover field is used only to restrict the supplied LUC data to
+`{s | entireRiemannXi s ≠ 0}`; zero collision is then discharged from
+the zero system. -/
+noncomputable def EntireXiClassicalHadamardTheorem.toLogDerivLimitData
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι) :
+    HadamardLogDerivLimitData H.zeroSystem.zeroLoc :=
+  HadamardProductLUCLogDerivData.toEntireXiLogDerivLimitData
+    H.zeroSystem H.zeroDistribution H.luc H.region
+
+/-- 🌟🌟🌟 **PROVED — the regularized entire-ξ Hadamard zero series is
+summable away from zeros.** -/
+theorem EntireXiClassicalHadamardTheorem.regularized_summable_at_nonzero
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι)
+    {s : ℂ} (hs : entireRiemannXi s ≠ 0) :
+    Summable fun i : ι =>
+      1 / (s - H.zeroSystem.zeroLoc i) + 1 / H.zeroSystem.zeroLoc i :=
+  H.toLogDerivLimitData.regularized_summable_at s hs
+
+/-- 🌟🌟🌟 **PROVED — the infinite entire-ξ Hadamard product is
+differentiable away from zeros.** -/
+theorem EntireXiClassicalHadamardTheorem.product_differentiable_at_nonzero
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι)
+    {s : ℂ} (hs : entireRiemannXi s ≠ 0) :
+    DifferentiableAt ℂ (infiniteHadamardProduct H.zeroSystem.zeroLoc) s :=
+  H.toLogDerivLimitData.product_differentiable_at s hs
+
+/-- 🌟🌟🌟 **PROVED — the infinite Hadamard product is nonzero away from
+zeros of `entireRiemannXi`.**
+
+This extracts a genuine consequence of the Hadamard factorization:
+since the prefactor is nonzero at AFZ points, the product factor cannot
+vanish there either. -/
+theorem EntireXiClassicalHadamardTheorem.product_ne_at_nonzero
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι)
+    {s : ℂ} (hs : entireRiemannXi s ≠ 0) :
+    infiniteHadamardProduct H.zeroSystem.zeroLoc s ≠ 0 := by
+  intro hprod
+  apply hs
+  rw [H.factorization.factorization s, hprod, mul_zero]
+
+/-- 🌟🌟🌟 **PROVED — the infinite entire-ξ Hadamard product log derivative
+equals the regularized zero-sum away from zeros.** -/
+theorem EntireXiClassicalHadamardTheorem.product_logDeriv_eq_tsum_at_nonzero
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι)
+    {s : ℂ} (hs : entireRiemannXi s ≠ 0) :
+    logDerivativeResponse (infiniteHadamardProduct H.zeroSystem.zeroLoc) s
+      = hadamardRegularizedLogDerivSeries H.zeroSystem.zeroLoc s :=
+  H.toLogDerivLimitData.logDeriv_eq_tsum_at s hs
+
+/-- 🌟🌟🌟 **PROVED — publication-level entire-ξ Hadamard theorem from
+LUC data stated directly on `{s | entireRiemannXi s ≠ 0}`.**
+
+This discharges the theorem's `region` field definitionally; the
+remaining Hadamard-side content is the zero system, inverse-square
+zero distribution, nonzero-locus LUC/log-derivative interchange,
+factorization, and prefactor data. -/
+noncomputable def EntireXiClassicalHadamardTheorem.of_lucOnEntireXiNonzero
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnEntireXiNonzeroData HZ.zeroLoc)
+    (Hfact : EntireXiHadamardFactorization HZ prefactor)
+    (Hpref : EntireXiHadamardPrefactor prefactor) :
+    EntireXiClassicalHadamardTheorem ι :=
+  { zeroSystem := HZ
+    prefactor := prefactor
+    zeroDistribution := Hdist
+    luc := Hluc.toLUCLogDerivData
+    region := by
+      intro s hs
+      exact hs
+    factorization := Hfact
+    prefactorData := Hpref }
+
+/-- 🌟🌟🌟 **PROVED — publication-level entire-ξ Hadamard theorem from
+arbitrary-region LUC data whose region covers `{s | entireRiemannXi s ≠ 0}`.** -/
+noncomputable def EntireXiClassicalHadamardTheorem.of_lucLogDerivData
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : EntireXiHadamardFactorization HZ prefactor)
+    (Hpref : EntireXiHadamardPrefactor prefactor) :
+    EntireXiClassicalHadamardTheorem ι :=
+  EntireXiClassicalHadamardTheorem.of_lucOnEntireXiNonzero
+    HZ
+    prefactor
+    Hdist
+    (HadamardProductLUCOnEntireXiNonzeroData.of_LUCLogDerivData
+      Hluc h_region)
+    Hfact
+    Hpref
+
+/-- 🌟🌟🌟 **PROVED — publication-level entire-ξ Hadamard theorem using
+the canonical nonzero-zero index type.**
+
+This removes the zero-system itself from the Hadamard assumptions: the
+remaining content is inverse-square zero distribution for the canonical
+nonzero-zero subtype, LUC/log-derivative interchange on the nonzero
+locus, factorization, and prefactor data. -/
+noncomputable def EntireXiClassicalHadamardTheorem.of_canonicalZeros_lucOnEntireXiNonzero
+    (prefactor : ℂ → ℂ)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCOnEntireXiNonzeroData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (Hfact :
+      EntireXiHadamardFactorization concreteEntireXiZeroSystem prefactor)
+    (Hpref : EntireXiHadamardPrefactor prefactor) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_lucOnEntireXiNonzero
+    concreteEntireXiZeroSystem prefactor Hdist Hluc Hfact Hpref
+
+/-- 🌟🌟🌟 **PROVED — publication-level entire-ξ Hadamard theorem using
+the canonical nonzero-zero index type and arbitrary-region LUC data.** -/
+noncomputable def EntireXiClassicalHadamardTheorem.of_canonicalZeros_lucLogDerivData
+    (prefactor : ℂ → ℂ)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCLogDerivData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hluc.region)
+    (Hfact :
+      EntireXiHadamardFactorization concreteEntireXiZeroSystem prefactor)
+    (Hpref : EntireXiHadamardPrefactor prefactor) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_lucLogDerivData
+    concreteEntireXiZeroSystem prefactor Hdist Hluc h_region Hfact Hpref
+
+/-- 🌟🌟🌟 **PROVED — canonical-zero entire-ξ Hadamard theorem with an
+exponential-affine prefactor.**
+
+This discharges the prefactor differentiability/nonvanishing obligation
+from the already-proved `EntireXiHadamardPrefactor.exp_affine` lemma. -/
+noncomputable def EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucOnEntireXiNonzero
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCOnEntireXiNonzeroData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (Hfact :
+      EntireXiHadamardFactorization
+        concreteEntireXiZeroSystem
+        (fun s : ℂ => C * Complex.exp (a + b * s))) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_canonicalZeros_lucOnEntireXiNonzero
+    (fun s : ℂ => C * Complex.exp (a + b * s))
+    Hdist
+    Hluc
+    Hfact
+    (EntireXiHadamardPrefactor.exp_affine hC)
+
+/-- 🌟🌟🌟 **PROVED — canonical-zero entire-ξ Hadamard theorem with an
+exponential-affine prefactor and arbitrary-region LUC data.** -/
+noncomputable def EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucLogDerivData
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCLogDerivData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hluc.region)
+    (Hfact :
+      EntireXiHadamardFactorization
+        concreteEntireXiZeroSystem
+        (fun s : ℂ => C * Complex.exp (a + b * s))) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_canonicalZeros_lucLogDerivData
+    (fun s : ℂ => C * Complex.exp (a + b * s))
+    Hdist
+    Hluc
+    h_region
+    Hfact
+    (EntireXiHadamardPrefactor.exp_affine hC)
+
 /-- 🌟🌟🌟 **PROVED — `EntireXiLogDerivativeSourceAFZ` from the
 entire-ξ Hadamard theorem.** -/
 noncomputable def EntireXiClassicalHadamardTheorem.toLogDerivativeSourceAFZ
@@ -59179,13 +62700,12 @@ noncomputable def EntireXiClassicalHadamardTheorem.toLogDerivativeSourceAFZ
       differentiable_at := ?_
       xi_logDeriv_eq := ?_ }
   · intro s hs
-    have hs_region : s ∈ H.luc.region := H.region s hs
     have hpref_diff : DifferentiableAt ℂ H.prefactor s :=
       H.prefactorData.differentiable_at_nonzero s hs
     have hprod_diff :
         DifferentiableAt ℂ
           (infiniteHadamardProduct H.zeroSystem.zeroLoc) s :=
-      H.luc.infinite_differentiable_at s hs_region
+      H.product_differentiable_at_nonzero hs
     have hfun_eq :
         entireRiemannXi
           = fun s' => H.prefactor s'
@@ -59195,7 +62715,6 @@ noncomputable def EntireXiClassicalHadamardTheorem.toLogDerivativeSourceAFZ
     rw [hfun_eq]
     exact hpref_diff.mul hprod_diff
   · intro s hs
-    have hs_region : s ∈ H.luc.region := H.region s hs
     have hpref_ne : H.prefactor s ≠ 0 :=
       H.prefactorData.nonzero_at_nonzero s hs
     have hprod_ne :
@@ -59208,7 +62727,7 @@ noncomputable def EntireXiClassicalHadamardTheorem.toLogDerivativeSourceAFZ
     have hprod_diff :
         DifferentiableAt ℂ
           (infiniteHadamardProduct H.zeroSystem.zeroLoc) s :=
-      H.luc.infinite_differentiable_at s hs_region
+      H.product_differentiable_at_nonzero hs
     have hfun_eq :
         entireRiemannXi
           = H.prefactor * infiniteHadamardProduct H.zeroSystem.zeroLoc := by
@@ -59227,7 +62746,197 @@ noncomputable def EntireXiClassicalHadamardTheorem.toLogDerivativeSourceAFZ
           rw [← logDerivativeResponse_eq_logDeriv (f := H.prefactor),
               ← logDerivativeResponse_eq_logDeriv
                   (f := infiniteHadamardProduct H.zeroSystem.zeroLoc),
-              H.luc.logDeriv_eq_tsum s hs_region]
+              H.product_logDeriv_eq_tsum_at_nonzero hs]
+
+/-- 🌟🌟🌟 **PROVED — explicit log-derivative formula supplied by an
+entire-ξ Hadamard theorem.**
+
+This is the internal Hadamard identity itself: away from zeros, the
+log-derivative of `entireRiemannXi` is the prefactor log-derivative plus
+the regularized genus-one zero sum. -/
+theorem EntireXiClassicalHadamardTheorem.logDerivativeResponse_eq_prefactor_plus_series
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι)
+    {s : ℂ} (hs : entireRiemannXi s ≠ 0) :
+    logDerivativeResponse entireRiemannXi s
+      = logDerivativeResponse H.prefactor s
+        + hadamardRegularizedLogDerivSeries H.zeroSystem.zeroLoc s :=
+  H.toLogDerivativeSourceAFZ.xi_logDeriv_eq s hs
+
+/-- 🌟🌟🌟 **PROVED — explicit entire-ξ Hadamard log-derivative for an
+exponential-affine prefactor.**
+
+Once the classical prefactor is identified as `C·exp(a + b·s)`, the
+Hadamard source has the expected concrete form `b + Σρ (1/(s-ρ)+1/ρ)`. -/
+theorem EntireXiClassicalHadamardTheorem.logDerivativeResponse_eq_expAffine_plus_series
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    {s : ℂ} (hs : entireRiemannXi s ≠ 0) :
+    logDerivativeResponse entireRiemannXi s
+      = b + hadamardRegularizedLogDerivSeries H.zeroSystem.zeroLoc s := by
+  rw [H.logDerivativeResponse_eq_prefactor_plus_series hs]
+  rw [hpref]
+  rw [logDerivativeResponse_exp_affine_prefactor hC]
+
+/-- 🌟🌟🌟 **PROVED — entire-ξ log-derivative source with explicit
+exponential-affine prefactor contribution.**
+
+This is the Hadamard source in the classical form: for prefactor
+`C·exp(a + b·s)`, the zero contribution is no longer
+`Λ[prefactor] + zeroSum`; it is definitionally `b + zeroSum`. -/
+noncomputable def EntireXiClassicalHadamardTheorem.toExpAffineLogDerivativeSourceAFZ
+    {ι : Type} (H : EntireXiClassicalHadamardTheorem ι)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s)) :
+    EntireXiLogDerivativeSourceAFZ :=
+  { xiZeroContribution :=
+      fun s => b + hadamardRegularizedLogDerivSeries H.zeroSystem.zeroLoc s
+    differentiable_at := H.toLogDerivativeSourceAFZ.differentiable_at
+    xi_logDeriv_eq := by
+      intro s hs
+      exact H.logDerivativeResponse_eq_expAffine_plus_series hC hpref hs }
+
+/-- 🌟🌟🌟 **PROVED — direct entire-ξ log-derivative source from
+Hadamard LUC data stated on `{s | entireRiemannXi s ≠ 0}`.**
+
+This is the usable internal output of the entire-Hadamard work: from
+zero distribution, nonzero-locus LUC/log-derivative interchange,
+factorization, and prefactor data, produce the AFZ log-derivative
+source used by the Γ bridge and Stieltjes side. -/
+noncomputable def EntireXiLogDerivativeSourceAFZ.of_lucOnEntireXiNonzeroHadamard
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnEntireXiNonzeroData HZ.zeroLoc)
+    (Hfact : EntireXiHadamardFactorization HZ prefactor)
+    (Hpref : EntireXiHadamardPrefactor prefactor) :
+    EntireXiLogDerivativeSourceAFZ :=
+  (EntireXiClassicalHadamardTheorem.of_lucOnEntireXiNonzero
+    HZ prefactor Hdist Hluc Hfact Hpref).toLogDerivativeSourceAFZ
+
+/-- 🌟🌟🌟 **PROVED — direct entire-ξ log-derivative source from
+arbitrary-region LUC data covering `{s | entireRiemannXi s ≠ 0}`.** -/
+noncomputable def EntireXiLogDerivativeSourceAFZ.of_lucLogDerivDataHadamard
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : EntireXiHadamardFactorization HZ prefactor)
+    (Hpref : EntireXiHadamardPrefactor prefactor) :
+    EntireXiLogDerivativeSourceAFZ :=
+  (EntireXiClassicalHadamardTheorem.of_lucLogDerivData
+    HZ prefactor Hdist Hluc h_region Hfact Hpref).toLogDerivativeSourceAFZ
+
+/-- 🌟🌟🌟 **PROVED — direct entire-ξ log-derivative source from
+canonical-zero Hadamard data on `{s | entireRiemannXi s ≠ 0}`.** -/
+noncomputable def EntireXiLogDerivativeSourceAFZ.of_canonicalZeros_lucOnEntireXiNonzeroHadamard
+    (prefactor : ℂ → ℂ)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCOnEntireXiNonzeroData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (Hfact :
+      EntireXiHadamardFactorization concreteEntireXiZeroSystem prefactor)
+    (Hpref : EntireXiHadamardPrefactor prefactor) :
+    EntireXiLogDerivativeSourceAFZ :=
+  (EntireXiClassicalHadamardTheorem.of_canonicalZeros_lucOnEntireXiNonzero
+    prefactor Hdist Hluc Hfact Hpref).toLogDerivativeSourceAFZ
+
+/-- 🌟🌟🌟 **PROVED — direct entire-ξ log-derivative source from
+canonical-zero arbitrary-region Hadamard LUC data.** -/
+noncomputable def EntireXiLogDerivativeSourceAFZ.of_canonicalZeros_lucLogDerivDataHadamard
+    (prefactor : ℂ → ℂ)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCLogDerivData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hluc.region)
+    (Hfact :
+      EntireXiHadamardFactorization concreteEntireXiZeroSystem prefactor)
+    (Hpref : EntireXiHadamardPrefactor prefactor) :
+    EntireXiLogDerivativeSourceAFZ :=
+  (EntireXiClassicalHadamardTheorem.of_canonicalZeros_lucLogDerivData
+    prefactor Hdist Hluc h_region Hfact Hpref).toLogDerivativeSourceAFZ
+
+/-- 🌟🌟🌟 **PROVED — direct entire-ξ log-derivative source from
+canonical-zero Hadamard data with an exponential-affine prefactor.** -/
+noncomputable def EntireXiLogDerivativeSourceAFZ.of_canonicalZeros_expAffine_lucOnEntireXiNonzeroHadamard
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCOnEntireXiNonzeroData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (Hfact :
+      EntireXiHadamardFactorization
+        concreteEntireXiZeroSystem
+        (fun s : ℂ => C * Complex.exp (a + b * s))) :
+    EntireXiLogDerivativeSourceAFZ :=
+  (EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucOnEntireXiNonzero
+    hC Hdist Hluc Hfact).toExpAffineLogDerivativeSourceAFZ hC rfl
+
+/-- 🌟🌟🌟 **PROVED — direct entire-ξ log-derivative source from
+canonical-zero arbitrary-region Hadamard LUC data with an
+exponential-affine prefactor.** -/
+noncomputable def EntireXiLogDerivativeSourceAFZ.of_canonicalZeros_expAffine_lucLogDerivDataHadamard
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCLogDerivData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hluc.region)
+    (Hfact :
+      EntireXiHadamardFactorization
+        concreteEntireXiZeroSystem
+        (fun s : ℂ => C * Complex.exp (a + b * s))) :
+    EntireXiLogDerivativeSourceAFZ :=
+  (EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_lucLogDerivData
+    hC Hdist Hluc h_region Hfact).toExpAffineLogDerivativeSourceAFZ hC rfl
+
+/-- 🌟🌟 **PROVED — the canonical exp-affine nonzero-locus Hadamard
+source has the explicit zero contribution `b + Σρ`.** -/
+@[simp] theorem
+    EntireXiLogDerivativeSourceAFZ.of_canonicalZeros_expAffine_lucOnEntireXiNonzeroHadamard_xiZeroContribution
+    {C a b s : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCOnEntireXiNonzeroData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (Hfact :
+      EntireXiHadamardFactorization
+        concreteEntireXiZeroSystem
+        (fun s : ℂ => C * Complex.exp (a + b * s))) :
+    (EntireXiLogDerivativeSourceAFZ.of_canonicalZeros_expAffine_lucOnEntireXiNonzeroHadamard
+        hC Hdist Hluc Hfact).xiZeroContribution s
+      =
+    b + hadamardRegularizedLogDerivSeries
+      concreteEntireXiZeroSystem.zeroLoc s := rfl
+
+/-- 🌟🌟 **PROVED — the canonical exp-affine arbitrary-region Hadamard
+source has the explicit zero contribution `b + Σρ`.** -/
+@[simp] theorem
+    EntireXiLogDerivativeSourceAFZ.of_canonicalZeros_expAffine_lucLogDerivDataHadamard_xiZeroContribution
+    {C a b s : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (Hluc :
+      HadamardProductLUCLogDerivData
+        concreteEntireXiZeroSystem.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, entireRiemannXi s ≠ 0 → s ∈ Hluc.region)
+    (Hfact :
+      EntireXiHadamardFactorization
+        concreteEntireXiZeroSystem
+        (fun s : ℂ => C * Complex.exp (a + b * s))) :
+    (EntireXiLogDerivativeSourceAFZ.of_canonicalZeros_expAffine_lucLogDerivDataHadamard
+        hC Hdist Hluc h_region Hfact).xiZeroContribution s
+      =
+    b + hadamardRegularizedLogDerivSeries
+      concreteEntireXiZeroSystem.zeroLoc s := rfl
 
 /-- 🌟🌟🌟 **PROVED — `CompletedXiLogDerivativeSourceAFZ` from
 entire-ξ Hadamard theorem + bridge.** -/
@@ -59238,6 +62947,103 @@ noncomputable def EntireXiClassicalHadamardTheorem.toCompletedXiSourceAFZ
     CompletedXiLogDerivativeSourceAFZ :=
   CompletedXiLogDerivativeSourceAFZ.of_entireXi
     Hbridge H.toLogDerivativeSourceAFZ
+
+/-- 🌟🌟🌟 **PROVED — completed-ξ source from entire-ξ Hadamard with
+explicit exponential-affine prefactor contribution.**
+
+After Γ-cancellation is supplied by `Hbridge`, the completed-side
+zero contribution is still the concrete Hadamard expression
+`b + regularized zero sum`. -/
+noncomputable def EntireXiClassicalHadamardTheorem.toCompletedXiExpAffineSourceAFZ
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s)) :
+    CompletedXiLogDerivativeSourceAFZ :=
+  CompletedXiLogDerivativeSourceAFZ.of_entireXi
+    Hbridge
+    (H.toExpAffineLogDerivativeSourceAFZ hC hpref)
+
+/-- 🌟🌟 **PROVED — Γ-cancellation preserves the explicit exp-affine
+Hadamard zero contribution.** -/
+@[simp] theorem EntireXiClassicalHadamardTheorem.toCompletedXiExpAffineSourceAFZ_xiZeroContribution
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b s : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s)) :
+    (H.toCompletedXiExpAffineSourceAFZ Hbridge hC hpref).xiZeroContribution s
+      =
+    b + hadamardRegularizedLogDerivSeries H.zeroSystem.zeroLoc s := rfl
+
+/-- **Explicit z-plane Hadamard zero contribution for an exp-affine
+entire-ξ Hadamard product.**
+
+For `s(z) = 1/2 + I z`, this is the chain-rule pullback of the
+classical source `b + Σρ (1/(s-ρ)+1/ρ)`. -/
+noncomputable def expAffineHadamardPullbackZeroContribution
+    {ι : Type} (zeroLoc : ι → ℂ) (b : ℂ) : ℂ → ℂ :=
+  fun z =>
+    Complex.I *
+      (b + hadamardRegularizedLogDerivSeries zeroLoc
+        ((1 / 2 : ℂ) + Complex.I * z))
+
+/-- 🌟🌟🌟 **PROVED — explicit z-plane pullback zero contribution for
+an exp-affine entire-ξ Hadamard theorem.**
+
+This is the exact expression the Stieltjes side sees after the chain
+rule: `I` times the classical `b + Σρ` Hadamard log-derivative evaluated
+at `s = 1/2 + I z`. -/
+@[simp] theorem EntireXiClassicalHadamardTheorem.pullbackZeroContribution_toCompletedXiExpAffineSourceAFZ
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b z : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s)) :
+    pullbackZeroContribution
+        (H.toCompletedXiExpAffineSourceAFZ Hbridge hC hpref) z
+      =
+    expAffineHadamardPullbackZeroContribution
+      H.zeroSystem.zeroLoc b z := rfl
+
+/-- 🌟🌟🌟 **PROVED — the AFZ pullback Hadamard source from an
+exp-affine entire-ξ theorem has explicit zero contribution.** -/
+@[simp] theorem EntireXiClassicalHadamardTheorem.XiHadamardLogDerivativeSourceAFZ_of_toCompletedXiExpAffineSourceAFZ_zeroContribution
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b z : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s)) :
+    (XiHadamardLogDerivativeSourceAFZ_of_completedXi
+        (H.toCompletedXiExpAffineSourceAFZ Hbridge hC hpref)).zeroContribution z
+      =
+    expAffineHadamardPullbackZeroContribution
+      H.zeroSystem.zeroLoc b z := rfl
+
+/-- 🌟🌟🌟 **PROVED — explicit pullback-line Hadamard log-derivative
+formula for an exp-affine entire-ξ Hadamard theorem.**
+
+Away from zeros of `XiPullback`, the chain rule and Γ-cancellation turn
+the entire-ξ Hadamard product into the concrete z-plane identity
+`Λ[Ξ](z) = I * (b + Σρ (1/(s-ρ)+1/ρ))` with `s = 1/2 + I z`. -/
+theorem EntireXiClassicalHadamardTheorem.XiPullback_logDerivativeResponse_eq_expAffine_series
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b z : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (hy : 0 < z.im)
+    (hne : XiPullback z ≠ 0) :
+    logDerivativeResponse XiPullback z
+      =
+    expAffineHadamardPullbackZeroContribution
+      H.zeroSystem.zeroLoc b z := by
+  have hlog :=
+    (XiHadamardLogDerivativeSourceAFZ_of_completedXi
+      (H.toCompletedXiExpAffineSourceAFZ Hbridge hC hpref)).logDeriv_eq_zeroContribution
+        z hy hne
+  simpa using hlog
 
 -- =====================================================================
 -- §CCCLXXXIX. Source-level Path B front door
@@ -61250,12 +65056,8 @@ theorem ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource
   { mid := Hmid
     high := Hhigh
     low :=
-      StieltjesLowEqualityAFZ.of_lowZeroSumFormula
-        (LowFiniteZeroSumStieltjesFormulaAFZ.of_decomposition
-          (LowZeroContributionDecompositionAFZ.of_residualEquality
-            (LowStieltjesResidualEqualityAFZ.of_residualSource
-        (LowFiniteStieltjesResidualSourceAFZ.of_ibpSource_and_startsAfter
-                Hstarts Hlow)))) }
+      StieltjesLowEqualityAFZ.of_lowIBPSource_and_startsAfter
+        Hstarts Hlow }
 
 /-- 🌟🌟🌟 **PROVED — split Stieltjes bundle from mid/high plus the
 direct low finite Stieltjes IBP source and the standard `Z ≥ 15`
@@ -64183,9 +67985,8 @@ theorem CanonicalXiPullbackLowFirstZeroFormulaAFZ.of_lowIBPSource
     (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
     (Hlow : CanonicalXiPullbackLowIBPSourceAFZ Dzero) :
     CanonicalXiPullbackLowFirstZeroFormulaAFZ Dzero :=
-  (StieltjesLowEqualityAFZ.of_lowZeroContributionSplit_Z_ge_15
-    h_Z_ge_15
-    (LowZeroContributionSplitAFZ.of_ibpSource Hlow)).low_eq
+  LowFiniteStieltjesFormulaOnFirstZeroGapAFZ.of_lowIBPSource_and_Z_ge_15
+    h_Z_ge_15 Hlow
 
 /-- 🌟🌟 **PROVED — canonical low AFZ first-zero formula from a low
 zero-contribution split and the standard `Z ≥ 15` first-zero gap.** -/
@@ -64293,6 +68094,62 @@ theorem CanonicalXiPullbackStieltjesSourceAFZ.of_completedXiSource
     low_eq :=
       CanonicalXiPullbackLowFirstZeroFormulaAFZ.of_completedXiSource
         Hsrc H.low_eq }
+
+/-- 🌟🌟🌟 **PROVED — direct canonical low IBP source from any completed-ξ
+source-level low IBP source.**
+
+This is the reverse direction of
+`LowFiniteStieltjesIBPSourceAFZ.of_canonicalXiPullback`: the finite
+Stieltjes IBP identity is independent of the particular completed-ξ
+source, because all completed-ξ pullback zero contributions agree with
+the direct pullback log derivative away from zeros. -/
+theorem CanonicalXiPullbackLowIBPSourceAFZ.of_completedXiSource
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ}
+    (Hsrc : CompletedXiLogDerivativeSourceAFZ)
+    (H : LowFiniteStieltjesIBPSourceAFZ
+      Dzero T0 (pullbackZeroContribution Hsrc)) :
+    LowFiniteStieltjesIBPSourceAFZ
+      Dzero T0 canonicalXiPullbackZeroContribution :=
+  ⟨by
+    intro z hz hne Hno
+    rw [← pullbackZeroContribution_eq_canonicalXiPullbackZeroContribution
+      Hsrc hne]
+    exact H.ibp z hz hne Hno⟩
+
+/-- 🌟🌟🌟 **PROVED — direct canonical low zero split from any completed-ξ
+source-level low zero split.** -/
+theorem CanonicalXiPullbackLowZeroSplitAFZ.of_completedXiSource
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ}
+    (Hsrc : CompletedXiLogDerivativeSourceAFZ)
+    (H : LowZeroContributionSplitAFZ
+      Dzero T0 (pullbackZeroContribution Hsrc)) :
+    LowZeroContributionSplitAFZ
+      Dzero T0 canonicalXiPullbackZeroContribution :=
+  ⟨by
+    intro z hz hne Hno
+    rw [← pullbackZeroContribution_eq_canonicalXiPullbackZeroContribution
+      Hsrc hne]
+    exact H.split z hz hne Hno⟩
+
+/-- 🌟🌟🌟 **PROVED — direct canonical atomic low cloud/tail split from any
+completed-ξ source-level atomic low cloud/tail split.** -/
+theorem CanonicalXiPullbackLowCloudTailSplitAFZ.of_completedXiSource
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {finiteCloud tail : ℂ → ℂ}
+    (Hsrc : CompletedXiLogDerivativeSourceAFZ)
+    (H : LowCloudTailSplitAFZ
+      Dzero T0 (pullbackZeroContribution Hsrc) finiteCloud tail) :
+    LowCloudTailSplitAFZ
+      Dzero T0 canonicalXiPullbackZeroContribution finiteCloud tail :=
+  { cloud_exact := H.cloud_exact
+    tail_exact := H.tail_exact
+    split := by
+      intro z hz hne Hno
+      rw [← pullbackZeroContribution_eq_canonicalXiPullbackZeroContribution
+        Hsrc hne]
+      exact H.split z hz hne Hno }
 
 /-- 🌟🌟🌟 **PROVED — completed-ξ source-level AFZ mid/high equality from
 the direct canonical AFZ mid/high equality.**
@@ -64438,6 +68295,92 @@ theorem CanonicalPathBLowCloudTailSplitAFZ_of_canonicalXiPullback
       Dzero 10 canonicalPathBZeroContribution finiteCloud tail :=
   LowCloudTailSplitAFZ.of_canonicalXiPullback
     canonicalCompletedXiLogDerivativeSourceAFZ H
+
+/-- 🌟🌟🌟 **PROVED — direct canonical low IBP source from the source-level
+canonical Path B low IBP source.** -/
+theorem CanonicalXiPullbackLowIBPSourceAFZ.of_canonicalPathB
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (H : LowFiniteStieltjesIBPSourceAFZ
+      Dzero 10 canonicalPathBZeroContribution) :
+    CanonicalXiPullbackLowIBPSourceAFZ Dzero :=
+  CanonicalXiPullbackLowIBPSourceAFZ.of_completedXiSource
+    canonicalCompletedXiLogDerivativeSourceAFZ H
+
+/-- 🌟🌟🌟 **PROVED — direct canonical low zero split from the source-level
+canonical Path B low zero split.** -/
+theorem CanonicalXiPullbackLowZeroSplitAFZ.of_canonicalPathB
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (H : LowZeroContributionSplitAFZ
+      Dzero 10 canonicalPathBZeroContribution) :
+    CanonicalXiPullbackLowZeroSplitAFZ Dzero :=
+  CanonicalXiPullbackLowZeroSplitAFZ.of_completedXiSource
+    canonicalCompletedXiLogDerivativeSourceAFZ H
+
+/-- 🌟🌟🌟 **PROVED — direct canonical atomic low cloud/tail split from the
+source-level canonical Path B atomic low cloud/tail split.** -/
+theorem CanonicalXiPullbackLowCloudTailSplitAFZ.of_canonicalPathB
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {finiteCloud tail : ℂ → ℂ}
+    (H : LowCloudTailSplitAFZ
+      Dzero 10 canonicalPathBZeroContribution finiteCloud tail) :
+    CanonicalXiPullbackLowCloudTailSplitAFZ Dzero finiteCloud tail :=
+  CanonicalXiPullbackLowCloudTailSplitAFZ.of_completedXiSource
+    canonicalCompletedXiLogDerivativeSourceAFZ H
+
+/-- 🌟🌟 **PROVED — source-level and direct canonical low IBP sources are
+equivalent.** -/
+theorem canonicalPathBLowIBPSourceAFZ_iff_canonicalXiPullbackLowIBPSourceAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} :
+    LowFiniteStieltjesIBPSourceAFZ
+      Dzero 10 canonicalPathBZeroContribution
+      ↔ CanonicalXiPullbackLowIBPSourceAFZ Dzero :=
+  ⟨CanonicalXiPullbackLowIBPSourceAFZ.of_canonicalPathB,
+    CanonicalPathBLowIBPSourceAFZ_of_canonicalXiPullback⟩
+
+/-- 🌟🌟 **PROVED — source-level and direct canonical low zero splits are
+equivalent.** -/
+theorem canonicalPathBLowZeroSplitAFZ_iff_canonicalXiPullbackLowZeroSplitAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} :
+    LowZeroContributionSplitAFZ
+      Dzero 10 canonicalPathBZeroContribution
+      ↔ CanonicalXiPullbackLowZeroSplitAFZ Dzero :=
+  ⟨CanonicalXiPullbackLowZeroSplitAFZ.of_canonicalPathB,
+    CanonicalPathBLowZeroSplitAFZ_of_canonicalXiPullback⟩
+
+/-- 🌟🌟 **PROVED — source-level and direct canonical atomic low cloud/tail
+splits are equivalent.** -/
+theorem canonicalPathBLowCloudTailSplitAFZ_iff_canonicalXiPullbackLowCloudTailSplitAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {finiteCloud tail : ℂ → ℂ} :
+    LowCloudTailSplitAFZ
+      Dzero 10 canonicalPathBZeroContribution finiteCloud tail
+      ↔ CanonicalXiPullbackLowCloudTailSplitAFZ Dzero finiteCloud tail :=
+  ⟨CanonicalXiPullbackLowCloudTailSplitAFZ.of_canonicalPathB,
+    CanonicalPathBLowCloudTailSplitAFZ_of_canonicalXiPullback⟩
+
+/-- 🌟🌟 **PROVED — source-level and direct canonical mid/high AFZ
+Stieltjes equalities are equivalent.** -/
+theorem canonicalPathBMidHighStieltjesEqualityAFZ_iff_canonicalXiPullbackMidHighStieltjesEqualityAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} :
+    StieltjesMidHighTailEqualityAFZ
+      Dzero 10 canonicalPathBZeroContribution
+      ↔ CanonicalXiPullbackMidHighStieltjesEqualityAFZ Dzero :=
+  ⟨CanonicalXiPullbackMidHighStieltjesEqualityAFZ.of_completedXiSource
+      canonicalCompletedXiLogDerivativeSourceAFZ,
+    StieltjesMidHighTailEqualityAFZ.of_canonicalXiPullback
+      canonicalCompletedXiLogDerivativeSourceAFZ⟩
+
+/-- 🌟🌟 **PROVED — source-level and direct canonical low first-zero AFZ
+formulas are equivalent.** -/
+theorem canonicalPathBLowFirstZeroFormulaAFZ_iff_canonicalXiPullbackLowFirstZeroFormulaAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} :
+    LowFiniteStieltjesFormulaOnFirstZeroGapAFZ
+      Dzero 10 canonicalPathBZeroContribution
+      ↔ CanonicalXiPullbackLowFirstZeroFormulaAFZ Dzero :=
+  ⟨CanonicalXiPullbackLowFirstZeroFormulaAFZ.of_completedXiSource
+      canonicalCompletedXiLogDerivativeSourceAFZ,
+    LowFiniteStieltjesFormulaOnFirstZeroGapAFZ.of_canonicalXiPullback
+      canonicalCompletedXiLogDerivativeSourceAFZ⟩
 
 /-- 🌟🌟 **PROVED — the source-level and direct canonical AFZ Stieltjes
 sources are equivalent.** -/
@@ -67058,6 +71001,132 @@ theorem XiPullbackAntiHerglotzTarget_of_pathBDirectFull_entireXiSource_stieltjes
   (PathBDirectFullInputBundleAFZ.of_entireXiSource_envelopes
     Dzero h_Z_ge_15 Hsrc Hst hTuring hHighLog).to_target
 
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B DIRECT FULL CAPSTONE (`{ξ ≠ 0}` Hadamard LUC
+data + AFZ Stieltjes source, bundled Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_pathBDirectFull_lucOnXiNonzeroHadamard_stieltjesAFZ_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnXiNonzeroData HZ.zeroLoc)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiLogDerivativeSourceAFZ.of_lucOnXiNonzeroHadamard
+            HZ prefactor Hdist Hluc Hfact Hpref)))
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  (PathBDirectFullInputBundleAFZ.of_lucOnXiNonzeroHadamard
+    Dzero h_Z_ge_15 HZ prefactor Hdist Hluc Hfact Hpref Hst
+    Hturing).to_target
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B DIRECT FULL CAPSTONE (`{ξ ≠ 0}` Hadamard LUC
+data + AFZ Stieltjes source, raw Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_pathBDirectFull_lucOnXiNonzeroHadamard_stieltjesAFZ_turingEnvelopes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCOnXiNonzeroData HZ.zeroLoc)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiLogDerivativeSourceAFZ.of_lucOnXiNonzeroHadamard
+            HZ prefactor Hdist Hluc Hfact Hpref)))
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  (PathBDirectFullInputBundleAFZ.of_lucOnXiNonzeroHadamard_envelopes
+    Dzero h_Z_ge_15 HZ prefactor Hdist Hluc Hfact Hpref Hst
+    hTuring hHighLog).to_target
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B DIRECT FULL CAPSTONE (arbitrary-region Hadamard
+LUC data + AFZ Stieltjes source, bundled Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_pathBDirectFull_lucLogDerivDataHadamard_stieltjesAFZ_turingBundle
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiLogDerivativeSourceAFZ.of_lucLogDerivDataHadamard
+            HZ prefactor Hdist Hluc h_region Hfact Hpref)))
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    XiPullbackAntiHerglotzTarget :=
+  (PathBDirectFullInputBundleAFZ.of_lucLogDerivDataHadamard
+    Dzero h_Z_ge_15 HZ prefactor Hdist Hluc h_region Hfact Hpref Hst
+    Hturing).to_target
+
+/-- 🌟🌟🌟🌟🌟🌟 **PATH B DIRECT FULL CAPSTONE (arbitrary-region Hadamard
+LUC data + AFZ Stieltjes source, raw Turing envelopes).** -/
+theorem XiPullbackAntiHerglotzTarget_of_pathBDirectFull_lucLogDerivDataHadamard_stieltjesAFZ_turingEnvelopes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (HZ : ConcreteCompletedXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : CompletedXiZeroInvSqDistribution HZ)
+    (Hluc : HadamardProductLUCLogDerivData HZ.zeroLoc)
+    (h_region :
+      ∀ s : ℂ, completedXiFunction s ≠ 0 → s ∈ Hluc.region)
+    (Hfact : ConcreteCompletedXiHadamardFactorization HZ prefactor)
+    (Hpref : ConcreteCompletedXiHadamardPrefactor prefactor)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          (CompletedXiLogDerivativeSourceAFZ.of_lucLogDerivDataHadamard
+            HZ prefactor Hdist Hluc h_region Hfact Hpref)))
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    XiPullbackAntiHerglotzTarget :=
+  (PathBDirectFullInputBundleAFZ.of_lucLogDerivDataHadamard_envelopes
+    Dzero h_Z_ge_15 HZ prefactor Hdist Hluc h_region Hfact Hpref Hst
+    hTuring hHighLog).to_target
+
 /-- 🌟🌟🌟 **PROVED — lower a source-level full input bundle to the direct
 AFZ full input bundle.** -/
 noncomputable def PathBSourceFullInputBundle.to_directFull
@@ -67085,6 +71154,180 @@ noncomputable def PathBFullInputBundle.to_directFull
     (H : PathBFullInputBundle Dzero ι) :
     PathBDirectFullInputBundleAFZ Dzero :=
   H.to_sourceFull.to_directFull
+
+/-- 🌟🌟🌟 **PROVED — named constructor lowering a source-level full input
+bundle into the direct AFZ full input bundle.** -/
+noncomputable def PathBDirectFullInputBundleAFZ.of_sourceFullInputBundle
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    (H : PathBSourceFullInputBundle Dzero) :
+    PathBDirectFullInputBundleAFZ Dzero :=
+  H.to_directFull
+
+/-- 🌟🌟🌟 **PROVED — named constructor lowering a publication-level full
+input bundle into the direct AFZ full input bundle.** -/
+noncomputable def PathBDirectFullInputBundleAFZ.of_fullInputBundle
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {ι : Type}
+    (H : PathBFullInputBundle Dzero ι) :
+    PathBDirectFullInputBundleAFZ Dzero :=
+  H.to_directFull
+
+/-- 🌟🌟🌟 **PROVED — direct full bundle from the genuine entire-ξ
+Hadamard theorem, publication-level Stieltjes explicit-formula inputs,
+and bundled Turing envelopes.** -/
+noncomputable def PathBDirectFullInputBundleAFZ.of_entireHadamard_classicalStieltjes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    {finiteCloud tail : ℂ → ℂ}
+    (Hst :
+      ClassicalStieltjesExplicitFormulaInputs
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)
+        finiteCloud tail)
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    PathBDirectFullInputBundleAFZ Dzero :=
+  PathBDirectFullInputBundleAFZ.of_fullInputBundle
+    (PathBFullInputBundle.of_classicalStieltjes
+      Dzero h_Z_ge_15 Hhad Hst Hturing)
+
+/-- 🌟🌟🌟 **PROVED — direct full bundle from the genuine entire-ξ
+Hadamard theorem, canonical split Stieltjes inputs, and bundled Turing
+envelopes.** -/
+noncomputable def PathBDirectFullInputBundleAFZ.of_entireHadamard_stieltjesInputs
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hst :
+      ClassicalPathBStieltjesInputsAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    PathBDirectFullInputBundleAFZ Dzero :=
+  PathBDirectFullInputBundleAFZ.of_fullInputBundle
+    (PathBFullInputBundle.of_stieltjesInputs
+      Dzero h_Z_ge_15 Hhad Hst Hturing)
+
+/-- 🌟🌟🌟 **PROVED — direct full bundle from the genuine entire-ξ
+Hadamard theorem, the unified AFZ Stieltjes equality source, and bundled
+Turing envelopes.** -/
+noncomputable def PathBDirectFullInputBundleAFZ.of_entireHadamard_stieltjesEqualitySourceAFZ
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (Hturing : PathBTuringEnvelopeInputs Dzero) :
+    PathBDirectFullInputBundleAFZ Dzero :=
+  PathBDirectFullInputBundleAFZ.of_fullInputBundle
+    (PathBFullInputBundle.of_stieltjesEqualitySourceAFZ
+      Dzero h_Z_ge_15 Hhad Hst Hturing)
+
+/-- 🌟🌟🌟 **PROVED — direct full bundle from the genuine entire-ξ
+Hadamard theorem, publication-level Stieltjes explicit-formula inputs,
+and raw Turing envelopes.** -/
+noncomputable def PathBDirectFullInputBundleAFZ.of_entireHadamard_classicalStieltjes_envelopes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    {finiteCloud tail : ℂ → ℂ}
+    (Hst :
+      ClassicalStieltjesExplicitFormulaInputs
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical)
+        finiteCloud tail)
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    PathBDirectFullInputBundleAFZ Dzero :=
+  PathBDirectFullInputBundleAFZ.of_entireHadamard_classicalStieltjes
+    Dzero h_Z_ge_15 Hhad Hst
+    (PathBTuringEnvelopeInputs.of_envelopes Dzero hTuring hHighLog)
+
+/-- 🌟🌟🌟 **PROVED — direct full bundle from the genuine entire-ξ
+Hadamard theorem, canonical split Stieltjes inputs, and raw Turing
+envelopes.** -/
+noncomputable def PathBDirectFullInputBundleAFZ.of_entireHadamard_stieltjesInputs_envelopes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hst :
+      ClassicalPathBStieltjesInputsAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    PathBDirectFullInputBundleAFZ Dzero :=
+  PathBDirectFullInputBundleAFZ.of_entireHadamard_stieltjesInputs
+    Dzero h_Z_ge_15 Hhad Hst
+    (PathBTuringEnvelopeInputs.of_envelopes Dzero hTuring hHighLog)
+
+/-- 🌟🌟🌟 **PROVED — direct full bundle from the genuine entire-ξ
+Hadamard theorem, the unified AFZ Stieltjes equality source, and raw
+Turing envelopes.** -/
+noncomputable def PathBDirectFullInputBundleAFZ.of_entireHadamard_stieltjesEqualitySourceAFZ_envelopes
+    (Dzero : Phase1IBP.OrderedFluctuationMeasureData)
+    {ι : Type}
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i)
+    (Hhad : EntireXiClassicalHadamardTheorem ι)
+    (Hst :
+      XiZeroContributionStieltjesEqualitySourceAFZ
+        Dzero 10
+        (pullbackZeroContribution
+          Hhad.toCompletedXiSourceAFZ_canonical))
+    (hTuring :
+      ∀ {z : ℂ} {T u : ℝ},
+        10 ≤ T → T ≤ 140 → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (slabCD T).1 * Real.log u + (slabCD T).2)
+    (hHighLog :
+      ∀ {z : ℂ} {T u : ℝ},
+        140 ≤ T → 0 < z.im →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        T ≤ u →
+        |Phase1IBP.finiteFluctuationPrimitive Dzero 10 u|
+          ≤ (1 / 2 : ℝ) * Real.log u + (49 / 20 : ℝ)) :
+    PathBDirectFullInputBundleAFZ Dzero :=
+  PathBDirectFullInputBundleAFZ.of_entireHadamard_stieltjesEqualitySourceAFZ
+    Dzero h_Z_ge_15 Hhad Hst
+    (PathBTuringEnvelopeInputs.of_envelopes Dzero hTuring hHighLog)
 
 /-- 🌟🌟🌟🌟🌟 **PATH B SOURCE ONE-BUNDLE CAPSTONE through the direct AFZ
 route.** -/
