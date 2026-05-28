@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-74,476 lines and roughly 3,860 top-level declarations. It contains no
+76,253 lines and roughly 3,931 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -1650,15 +1650,39 @@ the three obligation lines, with concrete handoff targets in each case.
   into row-local certificate obligations:
   `BacklundGrid2EndpointCountRow`,
   `BacklundGrid2EndpointCountRowFacts`,
+  `BacklundGrid2EndpointCountEqualities`,
+  `BacklundGrid2EndpointSmoothFacts`,
+  `BacklundGrid2EndpointSmoothExpFacts`,
+  `BacklundGrid2EndpointSmoothExpFacts.toSmoothFacts`,
+  `BacklundGrid2EndpointCountRowFacts.ofSeparated`,
   `BacklundGrid2EndpointCountRow.toEndpointCountRangeMainSlab`,
   `backlundGrid2EndpointCount140_369075049_1000000`,
   `backlundGrid2EndpointRow140_369075049_1000000`,
   `backlundGrid2EndpointRows140_369075049_1000000`,
   `backlundGrid2EndpointRows140_369075049_1000000_cover`,
   `BacklundGrid2EndpointCountFacts140_369075049_1000000`,
+  `BacklundGrid2EndpointCountEqualities140_369075049_1000000`,
+  `BacklundGrid2EndpointSmoothFacts140_369075049_1000000`,
+  `BacklundGrid2EndpointSmoothExpFacts140_369075049_1000000`,
+  `backlundGrid2EndpointSmoothRationalExpFact_row0`,
+  `backlundGrid2EndpointSmoothRationalExpFact_row1`,
+  `backlundGrid2EndpointSmoothRationalExpFact_row2`,
+  `backlundGrid2EndpointSmoothRationalExpFact_row3`,
+  `backlundGrid2EndpointSmoothRationalExpFact_row4`,
+  `backlundGrid2EndpointSmoothRationalExpFact_row5`,
+  `backlundGrid2EndpointSmoothRationalExpFact_row6`,
+  `backlundGrid2EndpointSmoothRationalExpFact_row7`,
+  `backlundGrid2EndpointSmoothRationalExpFact_row8`,
+  `backlundGrid2EndpointSmoothRationalExpFact_row9`,
+  `backlundGrid2EndpointSmoothRationalExpFact_row10`,
+  `BacklundGrid2EndpointSmoothFacts140_369075049_1000000.ofExpFacts`,
+  `BacklundGrid2EndpointCountFacts140_369075049_1000000.ofSeparated`,
   `BacklundGrid2EndpointCountFacts140_369075049_1000000.toEndpointCountRangeMainCertificate`,
   and the headline
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2EndpointCountFacts369075049`.
+  The separated endpoint-count plus rational/exponential smooth route is
+  exposed by
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CountExpFacts369075049`.
   The sharp sourced pair is also packaged as
   `ClassicalBacklundTuringPlattGlobalFiniteRangeInputs`, with exports
   `toGoodHeightArgumentBound`, `toProofInputs`,
@@ -2738,6 +2762,26 @@ through
 `EntireXiClassicalHadamardTheorem.XiHadamardLogDerivativeSourceAFZ_of_toCompletedXiExpAffineSourceAFZ_zeroContribution`,
 and
 `EntireXiClassicalHadamardTheorem.XiPullback_logDerivativeResponse_eq_expAffine_series`.
+It also exposes the direct AFZ source/front-door layer
+`EntireXiClassicalHadamardTheorem.toExpAffinePullbackHadamardSourceAFZ`,
+`EntireXiClassicalHadamardTheorem.toExpAffinePullbackHadamardSourceAFZ_zeroContribution`,
+`expAffineHadamardPullbackZeroContribution_eq_prefactor_plus_tsum`,
+`expAffineHadamardPullbackZeroContributionExpanded`,
+`expAffineHadamardPullbackFiniteContribution`,
+`expAffineHadamardPullbackFiniteContribution_eq_prefactor_plus_finiteRegularizedSum`,
+`expAffineHadamardPullbackZeroContribution_eq_expanded`,
+`EntireXiClassicalHadamardTheorem.pullback_regularized_summable_at_XiPullback_nonzero`,
+`EntireXiClassicalHadamardTheorem.pullback_regularized_hasSum_at_XiPullback_nonzero`,
+`EntireXiClassicalHadamardTheorem.tendsto_expAffineHadamardPullbackFiniteContribution`,
+`EntireXiClassicalHadamardTheorem.tendsto_expAffineHadamardPullbackFiniteContribution_compact`,
+`StieltjesLowEqualityAFZ.congr_zeroContribution`,
+`LowCloudTailSplitAFZ.congr_zeroContribution`,
+`ClassicalPathBStieltjesInputsAFZ.congr_zeroContribution`,
+`XiZeroContributionStieltjesEqualitySourceAFZ.of_expAffineHadamardPullbackExpanded`,
+`XiPullbackAntiHerglotzTarget_of_expAffineHadamardPullbackExpandedStieltjesAFZ`,
+`XiPullbackAntiHerglotzTarget_of_expAffineHadamardPullbackExpanded_midHigh_lowSplit`,
+and
+`XiPullbackAntiHerglotzTarget_of_expAffineHadamardPullback_midHigh_lowSplit`.
 It now also
 exports direct source constructors
 `EntireXiLogDerivativeSourceAFZ.of_lucOnEntireXiNonzeroHadamard` and
@@ -3312,7 +3356,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-74,476 lines and roughly 3,860 top-level declarations.
+76,253 lines and roughly 3,931 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
