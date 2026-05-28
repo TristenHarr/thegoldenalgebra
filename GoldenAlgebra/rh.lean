@@ -16473,6 +16473,30 @@ theorem BacklundRightSideArgumentVariationEstimate.of_logDeriv_bound
     BacklundRightSideArgumentVariationEstimate T :=
   ⟨hnonzero, C, hC, hbound⟩
 
+/-- On Backlund's right vertical side `Re s = 2`, `ζ(s)` is nonzero.
+This discharges the nonvanishing part of the right-side argument-variation
+estimate from mathlib's Euler-product nonvanishing theorem. -/
+theorem backlund_right_side_zeta_ne_zero (y : ℝ) :
+    riemannZeta ((2 : ℂ) + (y : ℂ) * Complex.I) ≠ 0 := by
+  apply riemannZeta_ne_zero_of_one_lt_re
+  norm_num [Complex.add_re, Complex.mul_re]
+
+/-- Constructor for the right-side argument-variation estimate requiring
+only the log-derivative bound: nonvanishing on `Re s = 2` is proved above. -/
+theorem BacklundRightSideArgumentVariationEstimate.of_logDeriv_bound_on_re_two
+    {T C : ℝ}
+    (hC : 0 ≤ C)
+    (hbound :
+      ∀ y : ℝ, T ≤ y → y ≤ T + 1 →
+        ‖deriv riemannZeta ((2 : ℂ) + (y : ℂ) * Complex.I) /
+            riemannZeta ((2 : ℂ) + (y : ℂ) * Complex.I)‖ ≤
+          C * Real.log (T + 2)) :
+    BacklundRightSideArgumentVariationEstimate T :=
+  BacklundRightSideArgumentVariationEstimate.of_logDeriv_bound
+    (fun y _hyT _hyTop => backlund_right_side_zeta_ne_zero y)
+    hC
+    hbound
+
 /-- Analytic input supplying right-side argument-variation control on
 Backlund's rectangle, across every good height `T ≥ 140`. -/
 structure BacklundRightSideArgumentVariationInput : Prop where
