@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-63,415 lines and roughly 3,285 top-level declarations. It contains no
+64,716 lines and roughly 3,344 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -1356,7 +1356,31 @@ the three obligation lines, with concrete handoff targets in each case.
   Mathlib's Euler-product identity, and
   `BacklundRightSideArgumentVariationEstimate.of_vonMangoldt_bound_on_re_two`
   turns a von Mangoldt L-series bound directly into the right-side
-  argument-variation estimate.
+  argument-variation estimate. The file now discharges the whole
+  right-side input: `backlund_right_side_vonMangoldtLSeries_continuous`
+  proves continuity on the vertical line, `backlund_right_side_vonMangoldt_plain_bound`
+  gives a compact-window bound, and
+  `BacklundRightSideArgumentVariationEstimate.of_abs_vonMangoldt_bound_on_re_two`
+  feeds the final theorem `backlundRightSideArgumentVariationInput`.
+  The Jensen-window input is also discharged under the present
+  existential formulation: `BacklundJensenRectangleEstimate.of_height_ge_140`
+  chooses a per-height finite-window constant, and
+  `backlundJensenRectangleInput` packages this into the global input.
+  With Jensen, right-side, and horizontal estimates discharged in-file,
+  `BacklundClassicalCombinationInput.toGoodHeightArgumentBound` now turns
+  the isolated classical combination lemma directly into the good-height
+  Backlund argument bound. The count/right-continuity side is also now
+  supplied in-file: `zetaZeroHeightRightGapToLocalConstancyInput` turns
+  the global zero-height right-gap theorem into local constancy of the
+  weighted count, `zetaWeightedZeroCountRightLocalConstancyInput`
+  packages the unconditional instance, and
+  `concreteS_halfLogPlusHalf_of_backlundArgument` reduces the final
+  half-log-plus-half bound to the single good-height Backlund argument
+  input. The fixed-`K` classical proof package now closes the same loop:
+  `ClassicalBacklundTuringProofInputs.toGoodHeightArgumentBound`
+  projects it back to the exact good-height argument bound, and
+  `classicalBacklundTuringProofInputs_iff_goodHeightArgumentBound`
+  records equivalence with that single remaining input.
   A second sourced route
   now records the modern Hasanalizade--Shen--Wong large-height envelope
   `hasanalizadeShenWongBacklundEnvelope` together with the
@@ -1442,6 +1466,16 @@ the three obligation lines, with concrete handoff targets in each case.
   `BacklundFiniteBandArgumentPrincipleTheoremFixedPiExpAutoPosCertificate140_370`
   lowers via `toUniform25167Check` and culminates in
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleTheoremFixedPiExpAutoPosFinite370`.
+  The exact tangent-arithmetic refinement now reaches the cutoff
+  `exp (151476/25625)`: the comparison theorems
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_log_ge_151476_25625`,
+  `backlund_log_ge_151476_25625_of_ge_exp_151476_25625`, and
+  `plattTrudgianBacklundEnvelope_le_halfLogPlusHalf_of_ge_exp_151476_25625`
+  feed `PlattTrudgianBacklundCut151476_25625TailInput`,
+  `BacklundFiniteBandCheck140_exp151476_25625`,
+  `BacklundGoodHeightArgumentBound.of_plattTrudgian_151476_25625Tail_and_finite`,
+  and the headline
+  `concreteS_halfLogPlusHalf_of_plattTrudgian_151476_25625Tail_and_finite`.
   The narrow computational-certificate interface
   `BacklundFiniteBandUniform25167Check140_374` packages the uniform
   `|S(T)| ≤ 2.5167` check on `[140, 374]`, converts through
@@ -1814,6 +1848,11 @@ also registered by the `[simp]` round trips
 `PathBNonTuringSourceRawComponents.to_sourceInputs_to_rawComponents`
 and
 `PathBNonTuringSourceInputs.to_rawComponents_to_sourceInputs`. The
+source and publication full bundles now project back to raw component
+views through `PathBSourceFullInputBundle.to_rawComponents` and
+`PathBFullInputBundle.to_rawComponents`, with `[simp]` rebuild checks
+`PathBSourceFullInputBundle.to_rawComponents_to_sourceInputs` and
+`PathBFullInputBundle.to_rawComponents_to_inputs`. The
 same bundled and raw views now expose
 method forms of the non-direct target capstones:
 `PathBNonTuringSourceInputs.to_target_turingBundle`,
@@ -1831,6 +1870,25 @@ component views also feed the direct target through
 `PathBNonTuringSourceRawComponents.to_target_direct_turingEnvelopes`,
 `PathBNonTuringRawComponents.to_target_direct_turingBundle`, and
 `PathBNonTuringRawComponents.to_target_direct_turingEnvelopes`. These
+raw component views now also assemble the one-object full bundles:
+`PathBNonTuringSourceRawComponents.to_sourceFullBundle`,
+`PathBNonTuringSourceRawComponents.to_directFullBundle`,
+`PathBNonTuringSourceRawComponents.to_sourceFullBundle_envelopes`,
+`PathBNonTuringSourceRawComponents.to_directFullBundle_envelopes`,
+`PathBNonTuringRawComponents.to_fullBundle`,
+`PathBNonTuringRawComponents.to_sourceFullBundle`,
+`PathBNonTuringRawComponents.to_directFullBundle`,
+`PathBNonTuringRawComponents.to_fullBundle_envelopes`, and
+`PathBNonTuringRawComponents.to_directFullBundle_envelopes`. Their
+target-level full-bundle method forms are
+`PathBNonTuringSourceRawComponents.to_target_full_turingBundle`,
+`PathBNonTuringSourceRawComponents.to_target_full_turingEnvelopes`,
+`PathBNonTuringSourceRawComponents.to_target_directFull_turingBundle`,
+`PathBNonTuringSourceRawComponents.to_target_directFull_turingEnvelopes`,
+`PathBNonTuringRawComponents.to_target_full_turingBundle`,
+`PathBNonTuringRawComponents.to_target_full_turingEnvelopes`,
+`PathBNonTuringRawComponents.to_target_directFull_turingBundle`, and
+`PathBNonTuringRawComponents.to_target_directFull_turingEnvelopes`. These
 raw-component views are also exposed as top-level front doors:
 `XiPullbackAntiHerglotzTarget_of_pathBSourceRawComponents_turingBundle`,
 `XiPullbackAntiHerglotzTarget_of_pathBSourceRawComponents_turingEnvelopes`,
@@ -1841,6 +1899,16 @@ raw-component views are also exposed as top-level front doors:
 `XiPullbackAntiHerglotzTarget_of_pathBRawComponents_direct_turingBundle`,
 and
 `XiPullbackAntiHerglotzTarget_of_pathBRawComponents_direct_turingEnvelopes`.
+The full-bundle paths also have top-level front doors:
+`XiPullbackAntiHerglotzTarget_of_pathBSourceRawComponents_full_turingBundle`,
+`XiPullbackAntiHerglotzTarget_of_pathBSourceRawComponents_full_turingEnvelopes`,
+`XiPullbackAntiHerglotzTarget_of_pathBSourceRawComponents_directFull_turingBundle`,
+`XiPullbackAntiHerglotzTarget_of_pathBSourceRawComponents_directFull_turingEnvelopes`,
+`XiPullbackAntiHerglotzTarget_of_pathBRawComponents_full_turingBundle`,
+`XiPullbackAntiHerglotzTarget_of_pathBRawComponents_full_turingEnvelopes`,
+`XiPullbackAntiHerglotzTarget_of_pathBRawComponents_directFull_turingBundle`,
+and
+`XiPullbackAntiHerglotzTarget_of_pathBRawComponents_directFull_turingEnvelopes`.
 §CDXLVII adds the canonical completed-ξ source names
 `canonicalEntireXiLogDerivativeSourceAFZ`,
 `canonicalCompletedXiLogDerivativeSourceAFZ`,
@@ -2121,6 +2189,13 @@ with the `.exp_affine` convenience, `ConcreteCompletedXiHadamardFactorization`,
 `CompletedXiZeroInvSqDistribution`, `ConcreteCompletedXiHadamardInputs`,
 and the concrete-input front door
 `XiPullbackAntiHerglotzTarget_of_concreteHadamard_midHigh_cloudTailLow`.
+The Hadamard LUC/log-derivative handoff can now be stated directly on
+the ξ-nonzero region through `HadamardProductLUCOnXiNonzeroData`; its
+`toLUCLogDerivData` adapter feeds
+`ClassicalPathBAnalyticInputs.of_hadamard_packages_onXiNonzero`,
+`ConcreteCompletedXiHadamardInputs.of_lucOnXiNonzero`, and the
+publication constructor
+`CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero`.
 
 **Publication-level bundles** (§§CCCLXXVII–CCCLXXIX). Public-name
 renames: `CompletedXiClassicalHadamardTheorem` (the publication name
@@ -2386,14 +2461,38 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   is the direct two-bundle capstone. The one-object direct frontier
   `PathBDirectFullInputBundleAFZ` packages direct non-Turing data plus
   Turing envelopes; `PathBDirectFullInputBundleAFZ.of_envelopes` builds
-  it from raw Turing envelopes, with `PathBDirectFullInputBundleAFZ.to_target` and
+  it from raw Turing envelopes. Its projection and constructor surface now
+  includes `PathBDirectFullInputBundleAFZ.to_directNonTuringInputs`,
+  `PathBDirectFullInputBundleAFZ.h_Z_ge_15`,
+  `PathBDirectFullInputBundleAFZ.to_splitStieltjes`,
+  `PathBDirectFullInputBundleAFZ.to_stieltjesSource`,
+  `PathBDirectFullInputBundleAFZ.of_splitStieltjes`,
+  `PathBDirectFullInputBundleAFZ.of_stieltjesSource`,
+  `PathBDirectFullInputBundleAFZ.of_splitStieltjes_envelopes`,
+  `PathBDirectFullInputBundleAFZ.of_stieltjesSource_envelopes`, and
+  the corresponding `[simp]` projection checks
+  `PathBDirectFullInputBundleAFZ.of_splitStieltjes_to_splitStieltjes`,
+  `PathBDirectFullInputBundleAFZ.of_stieltjesSource_to_stieltjesSource`,
+  `PathBDirectFullInputBundleAFZ.of_splitStieltjes_envelopes_to_splitStieltjes`,
+  and
+  `PathBDirectFullInputBundleAFZ.of_stieltjesSource_envelopes_to_stieltjesSource`, with
+  `PathBDirectFullInputBundleAFZ.to_target` and
   `XiPullbackAntiHerglotzTarget_of_pathBDirectFullInputBundleAFZ` as
-  capstones. The source and publication full bundles lower through
+  capstones. The split/unified constructor routes also expose direct
+  front-door capstones:
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_splitStieltjes_turingBundle`,
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_splitStieltjes_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_stieltjesSource_turingBundle`,
+  and
+  `XiPullbackAntiHerglotzTarget_of_pathBDirectFull_stieltjesSource_turingEnvelopes`.
+  The source and publication full bundles lower through
   `PathBSourceFullInputBundle.to_directFull`,
   `PathBFullInputBundle.to_sourceFull`, and
   `PathBFullInputBundle.to_directFull`, with direct-route capstones
-  `PathBSourceFullInputBundle.to_target_direct` and
-  `PathBFullInputBundle.to_target_direct`. The unified source constructor
+  `PathBSourceFullInputBundle.to_target_direct`,
+  `XiPullbackAntiHerglotzTarget_of_pathBSourceFullInputBundle_direct`,
+  `PathBFullInputBundle.to_target_direct`, and
+  `XiPullbackAntiHerglotzTarget_of_pathBFullInputBundle_direct`. The unified source constructor
   `PathBDirectNonTuringInputsAFZ.of_stieltjesSource` feeds
   `XiPullbackAntiHerglotzTarget_of_directStieltjesSourceAFZ_turingBundle`;
   the generic completed-ξ source constructor
@@ -2511,7 +2610,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-63,415 lines and roughly 3,285 top-level declarations.
+64,716 lines and roughly 3,344 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
