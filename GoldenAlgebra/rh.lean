@@ -22799,9 +22799,9 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite370
     (Hfinite : BacklundFiniteBandCheck140_370)
     {T : ℝ} (hT : (140 : ℝ) ≤ T) :
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
-  concreteS_halfLogPlusHalf_of_plattTrudgian_739_125Tail_and_finite
-    (PlattTrudgianBacklundCut739_125TailInput.of_global Hglobal)
-    (BacklundFiniteBandCheck140_exp739_125.of_140_370 Hfinite)
+  concreteS_halfLogPlusHalf_of_plattTrudgian_151476_25625Tail_and_finite
+    (PlattTrudgianBacklundCut151476_25625TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp151476_25625.of_140_370 Hfinite)
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
