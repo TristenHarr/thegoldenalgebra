@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-66,505 lines and roughly 3,443 top-level declarations. It contains no
+68,677 lines and roughly 3,573 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -1459,6 +1459,8 @@ the three obligation lines, with concrete handoff targets in each case.
   interfaces `BacklundFiniteBandCheck140_370`,
   `BacklundFiniteBandUniform25167Check140_370`,
   `BacklundFiniteBandUniform25167Check140_370.toFiniteBandCheck`,
+  `BacklundFiniteBandUniform25167Check140_3690757803_10000000.of_140_370`,
+  `BacklundFiniteBandCheck140_3690757803_10000000.of_140_370`,
   `BacklundFiniteBandCheck140_370.of_plattTrudgian`, and
   `BacklundFiniteBandCheck140_exp739_125.of_140_370` yield the headline
   theorems `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite370`,
@@ -1509,6 +1511,14 @@ the three obligation lines, with concrete handoff targets in each case.
   `toProvenBacklundTuringBound`, `toHalfLogPlusHalfSBound`, and
   `toTuringStyleSBound`, plus headline theorem
   `concreteS_halfLogPlusHalf_of_plattGlobalFiniteRangeBacklundTuringInputs`.
+  Its near-endpoint export layer routes through
+  `3690757803/10000000` via
+  `toGoodHeightArgumentBoundNearEndpoint`,
+  `toProofInputsNearEndpoint`,
+  `toProvenBacklundTuringBoundNearEndpoint`,
+  `toHalfLogPlusHalfSBoundNearEndpoint`,
+  `toTuringStyleSBoundNearEndpoint`, and
+  `concreteS_halfLogPlusHalf_of_plattGlobalFiniteRangeBacklundTuringInputs_nearEndpoint`.
   The concrete endpoint for this sharp route first pushed to
   `1846/5`: `backlund_exp_5_lt_74207_500`,
   `backlund_exp_9_10_lt_24597_10000`,
@@ -1538,6 +1548,79 @@ the three obligation lines, with concrete handoff targets in each case.
   are `BacklundFiniteBandCheck140_9227_25`,
   `BacklundFiniteBandUniform25167Check140_9227_25`, and
   `BacklundFiniteBandUniform25167Check140_9227_25.toFiniteBandCheck`.
+  The near-exact endpoint now sits at
+  `3690757803/10000000`, supported by
+  `backlund_exp_5_lt_148413159142_1000000000`,
+  `backlund_exp_9_10_lt_24596031113_10000000000`,
+  `backlund_exp_177_16088_le_1263828416885_1250000000000`, and
+  `backlund_exp_475481_80440_lt_3690757803_10000000`; it exposes
+  `BacklundFiniteBandCheck140_3690757803_10000000`,
+  `BacklundFiniteBandUniform25167Check140_3690757803_10000000`,
+  `BacklundFiniteBandUniform25167Check140_3690757803_10000000.toFiniteBandCheck`,
+  `BacklundFiniteBandCheck140_3690757803_10000000.of_plattTrudgian`,
+  `BacklundFiniteBandCheck140_3690757803_10000000.of_140_369075781_1000000`,
+  `BacklundFiniteBandCheck140_exp475481_80440.of_140_3690757803_10000000`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite3690757803_10000000`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete3690757803_10000000`,
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite3690757803_10000000`.
+  A Taylor-certified refinement moves the endpoint to
+  `3690757801/10000000`, using
+  `backlund_exp_one_le_271828182846_100000000000`,
+  `backlund_exp_9_10_le_245960311116_100000000000`,
+  `backlund_exp_177_16088_le_101106273351_100000000000`, and
+  `backlund_exp_475481_80440_lt_3690757801_10000000`. Its public
+  surfaces are `BacklundFiniteBandCheck140_3690757801_10000000`,
+  `BacklundFiniteBandUniform25167Check140_3690757801_10000000`,
+  `BacklundFiniteBandUniform25167Check140_3690757801_10000000.toFiniteBandCheck`,
+  `BacklundFiniteBandCheck140_3690757801_10000000.of_plattTrudgian`,
+  `BacklundFiniteBandCheck140_3690757801_10000000.of_140_3690757803_10000000`,
+  `BacklundFiniteBandCheck140_exp475481_80440.of_140_3690757801_10000000`,
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite3690757801_10000000`.
+  A higher-order Taylor refinement pushes the endpoint to
+  `369075780093/1000000000`, using
+  `backlund_exp_one_le_27182818284591_10000000000000`,
+  `backlund_exp_9_10_le_2459603111157_1000000000000`,
+  `backlund_exp_177_16088_le_5055313667537_5000000000000`, and
+  `backlund_exp_475481_80440_lt_369075780093_1000000000`; it exposes
+  `BacklundFiniteBandCheck140_369075780093_1000000000`,
+  `BacklundFiniteBandUniform25167Check140_369075780093_1000000000`,
+  `BacklundFiniteBandUniform25167Check140_369075780093_1000000000.toFiniteBandCheck`,
+  `BacklundFiniteBandCheck140_369075780093_1000000000.of_plattTrudgian`,
+  `BacklundFiniteBandCheck140_369075780093_1000000000.of_140_3690757801_10000000`,
+  `BacklundFiniteBandCheck140_exp475481_80440.of_140_369075780093_1000000000`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite369075780093_1000000000`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete369075780093_1000000000`,
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite369075780093_1000000000`.
+  A nineteenth-order Taylor refinement moves to
+  `3690757800926/10000000000`, using
+  `backlund_exp_one_le_271828182845905_100000000000000`,
+  `backlund_exp_9_10_le_245960311115695_100000000000000`,
+  `backlund_exp_177_16088_le_101106273350734_100000000000000`, and
+  `backlund_exp_475481_80440_lt_3690757800926_10000000000`; it exposes
+  `BacklundFiniteBandCheck140_3690757800926_10000000000`,
+  `BacklundFiniteBandUniform25167Check140_3690757800926_10000000000`,
+  `BacklundFiniteBandUniform25167Check140_3690757800926_10000000000.toFiniteBandCheck`,
+  `BacklundFiniteBandCheck140_3690757800926_10000000000.of_plattTrudgian`,
+  `BacklundFiniteBandCheck140_3690757800926_10000000000.of_140_369075780093_1000000000`,
+  `BacklundFiniteBandCheck140_exp475481_80440.of_140_3690757800926_10000000000`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite3690757800926_10000000000`,
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete3690757800926_10000000000`,
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite3690757800926_10000000000`.
+  A twenty-first-order refinement reaches
+  `36907578009252/100000000000`, with
+  `backlund_exp_one_le_2718281828459046_1000000000000000`,
+  `backlund_exp_9_10_le_2459603111156950_1000000000000000`,
+  `backlund_exp_177_16088_le_1011062733507339_1000000000000000`, and
+  `backlund_exp_475481_80440_lt_36907578009252_100000000000`; its
+  finite-band interfaces are
+  `BacklundFiniteBandCheck140_36907578009252_100000000000`,
+  `BacklundFiniteBandUniform25167Check140_36907578009252_100000000000`,
+  and
+  `BacklundFiniteBandUniform25167Check140_36907578009252_100000000000.toFiniteBandCheck`.
   The narrow computational-certificate interface
   `BacklundFiniteBandUniform25167Check140_374` packages the uniform
   `|S(T)| ≤ 2.5167` check on `[140, 374]`, converts through
@@ -1790,6 +1873,15 @@ the three obligation lines, with concrete handoff targets in each case.
   `concreteS_halfLogPlusHalf_of_plattEndpointCountRangeFixedPiExpBacklundTuringInputs370`,
   and exports `toProvenBacklundTuringBound`, `toHalfLogPlusHalfSBound`,
   and `toTuringStyleSBound`.
+  The near-exact endpoint now also has count-range certificate surfaces:
+  `BacklundFiniteBandCountRangeMainCertificate140_3690757803_10000000`,
+  `BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000`,
+  and
+  `BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757803_10000000`,
+  with headline theorems
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite3690757803_10000000`
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757803_10000000`.
 
 * **(P2) Entire-ξ Hadamard bundle.** Inhabit
   `EntireXiClassicalHadamardTheorem ι` (§CCCLXXXVIII) — the per-field
@@ -2014,6 +2106,27 @@ canonical AFZ imports
 `CanonicalXiPullbackMidHighStieltjesEqualityAFZ.of_canonicalPathB`,
 `CanonicalXiPullbackLowFirstZeroFormulaAFZ.of_canonicalPathB`, and
 `CanonicalXiPullbackStieltjesSourceAFZ.of_canonicalPathB`.
+The reverse adapters now push direct canonical AFZ Stieltjes proofs
+back through any completed-ξ source:
+`StieltjesMidHighTailEqualityAFZ.of_canonicalXiPullback`,
+`LowFiniteStieltjesFormulaOnFirstZeroGapAFZ.of_canonicalXiPullback`,
+`XiZeroContributionStieltjesEqualitySourceAFZ.of_canonicalXiPullback`,
+`CanonicalPathBStieltjesSource.of_canonicalXiPullback`,
+`LowFiniteStieltjesIBPSourceAFZ.of_canonicalXiPullback`,
+`LowZeroContributionSplitAFZ.of_canonicalXiPullback`,
+`LowCloudTailSplitAFZ.of_canonicalXiPullback`,
+`CanonicalPathBLowIBPSourceAFZ_of_canonicalXiPullback`,
+`CanonicalPathBLowZeroSplitAFZ_of_canonicalXiPullback`,
+`CanonicalPathBLowCloudTailSplitAFZ_of_canonicalXiPullback`, and
+`canonicalPathBStieltjesSource_iff_canonicalXiPullbackStieltjesSourceAFZ`.
+This direct canonical Stieltjes source now also feeds the source-level
+non-Turing/full-bundle layer through
+`PathBNonTuringSourceInputs.of_canonicalXiPullbackStieltjesSource`,
+`PathBSourceFullInputBundle.of_canonicalXiPullbackStieltjesSource`,
+`PathBSourceFullInputBundle.of_canonicalXiPullbackStieltjesSource_envelopes`,
+`XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackStieltjesSource_turingBundle`,
+and
+`XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackStieltjesSource_turingEnvelopes`.
 The direct canonical layer then packages these Stieltjes shapes as
 `CanonicalXiPullbackSplitStieltjesInputsAFZ`,
 `CanonicalXiPullbackIBPStieltjesInputsAFZ`,
@@ -2190,7 +2303,11 @@ low-band split (boundary + integral); §§CCC–CCCII expose the master
 `XiExplicitFormulaPackage`; §§CCCIII–CCCXII develop the
 zero-contribution split and Stieltjes data scaffolding;
 §§CCCXIII–CCCXV define the AFZ source/equality structures and the
-master composition `XiResidualStieltjesFormulaData_of_AFZ`;
+master composition `XiResidualStieltjesFormulaData_of_AFZ`; the
+standard first-zero hypothesis now has the direct wrapper
+`XiResidualStieltjesFormulaData_of_AFZ_Z_ge_15`;
+the low contribution formula similarly has
+`StieltjesLowContributionData_of_firstZeroGapFormula_Z_ge_15`;
 §§CCCXVI–CCCXVIII lift to the $s$-plane via the chain rule and land
 an intermediate `_of_completedXiHadamardAndStieltjesAFZ` front door.
 
@@ -2281,6 +2398,16 @@ The arbitrary-region LUC version feeds
 It also lowers directly into the canonical direct AFZ non-Turing bundle
 through `PathBDirectNonTuringInputsAFZ.of_lucOnXiNonzeroHadamard` and
 `PathBDirectNonTuringInputsAFZ.of_lucLogDerivDataHadamard`.
+The same LUC handoff now builds source full bundles via
+`PathBSourceFullInputBundle.of_lucOnXiNonzeroHadamard`,
+`PathBSourceFullInputBundle.of_lucOnXiNonzeroHadamard_envelopes`,
+`PathBSourceFullInputBundle.of_lucLogDerivDataHadamard`, and
+`PathBSourceFullInputBundle.of_lucLogDerivDataHadamard_envelopes`, and
+direct AFZ full bundles via
+`PathBDirectFullInputBundleAFZ.of_lucOnXiNonzeroHadamard`,
+`PathBDirectFullInputBundleAFZ.of_lucOnXiNonzeroHadamard_envelopes`,
+`PathBDirectFullInputBundleAFZ.of_lucLogDerivDataHadamard`, and
+`PathBDirectFullInputBundleAFZ.of_lucLogDerivDataHadamard_envelopes`.
 This
 ξ-nonzero-region package now also has publication front doors
 `XiPullbackAntiHerglotzTarget_of_lucLogDerivDataHadamardSource_and_stieltjesAFZ`,
@@ -2315,9 +2442,13 @@ Hadamard infrastructure for `entireRiemannXi`:
 (§§CCCXC–CDXIV). The chain that identifies `completedXiFunction` with
 `entireRiemannXi` away from $\Gamma$-pole pullbacks:
 
-* §§CCCXCI–CCCXCV — `CompletedXiRawEntireXiLocalEqualitySource`,
-  nonzero transfer, differentiability transfer, log-derivative
-  equality from local equality.
+* §§CCCXCI–CCCXCV — `CompletedXiRawEntireXiPointwiseEqualitySource`,
+  `CompletedXiRawEntireXiOpenNeighborhoodEqualitySource`,
+  `CompletedXiRawEntireXiLocalEqualitySource`, nonzero transfer,
+  differentiability transfer, log-derivative equality from local equality,
+  and raw-correctness constructors
+  `CompletedXiRawEntireXiPointwiseEqualitySource.of_rawCorrectness` and
+  `CompletedXiRawEntireXiOpenNeighborhoodEqualitySource.of_rawCorrectness`.
 * §§CCCXCVI–CCCXCVII — `CompletedXiRawEqualsEntireXiOffGammaPoles`
   raw off-pole equality target.
 * §§CCCXCVIII–CDII — auto-discharged differentiability via
@@ -2380,8 +2511,12 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   appear as hypotheses.
 * §CDXLIV — **canonical front doors**:
   `rawCompletedXiCorrectness`,
+  `completedXiRawEntireXiPointwiseEqualitySource`,
+  `completedXiRawEntireXiOpenNeighborhoodEqualitySource`,
   `completedXiRawEntireXiLocalEqualitySource`,
+  `completedXiRawEqualsEntireXiOnRegularRegion`,
   `completedXiRawEqualsEntireXiOffGammaPoles`,
+  `completedXiEqualsEntireXiLocallyAFZSource`,
   `entireXiToCompletedXiLogDerivBridge`, and
   `EntireXiClassicalHadamardTheorem.toCompletedXiSourceAFZ_canonical`
   name the completed-ξ source once; the theorem variants
@@ -2441,7 +2576,22 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   `PathBNonTuringInputs` and `PathBTuringEnvelopeInputs`. The
   one-object publication frontier `PathBFullInputBundle` packages those
   together; `PathBFullInputBundle.of_envelopes` builds it from raw
-  Turing envelopes, with `PathBFullInputBundle.to_target` and
+  Turing envelopes. It now also has bundled-Turing constructors
+  `PathBFullInputBundle.of_classicalStieltjes`,
+  `PathBFullInputBundle.of_stieltjesInputs`, and
+  `PathBFullInputBundle.of_stieltjesEqualitySourceAFZ`, plus the
+  mid/high AFZ low-side variants
+  `PathBFullInputBundle.of_midHighAFZ_lowIBPSource`,
+  `PathBFullInputBundle.of_midHighAFZ_lowZeroSplit`, and
+  `PathBFullInputBundle.of_midHighAFZ_lowCloudTailSplit`. Each has a
+  raw-envelope sibling:
+  `PathBFullInputBundle.of_classicalStieltjes_envelopes`,
+  `PathBFullInputBundle.of_stieltjesInputs_envelopes`,
+  `PathBFullInputBundle.of_stieltjesEqualitySourceAFZ_envelopes`,
+  `PathBFullInputBundle.of_midHighAFZ_lowIBPSource_envelopes`,
+  `PathBFullInputBundle.of_midHighAFZ_lowZeroSplit_envelopes`, and
+  `PathBFullInputBundle.of_midHighAFZ_lowCloudTailSplit_envelopes`, with
+  `PathBFullInputBundle.to_target` and
   `XiPullbackAntiHerglotzTarget_of_pathBFullInputBundle` as capstones.
   The new
   `PathBNonTuringSourceInputs` lowers the non-Turing side further to a
@@ -2485,7 +2635,29 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   `canonicalCompletedXiLogDerivativeSourceAFZ`,
   `canonicalPathBZeroContribution`, and
   `CanonicalPathBStieltjesSource` name the canonical source and its
-  Stieltjes equality source once. The constructor
+  Stieltjes equality source once. The source-level Stieltjes source can
+  now also be built from the direct canonical AFZ Stieltjes source by
+  `StieltjesMidHighTailEqualityAFZ.of_canonicalXiPullback`,
+  `LowFiniteStieltjesFormulaOnFirstZeroGapAFZ.of_canonicalXiPullback`,
+  `XiZeroContributionStieltjesEqualitySourceAFZ.of_canonicalXiPullback`,
+  and `CanonicalPathBStieltjesSource.of_canonicalXiPullback`; the
+  matching low-side bridges are
+  `LowFiniteStieltjesIBPSourceAFZ.of_canonicalXiPullback`,
+  `LowZeroContributionSplitAFZ.of_canonicalXiPullback`,
+  `LowCloudTailSplitAFZ.of_canonicalXiPullback`,
+  `CanonicalPathBLowIBPSourceAFZ_of_canonicalXiPullback`,
+  `CanonicalPathBLowZeroSplitAFZ_of_canonicalXiPullback`,
+  `CanonicalPathBLowCloudTailSplitAFZ_of_canonicalXiPullback`, and
+  `canonicalPathBStieltjesSource_iff_canonicalXiPullbackStieltjesSourceAFZ`.
+  The direct canonical AFZ Stieltjes source can now be used as a
+  source-level input directly via
+  `PathBNonTuringSourceInputs.of_canonicalXiPullbackStieltjesSource`,
+  `PathBSourceFullInputBundle.of_canonicalXiPullbackStieltjesSource`,
+  `PathBSourceFullInputBundle.of_canonicalXiPullbackStieltjesSource_envelopes`,
+  `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackStieltjesSource_turingBundle`,
+  and
+  `XiPullbackAntiHerglotzTarget_of_sourceCanonicalXiPullbackStieltjesSource_turingEnvelopes`.
+  The constructor
   `PathBNonTuringSourceInputs.of_canonicalStieltjesSource` and theorem
   `XiPullbackAntiHerglotzTarget_of_canonicalStieltjesSource_turingBundle`
   expose the source-level capstone directly for this canonical package;
@@ -2709,7 +2881,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-66,505 lines and roughly 3,443 top-level declarations.
+68,677 lines and roughly 3,573 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
