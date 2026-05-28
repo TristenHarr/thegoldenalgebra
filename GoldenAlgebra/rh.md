@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-91,190 lines and roughly 4,318 top-level declarations. It contains no
+92,085 lines and roughly 4,347 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -1935,6 +1935,44 @@ the three obligation lines, with concrete handoff targets in each case.
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2ResidueIndexSlabs369075049`,
   and
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2ResidueTheoremOutputSlabs369075049`.
+  The current residue-free source is
+  `BacklundGrid2NoUnremovedSingularitiesCertificates140_369075049_1000000`,
+  lowered by
+  `BacklundGrid2ResidueIndexCertificates140_369075049_1000000.ofNoUnremovedSingularitiesCertificates`,
+  with headline routes
+  `concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2NoUnremovedSingularitiesSlabs369075049`
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2NoUnremovedSingularitiesSlabs369075049`.
+  The fixed-side rectangle adapters
+  `backlundFixedSideRectangle_stronglyAdmissible_of_safeHeightZeroClassification`
+  and
+  `backlundFixedSideRectangle_noUnremovedSingularities_of_safeHeightZeroClassification`
+  bridge safe-height zero classification into that no-unremoved source.
+  The rowwise source
+  `BacklundGrid2SafeHeightZeroClassificationCertificates140_369075049_1000000`
+  lowers through
+  `BacklundGrid2NoUnremovedSingularitiesCertificates140_369075049_1000000.ofSafeHeightZeroClassificationCertificates`.
+  It reaches the public half-log bound through
+  `concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2SafeHeightZeroClassificationSlabs369075049`
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2SafeHeightZeroClassificationSlabs369075049`.
+  The global zero-classification adapter
+  `safeHeightZeroClassification_of_zeroClassificationInput` feeds the
+  still leaner `BacklundGrid2GoodHeightIndexCertificates140_369075049_1000000`,
+  which lowers by
+  `BacklundGrid2SafeHeightZeroClassificationCertificates140_369075049_1000000.ofGoodHeightIndexCertificates`.
+  Its public half-log routes are
+  `concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2GoodHeightIndexSlabs369075049`
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2GoodHeightIndexSlabs369075049`.
+  Endpoint-good-height data is packaged by
+  `BacklundGrid2EndpointGoodIndexCertificates140_369075049_1000000`,
+  lowered through
+  `BacklundGrid2GoodHeightIndexCertificates140_369075049_1000000.ofEndpointGoodIndexCertificates`,
+  and exposed as
+  `concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2EndpointGoodIndexSlabs369075049`
+  and
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2EndpointGoodIndexSlabs369075049`.
   The same compact cumulative payload now also feeds the still-finer
   `369061/1000` handoff through
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CumulativeEndpointCounts369075049_via369061`.
@@ -2908,14 +2946,20 @@ Hadamard product over an indexed zero family:
 `HadamardZeroInvSqSummability.infiniteProduct_ne_zero`,
 `HadamardZeroInvSqSummability.indexedFiniteProduct_tendsto`,
 `HadamardZeroInvSqSummability.finiteRegularizedSum_tendsto`,
+`HadamardZeroInvSqSummability.summable_regularized_totalized`,
+`HadamardZeroInvSqSummability.finiteRegularizedSum_tendsto_totalized`,
 `HadamardZeroInvSqSummability.indexedFiniteProduct_tendsto_at_exhaustion`,
 `HadamardZeroInvSqSummability.finiteRegularizedSum_tendsto_at_exhaustion`,
+`HadamardZeroInvSqSummability.finiteRegularizedSum_tendsto_at_exhaustion_totalized`,
+`HadamardFiniteExhaustion.of_invSq_mono_exhaustive`,
 `hasProdLocallyUniformlyOn_hadamardGenus1Factor_of_summable_bound`,
 `tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_of_summable_bound`,
 `HadamardZeroInvSqSummability.eventually_uniform_factor_sub_one_bound`,
 `HadamardZeroInvSqSummability.tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_of_norm_bounded_open`,
 `tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_at_exhaustion`,
 `HadamardProductLocallyUniformLimitData.of_finsetLocallyUniform`,
+`HadamardZeroInvSqSummability.tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_univ`,
+`HadamardProductLocallyUniformLimitData.of_invSq_univ`,
 `HadamardLogDerivLimitData.of_finiteDerivativeLimitData_invSq`,
 `HadamardProductLUCLogDerivData.of_finiteDerivativeLimitData_invSq`,
 `HadamardProductLUCLogDerivData.of_locallyUniformProductLimitData_invSq`,
@@ -3001,6 +3045,8 @@ lives at §CCCLXV.
 reduces `LowZeroContributionSplitAFZ` to three identity fields against
 any chosen decomposition. The explicit model layer now includes
 `LowCloudTailSplitAFZ.of_fun_sum`,
+`LowCloudTailSplitAFZ.of_zeroContributionSplit`,
+`lowCloudTailSplitAFZ_iff_zeroContributionSplit`,
 `LowCloudTailSplitAFZ.explicit_lowModel`,
 `LowZeroContributionSplitAFZ.explicit_lowModel`,
 `StieltjesLowEqualityAFZ.explicit_lowModel_of_startsAfter`, and
@@ -3273,16 +3319,21 @@ Hadamard infrastructure for `entireRiemannXi`:
 `infiniteHadamardProduct_eq_zero_at_zeroLoc`,
 `EntireXiHadamardFactorization.of_offZeroQuotient`,
 `EntireXiHadamardFactorization.of_offZeroQuotient_invSq`,
+`EntireXiHadamardFactorization.to_offZeroQuotient_invSq`,
+`entireXiHadamardFactorization_iff_offZeroQuotient_invSq`,
 `EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient`,
 `EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient_invSq`,
 `HadamardProductLUCOnEntireXiNonzeroData.of_finiteDerivativeLimitData_invSq`,
 `HadamardProductLUCOnEntireXiNonzeroData.of_locallyUniformProductLimitData_invSq`,
+`HadamardProductLUCOnEntireXiNonzeroData.of_invSq_univ`,
+`HadamardProductLUCOnEntireXiNonzeroData.of_invSq_mono_exhaustive`,
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_offZeroQuotient_lucOnEntireXiNonzero`,
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_offZeroQuotient_locallyUniformProductLimitData`,
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_quotient_lucOnEntireXiNonzero`,
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_quotient_lucLogDerivData`,
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_quotient_locallyUniformProductLimitData`,
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_independentLUC_quotient_locallyUniformProductLimitData`,
+`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_quotient_invSq_mono_exhaustive`,
 `EntireXiClassicalHadamardTheorem` (§CCCLXXXVIII), and
 `EntireXiLogDerivativeSourceAFZ`. The source-level front door
 `XiPullbackAntiHerglotzTarget_of_completedXiSource_midHigh_lowSplit`
@@ -3821,7 +3872,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-91,190 lines and roughly 4,318 top-level declarations.
+92,085 lines and roughly 4,347 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.

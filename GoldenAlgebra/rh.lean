@@ -24938,6 +24938,64 @@ theorem backlundFixedSideRectangle_one_lt_right
     1 < (backlundFixedSideRectangle bottom top hbottom_lt_top).right := by
   norm_num [backlundFixedSideRectangle]
 
+/-- Safe-height zero classification gives strong admissibility for the
+standard fixed-side Backlund rectangle. -/
+theorem backlundFixedSideRectangle_stronglyAdmissible_of_safeHeightZeroClassification
+    {bottom top : ℝ} (hbottom_pos : 0 < bottom)
+    (hbottom_lt_top : bottom < top)
+    (hbottom_good : GoodHeight bottom) (htop_good : GoodHeight top)
+    (H : ZetaRectangle.SafeHeightRectangleZeroClassification
+      hbottom_pos hbottom_lt_top) :
+    (backlundFixedSideRectangle bottom top hbottom_lt_top).StronglyAdmissibleForZeta := by
+  simpa [backlundFixedSideRectangle, ZetaRectangle.rectangleOfSafeHeights] using
+    ZetaRectangle.stronglyAdmissible_rectangleOfSafeHeights
+      hbottom_pos hbottom_lt_top hbottom_good htop_good
+      H.toSafeHeightRectangleBoundaryZeroFree
+
+/-- Safe-height zero classification gives the canonical no-unremoved
+singularities package for the standard fixed-side Backlund rectangle. -/
+theorem backlundFixedSideRectangle_noUnremovedSingularities_of_safeHeightZeroClassification
+    {bottom top : ℝ} (hbottom_pos : 0 < bottom)
+    (hbottom_lt_top : bottom < top)
+    (hbottom_good : GoodHeight bottom) (htop_good : GoodHeight top)
+    (H : ZetaRectangle.SafeHeightRectangleZeroClassification
+      hbottom_pos hbottom_lt_top)
+    {hAdm :
+      (backlundFixedSideRectangle bottom top hbottom_lt_top).StronglyAdmissibleForZeta}
+    {Z :
+      (backlundFixedSideRectangle bottom top hbottom_lt_top).ZeroSetInside} :
+    (backlundFixedSideRectangle bottom top hbottom_lt_top)
+      |>.CanonicalRemainderNoUnremovedSingularities hAdm Z := by
+  simpa [backlundFixedSideRectangle, ZetaRectangle.rectangleOfSafeHeights] using
+    (ZetaRectangle.noUnremovedSingularities_rectangleOfSafeHeights
+      hbottom_pos hbottom_lt_top hbottom_good htop_good H
+      (hAdm := by
+        simpa [backlundFixedSideRectangle, ZetaRectangle.rectangleOfSafeHeights] using hAdm)
+      (Z := by
+        simpa [backlundFixedSideRectangle, ZetaRectangle.rectangleOfSafeHeights] using Z))
+
+/-- A global zeta-zero classification input supplies the safe-height
+zero-classification package for any positive safe-height rectangle. -/
+def safeHeightZeroClassification_of_zeroClassificationInput
+    (ZC : ZetaZeroClassificationInput)
+    {bottom top : ℝ} (hbottom_pos : 0 < bottom)
+    (hbottom_lt_top : bottom < top) :
+    ZetaRectangle.SafeHeightRectangleZeroClassification
+      hbottom_pos hbottom_lt_top where
+  left_edge := ZC.left_edge_zero_free
+  bottom_zeros_nontrivial := fun z hzIm hzeta =>
+    ZC.zeros_nontrivial_of_pos_im z
+      (by rw [hzIm]; exact hbottom_pos) hzeta
+  top_zeros_nontrivial := fun z hzIm hzeta =>
+    ZC.zeros_nontrivial_of_pos_im z
+      (by rw [hzIm]; linarith) hzeta
+  interior_zeros_nontrivial := fun z hzOpen hzeta =>
+    ZC.zeros_nontrivial_of_pos_im z
+      (by
+        have hbottom_lt : bottom < z.im := hzOpen.2.2.1
+        linarith)
+      hzeta
+
 /-- If a canonical argument index is certified equal to a natural number,
 then Lean's nonnegative-index conversion returns that same natural
 number. -/
@@ -35230,6 +35288,373 @@ noncomputable def
     simpa [ZetaRectangle.ZetaRectangleResidueTheoremOutput.toResidueIndexFormula] using
       C.residueIndex_eq_nat n
 
+/-- Canonical no-unremoved-singularities rows for the concrete Backlund
+grid.
+
+This is the internal residue-free argument-principle source: each row
+supplies strong admissibility and the canonical statement that every
+closed-rectangle zeta zero is one of the counted nontrivial interior
+zeros.  The existing principal-part/kernal-index machinery then builds
+the residue-index formula. -/
+structure
+    BacklundGrid2NoUnremovedSingularitiesCertificates140_369075049_1000000 where
+  initial_count_eq :
+    zetaWeightedZeroCountUpToHeight
+      (backlundGrid2EndpointHeight140_369075049_1000000 ⟨0, by norm_num⟩)
+      (backlundGrid2EndpointHeight140_369075049_1000000_nonneg
+        ⟨0, by norm_num⟩) =
+    backlundGrid2EndpointCount140_369075049_1000000 0
+  hgood :
+    ∀ n : Fin 115,
+      GoodHeight (backlundGrid2EndpointRow140_369075049_1000000 n).B
+  hAdm :
+    ∀ n : Fin 115,
+      (backlundFixedSideRectangle
+          (backlundGrid2EndpointRow140_369075049_1000000 n).A
+          (backlundGrid2EndpointRow140_369075049_1000000 n).B
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+        ).StronglyAdmissibleForZeta
+  noUnremoved :
+    ∀ n : Fin 115,
+      let R :=
+        backlundFixedSideRectangle
+          (backlundGrid2EndpointRow140_369075049_1000000 n).A
+          (backlundGrid2EndpointRow140_369075049_1000000 n).B
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+      let hA0 : 0 ≤ (backlundGrid2EndpointRow140_369075049_1000000 n).A :=
+        le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140
+            (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140)
+      R.CanonicalRemainderNoUnremovedSingularities
+        (hAdm n)
+        (R.zeroSetInsideOfSlab
+          backlundFixedSideRectangle_left_lt_zero
+          backlundFixedSideRectangle_one_lt_right
+          (hgood n)
+          (R.canonicalSlabZeroSet hA0))
+  residueIndex_eq_nat :
+    ∀ n : Fin 115,
+      let R :=
+        backlundFixedSideRectangle
+          (backlundGrid2EndpointRow140_369075049_1000000 n).A
+          (backlundGrid2EndpointRow140_369075049_1000000 n).B
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+      let hA0 : 0 ≤ (backlundGrid2EndpointRow140_369075049_1000000 n).A :=
+        le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140
+            (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140)
+      let D :=
+        ZetaRectangle.canonicalResidueFreeArgumentPrincipleData
+          (R := R)
+          (hAdm := hAdm n)
+          (Z := R.zeroSetInsideOfSlab
+            backlundFixedSideRectangle_left_lt_zero
+            backlundFixedSideRectangle_one_lt_right
+            (hgood n)
+            (R.canonicalSlabZeroSet hA0))
+          (noUnremoved n)
+      (D.toResidueIndexFormula (by rfl)).residueIndex =
+        ((backlundGrid2EndpointRow140_369075049_1000000 n).countUpper -
+          (backlundGrid2EndpointRow140_369075049_1000000 n).countLower : ℕ)
+
+/-- No-unremoved-singularity rows lower to residue-index rows. -/
+noncomputable def
+    BacklundGrid2ResidueIndexCertificates140_369075049_1000000.ofNoUnremovedSingularitiesCertificates
+    (C :
+      BacklundGrid2NoUnremovedSingularitiesCertificates140_369075049_1000000) :
+    BacklundGrid2ResidueIndexCertificates140_369075049_1000000 where
+  initial_count_eq := C.initial_count_eq
+  hgood := C.hgood
+  residueData := by
+    intro n
+    let R :=
+      backlundFixedSideRectangle
+        (backlundGrid2EndpointRow140_369075049_1000000 n).A
+        (backlundGrid2EndpointRow140_369075049_1000000 n).B
+        (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+    let hA0 : 0 ≤ (backlundGrid2EndpointRow140_369075049_1000000 n).A :=
+      le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+        (backlund_two_pi_le_of_ge_140
+          (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140)
+    let Z :=
+      R.zeroSetInsideOfSlab
+        backlundFixedSideRectangle_left_lt_zero
+        backlundFixedSideRectangle_one_lt_right
+        (C.hgood n)
+        (R.canonicalSlabZeroSet hA0)
+    let D :=
+      ZetaRectangle.canonicalResidueFreeArgumentPrincipleData
+        (R := R) (hAdm := C.hAdm n) (Z := Z) (C.noUnremoved n)
+    exact D.toResidueIndexFormula (by rfl)
+  residueIndex_eq_nat := by
+    intro n
+    simpa using C.residueIndex_eq_nat n
+
+/-- Safe-height zero-classification rows for the concrete Backlund grid.
+
+This lowers the rowwise geometric inputs further: strong admissibility
+and no-unremoved-singularities are derived from `GoodHeight` at both
+horizontal sides plus the standard safe-height zero classification for
+the fixed rectangle. -/
+structure
+    BacklundGrid2SafeHeightZeroClassificationCertificates140_369075049_1000000 where
+  initial_count_eq :
+    zetaWeightedZeroCountUpToHeight
+      (backlundGrid2EndpointHeight140_369075049_1000000 ⟨0, by norm_num⟩)
+      (backlundGrid2EndpointHeight140_369075049_1000000_nonneg
+        ⟨0, by norm_num⟩) =
+    backlundGrid2EndpointCount140_369075049_1000000 0
+  hgood_bottom :
+    ∀ n : Fin 115,
+      GoodHeight (backlundGrid2EndpointRow140_369075049_1000000 n).A
+  hgood_top :
+    ∀ n : Fin 115,
+      GoodHeight (backlundGrid2EndpointRow140_369075049_1000000 n).B
+  zeroClass :
+    ∀ n : Fin 115,
+      ZetaRectangle.SafeHeightRectangleZeroClassification
+        (lt_of_lt_of_le (by positivity : (0 : ℝ) < 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140
+            (backlundGrid2EndpointRow140_369075049_1000000 n).hA_ge_140))
+        (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+  residueIndex_eq_nat :
+    ∀ n : Fin 115,
+      let row := backlundGrid2EndpointRow140_369075049_1000000 n
+      let R :=
+        backlundFixedSideRectangle row.A row.B
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+      let hApos : 0 < row.A :=
+        lt_of_lt_of_le (by positivity : (0 : ℝ) < 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140 row.hA_ge_140)
+      let hA0 : 0 ≤ row.A :=
+        le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140 row.hA_ge_140)
+      let hAdm : R.StronglyAdmissibleForZeta :=
+        backlundFixedSideRectangle_stronglyAdmissible_of_safeHeightZeroClassification
+          hApos (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+          (hgood_bottom n) (hgood_top n) (zeroClass n)
+      let Z :=
+        R.zeroSetInsideOfSlab
+          backlundFixedSideRectangle_left_lt_zero
+          backlundFixedSideRectangle_one_lt_right
+          (hgood_top n)
+          (R.canonicalSlabZeroSet hA0)
+      let N : R.CanonicalRemainderNoUnremovedSingularities hAdm Z :=
+        backlundFixedSideRectangle_noUnremovedSingularities_of_safeHeightZeroClassification
+          hApos (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+          (hgood_bottom n) (hgood_top n) (zeroClass n)
+      let D :=
+        ZetaRectangle.canonicalResidueFreeArgumentPrincipleData
+          (R := R) (hAdm := hAdm) (Z := Z) N
+      (D.toResidueIndexFormula (by rfl)).residueIndex =
+        (row.countUpper - row.countLower : ℕ)
+
+/-- Safe-height zero-classification rows lower to no-unremoved rows. -/
+noncomputable def
+    BacklundGrid2NoUnremovedSingularitiesCertificates140_369075049_1000000.ofSafeHeightZeroClassificationCertificates
+    (C :
+      BacklundGrid2SafeHeightZeroClassificationCertificates140_369075049_1000000) :
+    BacklundGrid2NoUnremovedSingularitiesCertificates140_369075049_1000000 where
+  initial_count_eq := C.initial_count_eq
+  hgood := C.hgood_top
+  hAdm := by
+    intro n
+    let row := backlundGrid2EndpointRow140_369075049_1000000 n
+    let hApos : 0 < row.A :=
+      lt_of_lt_of_le (by positivity : (0 : ℝ) < 2 * Real.pi)
+        (backlund_two_pi_le_of_ge_140 row.hA_ge_140)
+    exact
+      backlundFixedSideRectangle_stronglyAdmissible_of_safeHeightZeroClassification
+        hApos (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+        (C.hgood_bottom n) (C.hgood_top n) (C.zeroClass n)
+  noUnremoved := by
+    intro n
+    let row := backlundGrid2EndpointRow140_369075049_1000000 n
+    let hApos : 0 < row.A :=
+      lt_of_lt_of_le (by positivity : (0 : ℝ) < 2 * Real.pi)
+        (backlund_two_pi_le_of_ge_140 row.hA_ge_140)
+    exact
+      backlundFixedSideRectangle_noUnremovedSingularities_of_safeHeightZeroClassification
+        hApos (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+        (C.hgood_bottom n) (C.hgood_top n) (C.zeroClass n)
+  residueIndex_eq_nat := by
+    intro n
+    simpa using C.residueIndex_eq_nat n
+
+/-- Good-height plus index rows for the concrete Backlund grid.
+
+The zeta zero-classification input is already proved globally in this
+file, so the rowwise safe-height zero-classification package is no
+longer an assumption.  The remaining finite row data are: both horizontal
+endpoints are good heights, and the residue-free contour index equals
+the tabulated slab increment. -/
+structure
+    BacklundGrid2GoodHeightIndexCertificates140_369075049_1000000 where
+  initial_count_eq :
+    zetaWeightedZeroCountUpToHeight
+      (backlundGrid2EndpointHeight140_369075049_1000000 ⟨0, by norm_num⟩)
+      (backlundGrid2EndpointHeight140_369075049_1000000_nonneg
+        ⟨0, by norm_num⟩) =
+    backlundGrid2EndpointCount140_369075049_1000000 0
+  hgood_bottom :
+    ∀ n : Fin 115,
+      GoodHeight (backlundGrid2EndpointRow140_369075049_1000000 n).A
+  hgood_top :
+    ∀ n : Fin 115,
+      GoodHeight (backlundGrid2EndpointRow140_369075049_1000000 n).B
+  residueIndex_eq_nat :
+    ∀ n : Fin 115,
+      let row := backlundGrid2EndpointRow140_369075049_1000000 n
+      let R :=
+        backlundFixedSideRectangle row.A row.B
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+      let hApos : 0 < row.A :=
+        lt_of_lt_of_le (by positivity : (0 : ℝ) < 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140 row.hA_ge_140)
+      let hA0 : 0 ≤ row.A :=
+        le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140 row.hA_ge_140)
+      let zeroClass :=
+        safeHeightZeroClassification_of_zeroClassificationInput
+          zetaZeroClassificationInput
+          hApos
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+      let hAdm : R.StronglyAdmissibleForZeta :=
+        backlundFixedSideRectangle_stronglyAdmissible_of_safeHeightZeroClassification
+          hApos
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+          (hgood_bottom n) (hgood_top n) zeroClass
+      let Z :=
+        R.zeroSetInsideOfSlab
+          backlundFixedSideRectangle_left_lt_zero
+          backlundFixedSideRectangle_one_lt_right
+          (hgood_top n)
+          (R.canonicalSlabZeroSet hA0)
+      let N : R.CanonicalRemainderNoUnremovedSingularities hAdm Z :=
+        backlundFixedSideRectangle_noUnremovedSingularities_of_safeHeightZeroClassification
+          hApos
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+          (hgood_bottom n) (hgood_top n) zeroClass
+      let D :=
+        ZetaRectangle.canonicalResidueFreeArgumentPrincipleData
+          (R := R) (hAdm := hAdm) (Z := Z) N
+      (D.toResidueIndexFormula (by rfl)).residueIndex =
+        (row.countUpper - row.countLower : ℕ)
+
+/-- Good-height/index rows lower to safe-height zero-classification rows,
+using the globally proved zeta zero-classification input. -/
+noncomputable def
+    BacklundGrid2SafeHeightZeroClassificationCertificates140_369075049_1000000.ofGoodHeightIndexCertificates
+    (C :
+      BacklundGrid2GoodHeightIndexCertificates140_369075049_1000000) :
+    BacklundGrid2SafeHeightZeroClassificationCertificates140_369075049_1000000 where
+  initial_count_eq := C.initial_count_eq
+  hgood_bottom := C.hgood_bottom
+  hgood_top := C.hgood_top
+  zeroClass := by
+    intro n
+    let row := backlundGrid2EndpointRow140_369075049_1000000 n
+    let hApos : 0 < row.A :=
+      lt_of_lt_of_le (by positivity : (0 : ℝ) < 2 * Real.pi)
+        (backlund_two_pi_le_of_ge_140 row.hA_ge_140)
+    exact
+      safeHeightZeroClassification_of_zeroClassificationInput
+        zetaZeroClassificationInput
+        hApos
+        (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+  residueIndex_eq_nat := by
+    intro n
+    simpa using C.residueIndex_eq_nat n
+
+/-- Endpoint-good-height plus index rows for the concrete Backlund grid.
+
+Instead of giving bottom/top good-height facts row by row, this source
+certifies `GoodHeight` once at each of the 116 grid endpoints. -/
+structure
+    BacklundGrid2EndpointGoodIndexCertificates140_369075049_1000000 where
+  initial_count_eq :
+    zetaWeightedZeroCountUpToHeight
+      (backlundGrid2EndpointHeight140_369075049_1000000 ⟨0, by norm_num⟩)
+      (backlundGrid2EndpointHeight140_369075049_1000000_nonneg
+        ⟨0, by norm_num⟩) =
+    backlundGrid2EndpointCount140_369075049_1000000 0
+  hgood_endpoint :
+    ∀ n : Fin 116,
+      GoodHeight (backlundGrid2EndpointHeight140_369075049_1000000 n)
+  residueIndex_eq_nat :
+    ∀ n : Fin 115,
+      let row := backlundGrid2EndpointRow140_369075049_1000000 n
+      let R :=
+        backlundFixedSideRectangle row.A row.B
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+      let hgood_bottom : GoodHeight row.A := by
+        have h :=
+          hgood_endpoint
+            (backlundGrid2EndpointLeftIndex140_369075049_1000000 n)
+        simpa [backlundGrid2EndpointHeight_left140_369075049_1000000 n]
+          using h
+      let hgood_top : GoodHeight row.B := by
+        have h :=
+          hgood_endpoint
+            (backlundGrid2EndpointRightIndex140_369075049_1000000 n)
+        simpa [backlundGrid2EndpointHeight_right140_369075049_1000000 n]
+          using h
+      let hApos : 0 < row.A :=
+        lt_of_lt_of_le (by positivity : (0 : ℝ) < 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140 row.hA_ge_140)
+      let hA0 : 0 ≤ row.A :=
+        le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi)
+          (backlund_two_pi_le_of_ge_140 row.hA_ge_140)
+      let zeroClass :=
+        safeHeightZeroClassification_of_zeroClassificationInput
+          zetaZeroClassificationInput
+          hApos
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+      let hAdm : R.StronglyAdmissibleForZeta :=
+        backlundFixedSideRectangle_stronglyAdmissible_of_safeHeightZeroClassification
+          hApos
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+          hgood_bottom hgood_top zeroClass
+      let Z :=
+        R.zeroSetInsideOfSlab
+          backlundFixedSideRectangle_left_lt_zero
+          backlundFixedSideRectangle_one_lt_right
+          hgood_top
+          (R.canonicalSlabZeroSet hA0)
+      let N : R.CanonicalRemainderNoUnremovedSingularities hAdm Z :=
+        backlundFixedSideRectangle_noUnremovedSingularities_of_safeHeightZeroClassification
+          hApos
+          (backlundGrid2EndpointRow_lt140_369075049_1000000 n)
+          hgood_bottom hgood_top zeroClass
+      let D :=
+        ZetaRectangle.canonicalResidueFreeArgumentPrincipleData
+          (R := R) (hAdm := hAdm) (Z := Z) N
+      (D.toResidueIndexFormula (by rfl)).residueIndex =
+        (row.countUpper - row.countLower : ℕ)
+
+/-- Endpoint-good-height/index rows lower to rowwise good-height/index rows. -/
+noncomputable def
+    BacklundGrid2GoodHeightIndexCertificates140_369075049_1000000.ofEndpointGoodIndexCertificates
+    (C :
+      BacklundGrid2EndpointGoodIndexCertificates140_369075049_1000000) :
+    BacklundGrid2GoodHeightIndexCertificates140_369075049_1000000 where
+  initial_count_eq := C.initial_count_eq
+  hgood_bottom := by
+    intro n
+    have h :=
+      C.hgood_endpoint
+        (backlundGrid2EndpointLeftIndex140_369075049_1000000 n)
+    simpa [backlundGrid2EndpointHeight_left140_369075049_1000000 n] using h
+  hgood_top := by
+    intro n
+    have h :=
+      C.hgood_endpoint
+        (backlundGrid2EndpointRightIndex140_369075049_1000000 n)
+    simpa [backlundGrid2EndpointHeight_right140_369075049_1000000 n] using h
+  residueIndex_eq_nat := by
+    intro n
+    simpa using C.residueIndex_eq_nat n
+
 /-- Turing-count certificate rows for the concrete Backlund grid.
 
 This is the finite zero-table-facing form after the smooth-main
@@ -38638,6 +39063,66 @@ theorem
       Hslabs)
     hT
 
+/-- Backlund/Turing from canonical no-unremoved-singularity rows on the
+concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2NoUnremovedSingularitiesSlabs369075049
+    (Htail : PlattTrudgianBacklundCut591096_100000TailInput)
+    (Hslabs :
+      BacklundGrid2NoUnremovedSingularitiesCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ResidueIndexSlabs369075049
+    Htail
+    (BacklundGrid2ResidueIndexCertificates140_369075049_1000000.ofNoUnremovedSingularitiesCertificates
+      Hslabs)
+    hT
+
+/-- Backlund/Turing from safe-height zero-classification rows on the
+concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2SafeHeightZeroClassificationSlabs369075049
+    (Htail : PlattTrudgianBacklundCut591096_100000TailInput)
+    (Hslabs :
+      BacklundGrid2SafeHeightZeroClassificationCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2NoUnremovedSingularitiesSlabs369075049
+    Htail
+    (BacklundGrid2NoUnremovedSingularitiesCertificates140_369075049_1000000.ofSafeHeightZeroClassificationCertificates
+      Hslabs)
+    hT
+
+/-- Backlund/Turing from good-height/index rows on the concrete grid.
+The global zeta zero-classification input is already proved in this
+file. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2GoodHeightIndexSlabs369075049
+    (Htail : PlattTrudgianBacklundCut591096_100000TailInput)
+    (Hslabs :
+      BacklundGrid2GoodHeightIndexCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2SafeHeightZeroClassificationSlabs369075049
+    Htail
+    (BacklundGrid2SafeHeightZeroClassificationCertificates140_369075049_1000000.ofGoodHeightIndexCertificates
+      Hslabs)
+    hT
+
+/-- Backlund/Turing from endpoint-good/index rows on the concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2EndpointGoodIndexSlabs369075049
+    (Htail : PlattTrudgianBacklundCut591096_100000TailInput)
+    (Hslabs :
+      BacklundGrid2EndpointGoodIndexCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2GoodHeightIndexSlabs369075049
+    Htail
+    (BacklundGrid2GoodHeightIndexCertificates140_369075049_1000000.ofEndpointGoodIndexCertificates
+      Hslabs)
+    hT
+
 /-- Backlund/Turing from the analytic finite source: the
 Platt--Trudgian tail plus fixed-rectangle argument-principle
 natural-index certificates on the concrete grid. -/
@@ -38724,6 +39209,62 @@ theorem
     {T : ℝ} (hT : (140 : ℝ) ≤ T) :
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
   concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2ResidueTheoremOutputSlabs369075049
+    (PlattTrudgianBacklundCut591096_100000TailInput.of_global Hglobal)
+    Hslabs
+    hT
+
+/-- Backlund/Turing from the published Platt--Trudgian global estimate
+plus canonical no-unremoved-singularity rows on the concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2NoUnremovedSingularitiesSlabs369075049
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hslabs :
+      BacklundGrid2NoUnremovedSingularitiesCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2NoUnremovedSingularitiesSlabs369075049
+    (PlattTrudgianBacklundCut591096_100000TailInput.of_global Hglobal)
+    Hslabs
+    hT
+
+/-- Backlund/Turing from the published Platt--Trudgian global estimate
+plus safe-height zero-classification rows on the concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2SafeHeightZeroClassificationSlabs369075049
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hslabs :
+      BacklundGrid2SafeHeightZeroClassificationCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2SafeHeightZeroClassificationSlabs369075049
+    (PlattTrudgianBacklundCut591096_100000TailInput.of_global Hglobal)
+    Hslabs
+    hT
+
+/-- Backlund/Turing from the published Platt--Trudgian global estimate
+plus good-height/index rows on the concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2GoodHeightIndexSlabs369075049
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hslabs :
+      BacklundGrid2GoodHeightIndexCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2GoodHeightIndexSlabs369075049
+    (PlattTrudgianBacklundCut591096_100000TailInput.of_global Hglobal)
+    Hslabs
+    hT
+
+/-- Backlund/Turing from the published Platt--Trudgian global estimate
+plus endpoint-good/index rows on the concrete grid. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2EndpointGoodIndexSlabs369075049
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hslabs :
+      BacklundGrid2EndpointGoodIndexCertificates140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTail591096_and_grid2EndpointGoodIndexSlabs369075049
     (PlattTrudgianBacklundCut591096_100000TailInput.of_global Hglobal)
     Hslabs
     hT
@@ -71179,6 +71720,39 @@ theorem HadamardZeroInvSqSummability.summable_regularized
   summable_hadamard_regularized_terms_of_inv_sq
     H.zero_ne hs_ne H.inv_sq_summable (H.eventually_large s)
 
+/-- 🌟🌟🌟 **PROVED — totalized regularized series is summable at every
+point.**
+
+The earlier bound needed an explicit no-collision hypothesis. For the
+totalized Lean expression, collisions can occur only among the finitely
+many non-large zeros: once `2‖s‖ ≤ ‖ρᵢ‖`, equality `s = ρᵢ` would force
+`ρᵢ = 0`, contradicting `zero_ne`. Thus the inverse-square majorant
+applies eventually for every `s`. -/
+theorem HadamardZeroInvSqSummability.summable_regularized_totalized
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroInvSqSummability zeroLoc)
+    (s : ℂ) :
+    Summable fun i : ι => 1 / (s - zeroLoc i) + 1 / zeroLoc i := by
+  apply Summable.of_norm_bounded_eventually
+    (g := fun i => 2 * ‖s‖ * (‖zeroLoc i‖ ^ 2)⁻¹)
+  · exact H.inv_sq_summable.mul_left (2 * ‖s‖)
+  · filter_upwards [H.eventually_large s] with i hi
+    have hs_ne : s ≠ zeroLoc i := by
+      intro h
+      have hnorm_zero : ‖s‖ = 0 := by
+        rw [← h] at hi
+        have hs_nonneg : 0 ≤ ‖s‖ := norm_nonneg s
+        linarith
+      have hs0 : s = 0 := norm_eq_zero.mp hnorm_zero
+      exact H.zero_ne i (by rw [← h, hs0])
+    have h_bound :=
+      norm_hadamard_regularized_term_le_large (H.zero_ne i) hs_ne hi
+    have h_eq :
+        (2 : ℝ) * ‖s‖ / ‖zeroLoc i‖ ^ 2
+          = 2 * ‖s‖ * (‖zeroLoc i‖ ^ 2)⁻¹ := by
+      rw [div_eq_mul_inv]
+    linarith [h_eq ▸ h_bound]
+
 /-- 🌟🌟🌟🌟 **PROVED — build Hadamard log-derivative limit data from
 finite derivative convergence.**
 
@@ -71391,6 +71965,19 @@ theorem HadamardZeroInvSqSummability.finiteRegularizedSum_tendsto
   unfold finiteHadamardRegularizedSum hadamardRegularizedLogDerivSeries
   exact (H.summable_regularized hs_ne).hasSum
 
+/-- 🌟🌟🌟 **PROVED — finite regularized sums converge to the `tsum`
+for the totalized regularized expression at every point.** -/
+theorem HadamardZeroInvSqSummability.finiteRegularizedSum_tendsto_totalized
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroInvSqSummability zeroLoc)
+    (s : ℂ) :
+    Tendsto
+      (fun F : Finset ι => finiteHadamardRegularizedSum zeroLoc F s)
+      Filter.atTop
+      (𝓝 (hadamardRegularizedLogDerivSeries zeroLoc s)) := by
+  unfold finiteHadamardRegularizedSum hadamardRegularizedLogDerivSeries
+  exact (H.summable_regularized_totalized s).hasSum
+
 /-- 🌟🌟🌟 **PROVED — monotone finite exhaustions inherit Hadamard product
 convergence.**
 
@@ -71425,6 +72012,45 @@ theorem HadamardZeroInvSqSummability.finiteRegularizedSum_tendsto_at_exhaustion
       (𝓝 (hadamardRegularizedLogDerivSeries zeroLoc s)) :=
   (H.finiteRegularizedSum_tendsto hs_ne).comp
     (tendsto_atTop_finset_of_monotone hmono hexhaustive)
+
+/-- 🌟🌟🌟 **PROVED — monotone finite exhaustions inherit totalized
+regularized-sum convergence at every point.** -/
+theorem HadamardZeroInvSqSummability.finiteRegularizedSum_tendsto_at_exhaustion_totalized
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroInvSqSummability zeroLoc)
+    {exhaust : ℕ → Finset ι}
+    (hmono : Monotone exhaust)
+    (hexhaustive : ∀ i : ι, ∃ n : ℕ, i ∈ exhaust n)
+    (s : ℂ) :
+    Tendsto
+      (fun n : ℕ => finiteHadamardRegularizedSum zeroLoc (exhaust n) s)
+      Filter.atTop
+      (𝓝 (hadamardRegularizedLogDerivSeries zeroLoc s)) :=
+  (H.finiteRegularizedSum_tendsto_totalized s).comp
+    (tendsto_atTop_finset_of_monotone hmono hexhaustive)
+
+/-- 🌟🌟🌟🌟 **PROVED — build the finite-exhaustion convergence interface
+from inverse-square zero distribution and a monotone exhaustive sequence
+of finite sets.** -/
+noncomputable def HadamardFiniteExhaustion.of_invSq_mono_exhaustive
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroInvSqSummability zeroLoc)
+    (exhaust : ℕ → Finset ι)
+    (hmono : Monotone exhaust)
+    (hexhaustive : ∀ i : ι, ∃ n : ℕ, i ∈ exhaust n) :
+    HadamardFiniteExhaustion zeroLoc :=
+  { exhaust := exhaust
+    exhaust_mono := by
+      intro n m hnm
+      exact hmono hnm
+    product_tendsto := by
+      intro s
+      exact H.indexedFiniteProduct_tendsto_at_exhaustion
+        hmono hexhaustive s
+    regularized_sum_tendsto := by
+      intro s
+      exact H.finiteRegularizedSum_tendsto_at_exhaustion_totalized
+        hmono hexhaustive s }
 
 /-- 🌟🌟🌟🌟 **PROVED — locally uniform convergence of the genus-one
 Hadamard product from a summable uniform deviation bound.**
@@ -71616,6 +72242,63 @@ noncomputable def HadamardProductLocallyUniformLimitData.of_finsetLocallyUniform
           intro n m hnm
           exact Hex.exhaust_mono hnm)
         hexhaustive }
+
+/-- 🌟🌟🌟🌟🌟 **PROVED — locally uniform convergence of the genus-one
+Hadamard product on the whole complex plane from inverse-square zero
+distribution.**
+
+The proof is genuinely local: near a point `x`, work inside a ball of
+radius `‖x‖+1`, apply the bounded-open theorem above, then identify the
+ball-neighborhood with an ordinary neighborhood of `x`. -/
+theorem HadamardZeroInvSqSummability.tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_univ
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroInvSqSummability zeroLoc) :
+    TendstoLocallyUniformlyOn
+      (fun F : Finset ι => fun s : ℂ =>
+        indexedFiniteHadamardProduct zeroLoc F s)
+      (infiniteHadamardProduct zeroLoc)
+      Filter.atTop
+      Set.univ := by
+  intro V hV x _hx
+  let R : ℝ := ‖x‖ + 1
+  have hR : 0 ≤ R := by
+    have hxnn : 0 ≤ ‖x‖ := norm_nonneg x
+    linarith
+  have hRpos : 0 < R := by
+    have hxnn : 0 ≤ ‖x‖ := norm_nonneg x
+    linarith
+  have hxball : x ∈ Metric.ball (0 : ℂ) R := by
+    rw [Metric.mem_ball]
+    simp [R, dist_eq_norm, hRpos]
+  have hUbound :
+      ∀ s : ℂ, s ∈ Metric.ball (0 : ℂ) R → ‖s‖ ≤ R := by
+    intro s hs
+    exact le_of_lt (by
+      rw [Metric.mem_ball] at hs
+      simpa [dist_eq_norm] using hs)
+  have hball :=
+    H.tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_of_norm_bounded_open
+      Metric.isOpen_ball hR hUbound
+  rcases hball V hV x hxball with ⟨t, ht, htail⟩
+  refine ⟨t, ?_, htail⟩
+  have ht_nhds : t ∈ 𝓝 x := by
+    rwa [Metric.isOpen_ball.nhdsWithin_eq hxball] at ht
+  simpa using ht_nhds
+
+/-- 🌟🌟🌟🌟 **PROVED — full-plane sequential Hadamard product LUC data
+from inverse-square zero distribution and an exhaustive finite
+truncation sequence.** -/
+noncomputable def HadamardProductLocallyUniformLimitData.of_invSq_univ
+    {ι : Type*} {zeroLoc : ι → ℂ}
+    (H : HadamardZeroInvSqSummability zeroLoc)
+    (Hex : HadamardFiniteExhaustion zeroLoc)
+    (hexhaustive : ∀ i : ι, ∃ n : ℕ, i ∈ Hex.exhaust n) :
+    HadamardProductLocallyUniformLimitData zeroLoc Hex :=
+  HadamardProductLocallyUniformLimitData.of_finsetLocallyUniform
+    Hex
+    hexhaustive
+    isOpen_univ
+    H.tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_univ
 
 /-- 🌟🌟🌟 **PROVED — infinite genus-one product is nonzero off the
 indexed zeros when the genus-one deviations are summable.**
@@ -73665,6 +74348,41 @@ theorem LowZeroContributionSplitAFZ.of_cloudTailSplit
   rw [H.split z hz hne Hno, H.cloud_exact z hz,
       H.tail_exact z hz hne Hno]
 
+/-- 🌟🌟🌟 **PROVED — the atomic low cloud/tail split is equivalent to
+the bare low zero-contribution split when the cloud and tail are the
+canonical low pieces.** -/
+theorem LowCloudTailSplitAFZ.of_zeroContributionSplit
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ZC : ℂ → ℂ}
+    (H : LowZeroContributionSplitAFZ Dzero T0 ZC) :
+    LowCloudTailSplitAFZ
+      Dzero T0 ZC
+      (fun z : ℂ => cloudModel zeros100ceil z)
+      (lowTailZeroContribution Dzero T0) :=
+  { cloud_exact := by
+      intro z _hz
+      rfl
+    tail_exact := by
+      intro z _hz _hne _Hno
+      rfl
+    split := by
+      intro z hz hne Hno
+      exact H.split z hz hne Hno }
+
+/-- 🌟🌟🌟 **PROVED — canonical low cloud/tail split iff bare low
+zero-contribution split.** -/
+theorem lowCloudTailSplitAFZ_iff_zeroContributionSplit
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ZC : ℂ → ℂ} :
+    LowCloudTailSplitAFZ
+      Dzero T0 ZC
+      (fun z : ℂ => cloudModel zeros100ceil z)
+      (lowTailZeroContribution Dzero T0)
+      ↔
+    LowZeroContributionSplitAFZ Dzero T0 ZC :=
+  ⟨LowZeroContributionSplitAFZ.of_cloudTailSplit,
+    LowCloudTailSplitAFZ.of_zeroContributionSplit⟩
+
 /-- 🌟🌟 **PROVED — the explicit low model satisfies the genuine
 low zero-contribution split.** -/
 theorem LowZeroContributionSplitAFZ.explicit_lowModel
@@ -75148,6 +75866,48 @@ theorem EntireXiHadamardFactorization.of_offZeroQuotient_invSq
     (fun s hs => Hdist.infiniteProduct_ne_zero hs)
     hquot
 
+/-- 🌟🌟🌟 **PROVED — a global entire-ξ Hadamard factorization gives the
+off-zero quotient identity.**
+
+This is the reverse algebraic direction to `of_offZeroQuotient_invSq`;
+product nonvanishing off the indexed zero set is supplied by the
+inverse-square zero distribution. -/
+theorem EntireXiHadamardFactorization.to_offZeroQuotient_invSq
+    {ι : Type} {HZ : ConcreteEntireXiZeroSystem ι}
+    {prefactor : ℂ → ℂ}
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    (Hfact : EntireXiHadamardFactorization HZ prefactor) :
+    ∀ s : ℂ,
+      (∀ i : ι, s ≠ HZ.zeroLoc i) →
+        entireRiemannXi s / infiniteHadamardProduct HZ.zeroLoc s
+          = prefactor s := by
+  intro s hno
+  have hprod_ne :
+      infiniteHadamardProduct HZ.zeroLoc s ≠ 0 :=
+    Hdist.infiniteProduct_ne_zero hno
+  rw [Hfact.factorization s]
+  field_simp [hprod_ne]
+
+/-- 🌟🌟🌟🌟 **PROVED — under inverse-square zero distribution, the global
+entire-ξ Hadamard factorization is equivalent to the off-zero quotient
+identity.**
+
+Thus the remaining classical factorization content can be targeted as
+the punctured quotient formula; zero-side vanishing and off-zero product
+nonvanishing are already internal. -/
+theorem entireXiHadamardFactorization_iff_offZeroQuotient_invSq
+    {ι : Type} {HZ : ConcreteEntireXiZeroSystem ι}
+    {prefactor : ℂ → ℂ}
+    (Hdist : EntireXiZeroInvSqDistribution HZ) :
+    EntireXiHadamardFactorization HZ prefactor
+      ↔
+    ∀ s : ℂ,
+      (∀ i : ι, s ≠ HZ.zeroLoc i) →
+        entireRiemannXi s / infiniteHadamardProduct HZ.zeroLoc s
+          = prefactor s :=
+  ⟨EntireXiHadamardFactorization.to_offZeroQuotient_invSq Hdist,
+    EntireXiHadamardFactorization.of_offZeroQuotient_invSq Hdist⟩
+
 /-- 🌟🌟🌟 **PROVED — exp-affine entire-ξ Hadamard factorization from
 the classical off-zero quotient identity.** The product-zero behavior at
 the indexed zeros is already discharged by
@@ -75439,6 +76199,52 @@ noncomputable def
             simpa [Hderiv, HadamardFiniteDerivativeLimitData.of_locallyUniformProduct]
               using hs))
 
+/-- 🌟🌟🌟🌟🌟🌟 **PROVED — entire-ξ nonzero-locus LUC/log-derivative data
+from inverse-square zero distribution and an exhaustive finite
+truncation sequence.**
+
+This discharges the locally-uniform Hadamard product convergence input
+itself: the full-plane Finset-net LUC theorem supplies both the Finset
+and sequential product convergence needed by the derivative passage. -/
+noncomputable def HadamardProductLUCOnEntireXiNonzeroData.of_invSq_univ
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    (Hex : HadamardFiniteExhaustion HZ.zeroLoc)
+    (hexhaustive : ∀ i : ι, ∃ n : ℕ, i ∈ Hex.exhaust n) :
+    HadamardProductLUCOnEntireXiNonzeroData HZ.zeroLoc :=
+  HadamardProductLUCOnEntireXiNonzeroData.of_locallyUniformProductLimitData_invSq
+    HZ
+    Hdist
+    (HadamardProductLocallyUniformLimitData.of_invSq_univ
+      Hdist.toHadamardZeroInvSqSummability Hex hexhaustive)
+    (by
+      intro s _hs
+      exact Set.mem_univ s)
+    Hdist.toHadamardZeroInvSqSummability.tendstoLocallyUniformlyOn_indexedFiniteHadamardProduct_univ
+
+/-- 🌟🌟🌟🌟🌟🌟 **PROVED — entire-ξ nonzero-locus LUC/log-derivative data
+from inverse-square zero distribution and a monotone exhaustive finite
+set sequence.**
+
+This removes the preassembled `HadamardFiniteExhaustion` input: its
+product and regularized-sum convergence fields are built from
+inverse-square zero distribution. -/
+noncomputable def HadamardProductLUCOnEntireXiNonzeroData.of_invSq_mono_exhaustive
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    (exhaust : ℕ → Finset ι)
+    (hmono : Monotone exhaust)
+    (hexhaustive : ∀ i : ι, ∃ n : ℕ, i ∈ exhaust n) :
+    HadamardProductLUCOnEntireXiNonzeroData HZ.zeroLoc :=
+  HadamardProductLUCOnEntireXiNonzeroData.of_invSq_univ
+    HZ
+    Hdist
+    (HadamardFiniteExhaustion.of_invSq_mono_exhaustive
+      Hdist.toHadamardZeroInvSqSummability exhaust hmono hexhaustive)
+    hexhaustive
+
 /-- 🌟🌟🌟 **PROVED — entire-ξ nonzero-locus LUC data gives the Hadamard
 log-derivative limit data.**
 
@@ -75677,6 +76483,61 @@ noncomputable def
     Hdist
     (HadamardProductLUCOnEntireXiNonzeroData.of_locallyUniformProductLimitData
       HZ Hdist HlucSeq Hregion HlucFinset Hfact)
+    Hfact
+    Hpref
+
+/-- 🌟🌟🌟🌟🌟🌟 **PROVED — publication-level entire-ξ Hadamard theorem
+with locally-uniform product convergence discharged from inverse-square
+zero distribution.**
+
+The remaining Hadamard inputs are now the canonical zero system,
+inverse-square zero distribution, an exhaustive finite truncation
+sequence, the quotient/factorization identity, and the exp/prefactor
+facts. The Weierstrass locally-uniform product convergence and
+log-derivative interchange are built internally. -/
+noncomputable def EntireXiClassicalHadamardTheorem.of_invSq_univ
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    (Hex : HadamardFiniteExhaustion HZ.zeroLoc)
+    (hexhaustive : ∀ i : ι, ∃ n : ℕ, i ∈ Hex.exhaust n)
+    (Hfact : EntireXiHadamardFactorization HZ prefactor)
+    (Hpref : EntireXiHadamardPrefactor prefactor) :
+    EntireXiClassicalHadamardTheorem ι :=
+  EntireXiClassicalHadamardTheorem.of_lucOnEntireXiNonzero
+    HZ
+    prefactor
+    Hdist
+    (HadamardProductLUCOnEntireXiNonzeroData.of_invSq_univ
+      HZ Hdist Hex hexhaustive)
+    Hfact
+    Hpref
+
+/-- 🌟🌟🌟🌟🌟🌟 **PROVED — publication-level entire-ξ Hadamard theorem
+from inverse-square zero distribution and a monotone exhaustive finite
+set sequence.**
+
+This is the streamlined internal Hadamard constructor: the finite
+exhaustion interface and the locally-uniform product/log-derivative
+data are both built inside the proof. -/
+noncomputable def EntireXiClassicalHadamardTheorem.of_invSq_mono_exhaustive
+    {ι : Type}
+    (HZ : ConcreteEntireXiZeroSystem ι)
+    (prefactor : ℂ → ℂ)
+    (Hdist : EntireXiZeroInvSqDistribution HZ)
+    (exhaust : ℕ → Finset ι)
+    (hmono : Monotone exhaust)
+    (hexhaustive : ∀ i : ι, ∃ n : ℕ, i ∈ exhaust n)
+    (Hfact : EntireXiHadamardFactorization HZ prefactor)
+    (Hpref : EntireXiHadamardPrefactor prefactor) :
+    EntireXiClassicalHadamardTheorem ι :=
+  EntireXiClassicalHadamardTheorem.of_lucOnEntireXiNonzero
+    HZ
+    prefactor
+    Hdist
+    (HadamardProductLUCOnEntireXiNonzeroData.of_invSq_mono_exhaustive
+      HZ Hdist exhaust hmono hexhaustive)
     Hfact
     Hpref
 
@@ -76116,6 +76977,40 @@ noncomputable def
       HlucFinset)
     (EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient_invSq
       Hdist hquot)
+
+/-- 🌟🌟🌟🌟🌟🌟🌟 **PROVED — canonical-zero exp-affine entire-ξ Hadamard
+theorem from inverse-square zero distribution, a monotone exhaustive
+finite set sequence, and the off-zero quotient identity.**
+
+This uses the internally proved finite-exhaustion and full-plane LUC
+machinery, so the only remaining Hadamard factorization content is the
+classical off-zero quotient calculation. -/
+noncomputable def
+    EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_quotient_invSq_mono_exhaustive
+    {C a b : ℂ} (hC : C ≠ 0)
+    (Hdist : EntireXiZeroInvSqDistribution concreteEntireXiZeroSystem)
+    (exhaust : ℕ → Finset EntireXiNonzeroZeroIndex)
+    (hmono : Monotone exhaust)
+    (hexhaustive :
+      ∀ i : EntireXiNonzeroZeroIndex, ∃ n : ℕ, i ∈ exhaust n)
+    (hquot :
+      ∀ s : ℂ,
+        (∀ i : EntireXiNonzeroZeroIndex,
+          s ≠ concreteEntireXiZeroSystem.zeroLoc i) →
+          entireRiemannXi s
+              / infiniteHadamardProduct concreteEntireXiZeroSystem.zeroLoc s
+            = C * Complex.exp (a + b * s)) :
+    EntireXiClassicalHadamardTheorem EntireXiNonzeroZeroIndex :=
+  EntireXiClassicalHadamardTheorem.of_invSq_mono_exhaustive
+    concreteEntireXiZeroSystem
+    (fun s : ℂ => C * Complex.exp (a + b * s))
+    Hdist
+    exhaust
+    hmono
+    hexhaustive
+    (EntireXiHadamardFactorization.exp_affine_of_offZeroQuotient_invSq
+      Hdist hquot)
+    (EntireXiHadamardPrefactor.exp_affine hC)
 
 /-- 🌟🌟🌟 **PROVED — `EntireXiLogDerivativeSourceAFZ` from the
 entire-ξ Hadamard theorem.** -/
