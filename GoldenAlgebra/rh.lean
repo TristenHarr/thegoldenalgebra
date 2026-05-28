@@ -21662,6 +21662,15 @@ structure BacklundFiniteBandCountRangeMainCertificate140_370 where
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (370 : ℝ) →
       ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
 
+/-- A finite list of count-range/main-term slabs covering the near-exact
+remaining Backlund finite interval `[140, 3690757803/10000000]`. -/
+structure BacklundFiniteBandCountRangeMainCertificate140_3690757803_10000000 where
+  slabs : List BacklundCountRangeMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (3690757803 / 10000000 : ℝ) →
+        ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
 /-- Endpoint-style version of a count/main slab.  Since the smooth main
 term is monotone on this range, the table only has to bound it at the
 two slab endpoints. -/
@@ -23083,6 +23092,17 @@ structure BacklundFiniteBandEndpointCountRangeMainCertificate140_370 where
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (370 : ℝ) →
       ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
 
+/-- A finite list of endpoint count-range/main-term slabs covering the
+near-exact remaining finite interval `[140, 3690757803/10000000]`. -/
+structure
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000
+    where
+  slabs : List BacklundEndpointCountRangeMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (3690757803 / 10000000 : ℝ) →
+        ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
 /-- A finite list of fixed-pi exp endpoint count-range slabs covering
 `[140, 370]`.  This is the table-facing finite source shape: rows provide
 endpoint cumulative counts, rational ratio bounds, exponential log
@@ -23092,6 +23112,18 @@ structure BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370 where
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (370 : ℝ) →
       ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-- A finite list of fixed-pi exp endpoint count-range slabs covering
+the near-exact remaining finite interval
+`[140, 3690757803/10000000]`. -/
+structure
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757803_10000000
+    where
+  slabs : List BacklundEndpointCountRangeFixedPiExpSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T →
+      T ≤ (3690757803 / 10000000 : ℝ) →
+        ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
 
 /-- A finite list of Turing-count/range-main slabs covering
 `[140, 374]`. -/
@@ -23279,6 +23311,47 @@ noncomputable def
     refine ⟨S.toRangeSlab, ?_, hA, hB⟩
     exact List.mem_map.mpr ⟨S, hS, rfl⟩
 
+/-- Count-range/main slabs on `[140, 370]` restrict to the near-exact
+finite interval `[140, 3690757803/10000000]`. -/
+noncomputable def
+    BacklundFiniteBandCountRangeMainCertificate140_3690757803_10000000.of_140_370
+    (C : BacklundFiniteBandCountRangeMainCertificate140_370) :
+    BacklundFiniteBandCountRangeMainCertificate140_3690757803_10000000 where
+  slabs := C.slabs
+  cover := by
+    intro T hT140 hTendpoint
+    have hT370 : T ≤ (370 : ℝ) := by
+      linarith
+    exact C.cover T hT140 hT370
+
+/-- Endpoint count-range slabs on `[140, 370]` restrict to the
+near-exact finite interval `[140, 3690757803/10000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000.of_140_370
+    (C : BacklundFiniteBandEndpointCountRangeMainCertificate140_370) :
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000 where
+  slabs := C.slabs
+  cover := by
+    intro T hT140 hTendpoint
+    have hT370 : T ≤ (370 : ℝ) := by
+      linarith
+    exact C.cover T hT140 hT370
+
+/-- Endpoint count-range slabs supply count-range/main slabs on the
+near-exact finite interval `[140, 3690757803/10000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000.toCountRange
+    (C :
+      BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000) :
+    BacklundFiniteBandCountRangeMainCertificate140_3690757803_10000000 where
+  slabs := C.slabs.map
+    (fun S : BacklundEndpointCountRangeMainSlabCertificate => S.toRangeSlab)
+  cover := by
+    intro T hT140 hTendpoint
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hTendpoint
+    refine ⟨S.toRangeSlab, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
 /-- Fixed-pi exp endpoint count-range slabs supply endpoint
 count-range/main slabs on `[140, 370]`. -/
 noncomputable def
@@ -23291,6 +23364,40 @@ noncomputable def
   cover := by
     intro T hT140 hT370
     obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT370
+    refine ⟨S.toEndpointRangeSlab, ?_, ?_, ?_⟩
+    · exact List.mem_map.mpr ⟨S, hS, rfl⟩
+    · change S.A ≤ T
+      exact hA
+    · change T ≤ S.B
+      exact hB
+
+/-- Fixed-pi exp endpoint count-range slabs on `[140, 370]` restrict to
+the near-exact finite interval `[140, 3690757803/10000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757803_10000000.of_140_370
+    (C : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370) :
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757803_10000000 where
+  slabs := C.slabs
+  cover := by
+    intro T hT140 hTendpoint
+    have hT370 : T ≤ (370 : ℝ) := by
+      linarith
+    exact C.cover T hT140 hT370
+
+/-- Fixed-pi exp endpoint count-range slabs supply endpoint
+count-range/main slabs on the near-exact finite interval
+`[140, 3690757803/10000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757803_10000000.toEndpointCountRange
+    (C :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757803_10000000) :
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000 where
+  slabs := C.slabs.map
+    (fun S : BacklundEndpointCountRangeFixedPiExpSlabCertificate =>
+      S.toEndpointRangeSlab)
+  cover := by
+    intro T hT140 hTendpoint
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hTendpoint
     refine ⟨S.toEndpointRangeSlab, ?_, ?_, ?_⟩
     · exact List.mem_map.mpr ⟨S, hS, rfl⟩
     · change S.A ≤ T
@@ -23474,6 +23581,18 @@ noncomputable def
     have hT0 : 0 ≤ T := by linarith
     exact S.uniform25167 hT0 hA hB
 
+/-- Count-range/main-term slabs supply the narrow uniform finite-band
+certificate on `[140, 3690757803/10000000]`. -/
+noncomputable def
+    BacklundFiniteBandCountRangeMainCertificate140_3690757803_10000000.toUniform25167Check
+    (C : BacklundFiniteBandCountRangeMainCertificate140_3690757803_10000000) :
+    BacklundFiniteBandUniform25167Check140_3690757803_10000000 where
+  bound := by
+    intro T hT140 hTendpoint
+    obtain ⟨S, _hS, hA, hB⟩ := C.cover T hT140 hTendpoint
+    have hT0 : 0 ≤ T := by linarith
+    exact S.uniform25167 hT0 hA hB
+
 /-- Endpoint count-range slabs supply the narrow uniform finite-band
 certificate on `[140, 374]`. -/
 noncomputable def
@@ -23490,12 +23609,30 @@ noncomputable def
     BacklundFiniteBandUniform25167Check140_370 :=
   C.toCountRange.toUniform25167Check
 
+/-- Endpoint count-range slabs supply the narrow uniform finite-band
+certificate on `[140, 3690757803/10000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000.toUniform25167Check
+    (C :
+      BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000) :
+    BacklundFiniteBandUniform25167Check140_3690757803_10000000 :=
+  C.toCountRange.toUniform25167Check
+
 /-- Fixed-pi exp endpoint count-range slabs supply the narrow uniform
 finite-band certificate on `[140, 370]`. -/
 noncomputable def
     BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370.toUniform25167Check
     (C : BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_370) :
     BacklundFiniteBandUniform25167Check140_370 :=
+  C.toEndpointCountRange.toUniform25167Check
+
+/-- Fixed-pi exp endpoint count-range slabs supply the narrow uniform
+finite-band certificate on `[140, 3690757803/10000000]`. -/
+noncomputable def
+    BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757803_10000000.toUniform25167Check
+    (C :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757803_10000000) :
+    BacklundFiniteBandUniform25167Check140_3690757803_10000000 :=
   C.toEndpointCountRange.toUniform25167Check
 
 /-- Turing-count/range-main slabs supply the narrow uniform finite-band
@@ -24486,6 +24623,21 @@ theorem
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
+estimate and endpoint count-range/main-term slabs on the near-exact
+finite interval `[140, 3690757803/10000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite3690757803_10000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finite3690757803_10000000
+    Hglobal
+    Hfinite.toUniform25167Check.toFiniteBandCheck
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
 estimate and fixed-pi exp endpoint count-range slabs on `[140, 370]`.
 This removes raw endpoint `smoothMainTerm` inequalities from the exact
 finite route. -/
@@ -24496,6 +24648,21 @@ theorem
     {T : ℝ} (hT : (140 : ℝ) ≤ T) :
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite370
+    Hglobal
+    Hfinite.toEndpointCountRange
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and fixed-pi exp endpoint count-range slabs on the near-exact
+finite interval `[140, 3690757803/10000000]`. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757803_10000000
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757803_10000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite3690757803_10000000
     Hglobal
     Hfinite.toEndpointCountRange
     hT
@@ -25500,8 +25667,9 @@ noncomputable def
     BacklundGoodHeightArgumentBound :=
   BacklundGoodHeightArgumentBound.of_plattTrudgian_475481_80440Tail_and_finite
     (PlattTrudgianBacklundCut475481_80440TailInput.of_global I.global)
-    (BacklundFiniteBandCheck140_exp475481_80440.of_140_370
-      I.finite370.toUniform25167Check.toFiniteBandCheck)
+    (BacklundFiniteBandCheck140_exp475481_80440.of_140_3690757803_10000000
+      ((BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000.of_140_370
+        I.finite370).toUniform25167Check.toFiniteBandCheck))
 
 /-- The endpoint count-range package supplies the final classical proof
 inputs at `ClassicalBacklundTuringProof.K`. -/
@@ -25518,9 +25686,10 @@ theorem concreteS_halfLogPlusHalf_of_plattEndpointCountRangeBacklundTuringInputs
     (I : ClassicalBacklundTuringPlattEndpointCountRangeInputs370)
     {T : ℝ} (hT : (140 : ℝ) ≤ T) :
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
-  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite370
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite3690757803_10000000
     I.global
-    I.finite370
+    (BacklundFiniteBandEndpointCountRangeMainCertificate140_3690757803_10000000.of_140_370
+      I.finite370)
     hT
 
 /-- The endpoint count-range package supplies the generic proved
@@ -25594,9 +25763,10 @@ theorem concreteS_halfLogPlusHalf_of_plattEndpointCountRangeFixedPiExpBacklundTu
     (I : ClassicalBacklundTuringPlattEndpointCountRangeFixedPiExpInputs370)
     {T : ℝ} (hT : (140 : ℝ) ≤ T) :
     |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
-  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite370
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeFixedPiExpFinite3690757803_10000000
     I.global
-    I.finite370
+    (BacklundFiniteBandEndpointCountRangeFixedPiExpCertificate140_3690757803_10000000.of_140_370
+      I.finite370)
     hT
 
 /-- The fixed-pi exp endpoint count-range package supplies the generic
