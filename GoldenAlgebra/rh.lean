@@ -19852,6 +19852,67 @@ noncomputable def BacklundTuringCountRangeMainSlabCertificate.toEndpointRangeSla
   upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
   upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
 
+/-- Argument-principle version of a Backlund finite-band slab.  This
+packages the actual rectangle argument-principle data whose natural index
+is already proved to equal the actual zeta slab count. -/
+structure BacklundArgumentPrincipleCountRangeMainSlabCertificate where
+  R : ZetaRectangle
+  hleft : R.left < 0
+  hright : 1 < R.right
+  hbottom_two_pi : 2 * Real.pi ≤ R.bottom
+  hgood : GoodHeight R.top
+  formula :
+    R.CanonicalZetaArgumentPrincipleFormula
+      hleft hright
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hbottom_two_pi)
+      hgood
+  argumentIndex_nonneg :
+    0 ≤ formula.argumentIndex
+  leftCount : ℕ
+  mainLower : ℝ
+  mainUpper : ℝ
+  left_count_eq :
+    zetaWeightedZeroCountUpToHeight R.bottom
+      (le_trans (by positivity : (0 : ℝ) ≤ 2 * Real.pi) hbottom_two_pi) =
+      leftCount
+  mainLower_le_left :
+    mainLower ≤ smoothMainTerm R.bottom
+  right_le_mainUpper :
+    smoothMainTerm R.top ≤ mainUpper
+  upperCount_minus_lowerMain_le :
+    ((leftCount
+        + formula.argumentIndexNat
+          { argumentIndex_nonneg := argumentIndex_nonneg } : ℕ) : ℝ)
+      - mainLower ≤ (25167 / 10000 : ℝ)
+  upperMain_minus_lowerCount_le :
+    mainUpper - (leftCount : ℝ) ≤ (25167 / 10000 : ℝ)
+
+/-- Argument-principle slabs lower to Turing-count/range-main slabs. -/
+noncomputable def
+    BacklundArgumentPrincipleCountRangeMainSlabCertificate.toTuringCountRange
+    (S : BacklundArgumentPrincipleCountRangeMainSlabCertificate) :
+    BacklundTuringCountRangeMainSlabCertificate where
+  A := S.R.bottom
+  B := S.R.top
+  leftCount := S.leftCount
+  slabCount :=
+    S.formula.argumentIndexNat
+      { argumentIndex_nonneg := S.argumentIndex_nonneg }
+  mainLower := S.mainLower
+  mainUpper := S.mainUpper
+  hA_two_pi := S.hbottom_two_pi
+  hAB := S.R.hbottom_lt_top.le
+  left_count_eq := S.left_count_eq
+  slab_count_eq :=
+    (S.formula.argumentIndexNat_eq_actual_slab_count
+      { argumentIndex_nonneg := S.argumentIndex_nonneg }
+      (lt_of_lt_of_le (by positivity : (0 : ℝ) < 2 * Real.pi)
+        S.hbottom_two_pi)).symm
+  mainLower_le_left := S.mainLower_le_left
+  right_le_mainUpper := S.right_le_mainUpper
+  upperCount_minus_lowerMain_le := S.upperCount_minus_lowerMain_le
+  upperMain_minus_lowerCount_le := S.upperMain_minus_lowerCount_le
+
 /-- A finite list of endpoint-style slabs covering `[140, 374]`. -/
 structure BacklundFiniteBandEndpointCountMainCertificate140_374 where
   slabs : List BacklundEndpointCountMainSlabCertificate
@@ -19882,6 +19943,14 @@ structure BacklundFiniteBandTuringCountRangeMainCertificate140_374 where
   cover :
     ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
       ∃ S ∈ slabs, S.A ≤ T ∧ T ≤ S.B
+
+/-- A finite list of argument-principle count/range-main slabs covering
+`[140, 374]`. -/
+structure BacklundFiniteBandArgumentPrincipleCountRangeMainCertificate140_374 where
+  slabs : List BacklundArgumentPrincipleCountRangeMainSlabCertificate
+  cover :
+    ∀ T : ℝ, (140 : ℝ) ≤ T → T ≤ (374 : ℝ) →
+      ∃ S ∈ slabs, S.R.bottom ≤ T ∧ T ≤ S.R.top
 
 /-- Endpoint-style slabs supply the count/main finite-band certificate. -/
 noncomputable def
@@ -19935,6 +20004,20 @@ noncomputable def
     intro T hT140 hT374
     obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT374
     refine ⟨S.toEndpointRangeSlab, ?_, hA, hB⟩
+    exact List.mem_map.mpr ⟨S, hS, rfl⟩
+
+/-- Argument-principle count/range-main slabs supply Turing-count slabs. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleCountRangeMainCertificate140_374.toTuringCountRange
+    (C : BacklundFiniteBandArgumentPrincipleCountRangeMainCertificate140_374) :
+    BacklundFiniteBandTuringCountRangeMainCertificate140_374 where
+  slabs := C.slabs.map
+    (fun S : BacklundArgumentPrincipleCountRangeMainSlabCertificate =>
+      S.toTuringCountRange)
+  cover := by
+    intro T hT140 hT374
+    obtain ⟨S, hS, hA, hB⟩ := C.cover T hT140 hT374
+    refine ⟨S.toTuringCountRange, ?_, hA, hB⟩
     exact List.mem_map.mpr ⟨S, hS, rfl⟩
 
 /-- Count/main-term slab certificates supply the narrow uniform finite
@@ -19992,6 +20075,14 @@ noncomputable def
     (C : BacklundFiniteBandTuringCountRangeMainCertificate140_374) :
     BacklundFiniteBandUniform25167Check140_374 :=
   C.toEndpointCountRange.toUniform25167Check
+
+/-- Argument-principle count/range-main slabs supply the narrow uniform
+finite-band certificate on `[140, 374]`. -/
+noncomputable def
+    BacklundFiniteBandArgumentPrincipleCountRangeMainCertificate140_374.toUniform25167Check
+    (C : BacklundFiniteBandArgumentPrincipleCountRangeMainCertificate140_374) :
+    BacklundFiniteBandUniform25167Check140_374 :=
+  C.toTuringCountRange.toUniform25167Check
 
 /-- The broad Platt/Trudgian finite-range `2.5167` input supplies the
 concrete finite-band target `[140, 374]`. -/
@@ -20111,6 +20202,23 @@ theorem
   concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_endpointCountRangeMainFinite374
     Hglobal
     Hfinite.toEndpointCountRange
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and argument-principle count/range-main slabs on `[140, 374]`.
+This routes each finite-band slab through the existing rectangle
+argument-principle machinery, whose natural index is proved to be the
+actual zeta weighted zero count in the slab. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_argumentPrincipleCountRangeMainFinite374
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite :
+      BacklundFiniteBandArgumentPrincipleCountRangeMainCertificate140_374)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_turingCountRangeMainFinite374
+    Hglobal
+    Hfinite.toTuringCountRange
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
