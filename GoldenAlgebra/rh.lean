@@ -20167,6 +20167,25 @@ noncomputable def BacklundFiniteBandCheck140_exp739_125.of_plattTrudgian
     exact le_trans (H.bound T hT0 hTbig)
       (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
 
+/-- The Platt/Trudgian finite-range `2.5167` bound supplies the exact
+tangent-arithmetic finite band `[140, exp (151476/25625)]`. -/
+noncomputable def BacklundFiniteBandCheck140_exp151476_25625.of_plattTrudgian
+    (H : PlattTrudgianFiniteRangeSBoundInput) :
+    BacklundFiniteBandCheck140_exp151476_25625 where
+  bound := by
+    intro T hT140 hTexp
+    have hT0 : 0 ≤ T := by linarith
+    have hTbig : T ≤ (30610046000 : ℝ) := by
+      have hT1200 : T ≤ (1200 : ℝ) := by
+        have hExp_le :
+            Real.exp (151476 / 25625 : ℝ) ≤ Real.exp (592 / 100 : ℝ) :=
+          Real.exp_le_exp.mpr (by norm_num)
+        exact le_trans (le_trans hTexp hExp_le)
+          (le_of_lt backlund_exp_592_100_lt_1200)
+      linarith
+    exact le_trans (H.bound T hT0 hTbig)
+      (plattTrudgianFiniteBound_le_halfLogPlusHalf_of_ge_140 hT140)
+
 /-- Tighter Platt--Trudgian tail plus the shorter finite-band check gives
 the good-height Backlund argument bound. -/
 noncomputable def
@@ -20303,6 +20322,19 @@ theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_739_125
   concreteS_halfLogPlusHalf_of_plattTrudgian_739_125Tail_and_finite
     (PlattTrudgianBacklundCut739_125TailInput.of_global Hglobal)
     (BacklundFiniteBandCheck140_exp739_125.of_plattTrudgian Hfinite)
+    hT
+
+/-- Final headline theorem from the global Platt--Trudgian argument
+estimate and the finite-range `2.5167` input, using the exact
+tangent-arithmetic finite band `[140, exp (151476/25625)]`. -/
+theorem concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_finiteRange_151476_25625
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hfinite : PlattTrudgianFiniteRangeSBoundInput)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_plattTrudgian_151476_25625Tail_and_finite
+    (PlattTrudgianBacklundCut151476_25625TailInput.of_global Hglobal)
+    (BacklundFiniteBandCheck140_exp151476_25625.of_plattTrudgian Hfinite)
     hT
 
 /-! ### CW36: concrete finite endpoint for the Platt--Trudgian route -/
