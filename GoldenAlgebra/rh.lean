@@ -4555,6 +4555,22 @@ theorem ratio_upper_of_pi_lower_bound
     nlinarith
   exact le_trans h hscale
 
+/-- Six-decimal rational lower bound for `π`, exposed in the Backlund
+namespace for finite-table arithmetic. -/
+theorem backlund_pi_lower_3141592_1000000 :
+    (3141592 / 1000000 : ℝ) ≤ Real.pi := by
+  have h : (3.141592 : ℝ) < Real.pi := Real.pi_gt_d6
+  norm_num at h ⊢
+  exact le_of_lt h
+
+/-- Six-decimal rational upper bound for `π`, exposed in the Backlund
+namespace for finite-table arithmetic. -/
+theorem backlund_pi_upper_3141593_1000000 :
+    Real.pi ≤ (3141593 / 1000000 : ℝ) := by
+  have h : Real.pi < (3.141593 : ℝ) := Real.pi_lt_d6
+  norm_num at h ⊢
+  exact le_of_lt h
+
 /-! ### Zero-set predicates
 
 We define the predicates needed to talk about nontrivial zeta zeros up to
