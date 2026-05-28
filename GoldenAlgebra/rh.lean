@@ -59625,6 +59625,19 @@ theorem ClassicalStieltjesExplicitFormulaInputs.toClassicalPathBStieltjesInputsA
     (LowZeroContributionSplitAFZ.of_cloudTailSplit H.low)
     Hstarts
 
+/-- 🌟🌟🌟 **PROVED — publication-level Stieltjes inputs to the canonical
+split Stieltjes bundle using the standard `Z ≥ 15` first-zero-gap
+hypothesis.** -/
+theorem ClassicalStieltjesExplicitFormulaInputs.toClassicalPathBStieltjesInputsAFZ_Z_ge_15
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData}
+    {T0 : ℝ} {ZC finiteCloud tail : ℂ → ℂ}
+    (H : ClassicalStieltjesExplicitFormulaInputs
+      Dzero T0 ZC finiteCloud tail)
+    (h_Z_ge_15 : ∀ i : ℕ, (15 : ℝ) ≤ Dzero.toFluctuationMeasureData.Z i) :
+    ClassicalPathBStieltjesInputsAFZ Dzero T0 ZC :=
+  H.toClassicalPathBStieltjesInputsAFZ
+    (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15)
+
 /-- 🌟🌟🌟 **PROVED — split Stieltjes bundle from mid/high plus the
 direct low finite Stieltjes IBP source.** This exposes the low-side
 explicit-formula identity in its natural form. -/
@@ -60145,13 +60158,11 @@ def PathBNonTuringInputs.of_classicalStieltjes
           Hhad.toCompletedXiSourceAFZ_canonical)
         finiteCloud tail) :
     PathBNonTuringInputs Dzero ι := by
-  have Hstarts : DzeroStartsAfter Dzero 14 :=
-    DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15
   exact
     PathBNonTuringInputs.mk
       h_Z_ge_15
       Hhad
-      (Hst.toClassicalPathBStieltjesInputsAFZ Hstarts)
+      (Hst.toClassicalPathBStieltjesInputsAFZ_Z_ge_15 h_Z_ge_15)
 
 /-- 🌟🌟 **PROVED — build the non-Turing bundle from an already assembled
 canonical AFZ Stieltjes bundle.** -/
@@ -60317,9 +60328,8 @@ def PathBNonTuringInputs.of_midHighAFZ_lowIBPSource
     PathBNonTuringInputs Dzero ι :=
   PathBNonTuringInputs.of_stieltjesInputs
     Dzero h_Z_ge_15 Hhad
-    (ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowIBPSource
-      HmidHigh Hlow
-      (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15))
+    (ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowIBPSource_Z_ge_15
+      h_Z_ge_15 HmidHigh Hlow)
 
 /-- 🌟🌟 **PROVED — build the non-Turing bundle from split AFZ mid/high
 plus the direct low finite Stieltjes IBP source.** -/
@@ -60346,9 +60356,8 @@ def PathBNonTuringInputs.of_mid_high_lowIBPSource
     PathBNonTuringInputs Dzero ι :=
   PathBNonTuringInputs.of_stieltjesInputs
     Dzero h_Z_ge_15 Hhad
-    (ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource
-      Hmid Hhigh Hlow
-      (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15))
+    (ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource_Z_ge_15
+      h_Z_ge_15 Hmid Hhigh Hlow)
 
 /-- 🌟🌟 **PROVED — build the non-Turing bundle from combined AFZ
 mid/high plus the direct low zero-contribution split.** -/
@@ -60370,9 +60379,8 @@ def PathBNonTuringInputs.of_midHighAFZ_lowZeroSplit
     PathBNonTuringInputs Dzero ι :=
   PathBNonTuringInputs.of_stieltjesInputs
     Dzero h_Z_ge_15 Hhad
-    (ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowZeroSplit
-      HmidHigh HlowSplit
-      (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15))
+    (ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowZeroSplit_Z_ge_15
+      h_Z_ge_15 HmidHigh HlowSplit)
 
 /-- 🌟🌟 **PROVED — build the non-Turing bundle from split AFZ mid/high
 plus the direct low zero-contribution split.** -/
@@ -60399,9 +60407,8 @@ def PathBNonTuringInputs.of_mid_high_lowZeroSplit
     PathBNonTuringInputs Dzero ι :=
   PathBNonTuringInputs.of_stieltjesInputs
     Dzero h_Z_ge_15 Hhad
-    (ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit
-      Hmid Hhigh HlowSplit
-      (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15))
+    (ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowSplit_Z_ge_15
+      h_Z_ge_15 Hmid Hhigh HlowSplit)
 
 /-- 🌟🌟 **PROVED — build the non-Turing bundle from combined AFZ
 mid/high plus the atomic low cloud/tail split.** -/
@@ -60425,9 +60432,8 @@ def PathBNonTuringInputs.of_midHighAFZ_lowCloudTailSplit
     PathBNonTuringInputs Dzero ι :=
   PathBNonTuringInputs.of_stieltjesInputs
     Dzero h_Z_ge_15 Hhad
-    (ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowCloudTailSplit
-      HmidHigh Hlow
-      (DzeroStartsAfter_of_Z_ge_15 Dzero h_Z_ge_15))
+    (ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowCloudTailSplit_Z_ge_15
+      h_Z_ge_15 HmidHigh Hlow)
 
 /-- 🌟🌟 **PROVED — build the non-Turing bundle from split AFZ mid/high
 plus the atomic low cloud/tail split.** -/

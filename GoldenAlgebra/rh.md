@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-66,223 lines and roughly 3,425 top-level declarations. It contains no
+66,505 lines and roughly 3,443 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -1530,6 +1530,14 @@ the three obligation lines, with concrete handoff targets in each case.
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_plattTrudgianRange_concrete3691_10`,
   and
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_uniformFinite3691_10`.
+  The endpoint has since been tightened again to `9227/25 = 369.08`,
+  using `backlund_exp_5_lt_3710329_25000`,
+  `backlund_exp_9_10_lt_3074504_1250000`,
+  `backlund_exp_177_16088_le_126383_125000`, and
+  `backlund_exp_475481_80440_lt_9227_25`; the finite-band interfaces
+  are `BacklundFiniteBandCheck140_9227_25`,
+  `BacklundFiniteBandUniform25167Check140_9227_25`, and
+  `BacklundFiniteBandUniform25167Check140_9227_25.toFiniteBandCheck`.
   The narrow computational-certificate interface
   `BacklundFiniteBandUniform25167Check140_374` packages the uniform
   `|S(T)| ≤ 2.5167` check on `[140, 374]`, converts through
@@ -2393,6 +2401,7 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   hypothesis shapes, from direct low-zero/low-IBP sources up to the
   publication-level classical Stieltjes bundle. The helper theorems
   `ClassicalStieltjesExplicitFormulaInputs.toClassicalPathBStieltjesInputsAFZ`,
+  `ClassicalStieltjesExplicitFormulaInputs.toClassicalPathBStieltjesInputsAFZ_Z_ge_15`,
   `ClassicalPathBStieltjesInputsAFZ.of_mid_high_lowIBPSource`, and
   `ClassicalPathBStieltjesInputsAFZ.of_midHighAFZ_lowIBPSource`
   perform the canonical Stieltjes reassembly; the mid/high splitters
@@ -2700,7 +2709,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-66,223 lines and roughly 3,425 top-level declarations.
+66,505 lines and roughly 3,443 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
