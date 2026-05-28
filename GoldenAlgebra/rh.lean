@@ -16534,12 +16534,102 @@ theorem BacklundRightSideArgumentVariationEstimate.of_vonMangoldt_bound_on_re_tw
     simp
   simpa [s, hquot] using hbound y hyT hyTop
 
+open scoped LSeries.notation ArithmeticFunction in
+/-- The von Mangoldt L-series is continuous on Backlund's right vertical
+line `s = 2 + iy`. -/
+theorem backlund_right_side_vonMangoldtLSeries_continuous :
+    Continuous (fun y : ℝ => L ↗Λ ((2 : ℂ) + (y : ℂ) * Complex.I)) := by
+  refine continuous_iff_continuousAt.mpr (fun y => ?_)
+  let f : ℕ → ℂ := fun n : ℕ => (Λ n : ℂ)
+  let line : ℝ → ℂ := fun y => (2 : ℂ) + (y : ℂ) * Complex.I
+  let s : ℂ := line y
+  have hsum : LSeriesSummable f (((3 / 2 : ℝ) : ℂ)) := by
+    dsimp [f]
+    simpa only using
+      ArithmeticFunction.LSeriesSummable_vonMangoldt
+        (s := (((3 / 2 : ℝ) : ℂ))) (by norm_num)
+  have habs_le : LSeries.abscissaOfAbsConv f ≤ (3 / 2 : ℝ) := by
+    simpa using hsum.abscissaOfAbsConv_le
+  have hsre : LSeries.abscissaOfAbsConv f < s.re := by
+    have hsre_eq : s.re = (2 : ℝ) := by
+      simp [s, line, Complex.add_re, Complex.mul_re]
+    rw [hsre_eq]
+    exact lt_of_le_of_lt habs_le (by norm_num)
+  have hline : ContinuousAt line y := by
+    dsimp [line]
+    fun_prop
+  have hL : ContinuousAt (fun z : ℂ => LSeries f z) (line y) := by
+    simpa [s] using (LSeries_hasDerivAt hsre).continuousAt
+  change ContinuousAt
+    (fun y : ℝ => (fun z : ℂ => LSeries f z) (line y)) y
+  exact ContinuousAt.comp' (g := fun z : ℂ => LSeries f z) (f := line)
+    hL hline
+
+open scoped LSeries.notation ArithmeticFunction in
+/-- On every finite right-side window `[T, T+1]`, the von Mangoldt
+L-series is bounded. -/
+theorem backlund_right_side_vonMangoldt_plain_bound (T : ℝ) :
+    ∃ C : ℝ, 0 ≤ C ∧
+      ∀ y : ℝ, T ≤ y → y ≤ T + 1 →
+        ‖L ↗Λ ((2 : ℂ) + (y : ℂ) * Complex.I)‖ ≤ C := by
+  have hnorm_cont :
+      Continuous (fun y : ℝ =>
+        ‖L ↗Λ ((2 : ℂ) + (y : ℂ) * Complex.I)‖) :=
+    continuous_norm.comp backlund_right_side_vonMangoldtLSeries_continuous
+  have hnonempty : (Set.Icc T (T + 1)).Nonempty :=
+    ⟨T, by constructor <;> linarith⟩
+  obtain ⟨y₀, _hy₀mem, hy₀max⟩ :=
+    (isCompact_Icc (a := T) (b := T + 1)).exists_isMaxOn
+      hnonempty hnorm_cont.continuousOn
+  refine ⟨‖L ↗Λ ((2 : ℂ) + (y₀ : ℂ) * Complex.I)‖, norm_nonneg _, ?_⟩
+  intro y hyT hyTop
+  exact hy₀max ⟨hyT, hyTop⟩
+
+open scoped LSeries.notation ArithmeticFunction in
+/-- A plain von Mangoldt L-series bound on the right-side window supplies
+the scaled right-side argument-variation estimate. -/
+theorem BacklundRightSideArgumentVariationEstimate.of_abs_vonMangoldt_bound_on_re_two
+    {T C : ℝ}
+    (hT : (140 : ℝ) ≤ T)
+    (hC : 0 ≤ C)
+    (hbound :
+      ∀ y : ℝ, T ≤ y → y ≤ T + 1 →
+        ‖L ↗Λ ((2 : ℂ) + (y : ℂ) * Complex.I)‖ ≤ C) :
+    BacklundRightSideArgumentVariationEstimate T := by
+  have hlogpos : 0 < Real.log (T + 2) := Real.log_pos (by linarith)
+  have hlogne : Real.log (T + 2) ≠ 0 := ne_of_gt hlogpos
+  refine
+    BacklundRightSideArgumentVariationEstimate.of_vonMangoldt_bound_on_re_two
+      (C := C / Real.log (T + 2))
+      (div_nonneg hC hlogpos.le) ?_
+  intro y hyT hyTop
+  have hb := hbound y hyT hyTop
+  have hmul :
+      C / Real.log (T + 2) * Real.log (T + 2) = C :=
+    div_mul_cancel₀ C hlogne
+  rw [hmul]
+  exact hb
+
 /-- Analytic input supplying right-side argument-variation control on
 Backlund's rectangle, across every good height `T ≥ 140`. -/
 structure BacklundRightSideArgumentVariationInput : Prop where
   bound :
     ∀ T : ℝ, RvMGoodHeight T → (140 : ℝ) ≤ T →
       BacklundRightSideArgumentVariationEstimate T
+
+/-- The right-side argument-variation input is discharged: on `Re s = 2`
+nonvanishing follows from Euler-product nonvanishing, the logarithmic
+derivative is the von Mangoldt L-series, and compactness bounds that
+series on each finite window. -/
+theorem backlundRightSideArgumentVariationInput :
+    BacklundRightSideArgumentVariationInput where
+  bound := by
+    intro T _hgood hT
+    rcases backlund_right_side_vonMangoldt_plain_bound T with
+      ⟨C, hC, hbound⟩
+    exact
+      BacklundRightSideArgumentVariationEstimate.of_abs_vonMangoldt_bound_on_re_two
+        hT hC hbound
 
 /-- Bridge: the right-side argument-variation input supplies the
 corresponding field of `BacklundGoodHeightClassicalInputs`. -/
