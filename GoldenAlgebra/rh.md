@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-84,910 lines and roughly 4,071 top-level declarations. It contains no
+85,489 lines and roughly 4,088 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -1786,7 +1786,9 @@ the three obligation lines, with concrete handoff targets in each case.
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2EndpointCountFacts369075049`.
   The separated endpoint-count plus rational/exponential smooth route is
   exposed by
-  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CountExpFacts369075049`.
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CountExpFacts369075049`,
+  and its verified smooth-main wrapper is
+  `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CountFacts369075049_verifiedSmooth`.
   The sharp sourced pair is also packaged as
   `ClassicalBacklundTuringPlattGlobalFiniteRangeInputs`, with exports
   `toGoodHeightArgumentBound`, `toProofInputs`,
@@ -2293,6 +2295,9 @@ the three obligation lines, with concrete handoff targets in each case.
   tail-limit form of the explicit formula at $\Xi(z) \neq 0$; the low
   split is the conceptual statement
   $\mathrm{ZC}(z) = P(z) + \text{tailZC}(z)$.
+  The named tail-value wrapper also records the Hausdorff uniqueness
+  and transport utilities `XiFluctuationTailValue.unique` and
+  `XiFluctuationTailValue.congr`.
 
 For convenience, `PathBNonTuringInputs Dzero ι` bundles (P2), (P3),
 and the zero-start condition in one structure, with the Stieltjes side
@@ -2785,6 +2790,12 @@ the ξ-nonzero region through `HadamardProductLUCOnXiNonzeroData`; its
 `ClassicalPathBAnalyticInputs.of_hadamard_packages_onXiNonzero`,
 `ConcreteCompletedXiHadamardInputs.of_lucOnXiNonzero`,
 `ConcreteCompletedXiHadamardInputs.of_lucLogDerivData`, and the
+publication constructors. Its nonzero completed-ξ zero-system layer now
+includes `CompletedXiNonzeroZeroIndex`, `completedXiNonzeroZeroLoc`,
+`ConcreteCompletedXiNonzeroZeroSystem`,
+`ConcreteCompletedXiNonzeroZeroSystem.nonzero_no_collision`, and
+`concreteCompletedXiNonzeroZeroSystem`, separating the nonzero indexed
+zero payload from the later bridge that may reinsert the origin. The
 publication constructors
 `CompletedXiClassicalHadamardTheorem.of_lucOnXiNonzero` and
 `CompletedXiClassicalHadamardTheorem.of_lucLogDerivData`. It also has a
@@ -2903,12 +2914,17 @@ It also exposes the direct AFZ source/front-door layer
 `expAffineHadamardPullbackFiniteContribution_eq_cloud_lowTail`,
 `EntireXiClassicalHadamardTheorem.expAffineHadamardFiniteProductResidualTail_eq_finiteResidualTail`,
 `EntireXiClassicalHadamardTheorem.expAffineHadamardFiniteProductLowTail_eq_finiteLowTail`,
+`EntireXiClassicalHadamardTheorem.tendsto_expAffineHadamardFiniteProductResidualTail_to_XiPullback_residual`,
+`EntireXiClassicalHadamardTheorem.tendsto_expAffineHadamardFiniteProductLowTail_to_XiPullback_residual`,
 `ExpAffineHadamardResidualTailConvergenceMidAFZ`,
 `ExpAffineHadamardResidualTailConvergenceHighAFZ`,
 `ExpAffineHadamardResidualTailConvergenceLowAFZ`,
 `ExpAffineHadamardResidualTailConvergenceMidAFZ.of_stieltjesEquality`,
 `ExpAffineHadamardResidualTailConvergenceHighAFZ.of_stieltjesEquality`,
 `ExpAffineHadamardResidualTailConvergenceLowAFZ.of_lowZeroSplit`,
+`expAffineHadamardFiniteProductResidualTailConvergenceMid_of_stieltjesEquality`,
+`expAffineHadamardFiniteProductResidualTailConvergenceHigh_of_stieltjesEquality`,
+`expAffineHadamardFiniteProductLowTailConvergence_of_lowZeroSplit`,
 `ExpAffineHadamardResidualTailConvergenceMidAFZ.of_finiteProductResidualTailConvergence`,
 `ExpAffineHadamardResidualTailConvergenceHighAFZ.of_finiteProductResidualTailConvergence`,
 `ExpAffineHadamardResidualTailConvergenceLowAFZ.of_finiteProductLowTailConvergence`,
@@ -2918,6 +2934,11 @@ It also exposes the direct AFZ source/front-door layer
 `expAffineHadamardFiniteProductResidualTailConvergenceMid_iff_residualTailConvergence`,
 `expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_residualTailConvergence`,
 `expAffineHadamardFiniteProductLowTailConvergence_iff_residualTailConvergenceLow`,
+`expAffineHadamardFiniteProductResidualTailConvergenceMid_iff_stieltjesMidTailEqualityAFZ`,
+`expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_stieltjesHighTailEqualityAFZ`,
+`expAffineHadamardFiniteProductLowTailConvergence_iff_lowZeroContributionSplitAFZ`,
+`expAffineHadamardFiniteProductResidualTailConvergenceMid_of_exists_identified_tail`,
+`expAffineHadamardFiniteProductResidualTailConvergenceHigh_of_exists_identified_tail`,
 `XiPullbackAntiHerglotzTarget_of_expAffineHadamardFiniteProductResidualConvergence`,
 `expAffineHadamardResidualTailConvergenceMid_iff_stieltjesMidTailEqualityAFZ`,
 `expAffineHadamardResidualTailConvergenceHigh_iff_stieltjesHighTailEqualityAFZ`,
@@ -3512,7 +3533,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-84,910 lines and roughly 4,071 top-level declarations.
+85,489 lines and roughly 4,088 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.

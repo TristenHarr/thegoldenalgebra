@@ -34015,6 +34015,150 @@ structure
     ∀ R ∈ backlundGrid2EndpointRows140_369075049_1000000,
       BacklundGrid2EndpointSmoothRationalExpFacts R
 
+
+/-- Row-indexed rational/exponential smooth-main certificate selector for
+the concrete two-unit Backlund grid. -/
+noncomputable def backlundGrid2EndpointSmoothRationalExpFact_byIndex
+    (n : Fin 115) :
+    BacklundGrid2EndpointSmoothRationalExpFacts
+      (backlundGrid2EndpointRow140_369075049_1000000 n) := by
+  rcases n with ⟨i, hi⟩
+  interval_cases i
+
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row0
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row1
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row2
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row3
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row4
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row5
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row6
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row7
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row8
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row9
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row10
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row11
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row12
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row13
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row14
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row15
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row16
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row17
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row18
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row19
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row20
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row21
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row22
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row23
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row24
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row25
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row26
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row27
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row28
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row29
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row30
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row31
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row32
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row33
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row34
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row35
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row36
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row37
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row38
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row39
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row40
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row41
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row42
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row43
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row44
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row45
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row46
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row47
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row48
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row49
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row50
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row51
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row52
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row53
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row54
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row55
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row56
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row57
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row58
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row59
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row60
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row61
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row62
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row63
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row64
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row65
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row66
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row67
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row68
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row69
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row70
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row71
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row72
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row73
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row74
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row75
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row76
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row77
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row78
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row79
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row80
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row81
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row82
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row83
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row84
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row85
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row86
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row87
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row88
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row89
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row90
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row91
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row92
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row93
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row94
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row95
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row96
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row97
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row98
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row99
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row100
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row101
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row102
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row103
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row104
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row105
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row106
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row107
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row108
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row109
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row110
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row111
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row112
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row113
+  · exact backlundGrid2EndpointSmoothRationalExpFact_row114
+
+/-- Fully verified rational/exponential smooth-main facts for every row
+of the concrete two-unit Backlund grid. -/
+noncomputable def
+    backlundGrid2EndpointSmoothRationalExpFacts140_369075049_1000000 :
+    BacklundGrid2EndpointSmoothRationalExpFacts140_369075049_1000000 where
+  smoothRatExp := by
+    classical
+    intro R hR
+    rw [backlundGrid2EndpointRows140_369075049_1000000] at hR
+    let w := List.mem_map.mp hR
+    let n : Fin 115 := Classical.choose w
+    have hn : n ∈ List.finRange 115 ∧
+        backlundGrid2EndpointRow140_369075049_1000000 n = R :=
+      Classical.choose_spec w
+    rw [← hn.2]
+    exact backlundGrid2EndpointSmoothRationalExpFact_byIndex n
+
+
 /-- Rational/exponential smooth certificates imply the rowwise
 smooth-main facts. -/
 noncomputable def
@@ -36365,6 +36509,21 @@ theorem
     Hcounts
     (BacklundGrid2EndpointSmoothFacts140_369075049_1000000.ofRationalExpFacts
       Hsmooth)
+    hT
+
+/-- Concrete-grid Backlund/Turing route with verified smooth-main
+certificates.  After the row table above, the only finite grid payload
+left is the endpoint zero-count equality certificate. -/
+theorem
+    concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CountFacts369075049_verifiedSmooth
+    (Hglobal : PlattTrudgianBacklundGlobalInput)
+    (Hcounts : BacklundGrid2EndpointCountEqualities140_369075049_1000000)
+    {T : ℝ} (hT : (140 : ℝ) ≤ T) :
+    |concreteS T| ≤ (1 / 2 : ℝ) * Real.log T + 1 / 2 :=
+  concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2CountRationalExpFacts369075049
+    Hglobal
+    Hcounts
+    backlundGrid2EndpointSmoothRationalExpFacts140_369075049_1000000
     hT
 
 /-- Final headline theorem from the global Platt--Trudgian argument
@@ -65736,6 +65895,30 @@ structure XiFluctuationTailValue
       Filter.atTop
       (𝓝 L)
 
+/-- 🌟🌟 **PROVED — tail-limit values are unique.**
+
+The Stieltjes fluctuation tail is represented by a `Tendsto` statement;
+in the Hausdorff target `ℂ`, two such named values for the same
+partials must agree. -/
+theorem XiFluctuationTailValue.unique
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 T : ℝ}
+    {z L₁ L₂ : ℂ}
+    (H₁ : XiFluctuationTailValue Dzero T0 T z L₁)
+    (H₂ : XiFluctuationTailValue Dzero T0 T z L₂) :
+    L₁ = L₂ :=
+  tendsto_nhds_unique H₁.tendsto_tail H₂.tendsto_tail
+
+/-- 🌟🌟 **PROVED — a named fluctuation tail value can be transported
+across equality of limits.** -/
+theorem XiFluctuationTailValue.congr
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 T : ℝ}
+    {z L₁ L₂ : ℂ}
+    (H : XiFluctuationTailValue Dzero T0 T z L₁)
+    (hL : L₁ = L₂) :
+    XiFluctuationTailValue Dzero T0 T z L₂ := by
+  subst L₂
+  exact H
+
 /-- 📦 **`XiModelTailExplicitFormula`** — master source for both `decomp_high`
 and `decomp_mid`. Says for every `(z, T)` in the adaptive regime,
 there is a tail-limit value `L` with `Λ[Ξ](z) = M.model z + L`. -/
@@ -70538,6 +70721,37 @@ structure ConcreteCompletedXiNonzeroZeroSystem (ι : Type) : Type where
       completedXiFunction s = 0 → s ≠ 0 →
       ∃ i : ι, zeroLoc i = s
 
+/-- ⭐ **PROVED — no collision with indexed nonzero completed-ξ zeros
+at a point where the raw completed ξ is nonzero.** -/
+theorem ConcreteCompletedXiNonzeroZeroSystem.nonzero_no_collision
+    {ι : Type} (H : ConcreteCompletedXiNonzeroZeroSystem ι)
+    {s : ℂ} (hs : completedXiFunction s ≠ 0) :
+    ∀ i : ι, s ≠ H.zeroLoc i := by
+  intro i hsi
+  apply hs
+  rw [hsi]
+  exact H.zeroLoc_is_zero i
+
+/-- 🌟🌟🌟 **PROVED — canonical concrete nonzero-zero system for the raw
+completed-ξ function.**
+
+The index type is the subtype of nonzero zeros itself, so the
+surjectivity field is discharged by construction. This is the raw
+completed-ξ analogue of `concreteEntireXiZeroSystem`, with the origin
+excluded explicitly. -/
+def concreteCompletedXiNonzeroZeroSystem :
+    ConcreteCompletedXiNonzeroZeroSystem CompletedXiNonzeroZeroIndex :=
+  { zeroLoc := completedXiNonzeroZeroLoc
+    zeroLoc_ne_zero := by
+      intro i
+      exact i.2.2
+    zeroLoc_is_zero := by
+      intro i
+      exact i.2.1
+    all_nonzero_completedXi_zeros := by
+      intro s hs hs0
+      exact ⟨⟨s, ⟨hs, hs0⟩⟩, rfl⟩ }
+
 -- =====================================================================
 -- §CCCLXXXII. Bridge: nonzero-zero system → zero system under
 --             `completedXiFunction 0 ≠ 0`
@@ -71891,6 +72105,78 @@ theorem EntireXiClassicalHadamardTheorem.tendsto_expAffine_finiteProductLogDeriv
     ring
   exact htarget ▸ htotal
 
+/-- 🌟🌟🌟 **PROVED — finite product residual tails converge to the
+actual mid/high Stieltjes residual expression.**
+
+This is the product-log-derivative version of the Hadamard/Stieltjes
+limit: after subtracting the explicit cloud and smooth density model,
+the finite genus-one product log derivatives tend to
+`Λ[Ξ](z) - cloud - smooth`. -/
+theorem EntireXiClassicalHadamardTheorem.tendsto_expAffineHadamardFiniteProductResidualTail_to_XiPullback_residual
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b z : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (hy : 0 < z.im)
+    (hne : XiPullback z ≠ 0) :
+    Tendsto
+      (fun F : Finset ι =>
+        expAffineHadamardFiniteProductResidualTail
+          H.zeroSystem.zeroLoc b F z)
+      Filter.atTop
+      (𝓝 (logDerivativeResponse XiPullback z
+        - cloudModel zeros100ceil z
+        - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z)) := by
+  have hprod :=
+    H.tendsto_expAffine_finiteProductLogDeriv_to_XiPullback_logDerivativeResponse
+      Hbridge hC hpref hy hne
+  have hcloud :
+      Tendsto
+        (fun _F : Finset ι => cloudModel zeros100ceil z)
+        Filter.atTop
+        (𝓝 (cloudModel zeros100ceil z)) :=
+    tendsto_const_nhds
+  have hsmooth :
+      Tendsto
+        (fun _F : Finset ι =>
+          zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z)
+        Filter.atTop
+        (𝓝 (zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z)) :=
+    tendsto_const_nhds
+  have hres :=
+    (hprod.sub hcloud).sub hsmooth
+  simpa [expAffineHadamardFiniteProductResidualTail] using hres
+
+/-- 🌟🌟🌟 **PROVED — finite product low tails converge to the actual
+low Stieltjes residual expression.** -/
+theorem EntireXiClassicalHadamardTheorem.tendsto_expAffineHadamardFiniteProductLowTail_to_XiPullback_residual
+    {ι : Type}
+    (H : EntireXiClassicalHadamardTheorem ι)
+    (Hbridge : EntireXiToCompletedXiLogDerivBridge)
+    {C a b z : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (hy : 0 < z.im)
+    (hne : XiPullback z ≠ 0) :
+    Tendsto
+      (fun F : Finset ι =>
+        expAffineHadamardFiniteProductLowTail
+          H.zeroSystem.zeroLoc b F z)
+      Filter.atTop
+      (𝓝 (logDerivativeResponse XiPullback z
+        - cloudModel zeros100ceil z)) := by
+  have hprod :=
+    H.tendsto_expAffine_finiteProductLogDeriv_to_XiPullback_logDerivativeResponse
+      Hbridge hC hpref hy hne
+  have hcloud :
+      Tendsto
+        (fun _F : Finset ι => cloudModel zeros100ceil z)
+        Filter.atTop
+        (𝓝 (cloudModel zeros100ceil z)) :=
+    tendsto_const_nhds
+  have hres := hprod.sub hcloud
+  simpa [expAffineHadamardFiniteProductLowTail] using hres
+
 /-- 🌟🌟🌟 **PROVED — finite expanded Hadamard pullback contributions
 converge to the expanded infinite contribution.**
 
@@ -72569,6 +72855,135 @@ theorem ExpAffineHadamardResidualTailConvergenceLowAFZ.of_lowZeroSplit
       linear_combination h
     simpa [expAffineHadamardFiniteLowTail, hlim] using hTail⟩
 
+/-- 🌟🌟🌟🌟 **PROVED — mid finite product residual convergence directly
+from the Stieltjes equality and the exp-affine Hadamard log-derivative
+formula.**
+
+This avoids routing through the expanded finite contribution: the
+concrete finite genus-one product log derivatives are shown to converge
+to the Stieltjes tail value itself. -/
+theorem expAffineHadamardFiniteProductResidualTailConvergenceMid_of_stieltjesEquality
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge}
+    {C a b : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (Hmid :
+      StieltjesMidTailEqualityAFZ
+        Dzero T0
+        (expAffineHadamardPullbackZeroContribution
+          H.zeroSystem.zeroLoc b)) :
+      ∀ {z L : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L) := by
+  intro z L hy hne hmid hL
+  have hprod :=
+    H.tendsto_expAffineHadamardFiniteProductResidualTail_to_XiPullback_residual
+      Hbridge hC hpref hy hne
+  have htarget :
+      logDerivativeResponse XiPullback z
+          - cloudModel zeros100ceil z
+          - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+        = L := by
+    have hlog :=
+      H.XiPullback_logDerivativeResponse_eq_expAffine_series
+        Hbridge hC hpref hy hne
+    have hst := Hmid.mid_eq hy hne hmid hL
+    rw [hlog, hst]
+    ring
+  simpa [htarget] using hprod
+
+/-- 🌟🌟🌟🌟 **PROVED — high finite product residual convergence directly
+from the Stieltjes equality and the exp-affine Hadamard log-derivative
+formula.** -/
+theorem expAffineHadamardFiniteProductResidualTailConvergenceHigh_of_stieltjesEquality
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge}
+    {C a b : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (Hhigh :
+      StieltjesHighTailEqualityAFZ
+        Dzero T0
+        (expAffineHadamardPullbackZeroContribution
+          H.zeroSystem.zeroLoc b)) :
+      ∀ {z L : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        XiFluctuationTailValue Dzero T0 T z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L) := by
+  intro z L T hT hy hne hreg hL
+  have hprod :=
+    H.tendsto_expAffineHadamardFiniteProductResidualTail_to_XiPullback_residual
+      Hbridge hC hpref hy hne
+  have htarget :
+      logDerivativeResponse XiPullback z
+          - cloudModel zeros100ceil z
+          - zeroDensitySmoothTailModel (2 * Real.pi) le_rfl z
+        = L := by
+    have hlog :=
+      H.XiPullback_logDerivativeResponse_eq_expAffine_series
+        Hbridge hC hpref hy hne
+    have hst := Hhigh.high_eq hT hy hne hreg hL
+    rw [hlog, hst]
+    ring
+  simpa [htarget] using hprod
+
+/-- 🌟🌟🌟🌟 **PROVED — low finite product-tail convergence directly
+from the low zero split and the exp-affine Hadamard log-derivative
+formula.** -/
+theorem expAffineHadamardFiniteProductLowTailConvergence_of_lowZeroSplit
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge}
+    {C a b : ℂ} (hC : C ≠ 0)
+    (hpref : H.prefactor = fun s : ℂ => C * Complex.exp (a + b * s))
+    (Hlow :
+      LowZeroContributionSplitAFZ
+        Dzero T0
+        (expAffineHadamardPullbackZeroContribution
+          H.zeroSystem.zeroLoc b)) :
+      ∀ {z : ℂ},
+        lowCompactRegion z →
+        XiPullback z ≠ 0 →
+        LowFirstZeroGapNoAtoms Dzero →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductLowTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 (lowTailZeroContribution Dzero T0 z)) := by
+  intro z hz hne Hno
+  have hprod :=
+    H.tendsto_expAffineHadamardFiniteProductLowTail_to_XiPullback_residual
+      Hbridge hC hpref hz.1 hne
+  have htarget :
+      logDerivativeResponse XiPullback z - cloudModel zeros100ceil z
+        = lowTailZeroContribution Dzero T0 z := by
+    have hlog :=
+      H.XiPullback_logDerivativeResponse_eq_expAffine_series
+        Hbridge hC hpref hz.1 hne
+    have hst := Hlow.split z hz hne Hno
+    rw [hlog, hst]
+    ring
+  simpa [htarget] using hprod
+
 /-- 🌟🌟🌟 **PROVED — mid Stieltjes equality from finite Hadamard
 truncation decompositions.** -/
 theorem StieltjesMidTailEqualityAFZ.of_expAffineHadamardFiniteSource
@@ -72834,6 +73249,170 @@ theorem expAffineHadamardResidualTailConvergenceLow_iff_lowZeroContributionSplit
     fun Hlow =>
       ExpAffineHadamardResidualTailConvergenceLowAFZ.of_lowZeroSplit
         (Hbridge := Hbridge) Hlow⟩
+
+/-- 🌟🌟🌟🌟 **PROVED — concrete finite product residual convergence is
+equivalent to the mid AFZ Stieltjes equality.**
+
+This names the real mid-band analytic target in product-log-derivative
+coordinates: proving convergence of the finite genus-one product
+residual tails is exactly the same as proving the limiting Stieltjes
+identity for the exp-affine Hadamard zero contribution. -/
+theorem expAffineHadamardFiniteProductResidualTailConvergenceMid_iff_stieltjesMidTailEqualityAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ} :
+    (∀ {z L : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L))
+      ↔
+    StieltjesMidTailEqualityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  (expAffineHadamardFiniteProductResidualTailConvergenceMid_iff_residualTailConvergence
+    (Hbridge := Hbridge)).trans
+    (expAffineHadamardResidualTailConvergenceMid_iff_stieltjesMidTailEqualityAFZ
+      (Hbridge := Hbridge))
+
+/-- 🌟🌟🌟🌟 **PROVED — concrete finite product residual convergence is
+equivalent to the high AFZ Stieltjes equality.** -/
+theorem expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_stieltjesHighTailEqualityAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ} :
+    (∀ {z L : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        XiFluctuationTailValue Dzero T0 T z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L))
+      ↔
+    StieltjesHighTailEqualityAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  (expAffineHadamardFiniteProductResidualTailConvergenceHigh_iff_residualTailConvergence
+    (Hbridge := Hbridge)).trans
+    (expAffineHadamardResidualTailConvergenceHigh_iff_stieltjesHighTailEqualityAFZ
+      (Hbridge := Hbridge))
+
+/-- 🌟🌟🌟🌟 **PROVED — concrete finite product low-tail convergence is
+equivalent to the low zero-contribution split.** -/
+theorem expAffineHadamardFiniteProductLowTailConvergence_iff_lowZeroContributionSplitAFZ
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι}
+    {Hbridge : EntireXiToCompletedXiLogDerivBridge} {b : ℂ} :
+    (∀ {z : ℂ},
+        lowCompactRegion z →
+        XiPullback z ≠ 0 →
+        LowFirstZeroGapNoAtoms Dzero →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductLowTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 (lowTailZeroContribution Dzero T0 z)))
+      ↔
+    LowZeroContributionSplitAFZ
+      Dzero T0
+      (expAffineHadamardPullbackZeroContribution
+        H.zeroSystem.zeroLoc b) :=
+  (expAffineHadamardFiniteProductLowTailConvergence_iff_residualTailConvergenceLow
+    (Hbridge := Hbridge)).trans
+    (expAffineHadamardResidualTailConvergenceLow_iff_lowZeroContributionSplitAFZ
+      (Hbridge := Hbridge))
+
+/-- 🌟🌟🌟 **PROVED — mid finite-product residual convergence from one
+identified fluctuation tail value.**
+
+The downstream Stieltjes target asks for convergence to every named
+`XiFluctuationTailValue`. Since those values are unique, it is enough
+to produce one tail value and prove the finite product residuals
+converge to it. -/
+theorem expAffineHadamardFiniteProductResidualTailConvergenceMid_of_exists_identified_tail
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι} {b : ℂ}
+    (Hidentify :
+      ∀ {z : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        ∃ L₀ : ℂ,
+          XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L₀ ∧
+          Tendsto
+            (fun F : Finset ι =>
+              expAffineHadamardFiniteProductResidualTail
+                H.zeroSystem.zeroLoc b F z)
+            Filter.atTop
+            (𝓝 L₀)) :
+      ∀ {z L : ℂ},
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        (∃ T : ℝ, 10 ≤ T ∧ T ≤ 140 ∧
+          2 * (1 + |z.re| + z.im) ≤ T) →
+        XiFluctuationTailValue Dzero T0 (canonicalAdaptiveT z) z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L) := by
+  intro z L hy hne hmid hL
+  obtain ⟨L₀, hL₀, hprod⟩ := Hidentify hy hne hmid
+  have huniq : L₀ = L := hL₀.unique hL
+  simpa [huniq] using hprod
+
+/-- 🌟🌟🌟 **PROVED — high finite-product residual convergence from one
+identified fluctuation tail value.** -/
+theorem expAffineHadamardFiniteProductResidualTailConvergenceHigh_of_exists_identified_tail
+    {Dzero : Phase1IBP.OrderedFluctuationMeasureData} {T0 : ℝ}
+    {ι : Type} {H : EntireXiClassicalHadamardTheorem ι} {b : ℂ}
+    (Hidentify :
+      ∀ {z : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        ∃ L₀ : ℂ,
+          XiFluctuationTailValue Dzero T0 T z L₀ ∧
+          Tendsto
+            (fun F : Finset ι =>
+              expAffineHadamardFiniteProductResidualTail
+                H.zeroSystem.zeroLoc b F z)
+            Filter.atTop
+            (𝓝 L₀)) :
+      ∀ {z L : ℂ} {T : ℝ},
+        140 ≤ T →
+        0 < z.im →
+        XiPullback z ≠ 0 →
+        2 * (1 + |z.re| + z.im) ≤ T →
+        XiFluctuationTailValue Dzero T0 T z L →
+        Tendsto
+          (fun F : Finset ι =>
+            expAffineHadamardFiniteProductResidualTail
+              H.zeroSystem.zeroLoc b F z)
+          Filter.atTop
+          (𝓝 L) := by
+  intro z L T hT hy hne hreg hL
+  obtain ⟨L₀, hL₀, hprod⟩ := Hidentify hT hy hne hreg
+  have huniq : L₀ = L := hL₀.unique hL
+  simpa [huniq] using hprod
 
 /-- 🌟🌟🌟🌟 **PATH B FRONT DOOR — finite Hadamard Stieltjes sources +
 low split.**
