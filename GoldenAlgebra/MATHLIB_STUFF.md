@@ -979,3 +979,49 @@ Net honest status of the three bridges: **all three compile and are axiom-clean,
 on project-specific analytic content that Mathlib does not provide** (B1 already done in-file
 another way; B2 behind the Hadamard factorization/growth; B3 behind the per-shell Γ·ζ sphere
 bound). They retire Mathlib-facing plumbing; they do not close P1/P2/P3.
+
+---
+---
+
+# Pass 7 — the compiled bridge chain (Scratch.lean), and the gap pinned to ONE constant
+
+> Six theorems, all compiling against pinned Mathlib (`lake env lean Scratch.lean`, exit 0),
+> all `#print axioms`-clean (propext/Choice/Quot only, **no sorryAx**), `linter.all` clean.
+> Branch `push-p3-stieltjes`. The chain below isolates the *entire* remaining analytic gap for the
+> Jensen/RvM route into a **single growth constant**.
+
+## The chain (Bridges 3 → 5 → 6)
+```
+jensen_zero_count_le                      -- Jensen: ∑ᶠ divisor f (ball r) ≤ log(M/‖fc‖)/log(R/r)
+  └─ jensen_zero_count_le_of_expBound     -- + growth exp(A·R)      ⇒ count ≤ A·e·r − log‖fc‖   (order-1 finite type)
+  └─ jensen_zero_count_le_of_xiTypeGrowth -- + growth exp(A·R·logR) ⇒ count ≤ A·(e·r)·log(e·r) − log‖fc‖   (ξ shape, N(T)~T·logT)
+```
+Bridge 6 is the **correct shape for ξ** (order 1, *maximal* type). Its hypothesis is precisely:
+```lean
+∀ z ∈ sphere c (e·r), ‖f z‖ ≤ exp (A · (e·r) · log (e·r))
+```
+Everything downstream of that hypothesis is a compiled theorem. **The whole remaining Jensen-route
+gap is the single constant `A`** in ξ's growth bound — i.e. the classical estimate
+`‖ξ(s)‖ ≤ exp(A·|s|·log|s|)` from the Γ·ζ factors, which Mathlib does not provide (no
+entire-function order theory; Pass 3). That estimate is the genuine, irreducible analytic input.
+
+## Honest status of all six bridges vs. rh.lean
+| bridge | compiles | in rh.lean already? | role |
+|---|---|---|---|
+| B1 `entire_conj_symm_of_real_on_real` | ✓ | yes (L50084, other route) | reusable Schwarz |
+| B2 `logDeriv_tprod_eq_tsum_wrapper` | ✓ | `logDeriv_prod` used L74235 | tprod logDeriv |
+| B4 `logDeriv_genus1Factor` | ✓ | yes, verbatim L74073 | per-factor keystone |
+| B3 `jensen_zero_count_le` | ✓ | **no** | RvM zero-count engine |
+| B5 `..._of_expBound` | ✓ | no | finite-type count |
+| B6 `..._of_xiTypeGrowth` | ✓ | no | **ξ-shape `T·logT` count** |
+
+B1/B2/B4 turned out redundant (rh.lean already has them) — useful confirmation that the Mathlib-facing
+plumbing is done. **B3/B5/B6 are genuinely new** and assemble the RvM count from Mathlib's Jensen
+formula, reducing the A1/`canonicalShellCard` obligation to the one growth constant.
+
+## What is NOT closed (unchanged, stated plainly)
+The three hard obligations (P1 Turing envelope, P2 Hadamard order/growth, P3 Stieltjes identities)
+remain genuine mathematics. Bridge 6 does not close P1/A1 — it *reformulates* the count half as a
+clean consequence of ξ's growth, leaving the growth bound itself (and the Turing-side envelope
+estimate, and the Stieltjes IBP identities) as the real work. No `sorry` was introduced anywhere;
+`rh.lean`'s audited no-sorry build is untouched (these live in the separate `Scratch.lean` tester).
