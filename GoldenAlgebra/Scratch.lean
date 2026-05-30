@@ -97,7 +97,6 @@ noncomputable def genus1Factor (ρ s : ℂ) : ℂ := (1 - s / ρ) * Complex.exp 
 
 theorem logDeriv_genus1Factor {ρ s : ℂ} (hρ : ρ ≠ 0) (hsρ : s ≠ ρ) :
     logDeriv (genus1Factor ρ) s = 1 / (s - ρ) + 1 / ρ := by
-  have hsub : s - ρ ≠ 0 := sub_ne_zero.mpr hsρ
   -- derivative of each piece
   have h1 : HasDerivAt (fun w : ℂ => 1 - w / ρ) (-(1 / ρ)) s := by
     have : HasDerivAt (fun w : ℂ => w / ρ) (1 / ρ) s := by
@@ -116,7 +115,7 @@ theorem logDeriv_genus1Factor {ρ s : ℂ} (hρ : ρ ≠ 0) (hsρ : s ≠ ρ) :
     exact hdiv
   have hexp : Complex.exp (s / ρ) ≠ 0 := Complex.exp_ne_zero _
   -- logDeriv of product, unfolding the def
-  show logDeriv (fun w => (1 - w / ρ) * Complex.exp (w / ρ)) s = 1 / (s - ρ) + 1 / ρ
+  change logDeriv (fun w => (1 - w / ρ) * Complex.exp (w / ρ)) s = 1 / (s - ρ) + 1 / ρ
   rw [logDeriv_mul s hval1 hexp h1.differentiableAt h2.differentiableAt]
   rw [logDeriv_apply, logDeriv_apply, h1.deriv, h2.deriv]
   -- first term: -(1/ρ) / (1 - s/ρ) = 1/(s-ρ);  second: (exp·(1/ρ))/exp = 1/ρ
