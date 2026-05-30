@@ -950,3 +950,32 @@ inputs that are themselves genuine math:
   order/growth estimate — no Mathlib shortcut, Pass 3).
 The bridges retire the *Mathlib-facing* half of each obligation; the *analytic-content* half (growth
 order, the envelope estimate) remains the irreducible work, exactly as the audits predicted.
+
+---
+
+## Pass 6 — CORRECTION (read the actual defs, earlier claim was wrong)
+
+**Earlier claim (Pass 2 #1, Pass 5, and Bridge 2 above): "wiring `logDeriv_tprod_eq_tsum` turns
+the `canonicalXiPullbackHadamardLogDerivativeSource` `rfl` placeholder into a real theorem and
+deletes ~200–300 lines." THIS IS WRONG.** After reading the actual definitions:
+
+- `canonicalXiPullbackZeroContribution := logDerivativeResponse XiPullback` (rh.lean L90208).
+- So the struct field `logDeriv_eq_zeroContribution` is literally
+  `logDerivativeResponse XiPullback z = logDerivativeResponse XiPullback z` — a **legitimate
+  definitional tautology**, closed by `rfl`. It is **not** a placeholder hiding analytic work.
+- The direct-canonical route *deliberately* sets the zero-contribution to the actual log-derivative,
+  pushing all genuine content onto the **Stieltjes side** (`StieltjesMidHighTailEquality` etc., P3).
+  Same pattern at L73441 (`if 0<z.im then logDerivativeResponse XiPullback z else 0`, closed by
+  `simp`).
+
+**Where Bridge 2 (`logDeriv_tprod_eq_tsum`) actually applies:** only on the *honest-Hadamard*
+route, to prove `logDerivativeResponse XiPullback z = Σ' (1/(z−ρ) + …)` — and that step first needs
+ξ written as a product over its zeros (the Hadamard **factorization**, P2), which requires
+entire-function **order/growth theory that is NOT in Mathlib** (confirmed Pass 3). So Bridge 2 is
+gated behind the genuinely-missing growth content; it is the *easy mile after the hard mile*, not a
+standalone win. Bridge 2 remains a correct, compiled lemma — its applicability was overstated.
+
+Net honest status of the three bridges: **all three compile and are axiom-clean, but each is gated
+on project-specific analytic content that Mathlib does not provide** (B1 already done in-file
+another way; B2 behind the Hadamard factorization/growth; B3 behind the per-shell Γ·ζ sphere
+bound). They retire Mathlib-facing plumbing; they do not close P1/P2/P3.
