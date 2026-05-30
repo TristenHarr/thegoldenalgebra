@@ -1997,4 +1997,260 @@ theorem summable_inv_sq_of_ballCount'
       exact Nat.card_mono (hfin R) himg
     exact_mod_cast hcardle
 
+
+/-! ## Bridge 49 — genus-1 product zero ORDERS (G5 multiplicity matching)
+Per-factor order (simple zero at ρ, 0 elsewhere); finite-product order = sum of orders; and the
+loc-unif product order = hitting-index count, CONDITIONAL on the factorization `hsplit` (finite
+hitting factors × analytic nonvanishing tail) — the one piece Mathlib lacks an order-of-product
+lemma for. With B45 this gives `Q=ξ/∏` entire once ξ's and ∏'s orders match. -/
+/-! ## PART 1 (tractable): the order of a single genus-1 factor.
+`genus1Factor ρ` is entire, vanishes only at `ρ`, to order exactly 1. -/
+
+/-- `genus1Factor ρ` is analytic everywhere. -/
+theorem analyticAt_genus1Factor (ρ : ℂ) (z : ℂ) : AnalyticAt ℂ (genus1Factor ρ) z := by
+  unfold genus1Factor
+  fun_prop
+
+/-- The cofactor `g s = -(1/ρ) * exp (s/ρ)` extracted from `genus1Factor ρ`, so that
+`genus1Factor ρ s = (s - ρ) ^ 1 • g s`. -/
+theorem analyticOrderAt_genus1Factor_self {ρ : ℂ} (hρ : ρ ≠ 0) :
+    analyticOrderAt (genus1Factor ρ) ρ = 1 := by
+  rw [show (1 : ℕ∞) = ((1 : ℕ) : ℕ∞) from rfl,
+    (analyticAt_genus1Factor ρ ρ).analyticOrderAt_eq_natCast]
+  refine ⟨fun s => -(1 / ρ) * Complex.exp (s / ρ), by fun_prop, ?_, ?_⟩
+  · exact mul_ne_zero (neg_ne_zero.mpr (div_ne_zero one_ne_zero hρ)) (Complex.exp_ne_zero _)
+  · filter_upwards with s
+    unfold genus1Factor
+    rw [pow_one, smul_eq_mul]
+    field_simp
+    ring
+
+theorem analyticOrderAt_genus1Factor_ne {ρ z : ℂ} (hρ : ρ ≠ 0) (hz : z ≠ ρ) :
+    analyticOrderAt (genus1Factor ρ) z = 0 := by
+  rw [(analyticAt_genus1Factor ρ z).analyticOrderAt_eq_zero]
+  unfold genus1Factor
+  refine mul_ne_zero ?_ (Complex.exp_ne_zero _)
+  rw [sub_ne_zero, ne_comm, ne_eq, div_eq_one_iff_eq hρ]
+  exact hz
+
+/-! ## PART 2 (the hard one): order of the infinite product = sum of factor orders.
+Investigate Mathlib for `analyticOrderAt` of a locally-uniform `tprod`. The order of a
+locally-uniformly-convergent product at `z` should equal the (finite) sum of the factor orders
+at `z` — because only finitely many factors vanish at `z` (the locations are discrete), and the
+tail product is analytic and nonzero near `z`.
+
+Target (state precisely; you MAY add hypotheses — discreteness of `loc`, `loc i ≠ 0`, the
+loc-uniform multipliability, and `Summable (1/‖loc i‖²)` — whatever the proof needs): -/
+
+/-- Order of a finite product of analytic functions is the sum of the orders. -/
+theorem analyticOrderAt_finsetProd {ι : Type*} (s : Finset ι) (F : ι → ℂ → ℂ) (z : ℂ)
+    (hF : ∀ i ∈ s, AnalyticAt ℂ (F i) z) :
+    analyticOrderAt (fun w => ∏ i ∈ s, F i w) z = ∑ i ∈ s, analyticOrderAt (F i) z := by
+  classical
+  induction s using Finset.induction with
+  | empty =>
+    simp only [Finset.prod_empty, Finset.sum_empty]
+    rw [analyticOrderAt_eq_zero]; right; simp
+  | insert a s ha ih =>
+    simp only [Finset.prod_insert ha, Finset.sum_insert ha]
+    have hAa : AnalyticAt ℂ (F a) z := hF a (Finset.mem_insert_self a s)
+    have hArest : AnalyticAt ℂ (fun w => ∏ i ∈ s, F i w) z := by
+      have := Finset.analyticAt_prod (𝕜 := ℂ) (f := F) s
+        (fun i hi => hF i (Finset.mem_insert_of_mem hi))
+      rw [Finset.prod_fn] at this; exact this
+    have key : analyticOrderAt (fun w => F a w * ∏ i ∈ s, F i w) z
+        = analyticOrderAt (F a) z + analyticOrderAt (fun w => ∏ i ∈ s, F i w) z := by
+      have := analyticOrderAt_mul (f := F a) (g := fun w => ∏ i ∈ s, F i w) hAa hArest
+      simpa [Pi.mul_def] using this
+    rw [key, ih (fun i hi => hF i (Finset.mem_insert_of_mem hi))]
+
+/-!
+The order of the locally-uniform genus-1 product at `z` equals the number of indices hitting `z`.
+
+We isolate the genuinely-missing analytic-number-theory input as the hypothesis `hsplit`: near
+`z`, the full product factors as the FINITE product over the indices that hit `z` times an
+analytic, nonvanishing TAIL. This is exactly the content of "order of a locally-uniform product"
+that Mathlib does not yet provide as a lemma (Mathlib has no `analyticOrderAt` lemma for a
+`tprod` / `MultipliableLocallyUniformlyOn` product). The standard proof of `hsplit` splits the
+product into the finite hitting factors times the complement tail
+(`Multipliable.prod_mul_tprod_subtype_compl`, available pointwise from `hmul.multipliable`) and
+shows the tail is analytic (locally-uniform limit of analytic partial products) and nonvanishing
+at `z` (each tail factor is nonzero there and the product is a genuine ξ-type Hadamard product).
+Everything ELSE — that this factorization forces the order to be the hitting count — is proved
+here unconditionally.
+-/
+theorem analyticOrderAt_genus1Product
+    {ι : Type*} (loc : ι → ℂ) (z : ℂ)
+    (hne : ∀ i, loc i ≠ 0)
+    -- `z` is hit by only finitely many indices (from discreteness of the zero set):
+    (hfin : {i | loc i = z}.Finite)
+    -- The full product factors near `z` as (finite hitting product) · (analytic nonvanishing tail).
+    -- This is the precise locally-uniform-product factorization Mathlib lacks an order lemma for.
+    (tail : ℂ → ℂ)
+    (htail_an : AnalyticAt ℂ tail z)
+    (htail_ne : tail z ≠ 0)
+    (hsplit : ∀ᶠ s in nhds z,
+      (∏' i, genus1Factor (loc i) s) = (∏ i ∈ hfin.toFinset, genus1Factor (loc i) s) * tail s) :
+    analyticOrderAt (fun s => ∏' i, genus1Factor (loc i) s) z
+      = (Nat.card {i | loc i = z} : ℕ∞) := by
+  classical
+  set F : ι → ℂ → ℂ := fun i s => genus1Factor (loc i) s with hFdef
+  set Hfin : Finset ι := hfin.toFinset with hHfindef
+  -- order of the product = order of (finite hitting product · tail), by the local factorization
+  have horder : analyticOrderAt (fun s => ∏' i, F i s) z
+      = analyticOrderAt (fun s => (∏ i ∈ Hfin, F i s) * tail s) z :=
+    analyticOrderAt_congr hsplit
+  rw [horder]
+  have hAfin : AnalyticAt ℂ (fun s => ∏ i ∈ Hfin, F i s) z := by
+    have := Finset.analyticAt_prod (𝕜 := ℂ) (f := F) Hfin
+      (fun i _ => analyticAt_genus1Factor (loc i) z)
+    rw [Finset.prod_fn] at this; exact this
+  have hmul_eq : analyticOrderAt (fun s => (∏ i ∈ Hfin, F i s) * tail s) z
+      = analyticOrderAt (fun s => ∏ i ∈ Hfin, F i s) z + analyticOrderAt tail z := by
+    have := analyticOrderAt_mul (f := fun s => ∏ i ∈ Hfin, F i s) (g := tail) hAfin htail_an
+    simpa [Pi.mul_def] using this
+  rw [hmul_eq]
+  -- tail order is 0 (nonvanishing at z)
+  have htail0 : analyticOrderAt tail z = 0 := by
+    rw [htail_an.analyticOrderAt_eq_zero]; exact htail_ne
+  rw [htail0, add_zero]
+  -- finite product order = sum of (order-1) factors = card
+  rw [analyticOrderAt_finsetProd Hfin F z (fun i _ => analyticAt_genus1Factor (loc i) z)]
+  have hmemz : ∀ i ∈ Hfin, loc i = z := fun i hi => (hfin.mem_toFinset.mp hi)
+  have hsum : ∑ i ∈ Hfin, analyticOrderAt (F i) z = ∑ _i ∈ Hfin, (1 : ℕ∞) := by
+    apply Finset.sum_congr rfl
+    intro i hi
+    have hlocz : loc i = z := hmemz i hi
+    change analyticOrderAt (genus1Factor (loc i)) z = 1
+    rw [hlocz]
+    exact analyticOrderAt_genus1Factor_self (hlocz ▸ hne i)
+  rw [hsum]
+  simp only [Finset.sum_const, nsmul_eq_mul, mul_one]
+  -- card of the finite set = card of the finset
+  rw [Nat.card_eq_card_finite_toFinset hfin]
+
+/-! ## Bridge 50 — G3 CLOSED: `Σ_ρ 1/‖ρ‖² < ∞`, and UNCONDITIONAL genus-1 product convergence
+Wires the unconditional RvM count (B47) through B44 + B21 into the abstract engine (B48'). Then
+the genus-1 Hadamard product over ξ's zeros converges locally uniformly — UNCONDITIONALLY. -/
+
+/-- **ξ inverse-square zero summability** (G3). -/
+theorem xi_zero_invSq_summable :
+    Summable (fun ρ : XiZeroIndex => 1 / ‖xiZeroLoc ρ‖ ^ 2) := by
+  -- Extract the growth constant `A` from the unconditional zero count.
+  obtain ⟨A, hA0, hA⟩ := xi_zero_count_bigO
+  -- Final dominating constant.
+  set C : ℝ :=
+    A * Real.exp 1 / Real.log 2 + A * Real.exp 1
+      + |Real.log ‖entireRiemannXi 0‖| / Real.log 2 + 1 with hC
+  -- Map a small-norm zero index into the compact-intersection finite set.
+  -- (`closedBall 0 R ∩ riemannXiZeros`).
+  have hfin : ∀ R : ℝ, {ρ : XiZeroIndex | ‖xiZeroLoc ρ‖ ≤ R}.Finite := by
+    intro R
+    -- The finite set we inject into.
+    have hcpt : (Metric.closedBall (0 : ℂ) R ∩ riemannXiZeros).Finite :=
+      isCompact_inter_riemannXiZeros_finite (isCompact_closedBall 0 R)
+    -- The image of our set under `Subtype.val` lands in that finite set.
+    apply Set.Finite.of_finite_image (f := (Subtype.val : XiZeroIndex → ℂ))
+    · apply hcpt.subset
+      rintro z ⟨ρ, hρ, rfl⟩
+      refine ⟨?_, ?_⟩
+      · -- z = ↑ρ ∈ closedBall 0 R
+        simp only [Metric.mem_closedBall, dist_zero_right]
+        simpa [xiZeroLoc] using hρ
+      · exact ρ.2
+    · -- `Subtype.val` is injective, hence injective on any set.
+      exact Subtype.val_injective.injOn
+  -- The counting bound.
+  have hcount : ∀ R : ℝ, 2 ≤ R →
+      (Nat.card {ρ : XiZeroIndex | ‖xiZeroLoc ρ‖ ≤ R} : ℝ) ≤ C * R * Real.log R := by
+    intro R hR
+    -- Target subtype of zeros in the ball; it is finite.
+    have hballfin : (Metric.closedBall (0 : ℂ) R ∩ riemannXiZeros).Finite :=
+      isCompact_inter_riemannXiZeros_finite (isCompact_closedBall 0 R)
+    have : Finite {z : ℂ // entireRiemannXi z = 0 ∧ z ∈ Metric.closedBall (0 : ℂ) R} := by
+      have hsub : {z : ℂ | entireRiemannXi z = 0 ∧ z ∈ Metric.closedBall (0 : ℂ) R}
+          ⊆ Metric.closedBall (0 : ℂ) R ∩ riemannXiZeros := by
+        rintro z ⟨hz0, hzb⟩
+        exact ⟨hzb, by simpa [riemannXiZeros] using hz0⟩
+      exact (hballfin.subset hsub).to_subtype
+    -- Inject small-norm indices into the ball-zero subtype.
+    have hcard_le :
+        Nat.card {ρ : XiZeroIndex | ‖xiZeroLoc ρ‖ ≤ R}
+          ≤ Nat.card {z : ℂ // entireRiemannXi z = 0 ∧ z ∈ Metric.closedBall (0 : ℂ) R} := by
+      refine Nat.card_le_card_of_injective
+        (fun ρ => ⟨(ρ.1 : ℂ), ?_, ?_⟩) ?_
+      · -- ξ (↑ρ) = 0
+        exact (mem_riemannXiZeros).1 ρ.1.2
+      · -- ↑ρ ∈ closedBall 0 R
+        have hρ2 : ‖xiZeroLoc ρ.1‖ ≤ R := ρ.2
+        simp only [Metric.mem_closedBall, dist_zero_right]
+        simpa [xiZeroLoc] using hρ2
+      · -- injectivity
+        rintro ⟨⟨ρ, hρmem⟩, hρ⟩ ⟨⟨σ, hσmem⟩, hσ⟩ h
+        simp only [Subtype.mk.injEq] at h
+        exact Subtype.ext (Subtype.ext h)
+    -- Cast to ℝ and chain through divisor / RvM bounds.
+    have hcard_leR :
+        (Nat.card {ρ : XiZeroIndex | ‖xiZeroLoc ρ‖ ≤ R} : ℝ)
+          ≤ (Nat.card {z : ℂ // entireRiemannXi z = 0 ∧ z ∈ Metric.closedBall (0 : ℂ) R} : ℝ) := by
+      exact_mod_cast hcard_le
+    have hdiv :
+        (Nat.card {z : ℂ // entireRiemannXi z = 0 ∧ z ∈ Metric.closedBall (0 : ℂ) R} : ℝ)
+          ≤ ∑ᶠ u, MeromorphicOn.divisor entireRiemannXi (Metric.closedBall (0 : ℂ) R) u :=
+      natCard_zeros_le_finsum_divisor analyticOnNhd_entireRiemannXi
+        ⟨0, entireRiemannXi_zero_ne⟩ (by linarith)
+    have hrvm := hA R hR
+    -- Now the arithmetic: A·(eR)·log(eR) − log‖ξ0‖ ≤ C·R·log R.
+    have hlog : Real.log (Real.exp 1 * R) = 1 + Real.log R := by
+      rw [Real.log_mul (Real.exp_pos 1).ne' (by linarith), Real.log_exp]
+    have hRpos : (0 : ℝ) < R := by linarith
+    have hlog2pos : (0 : ℝ) < Real.log 2 := Real.log_pos (by norm_num)
+    have hlogR : Real.log 2 ≤ Real.log R := Real.log_le_log (by norm_num) hR
+    have hlogRpos : (0 : ℝ) < Real.log R := lt_of_lt_of_le hlog2pos hlogR
+    have hRlogR : Real.log 2 ≤ R * Real.log R := by
+      have : (1 : ℝ) * Real.log 2 ≤ R * Real.log R :=
+        mul_le_mul (by linarith) hlogR hlog2pos.le hRpos.le
+      linarith
+    have hexp1pos : (0 : ℝ) < Real.exp 1 := Real.exp_pos 1
+    -- `-log‖ξ0‖ ≤ |log‖ξ0‖|`
+    have hcabs : -Real.log ‖entireRiemannXi 0‖ ≤ |Real.log ‖entireRiemannXi 0‖| :=
+      neg_le_abs _
+    -- `A·e·R ≤ (A·e/log2)·R·logR`  (since logR ≥ log2 > 0)
+    have hterm1 : A * Real.exp 1 * R ≤ (A * Real.exp 1 / Real.log 2) * R * Real.log R := by
+      have key : (A * Real.exp 1 / Real.log 2) * R * Real.log R
+          = (A * Real.exp 1 * R) * (Real.log R / Real.log 2) := by
+        field_simp
+      rw [key]
+      have hge1 : (1 : ℝ) ≤ Real.log R / Real.log 2 := by
+        rw [le_div_iff₀ hlog2pos]; linarith
+      nlinarith [hge1, mul_nonneg (mul_nonneg hA0 hexp1pos.le) hRpos.le]
+    -- `|log‖ξ0‖| ≤ (|log‖ξ0‖|/log2)·R·logR`  (since R·logR ≥ log2)
+    have hterm2 : |Real.log ‖entireRiemannXi 0‖|
+        ≤ (|Real.log ‖entireRiemannXi 0‖| / Real.log 2) * R * Real.log R := by
+      have key : (|Real.log ‖entireRiemannXi 0‖| / Real.log 2) * R * Real.log R
+          = |Real.log ‖entireRiemannXi 0‖| * (R * Real.log R / Real.log 2) := by
+        field_simp
+      rw [key]
+      have hge1 : (1 : ℝ) ≤ R * Real.log R / Real.log 2 := by
+        rw [le_div_iff₀ hlog2pos]; linarith
+      nlinarith [hge1, abs_nonneg (Real.log ‖entireRiemannXi 0‖)]
+    -- Assemble.
+    calc
+      (Nat.card {ρ : XiZeroIndex | ‖xiZeroLoc ρ‖ ≤ R} : ℝ)
+          ≤ A * (Real.exp 1 * R) * Real.log (Real.exp 1 * R)
+              - Real.log ‖entireRiemannXi 0‖ :=
+            le_trans hcard_leR (le_trans hdiv hrvm)
+      _ = A * Real.exp 1 * R * (1 + Real.log R) - Real.log ‖entireRiemannXi 0‖ := by
+            rw [hlog]; ring
+      _ ≤ C * R * Real.log R := by
+            rw [hC]
+            have hRlogRnn : 0 ≤ R * Real.log R := by positivity
+            nlinarith [hterm1, hterm2, hcabs, hRlogRnn]
+  exact summable_inv_sq_of_ballCount' xiZeroLoc C xiZeroLoc_ne_zero hfin hcount
+
+/-- **Unconditional** local-uniform convergence of the genus-1 Hadamard product over ξ's zeros. -/
+theorem xi_genus1Product_LU :
+    MultipliableLocallyUniformlyOn (fun ρ s => genus1Factor (xiZeroLoc ρ) s) Set.univ :=
+  xi_genus1Product_multipliableLocallyUniformlyOn xi_zero_invSq_summable
+
 end ScratchBridges
