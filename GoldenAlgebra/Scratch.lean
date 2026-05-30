@@ -127,4 +127,49 @@ theorem logDeriv_genus1Factor {ρ s : ℂ} (hρ : ρ ≠ 0) (hsρ : s ≠ ρ) :
     rw [mul_comm, mul_div_assoc, div_self hexp, mul_one]
   rw [e1, e2]
 
+/-! ## Bridge 5 — Jensen + order-≤1 growth ⟹ explicit linear zero count
+
+Compose Bridge 3 with an order-≤1 growth bound `‖f z‖ ≤ exp(A·‖z−c‖)` on the
+sphere of radius `R = e·r`. Choosing `R/r = e` makes `log(R/r) = 1`, collapsing
+Jensen's bound to a clean **linear-in-`r`** count `≤ A·e·r − log‖f c‖`.
+
+This is the concrete RvM-shaped consequence: it makes the only genuinely missing
+input explicit — the order-1 growth constant `A` for `f = ξ` (the Γ·ζ estimate that
+Mathlib does not provide). Everything else is now a compiled theorem. -/
+
+open MeromorphicOn in
+theorem jensen_zero_count_le_of_expBound
+    {c : ℂ} {r A : ℝ} {f : ℂ → ℂ}
+    (r_pos : 0 < r) (hA : 0 ≤ A)
+    (hf : Differentiable ℂ f) (h₂f : f c ≠ 0)
+    (f_bound : ∀ z ∈ Metric.sphere c (Real.exp 1 * r),
+        ‖f z‖ ≤ Real.exp (A * (Real.exp 1 * r))) :
+    ∑ᶠ u, divisor f (Metric.closedBall c r) u
+      ≤ A * (Real.exp 1 * r) - Real.log ‖f c‖ := by
+  set R : ℝ := Real.exp 1 * r with hR_def
+  set M : ℝ := Real.exp (A * R) with hM_def
+  have he1 : (1 : ℝ) < Real.exp 1 := by
+    have := Real.add_one_lt_exp (x := 1) (by norm_num); linarith
+  have hR_pos : 0 < R := by rw [hR_def]; positivity
+  have hRr : r < R := by rw [hR_def]; nlinarith [r_pos, he1]
+  have hAR : 0 ≤ A * R := mul_nonneg hA hR_pos.le
+  have hM1 : 1 ≤ M := by rw [hM_def]; exact Real.one_le_exp hAR
+  have hfc_pos : 0 < ‖f c‖ := norm_pos_iff.mpr h₂f
+  -- apply Bridge 3 with |r| = r, |R| = R
+  have hbridge := jensen_zero_count_le (c := c) (r := r) (R := R) (M := M) (f := f)
+    (by rwa [abs_of_pos r_pos])
+    (by rw [abs_of_pos r_pos, abs_of_pos hR_pos]; exact hRr)
+    hM1 hf h₂f
+    (by rw [abs_of_pos hR_pos]; intro z hz; rw [hM_def]; exact f_bound z hz)
+  rw [abs_of_pos r_pos] at hbridge
+  -- simplify the Jensen RHS
+  have hlogM : Real.log M = A * R := by rw [hM_def, Real.log_exp]
+  have hRr_ratio : Real.log (R / r) = 1 := by
+    rw [hR_def, mul_div_assoc, div_self (ne_of_gt r_pos), mul_one, Real.log_exp]
+  have hrhs : Real.log (M / ‖f c‖) / Real.log (R / r)
+      = A * R - Real.log ‖f c‖ := by
+    rw [hRr_ratio, div_one, Real.log_div (by positivity) (ne_of_gt hfc_pos), hlogM]
+  rw [hrhs] at hbridge
+  exact hbridge
+
 end ScratchBridges
