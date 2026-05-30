@@ -87,4 +87,45 @@ theorem jensen_zero_count_le
     ((hf.differentiableOn.analyticOnNhd isOpen_univ).mono (Set.subset_univ _))
     h₂f f_bound
 
+/-! ## Bridge 4 — genus-1 factor log-derivative keystone
+
+`hadamardGenus1Factor ρ s := (1 - s/ρ) * exp(s/ρ)`. Its log-derivative is the
+single regularized residue term `1/(s−ρ) + 1/ρ`. This is the per-factor input that
+lets `logDeriv_tprod_eq_tsum` discharge the genus-1 Hadamard `logDeriv = Σ` field. -/
+
+noncomputable def genus1Factor (ρ s : ℂ) : ℂ := (1 - s / ρ) * Complex.exp (s / ρ)
+
+theorem logDeriv_genus1Factor {ρ s : ℂ} (hρ : ρ ≠ 0) (hsρ : s ≠ ρ) :
+    logDeriv (genus1Factor ρ) s = 1 / (s - ρ) + 1 / ρ := by
+  have hsub : s - ρ ≠ 0 := sub_ne_zero.mpr hsρ
+  -- derivative of each piece
+  have h1 : HasDerivAt (fun w : ℂ => 1 - w / ρ) (-(1 / ρ)) s := by
+    have : HasDerivAt (fun w : ℂ => w / ρ) (1 / ρ) s := by
+      simpa using (hasDerivAt_id s).div_const ρ
+    simpa using (this.const_sub 1)
+  have h2 : HasDerivAt (fun w : ℂ => Complex.exp (w / ρ))
+      (Complex.exp (s / ρ) * (1 / ρ)) s := by
+    have hin : HasDerivAt (fun w : ℂ => w / ρ) (1 / ρ) s := by
+      simpa using (hasDerivAt_id s).div_const ρ
+    simpa [mul_comm] using (hin.cexp)
+  have hval1 : (1 : ℂ) - s / ρ ≠ 0 := by
+    intro h
+    apply hsρ
+    have hdiv : s / ρ = 1 := by linear_combination -h
+    field_simp at hdiv
+    exact hdiv
+  have hexp : Complex.exp (s / ρ) ≠ 0 := Complex.exp_ne_zero _
+  -- logDeriv of product, unfolding the def
+  show logDeriv (fun w => (1 - w / ρ) * Complex.exp (w / ρ)) s = 1 / (s - ρ) + 1 / ρ
+  rw [logDeriv_mul s hval1 hexp h1.differentiableAt h2.differentiableAt]
+  rw [logDeriv_apply, logDeriv_apply, h1.deriv, h2.deriv]
+  -- first term: -(1/ρ) / (1 - s/ρ) = 1/(s-ρ);  second: (exp·(1/ρ))/exp = 1/ρ
+  have e1 : (-(1 / ρ)) / (1 - s / ρ) = 1 / (s - ρ) := by
+    rw [div_eq_div_iff hval1 (sub_ne_zero.mpr hsρ)]
+    field_simp
+    ring
+  have e2 : (Complex.exp (s / ρ) * (1 / ρ)) / Complex.exp (s / ρ) = 1 / ρ := by
+    rw [mul_comm, mul_div_assoc, div_self hexp, mul_one]
+  rw [e1, e2]
+
 end ScratchBridges
