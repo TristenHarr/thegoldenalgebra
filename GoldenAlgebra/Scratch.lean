@@ -172,4 +172,49 @@ theorem jensen_zero_count_le_of_expBound
   rw [hrhs] at hbridge
   exact hbridge
 
+/-! ## Bridge 6 — Jensen + ξ-type growth `exp(A·R·log R)` ⟹ `r·log r` count
+
+Riemann ξ has order 1 of **maximal type**: its true growth is `exp(A·|s|·log|s|)`,
+not `exp(A·|s|)`. With that growth on the sphere `R = e·r`, Jensen gives a count
+`≤ A·(e·r)·log(e·r) − log‖f c‖`, i.e. the genuine **`N(T) ~ T·log T`** Riemann–von
+Mangoldt shape. This is the correct count for ξ; Bridge 5's linear bound was for
+finite-type functions only. The remaining input is exactly the constant `A` in
+ξ's growth — the Γ·ζ estimate Mathlib lacks. -/
+
+open MeromorphicOn in
+theorem jensen_zero_count_le_of_xiTypeGrowth
+    {c : ℂ} {r A : ℝ} {f : ℂ → ℂ}
+    (r_ge : 1 ≤ r) (hA : 0 ≤ A)
+    (hf : Differentiable ℂ f) (h₂f : f c ≠ 0)
+    (f_bound : ∀ z ∈ Metric.sphere c (Real.exp 1 * r),
+        ‖f z‖ ≤ Real.exp (A * (Real.exp 1 * r) * Real.log (Real.exp 1 * r))) :
+    ∑ᶠ u, divisor f (Metric.closedBall c r) u
+      ≤ A * (Real.exp 1 * r) * Real.log (Real.exp 1 * r) - Real.log ‖f c‖ := by
+  have r_pos : 0 < r := lt_of_lt_of_le one_pos r_ge
+  set R : ℝ := Real.exp 1 * r with hR_def
+  set M : ℝ := Real.exp (A * R * Real.log R) with hM_def
+  have he1 : (1 : ℝ) < Real.exp 1 := by
+    have := Real.add_one_lt_exp (x := 1) (by norm_num); linarith
+  have hR_pos : 0 < R := by rw [hR_def]; positivity
+  have hR_ge1 : 1 ≤ R := by rw [hR_def]; nlinarith [r_ge, he1.le]
+  have hlogR_nonneg : 0 ≤ Real.log R := Real.log_nonneg hR_ge1
+  have hRr : r < R := by rw [hR_def]; nlinarith [r_pos, he1]
+  have hARlog : 0 ≤ A * R * Real.log R := by positivity
+  have hM1 : 1 ≤ M := by rw [hM_def]; exact Real.one_le_exp hARlog
+  have hfc_pos : 0 < ‖f c‖ := norm_pos_iff.mpr h₂f
+  have hbridge := jensen_zero_count_le (c := c) (r := r) (R := R) (M := M) (f := f)
+    (by rwa [abs_of_pos r_pos])
+    (by rw [abs_of_pos r_pos, abs_of_pos hR_pos]; exact hRr)
+    hM1 hf h₂f
+    (by rw [abs_of_pos hR_pos]; intro z hz; rw [hM_def]; exact f_bound z hz)
+  rw [abs_of_pos r_pos] at hbridge
+  have hlogM : Real.log M = A * R * Real.log R := by rw [hM_def, Real.log_exp]
+  have hRr_ratio : Real.log (R / r) = 1 := by
+    rw [hR_def, mul_div_assoc, div_self (ne_of_gt r_pos), mul_one, Real.log_exp]
+  have hrhs : Real.log (M / ‖f c‖) / Real.log (R / r)
+      = A * R * Real.log R - Real.log ‖f c‖ := by
+    rw [hRr_ratio, div_one, Real.log_div (by positivity) (ne_of_gt hfc_pos), hlogM]
+  rw [hrhs] at hbridge
+  exact hbridge
+
 end ScratchBridges
