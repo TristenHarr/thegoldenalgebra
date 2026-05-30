@@ -1881,4 +1881,120 @@ theorem xi_zero_count_bigO :
   have hb := hA z hge4
   rwa [hz] at hb
 
+
+/-! ## Bridge 48 — ball-count ⇒ Σ1/‖ρ‖² (G3 engine; abstract, hlb-free variant for ξ)
+`summable_inv_sq_of_ballCount'` drops the `‖loc i‖≥1` assumption (small-modulus points are finite),
+so it applies directly to ξ's zeros. Built on B35 `summable_inv_sq_of_shellCard`. -/
+
+/-- Ball-count ⇒ inverse-square summability: the abstract G3 engine. -/
+theorem summable_inv_sq_of_ballCount
+    {ι : Type*} (loc : ι → ℂ) (A : ℝ) (_hA : 0 ≤ A)
+    (hlb : ∀ i, (1 : ℝ) ≤ ‖loc i‖)
+    (hfin : ∀ R : ℝ, {i | ‖loc i‖ ≤ R}.Finite)
+    (hcount : ∀ R : ℝ, 2 ≤ R → (Nat.card {i | ‖loc i‖ ≤ R} : ℝ) ≤ A * R * Real.log R) :
+    Summable (fun i => 1 / ‖loc i‖ ^ 2) := by
+  -- Apply the dyadic-shell engine with C := 2 * A * Real.log 2.
+  apply summable_inv_sq_of_shellCard loc (2 * A * Real.log 2) hlb
+  · -- hfin (shell): {‖loc i‖ < 2^(k+1)} ⊆ {‖loc i‖ ≤ 2^(k+1)} which is finite.
+    intro k
+    apply Set.Finite.subset (hfin ((2:ℝ) ^ (k+1)))
+    intro i hi
+    simp only [Set.mem_setOf_eq] at hi ⊢
+    exact le_of_lt hi
+  · -- hcard: shell k ⊆ ball 2^(k+1), and count bound gives ≤ C*(k+1)*2^k.
+    intro k
+    -- R := 2^(k+1)
+    set R : ℝ := (2:ℝ) ^ (k+1) with hR
+    have hR2 : (2:ℝ) ≤ R := by
+      rw [hR]
+      calc (2:ℝ) = 2 ^ 1 := by norm_num
+        _ ≤ 2 ^ (k+1) := by
+              apply pow_le_pow_right₀ (by norm_num)
+              omega
+    -- shell ⊆ ball R
+    have hsub : {i | (2:ℝ) ^ k ≤ ‖loc i‖ ∧ ‖loc i‖ < 2 ^ (k+1)} ⊆ {i | ‖loc i‖ ≤ R} := by
+      intro i hi
+      simp only [Set.mem_setOf_eq] at hi ⊢
+      rw [hR]
+      exact le_of_lt hi.2
+    -- ball R is finite
+    have hballfin : {i | ‖loc i‖ ≤ R}.Finite := hfin R
+    -- Nat.card shell ≤ Nat.card ball
+    have hcardmono : Nat.card {i | (2:ℝ) ^ k ≤ ‖loc i‖ ∧ ‖loc i‖ < 2 ^ (k+1)}
+        ≤ Nat.card {i | ‖loc i‖ ≤ R} := Nat.card_mono hballfin hsub
+    -- count bound for ball R
+    have hcountR : (Nat.card {i | ‖loc i‖ ≤ R} : ℝ) ≤ A * R * Real.log R := hcount R hR2
+    -- log R = (k+1) * log 2
+    have hlogR : Real.log R = ((k:ℝ)+1) * Real.log 2 := by
+      rw [hR, Real.log_pow]; push_cast; ring
+    -- chain: card shell ≤ A*R*log R = A*2^(k+1)*(k+1)*log2 = (2*A*log2)*(k+1)*2^k
+    have hchain : (Nat.card {i | (2:ℝ) ^ k ≤ ‖loc i‖ ∧ ‖loc i‖ < 2 ^ (k+1)} : ℝ)
+        ≤ A * R * Real.log R := by
+      refine le_trans ?_ hcountR
+      exact_mod_cast hcardmono
+    refine le_trans hchain (le_of_eq ?_)
+    -- A * R * log R = (2*A*log2)*(k+1)*2^k
+    rw [hlogR, hR]
+    have hpow : (2:ℝ) ^ (k+1) = 2 ^ k * 2 := by rw [pow_succ]
+    rw [hpow]
+    ring
+
+/-- Ball-count ⇒ inverse-square summability, WITHOUT the `1 ≤ ‖loc i‖` hypothesis.
+Replaces it with `loc i ≠ 0` (so each summand is finite); the small-modulus points
+`{i | ‖loc i‖ ≤ 1}` are finite, so summability is unaffected by them. -/
+theorem summable_inv_sq_of_ballCount'
+    {ι : Type*} (loc : ι → ℂ) (A : ℝ)
+    (_hne : ∀ i, loc i ≠ 0)
+    (hfin : ∀ R : ℝ, {i | ‖loc i‖ ≤ R}.Finite)
+    (hcount : ∀ R : ℝ, 2 ≤ R → (Nat.card {i | ‖loc i‖ ≤ R} : ℝ) ≤ A * R * Real.log R) :
+    Summable (fun i => 1 / ‖loc i‖ ^ 2) := by
+  classical
+  -- The small-modulus index set is finite.
+  set S : Set ι := {i | ‖loc i‖ ≤ 1} with hS
+  have hSfin : S.Finite := hfin 1
+  -- Summability is unaffected by the finite set S: reduce to the complement subtype.
+  rw [← hSfin.summable_compl_iff (f := fun i => 1 / ‖loc i‖ ^ 2)]
+  -- `0 ≤ A` is forced by the count bound at R = 2 (the count is nonneg, log 2 > 0).
+  have hA : 0 ≤ A := by
+    have h2 := hcount 2 (le_refl 2)
+    have hnn : (0:ℝ) ≤ (Nat.card {i | ‖loc i‖ ≤ (2:ℝ)} : ℝ) := by positivity
+    have hle : (0:ℝ) ≤ A * 2 * Real.log 2 := le_trans hnn h2
+    have hlog2 : (0:ℝ) < Real.log 2 := Real.log_pos (by norm_num)
+    nlinarith [hle, hlog2]
+  -- On Sᶜ, restrict and apply the `1 ≤ ‖loc i‖` engine to `loc ∘ Subtype.val`.
+  -- The summand `(fun i => 1/‖loc i‖^2) ∘ Subtype.val` equals
+  -- `fun j => 1 / ‖loc ↑j‖ ^ 2` for j : ↥Sᶜ.
+  apply summable_inv_sq_of_ballCount (fun j : (Sᶜ : Set ι) => loc (j : ι)) A hA
+  · -- hlb on the complement: 1 ≤ ‖loc ↑j‖ since j ∉ S means ¬(‖loc ↑j‖ ≤ 1).
+    intro j
+    have hj : (j : ι) ∉ S := j.2
+    simp only [hS, Set.mem_setOf_eq, not_le] at hj
+    exact le_of_lt hj
+  · -- hfin on the complement subtype.
+    intro R
+    -- inclusion of the subtype set into the ball, transported through Subtype.val.
+    have : {j : (Sᶜ : Set ι) | ‖loc (j : ι)‖ ≤ R}
+        = (Subtype.val : (Sᶜ : Set ι) → ι) ⁻¹' {i | ‖loc i‖ ≤ R} := by
+      ext j; simp
+    rw [this]
+    apply Set.Finite.preimage _ (hfin R)
+    exact (Subtype.val_injective).injOn
+  · -- hcount on the complement subtype: card ≤ card of full ball.
+    intro R hR
+    refine le_trans ?_ (hcount R hR)
+    -- Nat.card {j : ↥Sᶜ | ‖loc ↑j‖ ≤ R} ≤ Nat.card {i | ‖loc i‖ ≤ R}
+    have hcardle : Nat.card {j : (Sᶜ : Set ι) | ‖loc (j : ι)‖ ≤ R}
+        ≤ Nat.card {i | ‖loc i‖ ≤ R} := by
+      -- image of the subtype set under Subtype.val sits inside the ball
+      have himg : (Subtype.val : (Sᶜ : Set ι) → ι) '' {j | ‖loc (j : ι)‖ ≤ R}
+          ⊆ {i | ‖loc i‖ ≤ R} := by
+        rintro i ⟨j, hj, rfl⟩
+        exact hj
+      have hcard_img : Nat.card ((Subtype.val : (Sᶜ : Set ι) → ι) '' {j | ‖loc (j : ι)‖ ≤ R})
+          = Nat.card {j : (Sᶜ : Set ι) | ‖loc (j : ι)‖ ≤ R} :=
+        Nat.card_image_of_injective Subtype.val_injective _
+      rw [← hcard_img]
+      exact Nat.card_mono (hfin R) himg
+    exact_mod_cast hcardle
+
 end ScratchBridges

@@ -19,13 +19,32 @@ noncomputable def genus1Factor (ρ s : ℂ) : ℂ := (1 - s / ρ) * Complex.exp 
 /-! ## PART 1 (tractable): the order of a single genus-1 factor.
 `genus1Factor ρ` is entire, vanishes only at `ρ`, to order exactly 1. -/
 
+/-- `genus1Factor ρ` is analytic everywhere. -/
+theorem analyticAt_genus1Factor (ρ : ℂ) (z : ℂ) : AnalyticAt ℂ (genus1Factor ρ) z := by
+  unfold genus1Factor
+  fun_prop
+
+/-- The cofactor `g s = -(1/ρ) * exp (s/ρ)` extracted from `genus1Factor ρ`, so that
+`genus1Factor ρ s = (s - ρ) ^ 1 • g s`. -/
 theorem analyticOrderAt_genus1Factor_self {ρ : ℂ} (hρ : ρ ≠ 0) :
     analyticOrderAt (genus1Factor ρ) ρ = 1 := by
-  sorry
+  rw [show (1 : ℕ∞) = ((1 : ℕ) : ℕ∞) from rfl,
+    (analyticAt_genus1Factor ρ ρ).analyticOrderAt_eq_natCast]
+  refine ⟨fun s => -(1 / ρ) * Complex.exp (s / ρ), by fun_prop, ?_, ?_⟩
+  · exact mul_ne_zero (neg_ne_zero.mpr (div_ne_zero one_ne_zero hρ)) (Complex.exp_ne_zero _)
+  · filter_upwards with s
+    unfold genus1Factor
+    rw [pow_one, smul_eq_mul]
+    field_simp
+    ring
 
 theorem analyticOrderAt_genus1Factor_ne {ρ z : ℂ} (hρ : ρ ≠ 0) (hz : z ≠ ρ) :
     analyticOrderAt (genus1Factor ρ) z = 0 := by
-  sorry
+  rw [(analyticAt_genus1Factor ρ z).analyticOrderAt_eq_zero]
+  unfold genus1Factor
+  refine mul_ne_zero ?_ (Complex.exp_ne_zero _)
+  rw [sub_ne_zero, ne_comm, ne_eq, div_eq_one_iff_eq hρ]
+  exact hz
 
 /-! ## PART 2 (the hard one): order of the infinite product = sum of factor orders.
 Investigate Mathlib for `analyticOrderAt` of a locally-uniform `tprod`. The order of a
@@ -36,15 +55,81 @@ tail product is analytic and nonzero near `z`.
 Target (state precisely; you MAY add hypotheses — discreteness of `loc`, `loc i ≠ 0`, the
 loc-uniform multipliability, and `Summable (1/‖loc i‖²)` — whatever the proof needs): -/
 
+/-- Order of a finite product of analytic functions is the sum of the orders. -/
+theorem analyticOrderAt_finsetProd {ι : Type*} (s : Finset ι) (F : ι → ℂ → ℂ) (z : ℂ)
+    (hF : ∀ i ∈ s, AnalyticAt ℂ (F i) z) :
+    analyticOrderAt (fun w => ∏ i ∈ s, F i w) z = ∑ i ∈ s, analyticOrderAt (F i) z := by
+  classical
+  induction s using Finset.induction with
+  | empty =>
+    simp only [Finset.prod_empty, Finset.sum_empty]
+    rw [analyticOrderAt_eq_zero]; right; simp
+  | insert a s ha ih =>
+    simp only [Finset.prod_insert ha, Finset.sum_insert ha]
+    have hAa : AnalyticAt ℂ (F a) z := hF a (Finset.mem_insert_self a s)
+    have hArest : AnalyticAt ℂ (fun w => ∏ i ∈ s, F i w) z := by
+      have := Finset.analyticAt_prod (𝕜 := ℂ) (f := F) s
+        (fun i hi => hF i (Finset.mem_insert_of_mem hi))
+      rw [Finset.prod_fn] at this; exact this
+    have key : analyticOrderAt (fun w => F a w * ∏ i ∈ s, F i w) z
+        = analyticOrderAt (F a) z + analyticOrderAt (fun w => ∏ i ∈ s, F i w) z := by
+      have := analyticOrderAt_mul (f := F a) (g := fun w => ∏ i ∈ s, F i w) hAa hArest
+      simpa [Pi.mul_def] using this
+    rw [key, ih (fun i hi => hF i (Finset.mem_insert_of_mem hi))]
+
 theorem analyticOrderAt_genus1Product
     {ι : Type*} [DecidableEq ι] (loc : ι → ℂ) (z : ℂ)
     (hne : ∀ i, loc i ≠ 0)
     (hmul : MultipliableLocallyUniformlyOn (fun i s => genus1Factor (loc i) s) Set.univ)
     -- `z` is hit by only finitely many indices (from discreteness):
-    (hfin : {i | loc i = z}.Finite) :
+    (hfin : {i | loc i = z}.Finite)
+    -- The tail (over indices that do NOT hit `z`) is analytic at `z` and does not vanish there.
+    -- This is the genuine analytic-number-theory input (locally-uniform-product order theory):
+    -- it is the precise piece Mathlib lacks an order-of-`tprod` lemma for.
+    (htail_an : AnalyticAt ℂ
+      (fun s => ∏' i : {i // i ∉ hfin.toFinset}, genus1Factor (loc i) s) z)
+    (htail_ne :
+      (∏' i : {i // i ∉ hfin.toFinset}, genus1Factor (loc i) z) ≠ 0) :
     analyticOrderAt (fun s => ∏' i, genus1Factor (loc i) s) z
       = (Nat.card {i | loc i = z} : ℕ∞) := by
-  sorry
+  classical
+  let F : ι → ℂ → ℂ := fun i s => genus1Factor (loc i) s
+  let Hfin : Finset ι := hfin.toFinset
+  let tail : ℂ → ℂ := fun s => ∏' i : {i // i ∉ Hfin}, F i s
+  -- pointwise multipliability of the family
+  have hmult : ∀ s : ℂ, Multipliable (fun i => F i s) := fun s =>
+    hmul.multipliable (Set.mem_univ s)
+  -- split the product as (finite hitting product) * (tail) at every point
+  have hsplit : ∀ s : ℂ, (∏' i, F i s) = (∏ i ∈ Hfin, F i s) * tail s := fun s =>
+    ((hmult s).prod_mul_tprod_subtype_compl Hfin).symm
+  -- order of the product = order of finite product + order of tail
+  have horder : analyticOrderAt (fun s => ∏' i, F i s) z
+      = analyticOrderAt (fun s => (∏ i ∈ Hfin, F i s) * tail s) z :=
+    analyticOrderAt_congr (Filter.Eventually.of_forall hsplit)
+  rw [horder]
+  have hAfin : AnalyticAt ℂ (fun s => ∏ i ∈ Hfin, F i s) z := by
+    have := Finset.analyticAt_prod (𝕜 := ℂ) (f := F) Hfin
+      (fun i _ => analyticAt_genus1Factor (loc i) z)
+    rw [Finset.prod_fn] at this; exact this
+  rw [analyticOrderAt_mul hAfin htail_an]
+  -- tail order is 0 (nonvanishing at z)
+  have htail0 : analyticOrderAt tail z = 0 := by
+    rw [htail_an.analyticOrderAt_eq_zero]; exact htail_ne
+  rw [htail0, add_zero]
+  -- finite product order = sum of (order-1) factors = card
+  rw [analyticOrderAt_finsetProd Hfin F z (fun i _ => analyticAt_genus1Factor (loc i) z)]
+  have hmemz : ∀ i ∈ Hfin, loc i = z := fun i hi => (hfin.mem_toFinset.mp hi)
+  have hsum : ∑ i ∈ Hfin, analyticOrderAt (F i) z = ∑ _i ∈ Hfin, (1 : ℕ∞) := by
+    apply Finset.sum_congr rfl
+    intro i hi
+    have hlocz : loc i = z := hmemz i hi
+    show analyticOrderAt (genus1Factor (loc i)) z = 1
+    rw [hlocz]
+    exact analyticOrderAt_genus1Factor_self (hlocz ▸ hne i)
+  rw [hsum]
+  simp only [Finset.sum_const, nsmul_eq_mul, mul_one]
+  -- card of the finite set = card of the finset
+  rw [Nat.card_eq_card_finite_toFinset hfin]
 
 /-!
 ## INVESTIGATION POINTERS (search Mathlib HARD before declaring absent):
