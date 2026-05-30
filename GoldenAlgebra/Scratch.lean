@@ -68,4 +68,23 @@ theorem logDeriv_tprod_eq_tsum_wrapper
   logDeriv_tprod_eq_tsum isOpen_univ (Set.mem_univ x) hf
     (fun i => (hd i).differentiableOn) hm htend hnez
 
+/-! ## Bridge 3 — Jensen zero-count bound (the RvM / A1 / P1 main-term engine)
+
+For an entire `f`, nonzero at the center, bounded by `M` on the sphere of radius `R`,
+the weighted count of zeros in the disk of radius `r < R` is `≤ log(M/‖f c‖)/log(R/r)`.
+This is the Mathlib-grounded RvM upper bound: it directly majorizes `canonicalShellCard`
+and the `N(T)` main term feeding the Turing envelope. -/
+
+open MeromorphicOn in
+theorem jensen_zero_count_le
+    {c : ℂ} {r R M : ℝ} {f : ℂ → ℂ}
+    (r_pos : 0 < |r|) (r_lt_R : |r| < |R|) (hM : 1 ≤ M)
+    (hf : Differentiable ℂ f) (h₂f : f c ≠ 0)
+    (f_bound : ∀ z ∈ Metric.sphere c |R|, ‖f z‖ ≤ M) :
+    ∑ᶠ u, divisor f (Metric.closedBall c |r|) u
+      ≤ Real.log (M / ‖f c‖) / Real.log (R / r) :=
+  AnalyticOnNhd.sum_divisor_le r_pos r_lt_R hM
+    ((hf.differentiableOn.analyticOnNhd isOpen_univ).mono (Set.subset_univ _))
+    h₂f f_bound
+
 end ScratchBridges
