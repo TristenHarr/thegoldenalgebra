@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-98,321 lines and roughly 4,645 top-level declarations. It contains no
+99,307 lines and roughly 4,666 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -800,6 +800,12 @@ signed measure. The relevant Mathlib substrate
 `finiteFluctuationPrimitive_highLogEnvelope_of_discreteCount_and_concreteS`,
 `concreteS_ten_abs_le_39_20_of_grid2First182ZeroBracketTable`,
 `concreteS_ten_abs_le_39_20_of_grid2First182ZeroBracketExistence`,
+`zetaWeightedZeroCountUpToHeight_eq_zero_of_le_fourteen_grid2First182ZeroBracketTable`,
+`concreteS_eq_neg_smoothMainTerm_of_le_fourteen_grid2First182ZeroBracketTable`,
+`discreteCountingPrimitive_eq_zetaWeighted_count_sub_of_startsAfter_le_fourteen_grid2First182ZeroBracketTable`,
+`discreteCountingPrimitive_eq_zetaWeighted_count_sub_of_startsAfter_le_fourteen_grid2First182ZeroBracketExistence`,
+`finiteFluctuationPrimitive_eq_concreteS_sub_concreteS_of_startsAfter_le_fourteen_grid2First182ZeroBracketTable`,
+`finiteFluctuationPrimitive_eq_concreteS_sub_concreteS_of_startsAfter_le_fourteen_grid2First182ZeroBracketExistence`,
 `Phase1IBP.derivativeSidePartial`, ordered discrete Abel summation,
 the true-kernel FTC bridge, and the convergence engine
 `improperComplexIntegralConverges_of_normMajorant`) lives entirely
@@ -1881,6 +1887,7 @@ the three obligation lines, with concrete handoff targets in each case.
   `backlundGrid2First182ZeroLowerRatAt`,
   `backlundGrid2First182ZeroLowerRatAt_pos`,
   `backlundGrid2First182ZeroLowerRatAt_gt_ten`,
+  `backlundGrid2First182ZeroLowerRatAt_gt_fourteen`,
   `backlundGrid2EndpointZeroBracketRat_split140_369075049_1000000`,
   `backlundGrid2First182ZeroBracketRat_pairwise_disjoint`,
   `backlundGrid2EndpointCountFromZeroUpperRat140_369075049_1000000`,
@@ -1909,6 +1916,12 @@ the three obligation lines, with concrete handoff targets in each case.
   `ClassicalBacklundTuringPlattTailGrid2First182ZeroBracketInputs.toProvenBacklundTuringBound`,
   `ClassicalBacklundTuringPlattTailGrid2First182ZeroBracketInputs.toHalfLogPlusHalfSBound`,
   `ClassicalBacklundTuringPlattTailGrid2First182ZeroBracketInputs.toTuringStyleSBound`,
+  `ClassicalBacklundTuringPlattGlobalGrid2First182ZeroBracketInputs`,
+  `ClassicalBacklundTuringPlattGlobalGrid2First182ZeroBracketInputs.toTailInputs`,
+  `concreteS_halfLogPlusHalf_of_plattGlobalGrid2First182ZeroBracketBacklundTuringInputs`,
+  `ClassicalBacklundTuringPlattGlobalGrid2First182ZeroBracketInputs.toProvenBacklundTuringBound`,
+  `ClassicalBacklundTuringPlattGlobalGrid2First182ZeroBracketInputs.toHalfLogPlusHalfSBound`,
+  `ClassicalBacklundTuringPlattGlobalGrid2First182ZeroBracketInputs.toTuringStyleSBound`,
   and the headline
   `concreteS_halfLogPlusHalf_of_globalPlattTrudgian_and_grid2EndpointCountFacts369075049`.
   The separated endpoint-count plus rational/exponential smooth route is
@@ -2764,7 +2777,12 @@ envelope is recovered from the public `concreteS` bound plus the
 certified discrete-count bridge at basepoint `10`.
 `PathBTuringEnvelopeInputs.of_midEnvelope_discreteCountBridge_first182`
 discharges that basepoint bound from the first-182 bracket existence
-certificate. The two-bundle capstone
+certificate. The global-source variants
+`PathBTuringEnvelopeInputs.of_midEnvelope_discreteCountBridge_plattGlobalGrid2First182`
+and
+`PathBTuringEnvelopeInputs.of_midEnvelope_discreteCountBridge_plattGlobalGrid2First182Existence`
+extract the sharpened Platt--Trudgian tail internally from the global
+analytic input. The two-bundle capstone
 `XiPullbackAntiHerglotzTarget_of_pathBInputBundles` consumes only
 `PathBNonTuringInputs` plus `PathBTuringEnvelopeInputs`. §CDXLVI also
 defines `PathBNonTuringSourceInputs`, the leanest source-level
@@ -3599,6 +3617,10 @@ Hadamard infrastructure for `entireRiemannXi`:
 `entireRiemannXi_not_eventuallyEq_zero`,
 `entireRiemannXi_zeroSet_locallyFinite`,
 `entireRiemannXi_zeroSet_finite_in_closedBall`,
+`entireXiNonzeroZeroIndex_countable`,
+`entireRiemannXi_zeroSet_countable`,
+`entireRiemannXi_nonzeroLocus_isPathConnected`,
+`entireRiemannXi_nonzeroLocus_isPreconnected`,
 `entireXiCanonicalZeroNormProper`,
 `EntireXiZeroInvSqDistribution.of_canonical_invSqSummable_normProper`,
 `EntireXiZeroInvSqDistribution.of_canonical_invSqSummable`,
@@ -3644,6 +3666,8 @@ Hadamard infrastructure for `entireRiemannXi`:
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_nonzeroLocusXiLogDeriv_invSqSummable_normExhaustion`,
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_half_nonzeroLocusXiLogDeriv_invSqSummable_normExhaustion`,
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_half_nonzeroLocusQuotientDeriv_invSqSummable_normExhaustion`,
+`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_half_nonzeroLocusXiLogDeriv_ceilFiberMajorant_normExhaustion`,
+`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_half_nonzeroLocusQuotientDeriv_ceilFiberMajorant_normExhaustion`,
 `EntireXiClassicalHadamardTheorem` (§CCCLXXXVIII), and
 `EntireXiLogDerivativeSourceAFZ`. The source-level front door
 `XiPullbackAntiHerglotzTarget_of_completedXiSource_midHigh_lowSplit`
@@ -4221,7 +4245,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-98,321 lines and roughly 4,645 top-level declarations.
+99,307 lines and roughly 4,666 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.

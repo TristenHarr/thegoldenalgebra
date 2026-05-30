@@ -1,0 +1,24 @@
+{
+  "sdp_status": "closed_form_scalar22_15",
+  "domain": {
+    "T0": 140.0,
+    "y_min": 0.1,
+    "constraint_polynomials": {
+      "g_T": "T - 140.0",
+      "g_x": "x",
+      "g_y": "y",
+      "g_B": "T - 2*x - 2*y - 2"
+    }
+  },
+  "target_polynomial": "0.663789125619395*T - 77.4039605921791",
+  "schmudgen_certificate": {
+    "sigma_g_T": {
+      "product": "T - 140.0",
+      "sigma": "0.663789125619395"
+    },
+    "sigma_empty": {
+      "product": "1",
+      "sigma": "15.5265169945363"
+    }
+  }
+}
