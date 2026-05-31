@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-98,321 lines and roughly 4,645 top-level declarations. It contains no
+99,111 lines and roughly 4,662 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -3599,9 +3599,19 @@ Hadamard infrastructure for `entireRiemannXi`:
 `entireRiemannXi_not_eventuallyEq_zero`,
 `entireRiemannXi_zeroSet_locallyFinite`,
 `entireRiemannXi_zeroSet_finite_in_closedBall`,
+`entireXiNonzeroZeroIndex_countable`,
+`entireRiemannXi_zeroSet_countable`,
+`entireRiemannXi_nonzeroLocus_isPathConnected`,
+`entireRiemannXi_nonzeroLocus_isPreconnected`,
 `entireXiCanonicalZeroNormProper`,
 `EntireXiZeroInvSqDistribution.of_canonical_invSqSummable_normProper`,
 `EntireXiZeroInvSqDistribution.of_canonical_invSqSummable`,
+`entireXiCanonicalZeroNormCeilFiberFinite`,
+`entireXiCanonicalZeroNormCeilFiber_pred_lt_norm`,
+`entireXiCanonicalZeroNormCeilFiber_invSq_le_pred`,
+`EntireXiCanonicalZeroCeilFiberInvSqMajorant`,
+`entireXiCanonical_invSqSummable_of_ceilFiberMajorant`,
+`EntireXiZeroInvSqDistribution.of_canonical_ceilFiberMajorant`,
 `EntireXiHadamardPrefactor`, `EntireXiHadamardFactorization`,
 `EntireXiHadamardQuotientFactorization`,
 `EntireXiHadamardFactorization.of_quotientFactorization`,
@@ -3644,6 +3654,8 @@ Hadamard infrastructure for `entireRiemannXi`:
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_nonzeroLocusXiLogDeriv_invSqSummable_normExhaustion`,
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_half_nonzeroLocusXiLogDeriv_invSqSummable_normExhaustion`,
 `EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_half_nonzeroLocusQuotientDeriv_invSqSummable_normExhaustion`,
+`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_half_nonzeroLocusXiLogDeriv_ceilFiberMajorant_normExhaustion`,
+`EntireXiClassicalHadamardTheorem.of_canonicalZeros_expAffine_half_nonzeroLocusQuotientDeriv_ceilFiberMajorant_normExhaustion`,
 `EntireXiClassicalHadamardTheorem` (§CCCLXXXVIII), and
 `EntireXiLogDerivativeSourceAFZ`. The source-level front door
 `XiPullbackAntiHerglotzTarget_of_completedXiSource_midHigh_lowSplit`
@@ -3829,6 +3841,15 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   quotient-derivative sibling
   `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusQuotientDerivHadamard_canonicalMidHighResidual_lowPullbackResidual_turingEnvelopes`
   uses the same Stieltjes inputs with quotient-constancy Hadamard. The
+  shell-majorant A1 variants
+  `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusXiLogDerivHadamard_ceilFiberMajorant_identifiedFiniteProductTails_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusQuotientDerivHadamard_ceilFiberMajorant_identifiedFiniteProductTails_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusXiLogDerivHadamard_ceilFiberMajorant_canonicalMidHighResidual_lowPullbackResidual_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusQuotientDerivHadamard_ceilFiberMajorant_canonicalMidHighResidual_lowPullbackResidual_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusXiLogDerivHadamard_ceilFiberMajorant_canonicalMidHighResidual_lowZeroSplit_turingEnvelopes`, and
+  `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusQuotientDerivHadamard_ceilFiberMajorant_canonicalMidHighResidual_lowZeroSplit_turingEnvelopes`
+  replace raw inverse-square summability by the canonical
+  norm-ceiling zero-counting majorant package. The
   one-object publication frontier `PathBFullInputBundle` packages those
   together; `PathBFullInputBundle.of_envelopes` builds it from raw
   Turing envelopes. It now also has bundled-Turing constructors
@@ -4221,7 +4242,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-98,321 lines and roughly 4,645 top-level declarations.
+99,111 lines and roughly 4,662 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
