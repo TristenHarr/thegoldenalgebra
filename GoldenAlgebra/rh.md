@@ -78,7 +78,7 @@ can legitimately carry RH-strength are the named envelope/gap bundle.
 This document gives a structural account of each step, points to the
 Lean declarations that carry it out, and indicates the path to a
 Mathlib-grade Riemann Hypothesis theorem. The formalization comprises
-99,307 lines and roughly 4,666 top-level declarations. It contains no
+99,576 lines and roughly 4,666 top-level declarations. It contains no
 axioms; every occurrence of the keyword `sorry` lies inside prose. All
 names quoted below are real Lean declarations.
 
@@ -3624,6 +3624,20 @@ Hadamard infrastructure for `entireRiemannXi`:
 `entireXiCanonicalZeroNormProper`,
 `EntireXiZeroInvSqDistribution.of_canonical_invSqSummable_normProper`,
 `EntireXiZeroInvSqDistribution.of_canonical_invSqSummable`,
+`entireXiCanonicalZeroNormCeilFiberFinite`,
+`entireXiCanonicalZeroNormCeilFiber_pred_lt_norm`,
+`entireXiCanonicalZeroNormCeilFiber_invSq_le_pred`,
+`EntireXiCanonicalZeroCeilFiberInvSqMajorant`,
+`entireXiCanonical_invSqSummable_of_ceilFiberMajorant`,
+`EntireXiZeroInvSqDistribution.of_canonical_ceilFiberMajorant`,
+`summable_log_natCast_mul_pred_sq_inv`,
+`canonicalShellCard`,
+`canonicalShellInvSqMass`,
+`canonicalShellInvSqMass_nonneg`,
+`canonicalShellInvSqMass_le_card_mul`,
+`canonicalShellInvSqMass_summable_of_shellCard_log_bound`,
+`EntireXiCanonicalZeroCeilFiberInvSqMajorant.of_shellMass_summable`,
+`EntireXiCanonicalZeroCeilFiberInvSqMajorant.of_shellCard_log_bound`,
 `EntireXiHadamardPrefactor`, `EntireXiHadamardFactorization`,
 `EntireXiHadamardQuotientFactorization`,
 `EntireXiHadamardFactorization.of_quotientFactorization`,
@@ -3853,6 +3867,23 @@ theorem where Γ-cancellation no longer appears as a hypothesis:
   quotient-derivative sibling
   `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusQuotientDerivHadamard_canonicalMidHighResidual_lowPullbackResidual_turingEnvelopes`
   uses the same Stieltjes inputs with quotient-constancy Hadamard. The
+  shell-majorant A1 variants
+  `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusXiLogDerivHadamard_ceilFiberMajorant_identifiedFiniteProductTails_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusQuotientDerivHadamard_ceilFiberMajorant_identifiedFiniteProductTails_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusXiLogDerivHadamard_ceilFiberMajorant_canonicalMidHighResidual_lowPullbackResidual_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusQuotientDerivHadamard_ceilFiberMajorant_canonicalMidHighResidual_lowPullbackResidual_turingEnvelopes`,
+  `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusXiLogDerivHadamard_ceilFiberMajorant_canonicalMidHighResidual_lowZeroSplit_turingEnvelopes`, and
+  `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusQuotientDerivHadamard_ceilFiberMajorant_canonicalMidHighResidual_lowZeroSplit_turingEnvelopes`
+  replace raw inverse-square summability by the canonical
+  norm-ceiling zero-counting majorant package. The
+  A1 side now has a classical annular-count bridge:
+  `EntireXiCanonicalZeroCeilFiberInvSqMajorant.of_shellCard_log_bound`
+  converts a Riemann--von Mangoldt-style shell estimate
+  `canonicalShellCard n ≤ C * log n + C₀` into the norm-ceiling
+  inverse-square majorant, and
+  `XiPullbackAntiHerglotzTarget_of_halfNonzeroLocusXiLogDerivHadamard_shellCountLog_canonicalMidHighResidual_lowZeroSplit_turingEnvelopes`
+  exposes the corresponding Path B capstone with A1 reduced to that
+  shell-count obligation. The
   one-object publication frontier `PathBFullInputBundle` packages those
   together; `PathBFullInputBundle.of_envelopes` builds it from raw
   Turing envelopes. It now also has bundled-Turing constructors
@@ -4245,7 +4276,7 @@ grep -nE "sorry"    rh.lean    # every match must lie inside a comment
 ```
 At the time of writing, the first command returns 0 and every `sorry`
 match sits in prose discussing where `sorry` is forbidden. The file is
-99,307 lines and roughly 4,666 top-level declarations.
+99,576 lines and roughly 4,666 top-level declarations.
 
 Should either invariant fail on a future revision, take none of the
 above on faith — investigate first.
