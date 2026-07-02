@@ -1,0 +1,14 @@
+computing 5 Taylor coeffs of f at t=0 (center w=-i, LHP)...
+  a[0]=0.977168 |a|=0.97717
+  a[1]=-0.0451065 |a|=0.045107
+  a[2]=-0.0439689 |a|=0.043969
+  a[3]=-0.0427876 |a|=0.042788
+  a[4]=-0.0415662 |a|=0.041566
+  a[5]=-0.0403079 |a|=0.040308
+Schur params gamma_n and |gamma_n|:
+  gamma[0]=(0.97717 + 0.0j)  |gamma|=0.97717
+  gamma[1]=(-0.9992 + 0.0j)  |gamma|=0.9992
+  gamma[2]=(0.99887 + 0.0j)  |gamma|=0.99887
+  gamma[3]=(-0.99938 + 0.0j)  |gamma|=0.99938
+  gamma[4]=(0.99946 + 0.0j)  |gamma|=0.99946
+max|gamma_n|=0.999456 => in disk (Schur-consistent, Theta inner for true Phi)

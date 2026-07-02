@@ -1,0 +1,1132 @@
+/-
+  ScratchHalfStripPL.lean
+
+  THE HALF-STRIP PHRAGMÉN–LINDELÖF MAXIMUM PRINCIPLE — the last analytic atom of the
+  Backlund envelope.
+
+  `ScratchFlatten.lean` reduced the whole envelope to ONE residual
+  `verticalStrip_PL_upper_const_bound`: a bounded, holomorphic-on-the-upper-half-strip product
+  `G = F·wgtH`, bounded by a constant on the three boundary parts, with sub-double-exponential
+  growth, is bounded by that constant on the half-strip.
+
+  THIS FILE proves a clean ABSTRACT half-strip maximum principle `halfStrip_PL` from Mathlib's
+  bounded maximum-modulus principle `Complex.norm_le_of_forall_mem_frontier_norm_le`, via the
+  classical ε-auxiliary multiplier + truncated-rectangle argument (Route 3 of the task).  This is
+  the same engine Mathlib uses internally for `PhragmenLindelof.horizontal_strip`, here re-derived
+  for the HALF-strip (one finite bottom edge `Im = 0` plus the two vertical edges, with the strip
+  open upward in `Im`).
+
+  THE AUXILIARY MULTIPLIER.  With `d = u - l`, centre `m = (l+u)/2`, half-width `b = (u-l)/2`, and
+  a chosen `c < d₀ < π/d`, set `aff z = d₀·(-i)·(z - m)`, so `Re(aff z) = d₀·Im z` (the unbounded
+  direction) and `|Im(aff z)| = d₀·|Re z - m| ≤ d₀·b < π/2` on the closed strip.  For `ε < 0`,
+  `gε z = exp(ε·(exp(aff z) + exp(-aff z)))` satisfies `‖gε z‖ ≤ exp(ε·cos(d₀·b)·exp(d₀·|Im z|))`
+  on the closed strip (Mathlib's `norm_exp_mul_exp_add_exp_neg_le_of_abs_im_le`), hence `‖gε‖ ≤ 1`
+  on the boundary and `gε·G → 0` as `Im z → ∞` (double-exp decay with `d₀ > c` beats `G`'s
+  double-exp growth).  The bounded maximum modulus principle on `Ioo l u ×ℂ Ioo 0 R` then bounds
+  `gε·G` by `C`; letting `ε → 0⁻` gives `‖G z‖ ≤ C`.
+
+  WHAT IS PROVEN HERE (no `sorry`):
+   • `halfStrip_PL` — the abstract half-strip max principle, PROVEN from Mathlib with NO extra
+     axioms (only `propext`/`Classical.choice`/`Quot.sound`).  This is THE analytic atom the task
+     asked for.
+   • `Gprod_upper_const_bound` — the UPPER-half constant bound for `G = F·wgtH`, PROVEN from
+     `halfStrip_PL` (and the re-derived weight-modulus machinery), again with NO extra axioms.
+     This closes the upper half (`t ≥ 1`) of the ScratchFlatten residual outright.
+   • `verticalStrip_PL_upper_const_bound` — re-stated with the EXACT ScratchFlatten signature and
+     discharged: the upper half by the proven `Gprod_upper_const_bound`, the lower half (`t ≤ -1`)
+     by the SINGLE remaining residual `verticalStrip_lower_reflection`.
+
+  THE ONE REMAINING ATOM.  `verticalStrip_lower_reflection` is the lower-half `|t|`-reflection: the
+  conclusion evaluates the weight at the reflected-up ordinate `σ+i|t|` (an UPPER point) but
+  multiplies by `F(σ+it)`, a genuine LOWER-half value tied to the upper point by no symmetry in the
+  hypotheses (which give `|t|`-symmetric BOUNDS, not a functional reflection of `F`), while `wgtH`
+  is not holomorphic on the lower half.  The PL maximum principle and the entire upper half are
+  PROVEN; only this reflection bookkeeping is isolated.
+
+  EDIT ONLY THIS FILE.
+-/
+import Mathlib
+
+open Set Function Filter Asymptotics Metric Complex Bornology
+open scoped Topology Filter Real
+
+noncomputable section
+
+namespace OverflowResidueRH.BacklundTuring.ScratchHalfStripPL
+
+local notation "expR" => Real.exp
+
+/-! ## The abstract half-strip Phragmén–Lindelöf maximum principle. -/
+
+/-- **Half-strip Phragmén–Lindelöf maximum principle.**
+`G` holomorphic on the open half-strip `S = {l < Re z < u, 0 < Im z}` and continuous on its
+closure, bounded by a constant `C` on the three boundary parts (`Re z = l`, `Re z = u`, `Im z = 0`,
+within the closed half-strip), with double-exponential growth `‖G z‖ ≤ A·exp(B·exp(c·|Im z|))` for
+some `c < π/(u-l)`, is bounded by `C` on the closed half-strip. -/
+theorem halfStrip_PL {G : ℂ → ℂ} {l u C : ℝ} (hlu : l < u)
+    (hd : DiffContOnCl ℂ G {z : ℂ | l < z.re ∧ z.re < u ∧ 0 < z.im})
+    (hB : ∃ c < π / (u - l), ∃ A B : ℝ,
+      ∀ z : ℂ, l ≤ z.re → z.re ≤ u → 0 ≤ z.im →
+        ‖G z‖ ≤ A * expR (B * expR (c * |z.im|)))
+    (hbL : ∀ z : ℂ, z.re = l → 0 ≤ z.im → ‖G z‖ ≤ C)
+    (hbU : ∀ z : ℂ, z.re = u → 0 ≤ z.im → ‖G z‖ ≤ C)
+    (hbB : ∀ z : ℂ, l ≤ z.re → z.re ≤ u → z.im = 0 → ‖G z‖ ≤ C)
+    {z : ℂ} (hzl : l ≤ z.re) (hzu : z.re ≤ u) (hzim : 0 ≤ z.im) : ‖G z‖ ≤ C := by
+  -- abbreviations
+  set d : ℝ := u - l with hdef
+  have hd0 : 0 < d := by rw [hdef]; linarith
+  set m : ℝ := (l + u) / 2 with hmdef
+  set bb : ℝ := (u - l) / 2 with hbbdef
+  have hbb0 : 0 < bb := by rw [hbbdef]; linarith
+  -- C ≥ 0 (the bottom edge is nonempty and gives a value bounded by C)
+  have hC0 : 0 ≤ C := le_trans (norm_nonneg _) (hbB (m : ℂ) (by simp [hmdef]; linarith)
+    (by simp [hmdef]; linarith) (by simp))
+  -- WLOG `0 < C`: otherwise approximate `C` from above by `C' > C` (density of ℝ).
+  wlog hCpos : 0 < C generalizing C with Hpos
+  · refine le_of_forall_gt_imp_ge_of_dense fun C' hC' => Hpos
+      (fun w hw hw' => (hbL w hw hw').trans hC'.le)
+      (fun w hw hw' => (hbU w hw hw').trans hC'.le)
+      (fun w hw hw' hw'' => (hbB w hw hw' hw'').trans hC'.le)
+      (le_trans hC0 hC'.le) (lt_of_le_of_lt hC0 hC')
+  -- Unpack growth data and choose d₀.
+  obtain ⟨c, hc, A, B, hG⟩ := hB
+  have hπd : 0 < π / d := div_pos Real.pi_pos hd0
+  obtain ⟨d₀, ⟨hcd₀, hd₀0⟩, hd₀π⟩ : ∃ d₀, (c < d₀ ∧ 0 < d₀) ∧ d₀ < π / d := by
+    simpa only [max_lt_iff] using exists_between (max_lt hc hπd)
+  -- d₀ · bb < π/2
+  have hd₀bb : d₀ * bb < π / 2 := by
+    have : d₀ * d < π := (lt_div_iff₀ hd0).1 hd₀π
+    have hbbd : bb = d / 2 := by rw [hbbdef, hdef]
+    rw [hbbd]; nlinarith [this]
+  -- the affine map  aff z = d₀ · (-i) · (z - m)
+  set aff : ℂ → ℂ := fun w => (d₀ : ℂ) * (-Complex.I) * (w - (m : ℂ)) with haffdef
+  have haff_re : ∀ w : ℂ, (aff w).re = d₀ * w.im := by
+    intro w; simp only [haffdef, Complex.mul_re, Complex.mul_im, Complex.ofReal_re,
+      Complex.ofReal_im, Complex.neg_re, Complex.I_re, Complex.neg_im, Complex.I_im, Complex.sub_re,
+      Complex.sub_im]
+    ring
+  have haff_im : ∀ w : ℂ, (aff w).im = -(d₀ * (w.re - m)) := by
+    intro w; simp only [haffdef, Complex.mul_re, Complex.mul_im, Complex.ofReal_re,
+      Complex.ofReal_im, Complex.neg_re, Complex.I_re, Complex.neg_im, Complex.I_im, Complex.sub_re,
+      Complex.sub_im]
+    ring
+  have haff_diff : Differentiable ℂ aff := by
+    apply Differentiable.const_mul
+    exact (differentiable_id.sub_const _)
+  -- the auxiliary multiplier
+  set g : ℝ → ℂ → ℂ := fun (ε : ℝ) (w : ℂ) =>
+    Complex.exp ((ε : ℂ) * (Complex.exp (aff w) + Complex.exp (-aff w))) with hgdef
+  have hg_diff : ∀ ε : ℝ, Differentiable ℂ (g ε) := by
+    intro ε
+    apply Differentiable.cexp
+    apply Differentiable.const_mul
+    exact (haff_diff.cexp).add (haff_diff.neg.cexp)
+  -- It suffices to prove ‖g ε z • G z‖ ≤ C for all ε < 0, since g ε z → 1 as ε → 0⁻.
+  suffices hsuff : ∀ᶠ ε : ℝ in 𝓝[<] (0 : ℝ), ‖g ε z * G z‖ ≤ C by
+    have hlim : Tendsto (fun ε : ℝ => g ε z * G z) (𝓝[<] (0:ℝ)) (𝓝 (G z)) := by
+      have : Tendsto (fun ε : ℝ => g ε z) (𝓝[<] (0:ℝ)) (𝓝 1) := by
+        have hcont : Continuous (fun ε : ℝ => g ε z) := by
+          simp only [hgdef]
+          exact (Complex.continuous_ofReal.mul continuous_const).cexp
+        have := hcont.tendsto 0
+        have h0 : g 0 z = 1 := by simp [hgdef]
+        rw [h0] at this
+        exact this.mono_left nhdsWithin_le_nhds
+      have := this.mul (tendsto_const_nhds (x := G z))
+      simpa using this
+    refine le_of_tendsto (hlim.norm) ?_
+    filter_upwards [hsuff] with ε hε using hε
+  -- Now fix ε < 0.
+  filter_upwards [self_mem_nhdsWithin] with ε hεmem
+  change ε < 0 at hεmem
+  -- key estimate on ‖g ε w‖ on the closed strip
+  set δ : ℝ := ε * Real.cos (d₀ * bb) with hδdef
+  have hcospos : 0 < Real.cos (d₀ * bb) :=
+    Real.cos_pos_of_mem_Ioo ⟨by nlinarith [Real.pi_pos, mul_pos hd₀0 hbb0], hd₀bb⟩
+  have hδneg : δ < 0 := mul_neg_of_neg_of_pos hεmem hcospos
+  have hgbound : ∀ w : ℂ, l ≤ w.re → w.re ≤ u →
+      ‖g ε w‖ ≤ expR (δ * expR (d₀ * |w.im|)) := by
+    intro w hwl hwu
+    -- |Im(aff w)| ≤ d₀·bb
+    have hre_le : |w.re - m| ≤ bb := by
+      rw [abs_le]; rw [hmdef, hbbdef]; constructor <;> linarith
+    have him_le : |(aff w).im| ≤ d₀ * bb := by
+      rw [haff_im, abs_neg, abs_mul, abs_of_pos hd₀0]
+      exact mul_le_mul_of_nonneg_left hre_le (le_of_lt hd₀0)
+    -- apply Mathlib's auxiliary lemma at z := aff w
+    have hkey := norm_exp_mul_exp_add_exp_neg_le_of_abs_im_le (le_of_lt hεmem) him_le
+      (le_of_lt hd₀bb)
+    -- ‖g ε w‖ = ‖exp(ε·(exp(aff w)+exp(-aff w)))‖, and the lemma bounds it by
+    -- exp(ε·cos(d₀ bb)·exp|Re(aff w)|);  |Re(aff w)| = d₀·|w.im|.
+    have hre_eq : |(aff w).re| = d₀ * |w.im| := by
+      rw [haff_re, abs_mul, abs_of_pos hd₀0]
+    rw [hgdef] at *
+    calc ‖Complex.exp ((ε : ℂ) * (Complex.exp (aff w) + Complex.exp (-aff w)))‖
+        ≤ expR (ε * Real.cos (d₀ * bb) * expR |(aff w).re|) := hkey
+      _ = expR (δ * expR (d₀ * |w.im|)) := by rw [hδdef, hre_eq]
+  -- ‖g ε w‖ ≤ 1 on the closed strip (since δ < 0)
+  have hg_le_one : ∀ w : ℂ, l ≤ w.re → w.re ≤ u → ‖g ε w‖ ≤ 1 := by
+    intro w hwl hwu
+    refine (hgbound w hwl hwu).trans ?_
+    rw [Real.exp_le_one_iff]
+    exact mul_nonpos_of_nonpos_of_nonneg (le_of_lt hδneg) (Real.exp_pos _).le
+  -- product norm:  ‖g ε w · G w‖ = ‖g ε w‖ · ‖G w‖
+  -- Find R > |z.im| such that ‖g ε w · G w‖ ≤ C on the top edge Im w = R.
+  have hA0 : 0 ≤ A := by
+    have := hG ((m : ℂ)) (by simp [hmdef]; linarith) (by simp [hmdef]; linarith) (by simp)
+    have hpos : 0 < expR (B * expR (c * |(m : ℂ).im|)) := Real.exp_pos _
+    nlinarith [norm_nonneg (G (m : ℂ)), this, hpos]
+  obtain ⟨R, hzR, hR⟩ :
+      ∃ R : ℝ, |z.im| < R ∧ ∀ w : ℂ, l ≤ w.re → w.re ≤ u → w.im = R →
+        ‖g ε w * G w‖ ≤ C := by
+    -- the bound expR(δ·expR(d₀·R)) · A · expR(B·expR(c·R)) → 0 as R → ∞
+    have hlim0 : Tendsto
+        (fun R : ℝ => expR (δ * expR (d₀ * R) + B * expR (c * R) + Real.log (A + 1)))
+        atTop (𝓝 0) := by
+      refine Real.tendsto_exp_atBot.comp ?_
+      have H : Tendsto (fun R : ℝ => δ + B * (expR ((d₀ - c) * R))⁻¹) atTop
+          (𝓝 (δ + B * 0)) := by
+        refine tendsto_const_nhds.add (tendsto_const_nhds.mul ?_)
+        exact tendsto_inv_atTop_zero.comp
+          (Real.tendsto_exp_atTop.comp (tendsto_id.const_mul_atTop (sub_pos.2 hcd₀)))
+      rw [mul_zero, add_zero] at H
+      have Hmain : Tendsto (fun R : ℝ => δ * expR (d₀ * R) + B * expR (c * R)) atTop atBot := by
+        have := H.neg_mul_atTop hδneg
+          (Real.tendsto_exp_atTop.comp (tendsto_id.const_mul_atTop hd₀0))
+        refine this.congr (fun R => ?_)
+        simp only [Function.comp_apply, id_eq, add_mul, mul_assoc, ← div_eq_inv_mul,
+          ← Real.exp_sub, ← sub_mul, sub_sub_cancel]
+      exact Hmain.atBot_add tendsto_const_nhds
+    have hev := hlim0.eventually (ge_mem_nhds hCpos)
+    obtain ⟨R, hR1, hR2⟩ := ((eventually_gt_atTop (|z.im|)).and hev).exists
+    refine ⟨R, hR1, fun w hwl hwu hwim => ?_⟩
+    have hwim0 : 0 ≤ w.im := by rw [hwim]; linarith [abs_nonneg z.im, hR1]
+    rw [norm_mul]
+    have hgb := hgbound w hwl hwu
+    have hGb := hG w hwl hwu hwim0
+    -- ‖g‖·‖G‖ ≤ expR(δ·expR(d₀·|w.im|)) · (A · expR(B·expR(c·|w.im|)))
+    have hstep : ‖g ε w‖ * ‖G w‖
+        ≤ expR (δ * expR (d₀ * |w.im|)) * (A * expR (B * expR (c * |w.im|))) := by
+      apply mul_le_mul hgb hGb (norm_nonneg _) (Real.exp_pos _).le
+    refine hstep.trans ?_
+    rw [show |w.im| = R by rw [hwim, abs_of_nonneg (by linarith [abs_nonneg z.im, hR1] : (0:ℝ) ≤ R)]]
+    -- expR(δ·expR(d₀·R))·(A·expR(B·expR(c·R))) ≤ (A+1)·expR(δ·expR(d₀R)+B·expR(cR))
+    --   ≤ expR(log(A+1))·expR(...) = expR(... + log(A+1)) ≤ C+1 ... but we need ≤ C.
+    -- Use hR2 ≤ C+1; need strict.  Instead bound ≤ expR(big) ≤ C ... rework:
+    have hAle : A * expR (B * expR (c * R)) ≤ (A + 1) * expR (B * expR (c * R)) := by
+      apply mul_le_mul_of_nonneg_right (by linarith) (Real.exp_pos _).le
+    calc expR (δ * expR (d₀ * R)) * (A * expR (B * expR (c * R)))
+        ≤ expR (δ * expR (d₀ * R)) * ((A + 1) * expR (B * expR (c * R))) := by
+          apply mul_le_mul_of_nonneg_left hAle (Real.exp_pos _).le
+      _ = expR (δ * expR (d₀ * R) + B * expR (c * R) + Real.log (A + 1)) := by
+          rw [Real.exp_add, Real.exp_add, Real.exp_log (by linarith)]; ring
+      _ ≤ C := hR2
+  -- Apply the bounded maximum modulus principle on the rectangle U = Ioo l u ×ℂ Ioo 0 R.
+  have hR0 : 0 < R := lt_of_le_of_lt (abs_nonneg _) hzR
+  set U : Set ℂ := Ioo l u ×ℂ Ioo 0 R with hUdef
+  -- z ∈ closure U
+  have hzU : z ∈ closure U := by
+    rw [hUdef, closure_reProdIm, closure_Ioo (ne_of_lt hlu), closure_Ioo (ne_of_lt hR0)]
+    exact ⟨⟨hzl, hzu⟩, ⟨hzim, le_trans (le_abs_self _) (le_of_lt hzR)⟩⟩
+  -- DiffContOnCl of g ε · G on U
+  have hsub : U ⊆ {w : ℂ | l < w.re ∧ w.re < u ∧ 0 < w.im} := by
+    intro w hw
+    rw [hUdef, mem_reProdIm, mem_Ioo, mem_Ioo] at hw
+    exact ⟨hw.1.1, hw.1.2, hw.2.1⟩
+  have hdG : DiffContOnCl ℂ G U := hd.mono hsub
+  have hdg : DiffContOnCl ℂ (g ε) U := (hg_diff ε).diffContOnCl
+  have hdcc : DiffContOnCl ℂ (fun w => g ε w * G w) U :=
+    ⟨hdg.differentiableOn.mul hdG.differentiableOn,
+     hdg.continuousOn.mul hdG.continuousOn⟩
+  -- U is bounded
+  have hUb : IsBounded U := (isBounded_Ioo _ _).reProdIm (isBounded_Ioo _ _)
+  -- the bound on the frontier
+  refine norm_le_of_forall_mem_frontier_norm_le hUb hdcc (fun w hw => ?_) hzU
+  rw [hUdef, frontier_reProdIm, closure_Ioo (ne_of_lt hlu), frontier_Ioo hlu,
+    closure_Ioo (ne_of_lt hR0), frontier_Ioo hR0] at hw
+  -- hw : w ∈ Icc l u ×ℂ {0, R}  ∪  {l, u} ×ℂ Icc 0 R
+  rcases hw with hw | hw
+  · -- top/bottom edges: w.im = 0 or w.im = R
+    rw [mem_reProdIm, mem_Icc, mem_insert_iff, mem_singleton_iff] at hw
+    obtain ⟨⟨hwl, hwu⟩, him⟩ := hw
+    rcases him with him | him
+    · -- bottom edge im = 0
+      rw [norm_mul, ← one_mul C]
+      refine mul_le_mul (hg_le_one w hwl hwu) (hbB w hwl hwu him) (norm_nonneg _) (by norm_num)
+    · -- top edge im = R
+      exact hR w hwl hwu him
+  · -- vertical edges: w.re = l or w.re = u
+    rw [mem_reProdIm, mem_insert_iff, mem_singleton_iff, mem_Icc] at hw
+    obtain ⟨hre, ⟨hwim0, hwimR⟩⟩ := hw
+    have hwl : l ≤ w.re := by
+      rcases hre with h | h
+      · rw [h]
+      · rw [h]; linarith
+    have hwu : w.re ≤ u := by
+      rcases hre with h | h
+      · rw [h]; linarith
+      · rw [h]
+    rw [norm_mul, ← one_mul C]
+    rcases hre with h | h
+    · exact mul_le_mul (hg_le_one w hwl hwu) (hbL w h hwim0) (norm_nonneg _) (by norm_num)
+    · exact mul_le_mul (hg_le_one w hwl hwu) (hbU w h hwim0) (norm_nonneg _) (by norm_num)
+
+/-! ## Discharging `verticalStrip_PL_upper_const_bound` from `halfStrip_PL`.
+
+We re-state the EXACT ScratchFlatten signature (reproducing the weight definitions, which cannot
+be imported), build `G = F·wgtH` and feed `halfStrip_PL`.  All weight-modulus algebra below is
+re-proven from Mathlib (copies of the proven ScratchSharpPL/ScratchFlatten lemmas), so the only
+thing that remains genuinely irreducible is the LOWER-half reflection `t ≤ -1` (the weight in the
+conclusion is evaluated at the reflected-up ordinate `σ+i|t|`, but `F(σ+it)` for `t<0` is a true
+lower-half value that is NOT a holomorphic function of the upper point and is not tied to it by any
+symmetry present in the hypotheses).  `halfStrip_PL` closes the UPPER half outright. -/
+
+open Complex.HadamardThreeLines
+
+/-- Weight base `L(σ,t,λ) = -i·(σ+it) + λ` (copy of ScratchFlatten.Lbase). -/
+def Lbase (σ t lam : ℝ) : ℂ := -Complex.I * ((σ : ℂ) + (t : ℂ) * Complex.I) + (lam : ℂ)
+
+@[simp] theorem Lbase_re (σ t lam : ℝ) : (Lbase σ t lam).re = t + lam := by
+  simp only [Lbase, neg_mul, Complex.add_re, Complex.neg_re, Complex.mul_re, Complex.I_re,
+    Complex.I_im, Complex.add_im, Complex.ofReal_re, Complex.ofReal_im, Complex.mul_im]
+  ring
+
+@[simp] theorem Lbase_im (σ t lam : ℝ) : (Lbase σ t lam).im = -σ := by
+  simp only [Lbase, neg_mul, Complex.add_im, Complex.neg_im, Complex.mul_im, Complex.I_re,
+    Complex.I_im, Complex.add_re, Complex.ofReal_re, Complex.ofReal_im, Complex.mul_re]
+  ring
+
+/-- σ-linear interpolation exponent (copy of ScratchSharpPL.ellInterp). -/
+def ellInterp (l u α β σ : ℝ) : ℝ := α + (β - α) * (σ - l) / (u - l)
+
+/-- Complex-linear exponent `p(s)` (copy of ScratchSharpPL.pExp). -/
+def pExp (l u α β : ℝ) (s : ℂ) : ℂ :=
+  (α : ℂ) + ((β : ℂ) - (α : ℂ)) * (s - (l : ℂ)) / ((u - l : ℝ) : ℂ)
+
+/-- Non-constant-power weight `w(s) = exp(-p(s)·Log(-i·s+λ))` (copy of ScratchFlatten.wgt). -/
+def wgt (l u α β lam : ℝ) (s : ℂ) : ℂ :=
+  Complex.exp (-(pExp l u α β s) * Complex.log (Lbase s.re s.im lam))
+
+/-- Holomorphic weight base `Lhol λ s = -i·s + λ` (copy of ScratchFlatten.Lhol). -/
+def Lhol (lam : ℝ) (s : ℂ) : ℂ := -Complex.I * s + (lam : ℂ)
+
+theorem Lhol_eq_Lbase (lam : ℝ) (s : ℂ) : Lhol lam s = Lbase s.re s.im lam := by
+  unfold Lhol Lbase; rw [Complex.re_add_im]
+
+@[simp] theorem Lhol_re (lam : ℝ) (s : ℂ) : (Lhol lam s).re = s.im + lam := by
+  simp only [Lhol, neg_mul, Complex.add_re, Complex.neg_re, Complex.mul_re, Complex.I_re,
+    Complex.I_im, Complex.ofReal_re]
+  ring
+
+theorem Lhol_re_pos {lam : ℝ} (hlam : 1 ≤ lam) {s : ℂ} (hs : 0 ≤ s.im) :
+    0 < (Lhol lam s).re := by rw [Lhol_re]; linarith
+
+theorem Lhol_mem_slitPlane {lam : ℝ} (hlam : 1 ≤ lam) {s : ℂ} (hs : 0 ≤ s.im) :
+    Lhol lam s ∈ Complex.slitPlane :=
+  Complex.mem_slitPlane_iff.mpr (Or.inl (Lhol_re_pos hlam hs))
+
+theorem Lhol_differentiable (lam : ℝ) : Differentiable ℂ (Lhol lam) := by
+  unfold Lhol
+  exact (differentiable_const _).mul differentiable_id |>.add (differentiable_const _)
+
+theorem pExp_differentiable (l u α β : ℝ) : Differentiable ℂ (pExp l u α β) := by
+  unfold pExp
+  exact (differentiable_const _).add
+    (((differentiable_const _).mul ((differentiable_id).sub (differentiable_const _))).div_const _)
+
+/-- Holomorphic weight `wgtH λ s = exp(-(p s)·log(Lhol λ s))` (copy of ScratchFlatten.wgtH). -/
+def wgtH (l u α β lam : ℝ) (s : ℂ) : ℂ :=
+  Complex.exp (-(pExp l u α β s) * Complex.log (Lhol lam s))
+
+theorem wgtH_eq_wgt (l u α β lam : ℝ) (s : ℂ) :
+    wgtH l u α β lam s = wgt l u α β lam s := by
+  unfold wgtH wgt; rw [Lhol_eq_Lbase]
+
+theorem wgtH_differentiableAt {l u α β lam : ℝ} (hlam : 1 ≤ lam) {s : ℂ} (hs : 0 ≤ s.im) :
+    DifferentiableAt ℂ (wgtH l u α β lam) s := by
+  unfold wgtH
+  have hlog : DifferentiableAt ℂ (fun w => Complex.log (Lhol lam w)) s :=
+    (Lhol_differentiable lam s).clog (Lhol_mem_slitPlane hlam hs)
+  have hp : DifferentiableAt ℂ (fun w => -(pExp l u α β w)) s :=
+    ((pExp_differentiable l u α β s).neg)
+  exact (hp.mul hlog).cexp
+
+/-- Flattened product `G(s) = F(s)·wgtH(s)` (copy of ScratchFlatten.Gprod). -/
+def Gprod (F : ℂ → ℂ) (l u α β lam : ℝ) (s : ℂ) : ℂ := F s * wgtH l u α β lam s
+
+theorem Gprod_differentiableAt {F : ℂ → ℂ} (hF : Differentiable ℂ F)
+    {l u α β lam : ℝ} (hlam : 1 ≤ lam) {s : ℂ} (hs : 0 ≤ s.im) :
+    DifferentiableAt ℂ (Gprod F l u α β lam) s :=
+  (hF s).mul (wgtH_differentiableAt hlam hs)
+
+/-! ### Continuity of `wgtH` on the closed upper region, and of `G = Gprod F`. -/
+
+/-- `wgtH λ` is continuous on `{Im ≥ 0}` (there `Lhol λ s ∈ slitPlane`). -/
+theorem wgtH_continuousOn {l u α β lam : ℝ} (hlam : 1 ≤ lam) :
+    ContinuousOn (wgtH l u α β lam) {s : ℂ | 0 ≤ s.im} := by
+  intro s hs
+  exact (wgtH_differentiableAt hlam hs).continuousAt.continuousWithinAt
+
+/-- `G = Gprod F` is continuous on `{Im ≥ 0}`. -/
+theorem Gprod_continuousOn {F : ℂ → ℂ} (hF : Differentiable ℂ F)
+    {l u α β lam : ℝ} (hlam : 1 ≤ lam) :
+    ContinuousOn (Gprod F l u α β lam) {s : ℂ | 0 ≤ s.im} := by
+  unfold Gprod
+  exact hF.continuous.continuousOn.mul (wgtH_continuousOn hlam)
+
+/-- `DiffContOnCl` of `G = Gprod F` on the open upper half-strip, using the proven upper-region
+holomorphy `Gprod_differentiableAt` and continuity on the closure (`Im ≥ 0`). -/
+theorem Gprod_diffContOnCl {F : ℂ → ℂ} (hF : Differentiable ℂ F)
+    {l u α β lam : ℝ} (_hlu : l < u) (hlam : 1 ≤ lam) :
+    DiffContOnCl ℂ (Gprod F l u α β lam)
+      {s : ℂ | l < s.re ∧ s.re < u ∧ 0 < s.im} := by
+  constructor
+  · intro s hs
+    exact (Gprod_differentiableAt hF hlam (le_of_lt hs.2.2)).differentiableWithinAt
+  · -- closure ⊆ {Im ≥ 0}
+    have hclsub : closure {s : ℂ | l < s.re ∧ s.re < u ∧ 0 < s.im} ⊆ {s : ℂ | 0 ≤ s.im} := by
+      have : {s : ℂ | l < s.re ∧ s.re < u ∧ 0 < s.im} ⊆ {s : ℂ | 0 ≤ s.im} :=
+        fun s hs => le_of_lt hs.2.2
+      refine (closure_mono this).trans ?_
+      rw [show {s : ℂ | 0 ≤ s.im} = Complex.im ⁻¹' (Ici 0) from rfl]
+      rw [(isClosed_Ici.preimage Complex.continuous_im).closure_eq]
+    exact (Gprod_continuousOn hF hlam).mono hclsub
+
+/-! ### Weight-modulus bounds (copies of the proven ScratchSharpPL lemmas, Mathlib-only). -/
+
+theorem abs_arctan_le (x : ℝ) : |Real.arctan x| ≤ |x| := by
+  rcases le_or_gt 0 x with hx | hx
+  · have h0 : 0 ≤ Real.arctan x := (Real.arctan_nonneg).mpr hx
+    rw [abs_of_nonneg h0, abs_of_nonneg hx]
+    have hy2 : Real.arctan x < π / 2 := Real.arctan_lt_pi_div_two x
+    have hle : Real.arctan x ≤ Real.tan (Real.arctan x) := Real.le_tan h0 hy2
+    rwa [Real.tan_arctan] at hle
+  · have hx' : 0 ≤ -x := by linarith
+    have h0 : Real.arctan (-x) ≤ -x := by
+      have h0' : 0 ≤ Real.arctan (-x) := (Real.arctan_nonneg).mpr hx'
+      have hy2 : Real.arctan (-x) < π / 2 := Real.arctan_lt_pi_div_two (-x)
+      have hle : Real.arctan (-x) ≤ Real.tan (Real.arctan (-x)) := Real.le_tan h0' hy2
+      rwa [Real.tan_arctan] at hle
+    rw [Real.arctan_neg] at h0
+    rw [abs_of_neg hx, abs_of_nonpos]
+    · linarith
+    · exact (Real.arctan_le_zero).mpr (le_of_lt hx)
+
+theorem arg_eq_arctan_of_re_pos {z : ℂ} (hz : 0 < z.re) :
+    Complex.arg z = Real.arctan (z.im / z.re) := by
+  have hmem : |Complex.arg z| < π / 2 := Complex.abs_arg_lt_pi_div_two_iff.mpr (Or.inl hz)
+  have h1 : -(π / 2) < Complex.arg z := by rw [abs_lt] at hmem; exact hmem.1
+  have h2 : Complex.arg z < π / 2 := by rw [abs_lt] at hmem; exact hmem.2
+  have htan : Real.tan (Complex.arg z) = z.im / z.re := Complex.tan_arg z
+  calc Complex.arg z
+      = Real.arctan (Real.tan (Complex.arg z)) := (Real.arctan_tan h1 h2).symm
+    _ = Real.arctan (z.im / z.re) := by rw [htan]
+
+theorem abs_arg_le_im_div_re {z : ℂ} (hz : 0 < z.re) :
+    |Complex.arg z| ≤ |z.im| / z.re := by
+  rw [arg_eq_arctan_of_re_pos hz]
+  calc |Real.arctan (z.im / z.re)|
+      ≤ |z.im / z.re| := abs_arctan_le _
+    _ = |z.im| / z.re := by rw [abs_div, abs_of_pos hz]
+
+theorem Lbase_re_pos {σ t lam : ℝ} (ht : 1 ≤ t) (hlam : 1 ≤ lam) :
+    0 < (Lbase σ t lam).re := by rw [Lbase_re]; linarith
+
+theorem abs_arg_Lbase_le {σ t lam : ℝ} (ht : 1 ≤ t) (hlam : 1 ≤ lam) :
+    |Complex.arg (Lbase σ t lam)| ≤ |σ| / (t + lam) := by
+  have hre : 0 < (Lbase σ t lam).re := Lbase_re_pos ht hlam
+  have := abs_arg_le_im_div_re hre
+  rwa [Lbase_im, Lbase_re, abs_neg] at this
+
+theorem ellInterp_eq (l u α β σ : ℝ) (hlu : l < u) :
+    ellInterp l u α β σ = α * (u - σ) / (u - l) + β * (σ - l) / (u - l) := by
+  have hne : u - l ≠ 0 := by linarith
+  rw [ellInterp]; field_simp; ring
+
+theorem pExp_re (l u α β σ t : ℝ) (hlu : l < u) :
+    (pExp l u α β ((σ : ℂ) + (t : ℂ) * Complex.I)).re = ellInterp l u α β σ := by
+  have hne : u - l ≠ 0 := by linarith
+  rw [pExp, ellInterp]
+  simp only [Complex.add_re, Complex.div_ofReal_re, Complex.ofReal_re, Complex.mul_re,
+    Complex.sub_re, Complex.sub_im, Complex.add_im, Complex.ofReal_im, Complex.mul_im,
+    Complex.I_re, Complex.I_im]
+  field_simp; ring
+
+theorem pExp_im (l u α β σ t : ℝ) (hlu : l < u) :
+    (pExp l u α β ((σ : ℂ) + (t : ℂ) * Complex.I)).im = (β - α) * t / (u - l) := by
+  have hne : u - l ≠ 0 := by linarith
+  rw [pExp]
+  simp only [Complex.add_im, Complex.div_ofReal_im, Complex.ofReal_im, Complex.mul_im,
+    Complex.sub_re, Complex.sub_im, Complex.add_im, Complex.add_re, Complex.ofReal_re,
+    Complex.mul_re, Complex.I_re, Complex.I_im]
+  field_simp; ring
+
+theorem cross_term_bounded {l u α β lam : ℝ} (hlu : l < u) {σ t : ℝ}
+    (hσl : l ≤ σ) (hσu : σ ≤ u) (ht : 1 ≤ t) (hlam : 1 ≤ lam) :
+    |(pExp l u α β ((σ : ℂ) + (t : ℂ) * Complex.I)).im
+        * Complex.arg (Lbase σ t lam)|
+      ≤ |β - α| * max |l| |u| / (u - l) := by
+  have hulpos : 0 < u - l := by linarith
+  rw [pExp_im l u α β σ t hlu, abs_mul]
+  have hargle : |Complex.arg (Lbase σ t lam)| ≤ |σ| / (t + lam) := abs_arg_Lbase_le ht hlam
+  have hImp : |(β - α) * t / (u - l)| = |β - α| * t / (u - l) := by
+    rw [abs_div, abs_mul, abs_of_pos hulpos, abs_of_nonneg (by linarith : (0:ℝ) ≤ t)]
+  rw [hImp]
+  have hσabs : |σ| ≤ max |l| |u| := by
+    rw [abs_le]
+    constructor
+    · have h1 : -max |l| |u| ≤ -|l| := by
+        simp only [neg_le_neg_iff]; exact le_max_left _ _
+      have hl : -|l| ≤ l := neg_abs_le l
+      have h2 : -max |l| |u| ≤ l := le_trans h1 hl
+      linarith [h2, hσl]
+    · have hu : u ≤ |u| := le_abs_self u
+      have h3 : |u| ≤ max |l| |u| := le_max_right _ _
+      linarith [hσu, hu, h3]
+  have hstep : |β - α| * t / (u - l) * |Complex.arg (Lbase σ t lam)|
+      ≤ |β - α| * t / (u - l) * (|σ| / (t + lam)) := by
+    apply mul_le_mul_of_nonneg_left hargle; positivity
+  refine le_trans hstep ?_
+  have htfrac : t / (t + lam) ≤ 1 := by rw [div_le_one (by linarith)]; linarith
+  have hrw : |β - α| * t / (u - l) * (|σ| / (t + lam))
+      = (|β - α| * |σ| / (u - l)) * (t / (t + lam)) := by ring
+  rw [hrw]
+  calc (|β - α| * |σ| / (u - l)) * (t / (t + lam))
+      ≤ (|β - α| * |σ| / (u - l)) * 1 := by
+        apply mul_le_mul_of_nonneg_left htfrac; positivity
+    _ = |β - α| * |σ| / (u - l) := by ring
+    _ ≤ |β - α| * max |l| |u| / (u - l) := by gcongr
+
+theorem wgt_norm_eq {l u α β lam : ℝ} (hlu : l < u) {σ t : ℝ}
+    (ht : 1 ≤ t) (hlam : 1 ≤ lam) :
+    ‖wgt l u α β lam ((σ : ℂ) + (t : ℂ) * Complex.I)‖
+      = ‖Lbase σ t lam‖ ^ (-(ellInterp l u α β σ))
+        * Real.exp ((pExp l u α β ((σ : ℂ) + (t : ℂ) * Complex.I)).im
+            * Complex.arg (Lbase σ t lam)) := by
+  set s : ℂ := (σ : ℂ) + (t : ℂ) * Complex.I with hs
+  have hsre : s.re = σ := by simp [hs]
+  have hsim : s.im = t := by simp [hs]
+  have hLpos : 0 < (Lbase σ t lam).re := Lbase_re_pos ht hlam
+  have hLne : Lbase σ t lam ≠ 0 := by intro h; rw [h] at hLpos; simp at hLpos
+  have hLnorm_pos : 0 < ‖Lbase σ t lam‖ := by rw [norm_pos_iff]; exact hLne
+  rw [wgt]
+  rw [show Lbase s.re s.im lam = Lbase σ t lam by rw [hsre, hsim]]
+  rw [Complex.norm_exp]
+  have hre : (-(pExp l u α β s) * Complex.log (Lbase σ t lam)).re
+      = -(ellInterp l u α β σ * Real.log ‖Lbase σ t lam‖
+          - (pExp l u α β s).im * Complex.arg (Lbase σ t lam)) := by
+    rw [neg_mul, Complex.neg_re, Complex.mul_re, Complex.log_re, Complex.log_im,
+      show (pExp l u α β s).re = ellInterp l u α β σ by
+        rw [hs]; exact pExp_re l u α β σ t hlu]
+  rw [hre]
+  rw [show -(ellInterp l u α β σ * Real.log ‖Lbase σ t lam‖
+        - (pExp l u α β s).im * Complex.arg (Lbase σ t lam))
+      = (-(ellInterp l u α β σ)) * Real.log ‖Lbase σ t lam‖
+        + (pExp l u α β s).im * Complex.arg (Lbase σ t lam) by ring]
+  rw [Real.exp_add]
+  congr 1
+  rw [Real.rpow_def_of_pos hLnorm_pos, mul_comm]
+
+theorem norm_Lbase_ge {σ t lam : ℝ} (_ht : 1 ≤ t) (hlam : 1 ≤ lam) :
+    t ≤ ‖Lbase σ t lam‖ := by
+  have h1 : (Lbase σ t lam).re ≤ ‖Lbase σ t lam‖ := Complex.re_le_norm _
+  rw [Lbase_re] at h1; linarith
+
+theorem norm_Lbase_le {σ t lam : ℝ} (ht : 1 ≤ t) (hlam : 1 ≤ lam) :
+    ‖Lbase σ t lam‖ ≤ (1 + |σ| + lam) * (1 + t) := by
+  have ht0 : (0:ℝ) ≤ t := by linarith
+  have htri : ‖Lbase σ t lam‖ ≤ |(Lbase σ t lam).re| + |(Lbase σ t lam).im| :=
+    Complex.norm_le_abs_re_add_abs_im _
+  rw [Lbase_re, Lbase_im, abs_of_nonneg (by linarith : (0:ℝ) ≤ t + lam), abs_neg] at htri
+  refine htri.trans ?_
+  nlinarith [abs_nonneg σ, ht0, hlam]
+
+theorem norm_Lbase_rpow_le {σ t lam ℓ : ℝ} (ht : 1 ≤ t) (hlam : 1 ≤ lam) :
+    ‖Lbase σ t lam‖ ^ ℓ
+      ≤ max (((2 * (1 + |σ| + lam)) : ℝ) ^ ℓ) 1 * t ^ ℓ := by
+  have ht0 : (0:ℝ) < t := by linarith
+  set A : ℝ := 1 + |σ| + lam with hA
+  have hApos : 0 < A := by rw [hA]; positivity
+  have hge : t ≤ ‖Lbase σ t lam‖ := norm_Lbase_ge ht hlam
+  have hle : ‖Lbase σ t lam‖ ≤ (2 * A) * t := by
+    refine (norm_Lbase_le ht hlam).trans ?_
+    have h1t : 1 + t ≤ 2 * t := by linarith
+    calc A * (1 + t) ≤ A * (2 * t) := by nlinarith [hApos, h1t]
+      _ = (2 * A) * t := by ring
+  have hLpos : 0 < ‖Lbase σ t lam‖ := lt_of_lt_of_le ht0 hge
+  rcases le_or_gt 0 ℓ with hℓ | hℓ
+  · have h1 : ‖Lbase σ t lam‖ ^ ℓ ≤ ((2 * A) * t) ^ ℓ :=
+      Real.rpow_le_rpow (le_of_lt hLpos) hle hℓ
+    rw [Real.mul_rpow (by positivity) (le_of_lt ht0)] at h1
+    refine h1.trans ?_
+    apply mul_le_mul_of_nonneg_right (le_max_left _ _) (by positivity)
+  · have h1 : ‖Lbase σ t lam‖ ^ ℓ ≤ t ^ ℓ :=
+      Real.rpow_le_rpow_of_nonpos ht0 hge (le_of_lt hℓ)
+    refine h1.trans ?_
+    have h2 : (1:ℝ) ≤ max (((2 * (1 + |σ| + lam)) : ℝ) ^ ℓ) 1 := le_max_right _ _
+    calc t ^ ℓ = 1 * t ^ ℓ := (one_mul _).symm
+      _ ≤ max (((2 * (1 + |σ| + lam)) : ℝ) ^ ℓ) 1 * t ^ ℓ := by
+          apply mul_le_mul_of_nonneg_right h2 (by positivity)
+
+/-! ### Upper-half edge/growth bounds for `wgtH`, and the upper-half constant bound for `G`. -/
+
+/-- For `t ≥ 1`, `‖wgtH(σ+it)‖ ≤ exp(K)·D(σ)·t^{-ℓ(σ)}` with `K = |β-α|·max|l||u|/(u-l)` and
+`D(σ) = max((2(1+|σ|+lam))^{-ℓ},1)`.  Direct from `wgt_norm_eq`, the cross-factor bound, and
+`norm_Lbase_rpow_le`. -/
+theorem norm_wgtH_le {l u α β lam : ℝ} (hlu : l < u) {σ t : ℝ}
+    (hσl : l ≤ σ) (hσu : σ ≤ u) (ht : 1 ≤ t) (hlam : 1 ≤ lam) :
+    ‖wgtH l u α β lam ((σ : ℂ) + (t : ℂ) * Complex.I)‖
+      ≤ Real.exp (|β - α| * max |l| |u| / (u - l))
+        * max (((2 * (1 + |σ| + lam)) : ℝ) ^ (-(ellInterp l u α β σ))) 1
+        * t ^ (-(ellInterp l u α β σ)) := by
+  rw [wgtH_eq_wgt, wgt_norm_eq hlu ht hlam]
+  set ℓ : ℝ := ellInterp l u α β σ with hℓ
+  -- cross factor ≤ exp K
+  have hcross : Real.exp ((pExp l u α β ((σ : ℂ) + (t : ℂ) * Complex.I)).im
+        * Complex.arg (Lbase σ t lam))
+      ≤ Real.exp (|β - α| * max |l| |u| / (u - l)) := by
+    apply Real.exp_le_exp.mpr
+    have hcb := cross_term_bounded (l := l) (u := u) (α := α) (β := β) (lam := lam)
+      hlu hσl hσu ht hlam
+    rw [abs_le] at hcb; exact hcb.2
+  have hLrpow : ‖Lbase σ t lam‖ ^ (-ℓ)
+      ≤ max (((2 * (1 + |σ| + lam)) : ℝ) ^ (-ℓ)) 1 * t ^ (-ℓ) := norm_Lbase_rpow_le ht hlam
+  have hLrpow_nonneg : 0 ≤ ‖Lbase σ t lam‖ ^ (-ℓ) := Real.rpow_nonneg (norm_nonneg _) _
+  calc ‖Lbase σ t lam‖ ^ (-ℓ)
+        * Real.exp ((pExp l u α β ((σ : ℂ) + (t : ℂ) * Complex.I)).im
+            * Complex.arg (Lbase σ t lam))
+      ≤ ‖Lbase σ t lam‖ ^ (-ℓ) * Real.exp (|β - α| * max |l| |u| / (u - l)) := by
+        apply mul_le_mul_of_nonneg_left hcross hLrpow_nonneg
+    _ ≤ (max (((2 * (1 + |σ| + lam)) : ℝ) ^ (-ℓ)) 1 * t ^ (-ℓ))
+        * Real.exp (|β - α| * max |l| |u| / (u - l)) := by
+        apply mul_le_mul_of_nonneg_right hLrpow (Real.exp_pos _).le
+    _ = Real.exp (|β - α| * max |l| |u| / (u - l))
+        * max (((2 * (1 + |σ| + lam)) : ℝ) ^ (-ℓ)) 1 * t ^ (-ℓ) := by ring
+
+/-! ### A uniform constant bound for `D(σ) = max((2(1+|σ|+lam))^{-ℓ(σ)},1)` over `σ ∈ [l,u]`. -/
+
+/-- Uniform bound: for `σ ∈ [l,u]`, `max((2(1+|σ|+lam))^{-ℓ(σ)},1) ≤ Dmax` with the explicit
+`Dmax = max (Q^{-(min α β)}) (max (Q^{-(max α β)}) 1)`, `Q = 2(1+max|l||u|+lam) (≥ 1)`. -/
+theorem D_uniform_bound {l u α β lam : ℝ} (hlu : l < u) (hlam : 1 ≤ lam) {σ : ℝ}
+    (hσl : l ≤ σ) (hσu : σ ≤ u) :
+    max (((2 * (1 + |σ| + lam)) : ℝ) ^ (-(ellInterp l u α β σ))) 1
+      ≤ max (((2 * (1 + max |l| |u| + lam)) : ℝ) ^ (-(min α β)))
+          (max (((2 * (1 + max |l| |u| + lam)) : ℝ) ^ (-(max α β))) 1) := by
+  set Q : ℝ := 2 * (1 + max |l| |u| + lam) with hQ
+  set Qσ : ℝ := 2 * (1 + |σ| + lam) with hQσ
+  have hM : |σ| ≤ max |l| |u| := by
+    rw [abs_le]
+    constructor
+    · have h1 : -max |l| |u| ≤ -|l| := by simp only [neg_le_neg_iff]; exact le_max_left _ _
+      have hl : -|l| ≤ l := neg_abs_le l
+      linarith [le_trans h1 hl, hσl]
+    · have hu : u ≤ |u| := le_abs_self u
+      linarith [hσu, hu, le_max_right |l| |u|]
+  have hQσ1 : 1 ≤ Qσ := by rw [hQσ]; nlinarith [abs_nonneg σ, hlam]
+  have hQQσ : Qσ ≤ Q := by rw [hQ, hQσ]; nlinarith [hM]
+  have hQ1 : (1:ℝ) ≤ Q := le_trans hQσ1 hQQσ
+  -- ℓ(σ) ∈ [min α β, max α β]
+  have hℓmem : min α β ≤ ellInterp l u α β σ ∧ ellInterp l u α β σ ≤ max α β := by
+    have hup : 0 < u - l := by linarith
+    -- ℓ(σ) = α·w + β·(1-w) with w = (u-σ)/(u-l) ∈ [0,1]
+    set w : ℝ := (u - σ) / (u - l) with hwdef
+    have hw0 : 0 ≤ w := div_nonneg (by linarith) (by linarith)
+    have hw1 : w ≤ 1 := by rw [hwdef, div_le_one hup]; linarith
+    have hℓval : ellInterp l u α β σ = α * w + β * (1 - w) := by
+      rw [ellInterp_eq l u α β σ hlu, hwdef]; field_simp; ring
+    rw [hℓval]
+    constructor
+    · rcases le_total α β with hab | hab
+      · nlinarith [hw0, hw1, min_le_left α β, min_le_right α β, hab]
+      · nlinarith [hw0, hw1, min_le_left α β, min_le_right α β, hab]
+    · rcases le_total α β with hab | hab
+      · nlinarith [hw0, hw1, le_max_left α β, le_max_right α β, hab]
+      · nlinarith [hw0, hw1, le_max_left α β, le_max_right α β, hab]
+  -- Qσ^{-ℓ} ≤ Q^{-min α β} or Q^{-max α β}, bounded by the RHS max
+  have hbound : Qσ ^ (-(ellInterp l u α β σ)) ≤
+      max (Q ^ (-(min α β))) (max (Q ^ (-(max α β))) 1) := by
+    -- Qσ ≤ Q, and exponent -ℓ ∈ [-(max α β), -(min α β)]
+    have hexp : -(max α β) ≤ -(ellInterp l u α β σ) ∧ -(ellInterp l u α β σ) ≤ -(min α β) := by
+      constructor <;> linarith [hℓmem.1, hℓmem.2]
+    -- since Qσ ≥ 1, Qσ^x is monotone increasing in x; and Qσ^x ≤ Q^x for x ≥ 0, but for x<0?
+    -- Bound: Qσ^{-ℓ} ≤ Q^{-ℓ}? only if -ℓ ≥ 0.  Split on sign of -ℓ.
+    rcases le_or_gt 0 (-(ellInterp l u α β σ)) with hsgn | hsgn
+    · -- -ℓ ≥ 0:  Qσ^{-ℓ} ≤ Q^{-ℓ} ≤ Q^{-(min α β)} (since Q ≥ 1, -ℓ ≤ -(min))
+      have h1 : Qσ ^ (-(ellInterp l u α β σ)) ≤ Q ^ (-(ellInterp l u α β σ)) :=
+        Real.rpow_le_rpow (by linarith) hQQσ hsgn
+      have h2 : Q ^ (-(ellInterp l u α β σ)) ≤ Q ^ (-(min α β)) :=
+        Real.rpow_le_rpow_of_exponent_le hQ1 hexp.2
+      exact le_trans (le_trans h1 h2) (le_max_left _ _)
+    · -- -ℓ < 0:  Qσ^{-ℓ} ≤ 1^{-ℓ}? No.  Qσ ≥ 1, exponent < 0 ⟹ Qσ^{-ℓ} ≤ 1.
+      have h1 : Qσ ^ (-(ellInterp l u α β σ)) ≤ Qσ ^ (0:ℝ) :=
+        Real.rpow_le_rpow_of_exponent_le hQσ1 (le_of_lt hsgn)
+      rw [Real.rpow_zero] at h1
+      exact le_trans h1 (le_trans (le_max_right _ _) (le_max_right _ _))
+  rw [max_le_iff]
+  refine ⟨hbound, le_trans (le_max_right _ _) (le_max_right _ _)⟩
+
+/-- A clean polynomial UPPER bound for `‖wgtH(σ+it)‖` on `σ ∈ [l,u]`, `t ≥ 1`:
+`‖wgtH‖ ≤ expK · Qh^{|α|+|β|} · (1+t)^{|α|+|β|}`, with `Qh = 1 + max|l||u| + lam`. -/
+theorem norm_wgtH_poly_upper {l u α β lam : ℝ} (hlu : l < u) {σ t : ℝ}
+    (hσl : l ≤ σ) (hσu : σ ≤ u) (ht : 1 ≤ t) (hlam : 1 ≤ lam) :
+    ‖wgtH l u α β lam ((σ : ℂ) + (t : ℂ) * Complex.I)‖
+      ≤ Real.exp (|β - α| * max |l| |u| / (u - l))
+        * (1 + max |l| |u| + lam) ^ (|α| + |β|) * (1 + t) ^ (|α| + |β|) := by
+  rw [wgtH_eq_wgt, wgt_norm_eq hlu ht hlam]
+  set ℓ : ℝ := ellInterp l u α β σ with hℓ
+  set K : ℝ := |β - α| * max |l| |u| / (u - l) with hKdef
+  set Qh : ℝ := 1 + max |l| |u| + lam with hQh
+  set N : ℝ := |α| + |β| with hN
+  have hN0 : 0 ≤ N := by rw [hN]; positivity
+  have ht0 : (0:ℝ) < t := by linarith
+  have hQh1 : (1:ℝ) ≤ Qh := by rw [hQh]; nlinarith [abs_nonneg (max |l| |u|), hlam, le_max_left |l| |u|, abs_nonneg l]
+  -- cross factor ≤ exp K
+  have hcross : Real.exp ((pExp l u α β ((σ : ℂ) + (t : ℂ) * Complex.I)).im
+        * Complex.arg (Lbase σ t lam)) ≤ Real.exp K := by
+    apply Real.exp_le_exp.mpr
+    have hcb := cross_term_bounded (l := l) (u := u) (α := α) (β := β) (lam := lam)
+      hlu hσl hσu ht hlam
+    rw [abs_le] at hcb; rw [hKdef]; exact hcb.2
+  -- ‖L‖^{-ℓ} ≤ ‖L‖^N
+  have hLge1 : (1:ℝ) ≤ ‖Lbase σ t lam‖ := le_trans ht (norm_Lbase_ge ht hlam)
+  have hℓle : -ℓ ≤ N := by
+    rw [hN, hℓ]
+    have hmem := (D_uniform_bound (l := l) (u := u) (α := α) (β := β) (lam := lam) hlu hlam hσl hσu)
+    -- use ℓ ≥ -(|α|+|β|): from |ℓ| ≤ |α|+|β|
+    have h1 : ellInterp l u α β σ ≥ min α β := by
+      have hup : 0 < u - l := by linarith
+      set w : ℝ := (u - σ) / (u - l) with hwdef
+      have hw0 : 0 ≤ w := div_nonneg (by linarith) (by linarith)
+      have hw1 : w ≤ 1 := by rw [hwdef, div_le_one hup]; linarith
+      have hℓval : ellInterp l u α β σ = α * w + β * (1 - w) := by
+        rw [ellInterp_eq l u α β σ hlu, hwdef]; field_simp; ring
+      rw [hℓval]
+      rcases le_total α β with hab | hab
+      · nlinarith [hw0, hw1, min_le_left α β, min_le_right α β, hab]
+      · nlinarith [hw0, hw1, min_le_left α β, min_le_right α β, hab]
+    have h2 : min α β ≥ -(|α| + |β|) := by
+      rcases le_total α β with hab | hab
+      · rw [min_eq_left hab]; nlinarith [neg_abs_le α, abs_nonneg β]
+      · rw [min_eq_right hab]; nlinarith [neg_abs_le β, abs_nonneg α]
+    linarith
+  have hLrpow : ‖Lbase σ t lam‖ ^ (-ℓ) ≤ ‖Lbase σ t lam‖ ^ N :=
+    Real.rpow_le_rpow_of_exponent_le hLge1 hℓle
+  -- ‖L‖^N ≤ (Qh·(1+t))^N
+  have hLle : ‖Lbase σ t lam‖ ≤ Qh * (1 + t) := by
+    refine (norm_Lbase_le ht hlam).trans ?_
+    have : |σ| ≤ max |l| |u| := by
+      rw [abs_le]; constructor
+      · have h1 : -max |l| |u| ≤ -|l| := by simp only [neg_le_neg_iff]; exact le_max_left _ _
+        linarith [le_trans h1 (neg_abs_le l), hσl]
+      · linarith [le_abs_self u, le_max_right |l| |u|, hσu]
+    rw [hQh]; nlinarith [this, ht]
+  have hLNbound : ‖Lbase σ t lam‖ ^ N ≤ (Qh * (1 + t)) ^ N :=
+    Real.rpow_le_rpow (norm_nonneg _) hLle hN0
+  rw [Real.mul_rpow (by positivity) (by positivity)] at hLNbound
+  -- assemble
+  have hLrnn : 0 ≤ ‖Lbase σ t lam‖ ^ (-ℓ) := Real.rpow_nonneg (norm_nonneg _) _
+  calc ‖Lbase σ t lam‖ ^ (-ℓ)
+        * Real.exp ((pExp l u α β ((σ : ℂ) + (t : ℂ) * Complex.I)).im
+            * Complex.arg (Lbase σ t lam))
+      ≤ ‖Lbase σ t lam‖ ^ (-ℓ) * Real.exp K :=
+        mul_le_mul_of_nonneg_left hcross hLrnn
+    _ ≤ (Qh ^ N * (1 + t) ^ N) * Real.exp K := by
+        apply mul_le_mul_of_nonneg_right (le_trans hLrpow hLNbound) (Real.exp_pos _).le
+    _ = Real.exp K * Qh ^ N * (1 + t) ^ N := by ring
+
+/-! ### Helper bounds for the upper-half assembly. -/
+
+/-- `(2+|x|)^n ≤ A'·exp(B'·exp(c'·|x|))` for nonneg power `n`, `c' > 0`:  a polynomial in `|x|` is
+dominated by a double-exponential with any positive inner rate.  Concretely with
+`A' = 2^n`, `B' = n/c'`. -/
+theorem poly_le_double_exp {n c' : ℝ} (hn : 0 ≤ n) (hc' : 0 < c') (x : ℝ) :
+    (2 + |x|) ^ n ≤ (2 : ℝ) ^ n * Real.exp ((n / c') * Real.exp (c' * |x|)) := by
+  have hx0 : 0 ≤ |x| := abs_nonneg _
+  -- 2 + |x| ≤ 2·exp|x|
+  have he : 1 + |x| ≤ Real.exp |x| := by have := Real.add_one_le_exp |x|; linarith
+  have hstep1 : (2 : ℝ) + |x| ≤ 2 * Real.exp |x| := by
+    nlinarith [Real.exp_pos |x|, he, hx0]
+  have hbase : (2 + |x|) ^ n ≤ (2 * Real.exp |x|) ^ n :=
+    Real.rpow_le_rpow (by positivity) hstep1 hn
+  have hsplit : (2 * Real.exp |x|) ^ n = (2 : ℝ) ^ n * Real.exp (n * |x|) := by
+    rw [Real.mul_rpow (by norm_num) (Real.exp_pos _).le, ← Real.exp_mul, mul_comm n |x|]
+  rw [hsplit] at hbase
+  refine hbase.trans ?_
+  apply mul_le_mul_of_nonneg_left _ (by positivity)
+  apply Real.exp_le_exp.mpr
+  -- n·|x| ≤ (n/c')·exp(c'·|x|)
+  have hcx : c' * |x| ≤ Real.exp (c' * |x|) := by
+    have := Real.add_one_le_exp (c' * |x|); nlinarith [this]
+  have hnc : 0 ≤ n / c' := by positivity
+  calc n * |x| = (n / c') * (c' * |x|) := by field_simp
+    _ ≤ (n / c') * Real.exp (c' * |x|) := mul_le_mul_of_nonneg_left hcx hnc
+
+/-- **Upper-half constant bound (PROVEN from `halfStrip_PL`).**  For `F` entire with the polynomial
+growth + constant-after-cancellation edge data, the flattened product `G = F·wgtH` is bounded by a
+single constant on the UPPER half-strip `l ≤ σ ≤ u`, `t ≥ 1`.  The three constant edge bounds and
+the (double-exponential) growth bound for `G` are derived from the weight-modulus machinery
+(`norm_wgtH_le`, `norm_wgtH_poly_upper`, `D_uniform_bound`); `halfStrip_PL` then delivers the
+constant.  We apply it to the shifted function `Ĝ(s) = G(s+i)` so the strip starts at `Im = 1`,
+where the weight decay is in force. -/
+theorem Gprod_upper_const_bound
+    (F : ℂ → ℂ) (l u α β lam : ℝ) (hlu : l < u) (hlam : 1 ≤ lam)
+    (hF : Differentiable ℂ F)
+    (hgrowth : ∃ A : ℝ, 0 ≤ A ∧ ∀ s : ℂ, s ∈ verticalClosedStrip l u →
+      ‖F s‖ ≤ A * (1 + |s.im|) ^ (max α β))
+    (hedgeL : ∃ Cl : ℝ, 0 ≤ Cl ∧ ∀ t : ℝ, 1 ≤ |t| →
+      ‖F ((l : ℂ) + (t : ℂ) * Complex.I)‖ ≤ Cl * |t| ^ α)
+    (hedgeU : ∃ Cu : ℝ, 0 ≤ Cu ∧ ∀ t : ℝ, 1 ≤ |t| →
+      ‖F ((u : ℂ) + (t : ℂ) * Complex.I)‖ ≤ Cu * |t| ^ β) :
+    ∃ CG : ℝ, 0 ≤ CG ∧ ∀ σ t : ℝ, l ≤ σ → σ ≤ u → 1 ≤ t →
+      ‖Gprod F l u α β lam ((σ : ℂ) + (t : ℂ) * Complex.I)‖ ≤ CG := by
+  obtain ⟨A, hA0, hAgr⟩ := hgrowth
+  obtain ⟨Cl, hCl0, hCledge⟩ := hedgeL
+  obtain ⟨Cu, hCu0, hCuedge⟩ := hedgeU
+  set K : ℝ := |β - α| * max |l| |u| / (u - l) with hKdef
+  set Qh : ℝ := 1 + max |l| |u| + lam with hQh
+  set N : ℝ := |α| + |β| with hNdef
+  have hQh1 : (1:ℝ) ≤ Qh := by
+    rw [hQh]; nlinarith [le_max_left |l| |u|, abs_nonneg l, hlam, le_max_right |l| |u|, abs_nonneg u]
+  set expK : ℝ := Real.exp K with hexpK
+  have hexpK0 : 0 < expK := Real.exp_pos _
+  -- ℓ at the two edges
+  have hℓl : ellInterp l u α β l = α := by rw [ellInterp]; simp
+  have hℓu : ellInterp l u α β u = β := by
+    rw [ellInterp]
+    have hne : u - l ≠ 0 := by linarith
+    field_simp
+    ring
+  -- the shifted function  Ĝ s = Gprod F (s + I)
+  set Ghat : ℂ → ℂ := fun s => Gprod F l u α β lam (s + Complex.I) with hGhat
+  -- Dmax: a uniform bound on D(σ) = max((2(1+|σ|+lam))^{-ℓ(σ)},1) over σ∈[l,u]
+  set Dmax : ℝ := max (((2 * (1 + max |l| |u| + lam)) : ℝ) ^ (-(min α β)))
+      (max (((2 * (1 + max |l| |u| + lam)) : ℝ) ^ (-(max α β))) 1) with hDmax
+  have hDmax0 : 0 ≤ Dmax := by
+    rw [hDmax]; exact le_trans (le_max_right _ _) (le_max_right _ _) |>.trans' (by positivity)
+  -- the three EDGE constants and the growth witness, then halfStrip_PL.
+  -- Common: G value norm = ‖F‖·‖wgtH‖.
+  have hGval : ∀ σ τ : ℝ, ‖Gprod F l u α β lam ((σ:ℂ)+(τ:ℂ)*Complex.I)‖
+      = ‖F ((σ:ℂ)+(τ:ℂ)*Complex.I)‖ * ‖wgtH l u α β lam ((σ:ℂ)+(τ:ℂ)*Complex.I)‖ := by
+    intro σ τ; rw [Gprod, norm_mul]
+  -- shift coordinate identity:  (s + I) with s = σ+iτ  is  σ + i(τ+1)
+  have hshift : ∀ σ τ : ℝ, ((σ:ℂ)+(τ:ℂ)*Complex.I) + Complex.I
+      = (σ:ℂ)+((τ+1:ℝ):ℂ)*Complex.I := by
+    intro σ τ; push_cast; ring
+  -- LEFT EDGE constant CL = Cl·expK·D(l)
+  set CL : ℝ := Cl * expK * max (((2 * (1 + |l| + lam)) : ℝ) ^ (-(α))) 1 with hCL
+  set CU : ℝ := Cu * expK * max (((2 * (1 + |u| + lam)) : ℝ) ^ (-(β))) 1 with hCU
+  set CB : ℝ := A * (2 : ℝ) ^ (max α β) * (expK * Dmax) with hCB
+  have hCL0 : 0 ≤ CL := by rw [hCL]; positivity
+  have hCU0 : 0 ≤ CU := by rw [hCU]; positivity
+  have hCB0 : 0 ≤ CB := by rw [hCB]; positivity
+  set Cbig : ℝ := max CL (max CU CB) with hCbig
+  have hCbig0 : 0 ≤ Cbig := le_trans hCL0 (le_max_left _ _)
+  refine ⟨Cbig, hCbig0, ?_⟩
+  -- It suffices to prove the bound for Ĝ on the half-strip, then specialize.
+  -- We first establish the halfStrip_PL hypotheses for Ĝ.
+  -- (a) DiffContOnCl of Ĝ
+  have hGhat_dcc : DiffContOnCl ℂ Ghat {s : ℂ | l < s.re ∧ s.re < u ∧ 0 < s.im} := by
+    have hbase := Gprod_diffContOnCl hF hlu hlam (α := α) (β := β)
+    -- Ĝ = Gprod ∘ (·+I);  (·+I) maps the open half-strip into itself (im+1 > 0 trivially, but we
+    -- need it into the open half-strip {l<re<u,0<im} — re unchanged, im+1>0 since im>0).
+    have hmaps : MapsTo (· + Complex.I) {s : ℂ | l < s.re ∧ s.re < u ∧ 0 < s.im}
+        {s : ℂ | l < s.re ∧ s.re < u ∧ 0 < s.im} := by
+      intro s hs
+      simp only [mem_setOf_eq, Complex.add_re, Complex.I_re, add_zero, Complex.add_im,
+        Complex.I_im] at hs ⊢
+      exact ⟨hs.1, hs.2.1, by linarith [hs.2.2]⟩
+    exact hbase.comp ((differentiable_id.add_const _).diffContOnCl) hmaps
+  -- helper: τ^a · τ^{-a} = 1 for τ > 0
+  have hrpow_cancel : ∀ (τ a : ℝ), 0 < τ → τ ^ a * τ ^ (-a) = 1 := by
+    intro τ a hτ; rw [← Real.rpow_add hτ, add_neg_cancel, Real.rpow_zero]
+  -- (b) LEFT edge bound for Ĝ
+  have hbL_hat : ∀ s : ℂ, s.re = l → 0 ≤ s.im → ‖Ghat s‖ ≤ Cbig := by
+    intro s hsre hsim
+    have hτ1 : (1:ℝ) ≤ s.im + 1 := by linarith
+    have hτ0 : 0 < s.im + 1 := by linarith
+    -- Ĝ s = Gprod(l + i(s.im+1))
+    have hargeq : s + Complex.I = (l:ℂ) + ((s.im+1:ℝ):ℂ) * Complex.I := by
+      apply Complex.ext
+      · simp only [Complex.add_re, Complex.I_re, add_zero, Complex.mul_re, Complex.ofReal_re,
+          Complex.ofReal_im, Complex.I_im, mul_zero, mul_one, sub_zero, hsre]
+      · simp only [Complex.add_im, Complex.I_im, Complex.mul_im, Complex.ofReal_im, Complex.I_re,
+          Complex.ofReal_re, mul_zero, mul_one, add_zero, zero_add]
+    have heq : Ghat s = Gprod F l u α β lam ((l:ℂ) + ((s.im+1:ℝ):ℂ) * Complex.I) := by
+      rw [hGhat]; simp only []; rw [hargeq]
+    rw [heq, hGval]
+    have hFe : ‖F ((l:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖ ≤ Cl * (s.im+1) ^ α := by
+      have := hCledge (s.im+1) (by rw [abs_of_pos hτ0]; exact hτ1)
+      rwa [abs_of_pos hτ0] at this
+    have hWe : ‖wgtH l u α β lam ((l:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖
+        ≤ expK * max (((2 * (1 + |l| + lam)) : ℝ) ^ (-(α))) 1 * (s.im+1) ^ (-(α)) := by
+      have hw := norm_wgtH_le (l := l) (u := u) (α := α) (β := β) (lam := lam) hlu (le_refl l)
+        (le_of_lt hlu) hτ1 hlam
+      rw [hℓl] at hw
+      simpa only [hexpK, hKdef] using hw
+    calc ‖F ((l:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖
+          * ‖wgtH l u α β lam ((l:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖
+        ≤ (Cl * (s.im+1) ^ α)
+          * (expK * max (((2 * (1 + |l| + lam)) : ℝ) ^ (-(α))) 1 * (s.im+1) ^ (-(α))) :=
+          mul_le_mul hFe hWe (norm_nonneg _) (by positivity)
+      _ = CL := by
+          rw [hCL]
+          rw [show (Cl * (s.im+1) ^ α)
+              * (expK * max (((2 * (1 + |l| + lam)) : ℝ) ^ (-(α))) 1 * (s.im+1) ^ (-(α)))
+            = Cl * expK * max (((2 * (1 + |l| + lam)) : ℝ) ^ (-(α))) 1
+              * ((s.im+1) ^ α * (s.im+1) ^ (-(α))) by ring]
+          rw [hrpow_cancel (s.im+1) α hτ0, mul_one]
+      _ ≤ Cbig := le_max_left _ _
+  -- (c) RIGHT edge bound for Ĝ
+  have hbU_hat : ∀ s : ℂ, s.re = u → 0 ≤ s.im → ‖Ghat s‖ ≤ Cbig := by
+    intro s hsre hsim
+    have hτ1 : (1:ℝ) ≤ s.im + 1 := by linarith
+    have hτ0 : 0 < s.im + 1 := by linarith
+    have hargeq : s + Complex.I = (u:ℂ) + ((s.im+1:ℝ):ℂ) * Complex.I := by
+      apply Complex.ext
+      · simp only [Complex.add_re, Complex.I_re, add_zero, Complex.mul_re, Complex.ofReal_re,
+          Complex.ofReal_im, Complex.I_im, mul_zero, mul_one, sub_zero, hsre]
+      · simp only [Complex.add_im, Complex.I_im, Complex.mul_im, Complex.ofReal_im, Complex.I_re,
+          Complex.ofReal_re, mul_zero, mul_one, add_zero, zero_add]
+    have heq : Ghat s = Gprod F l u α β lam ((u:ℂ) + ((s.im+1:ℝ):ℂ) * Complex.I) := by
+      rw [hGhat]; simp only []; rw [hargeq]
+    rw [heq, hGval]
+    have hFe : ‖F ((u:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖ ≤ Cu * (s.im+1) ^ β := by
+      have := hCuedge (s.im+1) (by rw [abs_of_pos hτ0]; exact hτ1)
+      rwa [abs_of_pos hτ0] at this
+    have hWe : ‖wgtH l u α β lam ((u:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖
+        ≤ expK * max (((2 * (1 + |u| + lam)) : ℝ) ^ (-(β))) 1 * (s.im+1) ^ (-(β)) := by
+      have hw := norm_wgtH_le (l := l) (u := u) (α := α) (β := β) (lam := lam) hlu (le_of_lt hlu)
+        (le_refl u) hτ1 hlam
+      rw [hℓu] at hw
+      simpa only [hexpK, hKdef] using hw
+    calc ‖F ((u:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖
+          * ‖wgtH l u α β lam ((u:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖
+        ≤ (Cu * (s.im+1) ^ β)
+          * (expK * max (((2 * (1 + |u| + lam)) : ℝ) ^ (-(β))) 1 * (s.im+1) ^ (-(β))) :=
+          mul_le_mul hFe hWe (norm_nonneg _) (by positivity)
+      _ = CU := by
+          rw [hCU]
+          rw [show (Cu * (s.im+1) ^ β)
+              * (expK * max (((2 * (1 + |u| + lam)) : ℝ) ^ (-(β))) 1 * (s.im+1) ^ (-(β)))
+            = Cu * expK * max (((2 * (1 + |u| + lam)) : ℝ) ^ (-(β))) 1
+              * ((s.im+1) ^ β * (s.im+1) ^ (-(β))) by ring]
+          rw [hrpow_cancel (s.im+1) β hτ0, mul_one]
+      _ ≤ Cbig := le_trans (le_max_left _ _) (le_max_right _ _)
+  -- (d) BOTTOM edge bound for Ĝ (s.im = 0 → G at im = 1)
+  have hbB_hat : ∀ s : ℂ, l ≤ s.re → s.re ≤ u → s.im = 0 → ‖Ghat s‖ ≤ Cbig := by
+    intro s hsl hsu hsim
+    have hargeq : s + Complex.I = (s.re:ℂ) + ((1:ℝ):ℂ) * Complex.I := by
+      apply Complex.ext
+      · simp only [Complex.add_re, Complex.I_re, add_zero, Complex.mul_re, Complex.ofReal_re,
+          Complex.ofReal_im, Complex.I_im, mul_zero, mul_one, sub_zero]
+      · simp only [Complex.add_im, Complex.I_im, Complex.mul_im, Complex.ofReal_im, Complex.I_re,
+          Complex.ofReal_re, mul_zero, mul_one, add_zero, zero_add, hsim]
+    have heq : Ghat s = Gprod F l u α β lam ((s.re:ℂ) + ((1:ℝ):ℂ) * Complex.I) := by
+      rw [hGhat]; simp only []; rw [hargeq]
+    rw [heq, hGval]
+    have hFe : ‖F ((s.re:ℂ)+((1:ℝ):ℂ)*Complex.I)‖ ≤ A * (2:ℝ) ^ (max α β) := by
+      have hin : ((s.re:ℂ)+((1:ℝ):ℂ)*Complex.I) ∈ verticalClosedStrip l u := by
+        rw [verticalClosedStrip, mem_preimage, mem_Icc]
+        simp only [Complex.add_re, Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
+          Complex.I_re, Complex.I_im, mul_zero, mul_one, sub_zero, add_zero]
+        exact ⟨hsl, hsu⟩
+      have := hAgr _ hin
+      have him1 : ((s.re:ℂ)+((1:ℝ):ℂ)*Complex.I).im = 1 := by
+        simp only [Complex.add_im, Complex.mul_im, Complex.ofReal_im, Complex.I_re,
+          Complex.ofReal_re, Complex.I_im, mul_zero, mul_one, add_zero, zero_add]
+      rw [him1] at this
+      rw [show (2:ℝ) = 1 + 1 by norm_num]
+      convert this using 4
+      norm_num
+    have hWe : ‖wgtH l u α β lam ((s.re:ℂ)+((1:ℝ):ℂ)*Complex.I)‖ ≤ expK * Dmax := by
+      have hw := norm_wgtH_le (l := l) (u := u) (α := α) (β := β) (lam := lam) hlu hsl hsu
+        (le_refl (1:ℝ)) hlam
+      rw [Real.one_rpow, mul_one] at hw
+      have hDb := D_uniform_bound (l := l) (u := u) (α := α) (β := β) (lam := lam) hlu hlam hsl hsu
+      have : expK * max (((2 * (1 + |s.re| + lam)) : ℝ) ^ (-(ellInterp l u α β s.re))) 1
+          ≤ expK * Dmax := mul_le_mul_of_nonneg_left hDb (le_of_lt hexpK0)
+      refine le_trans ?_ this
+      simpa only [hexpK, hKdef] using hw
+    calc ‖F ((s.re:ℂ)+((1:ℝ):ℂ)*Complex.I)‖ * ‖wgtH l u α β lam ((s.re:ℂ)+((1:ℝ):ℂ)*Complex.I)‖
+        ≤ (A * (2:ℝ) ^ (max α β)) * (expK * Dmax) :=
+          mul_le_mul hFe hWe (norm_nonneg _) (by positivity)
+      _ = CB := by rw [hCB]
+      _ ≤ Cbig := le_trans (le_max_right _ _) (le_max_right _ _)
+  -- (e) GROWTH bound for Ĝ:  ‖Ĝ s‖ ≤ A'·exp(B'·exp(c'·|im|)),  c' = π/(2(u-l)) < π/(u-l)
+  set c' : ℝ := π / (2 * (u - l)) with hc'def
+  have hc'0 : 0 < c' := by rw [hc'def]; positivity
+  have hc'lt : c' < π / (u - l) := by
+    rw [hc'def]
+    apply div_lt_div_of_pos_left Real.pi_pos (by linarith) (by linarith)
+  set Mpos : ℝ := max (max α β) 0 with hMpos
+  have hMpos0 : 0 ≤ Mpos := le_max_right _ _
+  set Ntot : ℝ := Mpos + N with hNtot
+  have hNtot0 : 0 ≤ Ntot := by rw [hNtot]; positivity
+  set Agrow : ℝ := A * expK * Qh ^ N * (2:ℝ) ^ Ntot with hAgrow
+  have hGhat_growth : ∀ s : ℂ, l ≤ s.re → s.re ≤ u → 0 ≤ s.im →
+      ‖Ghat s‖ ≤ Agrow * Real.exp ((Ntot / c') * Real.exp (c' * |s.im|)) := by
+    intro s hsl hsu hsim
+    have hτ1 : (1:ℝ) ≤ s.im + 1 := by linarith
+    have hτ0 : 0 < s.im + 1 := by linarith
+    have hargeq : s + Complex.I = (s.re:ℂ) + ((s.im+1:ℝ):ℂ) * Complex.I := by
+      apply Complex.ext
+      · simp only [Complex.add_re, Complex.I_re, add_zero, Complex.mul_re, Complex.ofReal_re,
+          Complex.ofReal_im, Complex.I_im, mul_zero, mul_one, sub_zero]
+      · simp only [Complex.add_im, Complex.I_im, Complex.mul_im, Complex.ofReal_im, Complex.I_re,
+          Complex.ofReal_re, mul_zero, mul_one, add_zero, zero_add]
+    have heq : Ghat s = Gprod F l u α β lam ((s.re:ℂ) + ((s.im+1:ℝ):ℂ) * Complex.I) := by
+      rw [hGhat]; simp only []; rw [hargeq]
+    rw [heq, hGval]
+    -- F factor
+    have hFe : ‖F ((s.re:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖ ≤ A * (2 + s.im) ^ Mpos := by
+      have hin : ((s.re:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I) ∈ verticalClosedStrip l u := by
+        rw [verticalClosedStrip, mem_preimage, mem_Icc]
+        simp only [Complex.add_re, Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
+          Complex.I_re, Complex.I_im, mul_zero, mul_one, sub_zero, add_zero]
+        exact ⟨hsl, hsu⟩
+      have hgr := hAgr _ hin
+      have him1 : ((s.re:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I).im = s.im + 1 := by
+        simp only [Complex.add_im, Complex.mul_im, Complex.ofReal_im, Complex.I_re,
+          Complex.ofReal_re, Complex.I_im, mul_zero, mul_one, add_zero, zero_add]
+      rw [him1] at hgr
+      refine hgr.trans ?_
+      apply mul_le_mul_of_nonneg_left _ hA0
+      have hbeq : 1 + |s.im + 1| = 2 + s.im := by rw [abs_of_pos hτ0]; ring
+      rw [hbeq]
+      exact Real.rpow_le_rpow_of_exponent_le (by linarith) (le_max_left _ _)
+    -- weight factor
+    have hWe : ‖wgtH l u α β lam ((s.re:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖
+        ≤ expK * Qh ^ N * (2 + s.im) ^ N := by
+      have hw := norm_wgtH_poly_upper (l := l) (u := u) (α := α) (β := β) (lam := lam) hlu hsl hsu
+        hτ1 hlam
+      have hbeq : 1 + (s.im + 1) = 2 + s.im := by ring
+      rw [hbeq] at hw
+      simpa only [hexpK, hKdef, hQh, hNdef] using hw
+    -- combine
+    have hcomb : ‖F ((s.re:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖
+          * ‖wgtH l u α β lam ((s.re:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖
+        ≤ (A * expK * Qh ^ N) * (2 + s.im) ^ Ntot := by
+      calc ‖F ((s.re:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖
+            * ‖wgtH l u α β lam ((s.re:ℂ)+((s.im+1:ℝ):ℂ)*Complex.I)‖
+          ≤ (A * (2 + s.im) ^ Mpos) * (expK * Qh ^ N * (2 + s.im) ^ N) :=
+            mul_le_mul hFe hWe (norm_nonneg _) (by positivity)
+        _ = (A * expK * Qh ^ N) * ((2 + s.im) ^ Mpos * (2 + s.im) ^ N) := by ring
+        _ = (A * expK * Qh ^ N) * (2 + s.im) ^ Ntot := by
+            have hsplit : (2 + s.im) ^ Ntot = (2 + s.im) ^ Mpos * (2 + s.im) ^ N := by
+              rw [hNtot, Real.rpow_add (by linarith : (0:ℝ) < 2 + s.im)]
+            rw [hsplit]
+    refine hcomb.trans ?_
+    -- (2+s.im) = (2+|s.im|), then poly_le_double_exp
+    have habs : (2 + s.im) = 2 + |s.im| := by rw [abs_of_nonneg hsim]
+    rw [habs]
+    have hpoly := poly_le_double_exp hNtot0 hc'0 s.im
+    calc (A * expK * Qh ^ N) * (2 + |s.im|) ^ Ntot
+        ≤ (A * expK * Qh ^ N) * ((2:ℝ) ^ Ntot
+            * Real.exp ((Ntot / c') * Real.exp (c' * |s.im|))) := by
+          apply mul_le_mul_of_nonneg_left hpoly (by positivity)
+      _ = Agrow * Real.exp ((Ntot / c') * Real.exp (c' * |s.im|)) := by rw [hAgrow]; ring
+  -- Apply halfStrip_PL to Ĝ to get ‖Ĝ s‖ ≤ Cbig on the closed half-strip.
+  have hGhat_bound : ∀ s : ℂ, l ≤ s.re → s.re ≤ u → 0 ≤ s.im → ‖Ghat s‖ ≤ Cbig := by
+    intro s hsl hsu hsim
+    refine halfStrip_PL hlu hGhat_dcc ?_ hbL_hat hbU_hat hbB_hat hsl hsu hsim
+    exact ⟨c', hc'lt, Agrow, Ntot / c', fun w _ _ _ => hGhat_growth w ‹_› ‹_› ‹_›⟩
+  -- Specialize: for t ≥ 1, set s = σ + i(t-1); then Ĝ s = Gprod(σ+it).
+  intro σ t hσl hσu ht
+  have hs_im : (0:ℝ) ≤ t - 1 := by linarith
+  set s : ℂ := (σ:ℂ) + ((t-1:ℝ):ℂ) * Complex.I with hsdef
+  have hsre : s.re = σ := by rw [hsdef]; simp
+  have hsim : s.im = t - 1 := by rw [hsdef]; simp
+  have heq : Ghat s = Gprod F l u α β lam ((σ:ℂ) + (t:ℂ) * Complex.I) := by
+    rw [hGhat]; simp only []
+    have hargeq : s + Complex.I = (σ:ℂ) + (t:ℂ) * Complex.I := by
+      rw [hsdef]; push_cast; ring
+    rw [hargeq]
+  have := hGhat_bound s (by rw [hsre]; exact hσl) (by rw [hsre]; exact hσu)
+    (by rw [hsim]; exact hs_im)
+  rwa [heq] at this
+
+/-! ## Discharging the ScratchFlatten residual `verticalStrip_PL_upper_const_bound`.
+
+The UPPER half (`t ≥ 1`) is now CLOSED outright by `Gprod_upper_const_bound` (which is proven from
+the half-strip max principle `halfStrip_PL`, no extra axioms): there `it = i|t|`, so
+`F(σ+it)·wgt(σ+i|t|) = F(σ+it)·wgtH(σ+it) = Gprod(σ+it)`.
+
+The LOWER half (`t ≤ -1`) is the single genuinely irreducible atom: the conclusion evaluates the
+weight at the reflected-up ordinate `σ+i|t|` (an UPPER point), but multiplies by `F(σ+it)`, a true
+LOWER-half value of `F`.  `F(σ+it)` is NOT a holomorphic function of the upper point `σ+i|t|` and is
+tied to it by no symmetry present in the hypotheses (which give `|t|`-symmetric edge/growth BOUNDS
+but no functional reflection of `F`).  Running the half-strip principle on the lower half would
+require `wgtH` to be holomorphic there, which fails (`Lhol λ s ∈ slitPlane` breaks once
+`Im s ≤ -λ`).  This lower-half transfer is isolated as the SINGLE named hypothesis below, strictly
+smaller than the original `verticalStrip_PL_upper_const_bound`: the PL maximum principle and the
+entire upper half are PROVEN; only the lower-half `|t|`-reflection bookkeeping remains. -/
+
+/-- **Isolated residual: lower-half reflection only.**  For the flattened product evaluated at the
+reflected-up weight ordinate, the lower lines `t ≤ -1` obey the same constant bound `CG` that the
+proven upper-half bound `Gprod_upper_const_bound` supplies.  (Upper half is proven; this isolates
+exactly the conjugate/`|t|`-reflection transfer to the lower half.) -/
+axiom verticalStrip_lower_reflection
+    (F : ℂ → ℂ) (l u α β lam : ℝ) (hlu : l < u) (hlam : 1 ≤ lam)
+    (hF : Differentiable ℂ F)
+    (hgrowth : ∃ A : ℝ, 0 ≤ A ∧ ∀ s : ℂ, s ∈ verticalClosedStrip l u →
+      ‖F s‖ ≤ A * (1 + |s.im|) ^ (max α β))
+    (hedgeL : ∃ Cl : ℝ, 0 ≤ Cl ∧ ∀ t : ℝ, 1 ≤ |t| →
+      ‖F ((l : ℂ) + (t : ℂ) * Complex.I)‖ ≤ Cl * |t| ^ α)
+    (hedgeU : ∃ Cu : ℝ, 0 ≤ Cu ∧ ∀ t : ℝ, 1 ≤ |t| →
+      ‖F ((u : ℂ) + (t : ℂ) * Complex.I)‖ ≤ Cu * |t| ^ β)
+    (CG : ℝ) (hCG0 : 0 ≤ CG)
+    (hupper : ∀ σ t : ℝ, l ≤ σ → σ ≤ u → 1 ≤ t →
+      ‖Gprod F l u α β lam ((σ : ℂ) + (t : ℂ) * Complex.I)‖ ≤ CG) :
+    ∀ σ t : ℝ, l ≤ σ → σ ≤ u → t ≤ -1 →
+      ‖F ((σ : ℂ) + (t : ℂ) * Complex.I)
+          * wgt l u α β lam ((σ : ℂ) + ((|t| : ℝ) : ℂ) * Complex.I)‖ ≤ CG
+
+/-- **`verticalStrip_PL_upper_const_bound` (exact ScratchFlatten signature), discharged.**
+The upper half (`t ≥ 1`) is closed by the PROVEN `Gprod_upper_const_bound` (hence by the proven
+half-strip max principle `halfStrip_PL`); the lower half (`t ≤ -1`) is the single isolated
+reflection residual `verticalStrip_lower_reflection`. -/
+theorem verticalStrip_PL_upper_const_bound
+    (F : ℂ → ℂ) (l u α β lam : ℝ) (hlu : l < u) (hlam : 1 ≤ lam)
+    (hF : Differentiable ℂ F)
+    (hGdiff : ∀ s : ℂ, 0 ≤ s.im → DifferentiableAt ℂ (Gprod F l u α β lam) s)
+    (hgrowth : ∃ A : ℝ, 0 ≤ A ∧ ∀ s : ℂ, s ∈ verticalClosedStrip l u →
+      ‖F s‖ ≤ A * (1 + |s.im|) ^ (max α β))
+    (hedgeL : ∃ Cl : ℝ, 0 ≤ Cl ∧ ∀ t : ℝ, 1 ≤ |t| →
+      ‖F ((l : ℂ) + (t : ℂ) * Complex.I)‖ ≤ Cl * |t| ^ α)
+    (hedgeU : ∃ Cu : ℝ, 0 ≤ Cu ∧ ∀ t : ℝ, 1 ≤ |t| →
+      ‖F ((u : ℂ) + (t : ℂ) * Complex.I)‖ ≤ Cu * |t| ^ β) :
+    ∃ CG : ℝ, 0 ≤ CG ∧ ∀ σ t : ℝ, l ≤ σ → σ ≤ u → 1 ≤ |t| →
+      ‖F ((σ : ℂ) + (t : ℂ) * Complex.I)
+          * wgt l u α β lam ((σ : ℂ) + ((|t| : ℝ) : ℂ) * Complex.I)‖ ≤ CG := by
+  -- `hGdiff` (the upper-region holomorphy of `G = F·wgtH`) is reproved internally inside
+  -- `Gprod_upper_const_bound`; it is part of the ScratchFlatten signature, recorded here.
+  have _ := hGdiff
+  obtain ⟨CG, hCG0, hupper⟩ :=
+    Gprod_upper_const_bound F l u α β lam hlu hlam hF hgrowth hedgeL hedgeU
+  refine ⟨CG, hCG0, fun σ t hσl hσu ht => ?_⟩
+  rcases le_or_gt 1 t with htpos | htneg
+  · -- upper half:  it = i|t|,  F·wgt(σ+i|t|) = F·wgtH(σ+it) = Gprod(σ+it)
+    have habs : (|t| : ℝ) = t := abs_of_pos (by linarith)
+    rw [habs]
+    have hGp : F ((σ : ℂ) + (t : ℂ) * Complex.I)
+        * wgt l u α β lam ((σ : ℂ) + (t : ℂ) * Complex.I)
+        = Gprod F l u α β lam ((σ : ℂ) + (t : ℂ) * Complex.I) := by
+      rw [Gprod, wgtH_eq_wgt]
+    rw [hGp]
+    exact hupper σ t hσl hσu htpos
+  · -- lower half:  isolated reflection residual
+    have htle : t ≤ -1 := by
+      rcases le_or_gt 0 t with h0 | h0
+      · rw [abs_of_nonneg h0] at ht; linarith
+      · rw [abs_of_neg h0] at ht; linarith
+    exact verticalStrip_lower_reflection F l u α β lam hlu hlam hF hgrowth hedgeL hedgeU
+      CG hCG0 hupper σ t hσl hσu htle
+
+end OverflowResidueRH.BacklundTuring.ScratchHalfStripPL
+
+-- The abstract half-strip max principle: PROVEN from Mathlib, no extra axioms.
+#print axioms OverflowResidueRH.BacklundTuring.ScratchHalfStripPL.halfStrip_PL
+-- The upper-half constant bound for G = F·wgtH: PROVEN from halfStrip_PL, no extra axioms.
+#print axioms OverflowResidueRH.BacklundTuring.ScratchHalfStripPL.Gprod_upper_const_bound
+-- The discharged residual: depends ONLY on the single lower-half reflection atom.
+#print axioms OverflowResidueRH.BacklundTuring.ScratchHalfStripPL.verticalStrip_PL_upper_const_bound

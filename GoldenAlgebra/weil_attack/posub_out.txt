@@ -1,0 +1,27 @@
+=== (a)/(b) NEGATIVE EIGENSPACE OF Q_T vs T (obstruction dimension & flow) ===
+     T  dim_neg        min_eig        2nd_eig
+ 0.700        0   0.000000e+00   2.021187e-05
+ 0.800        0   0.000000e+00   1.335906e-06
+ 0.950        0   0.000000e+00   1.346094e-06
+ 1.100        0   0.000000e+00   9.097799e-07
+ 1.390        0   0.000000e+00   9.817888e-07
+ 1.610        0   0.000000e+00   5.312776e-07
+ 1.950        0   0.000000e+00   5.603706e-10
+ 2.300        0   0.000000e+00  -4.968910e-12
+ 2.710        1  -4.763131e-10   8.602856e-15
+ 3.000        1  -1.321695e-10  -9.835281e-18
+  (log2=0.693 log3=1.099 log4=1.386 log5=1.609 log7=1.946 log8=2.079 log9=2.197 log11=2.398)
+
+=== (c) DAVENPORT-HEILBRONN SPECTRAL CONTRAST ===
+  DH model g0(s)=1-2*2^{-s}+3^{-s}: c(2)=-1.3863 (NONZERO at log2; sign-indefinite, all n)
+  smallest log n with nonzero DH coeff: log2 = 0.69315
+  DH coeffs present at n: [2, 3, 4, 6, 8, 9, 12, 16, 18, 24] ... (ALL n, not just primes)
+
+       T   zeta_min_eig zeta_nneg  |     DH_min_eig  DH_nneg
+   0.400   2.699103e-02         0  |   2.699103e-02        0
+   0.550   6.981213e-04         0  |   2.580625e-03        0
+   0.650   3.576982e-05         0  |  -7.609151e-01        2
+   0.690   6.029847e-06         0  |  -1.040299e+00        2
+
+  => DH shows NEGATIVE eigenvalues already BELOW log2 (no empty-prime cone);
+     zeta stays >=0 (Yoshida) until log2. That is the invariant signature.

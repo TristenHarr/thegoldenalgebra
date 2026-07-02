@@ -18,3 +18,153 @@ name = "GoldenAlgebra"
 
 [[lean_lib]]
 name = "rh"
+
+# Consolidated convexity-tower sub-chain (HalfStripPL + Flatten merged, seam discharged
+# in-file as a theorem rather than a transplant axiom).  Importable as a library module so
+# downstream consolidations (SharpPL, Convexity, CountWiring) can `import RHConvexityTower`
+# and reuse `phragmenLindelof_flatten` as a PROVEN theorem instead of re-axiomatizing it.
+# Kept OUT of defaultTargets so routine `lake build` is not slowed.
+[[lean_lib]]
+name = "RHConvexityTower"
+
+# SEAM 2: imports RHConvexityTower, deletes the `phragmenLindelof_flatten` transplant axiom,
+# proves `tWeightedPL_linear_sharp` from the imported PL-flatten THEOREM + proven unwind.
+[[lean_lib]]
+name = "RHSharpPL"
+
+# SEAM 3: imports RHSharpPL, deletes the `tWeightedPL_linear_sharp` transplant axiom,
+# proves `tWeightedPL_zeta_convexity` from the imported sharp-PL THEOREM + ζ edge data.
+[[lean_lib]]
+name = "RHConvexityWire"
+
+# SEAM 4: imports RHConvexityWire, deletes the `zeta_convexity_bound` transplant axiom,
+# proves `backlund_subconvex_sign_count_proven` from the imported convexity bound +
+# the genuine residuals (nbhd convexity, Backlund good-height value).
+[[lean_lib]]
+name = "RHCountWiring"
+
+# AGGREGATOR: imports RHCountWiring, re-audits the endpoint across all four boundaries.
+[[lean_lib]]
+name = "RHConvexityChain"
+
+# META-QUESTION (DH vs ζ): the minimal arithmetic positivity axiom P and the
+# Euler-product → Herglotz transfer factorisation. Interface-only, axiom-clean.
+[[lean_lib]]
+name = "ScratchArithmeticTransfer"
+
+# BOLD-TWIST: Nyman–Beurling / Báez-Duarte (approximation-theory) RH criterion brought into
+# the displacement framework. Proves the off-line signal exp(2η·log N) and the verdict that
+# BD's displacement-visibility gate is the SAME δ·T~1 universal wall (T_BD = log N) as Weil.
+[[lean_lib]]
+name = "ScratchBaezDuarte"
+
+# KERNEL-WEIGHTED DENSITY: sharpens the zero-density → anti-Herglotz bridge by pushing the
+# Guth–Maynard density into the EXACT Ξ'/Ξ log-derivative kernel K_z(η,γ) (not a uniform
+# count). Proves the exact kernel decay (η² in displacement, γ⁻⁴ in height; majorant
+# |K_z|≤12y·η²/(γ²+y²)²) and banks kernelWeightedAntiHerglotz_of_modernDensity. Axiom-clean.
+[[lean_lib]]
+name = "ScratchKernelDensity"
+
+# KERNEL SIGN REGION: an UNCONDITIONAL (RH-free) partial anti-Herglotz region on the imaginary
+# axis. Uses the EXACT kernel K_z(η,γ) SIGN STRUCTURE (not |K|): each off-line zero's NEGATIVE
+# kernel penalty (high zeros γ>γ*=y/√3) is TERMWISE dominated by that same zero's on-line
+# reference reservoir 4y/(γ²+y²), because the kernel decays γ⁻⁴ vs the reference γ⁻², η²≤¼,
+# and γ²+y²≥γ₁²≈199.8≫¾. Banks netContribution_nonneg (every per-zero contribution ≥0 at every
+# height, no RH, no density) + the Guth–Maynard scale-uniform negative budget. Axiom-clean.
+[[lean_lib]]
+name = "ScratchKernelRegion"
+
+# SIGNED KERNEL OFF-AXIS REGION: an UNCONDITIONAL (RH-free) anti-Herglotz region OFF the imaginary
+# axis (the prior ScratchKernelRegion was the TRIVIAL x=0 axis, far from all zeros). Generalizes the
+# exact kernel to x≠0: K_z(η,γ) = k(η,γ+x) + k(η,γ−x) factors into two MIRROR nets at shifted
+# ordinates a=γ±x, each with the CLEAN closed form mirrorNet y η a = 2y(a²+y²−η²)/[((y−η)²+a²)((y+η)²+a²)],
+# sign = sign(a²+y²−η²) ≥ 0 whenever y≥|η|. Banks antiHerglotz_offAxisRegion on R={y≥½} (every per-zero
+# net ≥0 for ALL x including x=γ directly under the zero, by the kernel SIGN not |K|), the HELP/HURT
+# sign-map (mirrorNet_neg_below_zero: net<0 only when probed from BELOW a zero, y<η), the NONTRIVIALITY
+# witness (offAxisRegion_reaches_near_zeros: R reaches Euclidean distance δ→0 of an off-line zero, safe
+# by SIGN not distance), and the Guth–Maynard scale-uniform tail budget. Axiom-clean.
+[[lean_lib]]
+name = "ScratchSignedKernelRegion"
+
+# RESOLUTION THEORY: the organizing mathematics of the δT~1 displacement-visibility campaign.
+# Defines DisplacementResolutionProfile (the universal two-regime detector shape), proves the
+# exact cosh uncertainty law (cosh(δT)−1 ≤ (δT)²cosh(δT); ½(δT)² ≤ cosh(δT)−1 above the gate),
+# fits all four criterion families (Weil/BD/heat-flow/Li) to the profile with the SAME
+# reciprocal gate δ·T≍1, and banks RH_needs_unbounded_resolution. Axiom-clean.
+[[lean_lib]]
+name = "ScratchResolutionTheory"
+
+# SECOND MOMENT: the squared (second-moment) Weil off-line displacement detector. Proves the
+# squared uncertainty law ((cosh(δT)−1)² ≤ (δT)⁴cosh(δT)²; ¼(δT)⁴ ≤ (cosh(δT)−1)² above the
+# gate) by squaring the first-moment law, fits R₂=(cosh(δT)−1)² to the resolution profile with
+# exponent p=4 and the SAME gate δ·T≍1, and banks secondMoment_same_gate (squaring keeps the
+# wall, steepens blindness 2→4). Verdict: squaring keeps the signal but is strictly worse below
+# the gate; pair-correlation gives only wrong-direction upper bounds. Axiom-clean.
+[[lean_lib]]
+name = "ScratchSecondMoment"
+
+# CONVEX VARIATIONAL PRINCIPLE verdict: tests whether the Riemann zero measure minimizes a
+# CONVEX transport/entropy functional uniquely at the axis. Proves the Weil displacement block
+# is CONCAVE at the axis (aγ²>½) and UNBOUNDED BELOW (no minimizer); the dBN/Coulomb log-energy
+# is minimized OFF-line (axis = +∞ max); states EulerProductVariationalPrinciple (unproven,
+# flagged) and proves F_minimized_at_axis_imp_RH for the convex baseline. Axiom-clean.
+[[lean_lib]]
+name = "ScratchVariational"
+
+# DISPLACEMENT-ENERGY MOMENT: the unconditional 2nd-moment bound Sum_{gamma<=T} eta^2 from a
+# zero-density estimate via layer-cake. Names Selberg (1946) N(sigma,T)<<T^{1-(sigma-1/2)/4}logT,
+# proves displacementEnergyMoment_of_zeroDensity (Sum eta^2 <= 2 Int_0^{1/2} u N_off du ~ 64 T/logT,
+# mean-square ~1/log^2 T -> 0), shows mollifier PROPORTION theorems (Levinson/Conrey/PRZZ) do NOT
+# beat the moment EXPONENT (their trivial budget is order T logT), and banks the kernel-weighted
+# (gamma^-4) T-UNIFORM averaged anti-Herglotz error. RH never assumed. Axiom-clean.
+[[lean_lib]]
+name = "ScratchDisplacementMoment"
+
+# DISPLACEMENT-MOMENT FAMILY: the general-p unconditional bound Sum_{gamma<=T} |eta|^p
+# << K_p T/(log T)^{p-1}, K_p = 2 p! 4^p, from the SAME Selberg (1946) density via the
+# general-p layer-cake |eta|^p = p Int_0^{|eta|} u^{p-1} du. Proves displacementMomentP_of_zeroDensity
+# (whole family p>=1), the closed-form familyEnvelope (K_1=8,K_2=64,K_3=768,K_4=12288), the
+# log-decay monotonicity (each +1 in p buys one 1/log T), and the KERNEL-OPTIMAL verdict:
+# kernel is O(eta^2) so slivConst_2 = 1 (no sliver cost) and at eps~1/logT the eps^{2-p} prefactor
+# cancels the (log T)^{-(p-1)} gain (kernelSliver_logPower_p_independent) => p=2 is optimal.
+# RH never assumed. Axiom-clean.
+[[lean_lib]]
+name = "ScratchDisplacementMomentFamily"
+
+# SHARPENING of the displacement 2nd-moment: replaces Selberg's near-line decay rate theta=1/8
+# (N(1/2+u,T)<<T^{1-2 theta u} logT) by the SHARPEST unconditional Jutila-Conrey rate theta<4/7.
+# Same EXACT layer-cake, larger theta => envelope CONSTANT 1/theta^2 drops 64 (Selberg) -> 49/16
+# (Conrey), a ~20.9x improvement (displacementEnergyMoment_of_conreyDensity, conreyEnvelopeConst_lt_selberg).
+# The ORDER T/log T is CERTIFIED a barrier: logPowerMomentEnvelope = (1/theta^2) T (log T)^{k-2} with
+# k the near-line density log-power; every known near-line estimate has k=1 (local density logT). Only a
+# log-free near-line density (k=0, known only for sigma>~0.985, Bellotti 2024) would give T/(log T)^2
+# (logFreeWouldBeatOrder). Cites Selberg 1946, Jutila 1977, Conrey 1989, Bellotti 2024, GM 2024, TTY 2025.
+# RH never assumed. Axiom-clean.
+[[lean_lib]]
+name = "ScratchDisplacementMomentSharp"
+
+# TOP-EDGE MOMENT (the hard region 0<Y<1/2): controls the max-principle TOP EDGE
+# G(x+iY)>=0 BELOW y=1/2 with the unconditional displacement moment Sum eta^2<<T/log T.
+# Proves the EXACT damage geometry mirrorNet<0 iff a^2<eta^2-Y^2 (sliver half-width
+# damageWidth=sqrt(eta^2-Y^2)), the moment-feeding key sqrt(eta^2-Y^2)<=eta^2/Y (eta>Y),
+# and the sparse-exceptional measure bound |E_Y(T)|<=128 T/(Y log T) = (2/Y)*moment envelope.
+# Banks the DENSITY-ZERO nonvacuity (exceptional fraction 128/(Y log T)->0, density-1 set of x)
+# AND the honest crossover (fraction<1 only past T>exp(128/Y) ~ 10^124..10^1112: vacuous at every
+# verifiable height, real only asymptotically). x-average is exactly 0 (residue jump) => density,
+# not clean integral. RH never assumed. Axiom-clean. (top_edge_moment.py)
+[[lean_lib]]
+name = "ScratchTopEdgeMoment"
+
+# AVERAGED SIGN LAW (the human-height upgrade of the top-edge defect): replaces the
+# prior raw-MEASURE bound meas{G(.+iY)<0}<=128 T/(Y log T) (vacuous past 10^124) with
+# a NEGATIVE-PART integral bound int_0^T (G(x+iY))_- dx <= pi * N_off(Y,T). Route C
+# (neg-part via COUNT, not measure via 2nd moment) removes the killer 1/Y: per-zero
+# neg-part mass perZeroNegMass Y eta = -2 atan(w/2Y)+2 atan((Y^2+eta^2)/(Y w)) is < pi
+# for EVERY off-line zero (no 1/Y). With Conrey rate theta=4/7 count N_off<=2T^{1-8Y/7}logT,
+# the defect DENSITY (1/T)int(G)_- <= 2pi T^{-8Y/7} logT is < 1 (NONVACUOUS) at HUMAN/
+# verified heights: Y>=0.29 at T=1e6, Y>=0.17 at T=1e12. Honest barrier: the exp(O(1)/(theta Y))
+# Y->0 blowup is intrinsic (per-zero defect Omega(1), perZeroNegMass->pi); only the CONSTANT
+# (128->2pi, Selberg->Conrey) is improvable. RH never assumed. Axiom-clean.
+# (averaged_sign_law.py, poisson_lift.py, crossover_final.py, route_c_values.py, task5_detection.py)
+[[lean_lib]]
+name = "ScratchAveragedSignLaw"

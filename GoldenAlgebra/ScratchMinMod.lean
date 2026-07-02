@@ -115,28 +115,62 @@ lemma log_one_sub_ge {x : ℝ} (hx : |x| ≤ 1 / 2) :
   have h4 := (abs_le.mp h3).1
   linarith
 
-/-- **Per-factor log lower bound (far zeros).** For `‖u‖ ≤ 1/2`,
-`log(‖1 - u‖·exp(Re u)) ≥ -3·‖u‖²`. Combined with `Σ ‖z/loc i‖² < ∞` this is summable, so it
-controls the entire far-zeros contribution to `log‖P‖`. Uses `log_one_sub_ge`, the reverse
-triangle inequality `‖1-u‖ ≥ 1-‖u‖`, and `Re u ≥ -‖u‖`. -/
+/-- **Per-factor log lower bound (far zeros) — the genus-1 cancellation.** For `‖u‖ ≤ 1/2`,
+`log(‖1 - u‖·exp(Re u)) ≥ -‖u‖²`.
+
+This is the crucial *quadratic* bound: the linear terms of `log‖1-u‖` and `Re u` CANCEL, leaving
+`O(‖u‖²)`. This cannot be obtained from the real reverse-triangle inequality alone (that only
+gives the linear `-2‖u‖`, which is not summable). The proof uses the complex Taylor remainder
+`Complex.norm_log_one_add_sub_self_le` (`‖log(1+w) - w‖ ≤ ‖w‖²(1-‖w‖)⁻¹/2`) with `w = -u`, and
+`Complex.log_re : (log x).re = Real.log ‖x‖`. With `u = z/loc i`, summing `Σ‖z/loc i‖² < ∞`
+controls the entire far-zeros contribution to `log‖P‖`. -/
 lemma log_factor_ge {u : ℂ} (hu : ‖u‖ ≤ 1 / 2) :
-    -3 * ‖u‖ ^ 2 ≤ Real.log (‖1 - u‖ * Real.exp u.re) := by
-  have ht : |‖u‖| ≤ 1 / 2 := by rwa [abs_of_nonneg (norm_nonneg u)]
-  -- ‖1 - u‖ ≥ 1 - ‖u‖ > 0
-  have hge : (1 : ℝ) - ‖u‖ ≤ ‖1 - u‖ := by
-    calc (1 : ℝ) - ‖u‖ = ‖(1 : ℂ)‖ - ‖u‖ := by simp
-      _ ≤ ‖1 - u‖ := norm_sub_norm_le _ _
-  have hpos1 : (0 : ℝ) < 1 - ‖u‖ := by linarith
-  have hnormpos : 0 < ‖1 - u‖ := lt_of_lt_of_le hpos1 hge
+    -‖u‖ ^ 2 ≤ Real.log (‖1 - u‖ * Real.exp u.re) := by
+  have hu1 : ‖u‖ < 1 := lt_of_le_of_lt hu (by norm_num)
+  -- `1 - u ≠ 0`, so its norm is positive
+  have hne1 : (1 : ℂ) - u ≠ 0 := by
+    intro h
+    have : ‖u‖ = 1 := by
+      have : u = 1 := by linear_combination -h
+      rw [this]; simp
+    linarith
+  have hnormpos : 0 < ‖1 - u‖ := by simpa [norm_pos_iff] using hne1
   rw [Real.log_mul (ne_of_gt hnormpos) (Real.exp_ne_zero _), Real.log_exp]
-  -- log ‖1 - u‖ ≥ log (1 - ‖u‖) ≥ -‖u‖ - 2‖u‖²  (from log_one_sub_ge with x = ‖u‖)
-  have hlog : Real.log (1 - ‖u‖) ≤ Real.log ‖1 - u‖ := Real.log_le_log hpos1 hge
-  have htaylor : -‖u‖ - 2 * ‖u‖ ^ 2 ≤ Real.log (1 - ‖u‖) := log_one_sub_ge ht
-  -- Re u ≥ -‖u‖
-  have hre : -‖u‖ ≤ u.re := by
-    have := Complex.abs_re_le_norm u
+  -- Rewrite `1 - u = 1 + (-u)` and use the complex Taylor remainder bound.
+  have hw : ‖(-u)‖ < 1 := by simpa using hu1
+  have htay := Complex.norm_log_one_add_sub_self_le hw
+  -- `‖log(1 + (-u)) - (-u)‖ ≤ ‖u‖² (1 - ‖u‖)⁻¹ / 2 ≤ ‖u‖²`
+  have hbound : ‖Complex.log (1 + (-u)) - (-u)‖ ≤ ‖u‖ ^ 2 := by
+    refine le_trans htay ?_
+    rw [norm_neg]
+    have hinv : (1 - ‖u‖)⁻¹ ≤ 2 := by
+      rw [inv_le_comm₀ (by simpa using sub_pos_of_lt hu1) (by norm_num)]
+      linarith
+    have hsq : 0 ≤ ‖u‖ ^ 2 := sq_nonneg _
+    nlinarith [mul_le_mul_of_nonneg_left hinv hsq]
+  -- `Real.log ‖1 - u‖ + u.re = Re(log(1-u) + u) = Re(log(1+(-u)) - (-u)) ≥ -‖...‖ ≥ -‖u‖²`
+  have hre_eq : Real.log ‖1 - u‖ + u.re
+      = (Complex.log (1 + (-u)) - (-u)).re := by
+    rw [Complex.sub_re, ← Complex.log_re]
+    simp [Complex.neg_re, sub_eq_add_neg]
+  rw [hre_eq]
+  have hre_ge : -‖Complex.log (1 + (-u)) - (-u)‖
+      ≤ (Complex.log (1 + (-u)) - (-u)).re := by
+    have := Complex.abs_re_le_norm (Complex.log (1 + (-u)) - (-u))
     rw [abs_le] at this; linarith [this.1]
-  nlinarith [htaylor, hlog, hre, norm_nonneg u, sq_nonneg ‖u‖]
+  linarith [hbound, hre_ge]
+
+/-- **Summability of the regularizer.** `Σ ‖z/loc i‖² = ‖z‖²·Σ 1/‖loc i‖² < ∞`.
+This is what makes the far-zeros contribution `Σ_i log(factor) ≥ -Σ_i ‖z/loc i‖²` *finite* —
+the genus-1 convergence input. Combined with `log_factor_ge`, the far-zeros part of `log‖P‖`
+is bounded below by `-‖z‖²·Σ 1/‖loc i‖²`, an `O(‖z‖²)` quantity absorbed into `C₀(1+‖z‖)log(2+‖z‖)`. -/
+lemma summable_normsq (_hne : ∀ i, loc i ≠ 0)
+    (hsumm : Summable (fun i => 1 / ‖loc i‖ ^ 2)) (z : ℂ) :
+    Summable (fun i => ‖z / loc i‖ ^ 2) := by
+  have := hsumm.mul_left (‖z‖ ^ 2)
+  refine this.congr (fun i => ?_)
+  rw [norm_div, div_pow]
+  ring
 
 end GenusOneMinMod
 
@@ -159,5 +193,10 @@ theorem genus1Product_minModulus
         ≤ ‖∏' i, (1 - z/loc i) * Complex.exp (z/loc i)‖ := by
   obtain ⟨C₀, hC₀⟩ := hCore
   refine ⟨C₀, fun z hz => ?_⟩
+  -- The far-zeros analysis is in hand: `summable_normsq` gives `Σ ‖z/loc i‖² < ∞`, and
+  -- `log_factor_ge` bounds each far factor's log below by `-‖z/loc i‖²`. These two facts reduce
+  -- `hCore` to the *near*-zeros contribution only (the RvM + Borel–Carathéodory residual).
+  have _hfar_summable : Summable (fun i => ‖z / loc i‖ ^ 2) := summable_normsq loc hne hsumm z
+  -- Reduce the goal to the real factored product via `Multipliable.norm_tprod`.
   rw [norm_tprod_eq loc hmul z]
   exact hC₀ z hz

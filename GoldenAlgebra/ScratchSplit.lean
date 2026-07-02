@@ -21,17 +21,19 @@ theorem genus1Factor_ne_zero {ρ s : ℂ} (hρ : ρ ≠ 0) (hsρ : s ≠ ρ) : g
   refine mul_ne_zero ?_ (Complex.exp_ne_zero _)
   rw [sub_ne_zero, ne_comm, ne_eq, div_eq_one_iff_eq hρ]; exact hsρ
 
-/-- Pure index-split of a multipliable ℂ-product over a finset and its complement.
-Stated with an abstract `f` so that no concrete factor (`genus1Factor`/`exp`) ever enters the
-`whnf` used by `HasProd.mul_compl` (ℂ is not a multiplicative uniform group, so the group-based
-`tprod_subtype_mul_tprod_subtype_compl` is unavailable). -/
+/-- Pure index-split of a ℂ-product over a finset and its complement.
+The complement multipliability `hc` is taken as an argument because deriving it via
+`Multipliable.subtype` over ℂ triggers a multiplicative-instance `whnf` blow-up
+(`Multipliable.subtype` is pathologically slow on ℂ, unlike its additive `Summable.subtype`);
+the finite part uses `Finset.multipliable`, and the recombination uses the CommMonoid lemma
+`Multipliable.tprod_mul_tprod_compl`. -/
 theorem tprod_finset_mul_tprod_compl {ι : Type*} (f : ι → ℂ) (H : Finset ι)
-    (hf : Multipliable f) :
+    (hc : Multipliable (fun i : {i // i ∉ H} => f i)) :
     (∏' i, f i) = (∏ i ∈ H, f i) * ∏' i : {i // i ∉ H}, f i := by
-  have hsub := (hf.subtype (· ∈ (↑H : Set ι))).hasProd
-  have hsubc := (hf.subtype (· ∈ (↑H : Set ι)ᶜ)).hasProd
-  have hsplit := (hsub.mul_compl hsubc).tprod_eq
-  rw [hsplit, Finset.tprod_subtype' H f]
+  have hs := Finset.multipliable H f
+  have hsplit := hs.tprod_mul_tprod_compl hc
+  rw [← hsplit, Finset.tprod_subtype' H f]
+  rfl
 
 /-- GOAL (Task #1). You may adjust hypothesis spelling, but the conclusion must give the local
 factorization with an analytic, nonvanishing tail.
@@ -46,8 +48,8 @@ multipliable) is a structural input; in the real setting it follows from `xi_gen
 finite-index modification. -/
 theorem genus1Product_local_split
     {ι : Type*} (loc : ι → ℂ) (z : ℂ)
-    (hne : ∀ i, loc i ≠ 0)
-    (hmul : MultipliableLocallyUniformlyOn (fun i s => genus1Factor (loc i) s) Set.univ)
+    (_hne : ∀ i, loc i ≠ 0)
+    (_hmul : MultipliableLocallyUniformlyOn (fun i s => genus1Factor (loc i) s) Set.univ)
     (hfin : {i | loc i = z}.Finite)
     (hcompl : MultipliableLocallyUniformlyOn
       (fun i : {i // i ∉ hfin.toFinset} => fun s => genus1Factor (loc i) s) Set.univ)
@@ -76,18 +78,9 @@ theorem genus1Product_local_split
     exact hdiff.analyticAt (Filter.univ_mem)
   · -- EVENTUAL FACTORIZATION: holds at every `s`, hence eventually near `z`.
     filter_upwards with s
-    -- Work with an abstract `F` to keep `genus1Factor`/ℂ instances from unfolding during the
-    -- subtype/complement `whnf` (which otherwise blows up the elaborator).
-    set F : ι → ℂ := fun i => genus1Factor (loc i) s with hF
-    have hmuls : Multipliable F := hmul.multipliable (Set.mem_univ s)
-    -- Split `∏' i` over the set `H` and its complement using the CommMonoid lemma
-    -- `HasProd.mul_compl` (ℂ is NOT a multiplicative uniform group, so the `IsUniformGroup`-based
-    -- `tprod_subtype_mul_tprod_subtype_compl` is unavailable / diverges on instance search).
-    have hsub := (hmuls.subtype (· ∈ (↑H : Set ι))).hasProd
-    have hsubc := (hmuls.subtype (· ∈ (↑H : Set ι)ᶜ)).hasProd
-    have hsplit := (hsub.mul_compl hsubc).tprod_eq
-    -- `hsplit : ∏' i, F i = (∏' i:↑H, F i) * ∏' i:↑Hᶜ, F i`
-    rw [hsplit, Finset.tprod_subtype' H F]
+    -- The complement multipliability at `s` comes from `hcompl`; recombine via the helper.
+    exact tprod_finset_mul_tprod_compl (fun i => genus1Factor (loc i) s) H
+      (hcompl.multipliable (Set.mem_univ s))
 
 /-!
 ## STRATEGY / POINTERS (search Mathlib first)
